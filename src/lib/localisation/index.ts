@@ -1,4 +1,4 @@
-import { create } from '@voxeliface/svelte-localisation';
+import { create } from '@voxelified/svelte-localisation';
 
 import data from './data';
 import { LOCALES } from '../constants';
