@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let src: Promise<string | null> | string | null = null;
-	export let size: 'xs' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
+	export let size: 'xxs' | 'xs' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let circle = false;
 	export let transparent = false;
 
@@ -37,6 +37,15 @@
 			width: inherit;
 			height: inherit;
 			border-radius: inherit;
+		}
+		&.xxs {
+			width: 24px;
+			height: 24px;
+			border-radius: 4px;
+			:global(svg) {
+				width: 16px;
+				height: 16px;
+			}
 		}
 		&.xs {
 			width: 32px;

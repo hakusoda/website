@@ -7,6 +7,7 @@ export default {
 
 		'profile.id': 'User ID: {0}',
 		'profile.joined': 'Joined {0|time_ago}',
+		'profile.roblox': 'Known on Roblox as:',
 
 		'user_role.2': 'Staff',
 		'user_role.4': 'Tester',

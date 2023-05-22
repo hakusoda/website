@@ -42,6 +42,21 @@
 			<Sunrise/>
 			<p>{$t('profile.joined', [user.created])}</p>
 		</div>
+		{#if data.robloxLinks.length}
+			<div class="separator"/>
+			<div class="counter">
+				<Person/>
+				<p>{$t('profile.roblox')}</p>
+			</div>
+			<div class="roblox">
+				{#each data.robloxUsers as user}
+					<a href={`https://roblox.com/users/${user.id}/profile`}>
+						<Avatar src={user.icon} size="xxs" circle/>
+						{user.displayName}
+					</a>
+				{/each}
+			</div>
+		{/if}
 		<div class="separator"/>
 		<div class="counter">
 			<Person/>
@@ -125,6 +140,21 @@
 					color: var(--color-tertiary);
 					margin: 0;
 					white-space: nowrap;
+				}
+			}
+			.roblox {
+				gap: 8px;
+				display: flex;
+				a {
+					gap: 8px;
+					width: fit-content;
+					margin: 0;
+					display: flex;
+					padding: 4px 12px 4px 4px;
+					font-size: .9em;
+					background: var(--background-tertiary);
+					align-items: center;
+					border-radius: 24px;
 				}
 			}
 		}
