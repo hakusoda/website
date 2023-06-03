@@ -4,9 +4,11 @@
 	import { t } from '$lib/localisation';
 	import { goto } from '$app/navigation';
 	import { createProfile } from '$lib/api';
+	import type { PageData } from './$types';
 
 	import Check from '$lib/icons/Check.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+	export let data: PageData;
 	let username = '';
 
 	let error = false;
@@ -23,7 +25,7 @@
 	const create = async () => {
 		error = false;
 		creating = true;
-		const response = await createProfile(username, await files[0]?.arrayBuffer());
+		const response = await createProfile(data.session!.access_token, username, await files[0]?.arrayBuffer());
 		if (response.error) {
 			error = true;
 			creating = false;

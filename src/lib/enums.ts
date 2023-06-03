@@ -9,6 +9,11 @@ export enum RobloxLinkType {
 	GroupRole
 }
 
+export enum RobloxLinkFlag {
+	None,
+	Verified = 1 << 1
+}
+
 export enum Platform {
 	Discord
 }

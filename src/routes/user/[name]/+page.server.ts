@@ -1,7 +1,8 @@
 import { getUser } from '$lib/api';
 import { RobloxLinkType } from '$lib/enums';
+import { getUserRobloxLinks } from '$lib/database';
 import type { PageServerLoad } from './$types';
-import { getRobloxUsers, getRobloxAvatars, getUserRobloxLinks } from '$lib/api';
+import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
 export const load = (async ({ parent, params: { name } }) => {
 	const { user } = await parent();
 	const profile = (user && (user.id === name || user.username === name)) ? Promise.resolve(user) : getUser(name);

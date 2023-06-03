@@ -1,4 +1,4 @@
-import type { Platform, RobloxLinkType } from './enums';
+import type { Platform, RobloxLinkType, RobloxLinkFlag } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -14,9 +14,7 @@ export interface RobloxLink {
 	id: string
 	type: RobloxLinkType
 	owner: string
-
-	platform: Platform
-	platform_id: string
+	flags: RobloxLinkFlag
 	
 	target_id: number
 	

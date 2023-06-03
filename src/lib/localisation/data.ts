@@ -12,8 +12,11 @@ export default {
 		'user_role.2': 'Staff',
 		'user_role.4': 'Tester',
 
+		'roblox_link_flag.0': 'Confirmation Needed',
+		'roblox_link_flag.2': 'Verified',
+
 		'user_action.user.profile': 'Your Profile',
-		'user_action.settings.settings': 'Website Settings',
+		'user_action.settings': 'Settings',
 		'user_action.other.logout': 'Sign out',
 
 		'login.github' : 'Continue with GitHub',
@@ -25,6 +28,18 @@ export default {
 		'create_profile.username': 'Enter username',
 		'create_profile.finish': 'Create Profile',
 		'create_profile.error': 'An error occurred.',
+
+		'platform.0': 'Discord',
+
+		'roblox.verification.finish': 'Is this your Roblox account?',
+		'roblox.verification.finish.sub': 'Joined {0|time_ago} • Identifier: {1}',
+		'roblox.verification.finish.yes': 'Confirm & Proceed',
+		'roblox.verification.finish.no': 'Change Account',
+
+		'settings.roblox.verification.list': 'Linked Roblox Accounts',
+		'settings.roblox.verification.add': 'Connect Roblox Account',
+
+		'error.unknown': 'An unknown error occurred.',
 
 		'number': '{0|number}',
 

@@ -45,7 +45,7 @@
 				<p>{data.user.name ?? data.user.username}</p>
 				<a href={`/user/${data.user.username}`}>{$t('user_action.user.profile')}</a>
 				<div class="separator"/>
-				<a href="/settings">{$t('user_action.settings.settings')}</a>
+				<a href="/settings/account">{$t('user_action.settings')}</a>
 				<div class="separator"/>
 				<a href="/">{$t('user_action.other.logout')}</a>
 			</DropdownMenu>
