@@ -12,8 +12,14 @@ export default {
 		'user_role.2': 'Staff',
 		'user_role.4': 'Tester',
 
-		'roblox_link_flag.0': 'Confirmation Needed',
-		'roblox_link_flag.2': 'Verified',
+		'roblox_link.flag.0': 'Confirmation Needed',
+		'roblox_link.flag.2': 'Verified',
+		'roblox_link.visible.true': 'Public, will be displayed on your profile, and available via the Rest API.',
+		'roblox_link.visible.false': 'Private, only you and your connected services can see this.',
+		'roblox_link.view': 'View on Roblox',
+		'roblox_link.change_visibility.true': 'Make Private',
+		'roblox_link.change_visibility.false': 'Make Public',
+		'roblox_link.delete': 'Unlink Account',
 
 		'user_action.user.profile': 'Your Profile',
 		'user_action.settings': 'Settings',
@@ -36,8 +42,13 @@ export default {
 		'roblox.verification.finish.yes': 'Confirm & Proceed',
 		'roblox.verification.finish.no': 'Change Account',
 
+		'settings': 'Your Account',
+		'settings.account': 'Account',
+
+		'settings.roblox': 'Roblox',
+		'settings.roblox.verification': 'Linked Accounts',
 		'settings.roblox.verification.list': 'Linked Roblox Accounts',
-		'settings.roblox.verification.add': 'Connect Roblox Account',
+		'settings.roblox.verification.add': 'Link Roblox Account',
 
 		'error.unknown': 'An unknown error occurred.',
 

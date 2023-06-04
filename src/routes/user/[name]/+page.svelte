@@ -50,7 +50,7 @@
 			</div>
 			<div class="roblox">
 				{#each data.robloxUsers as user}
-					<a href={`https://roblox.com/users/${user.id}/profile`}>
+					<a href={`https://roblox.com/users/${user.id}/profile`} target="_blank">
 						<Avatar src={user.icon} size="xxs" circle/>
 						{user.displayName}
 					</a>

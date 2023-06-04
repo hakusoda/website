@@ -15,6 +15,7 @@ export interface RobloxLink {
 	type: RobloxLinkType
 	owner: string
 	flags: RobloxLinkFlag
+	public: boolean
 	
 	target_id: number
 	
