@@ -50,6 +50,9 @@ export default {
 		'settings.roblox.verification.list': 'Linked Roblox Accounts',
 		'settings.roblox.verification.add': 'Link Roblox Account',
 
+		'error.page': '(。>︿<)_θ',
+		'error.page2': 'oh noes, something\'s wrong!',
+		'error.page3': 'Code {0} • ″{1}‶',
 		'error.unknown': 'An unknown error occurred.',
 
 		'number': '{0|number}',

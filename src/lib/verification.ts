@@ -62,9 +62,4 @@ export interface DiscordAuthInfoResponse {
 
 export interface RobloxUserInfoResponse {
 	sub: string
-	name: string
-	profile: string
-	nickname: string
-	created_at: number
-	preferred_username: string
 }

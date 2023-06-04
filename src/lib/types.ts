@@ -22,11 +22,17 @@ export interface RobloxLink {
 	created_at: string
 }
 
-export interface RobloxUser {
+export interface PartialRobloxUser {
 	id: number
 	name: string
 	displayName: string
 	hasVerifiedBadge: boolean
+}
+export interface RobloxUser extends PartialRobloxUser {
+	created: string
+	isBanned: boolean
+	description: string
+	externalAppDisplayName: null
 }
 
 export type ApiResponse<T> = {

@@ -8,14 +8,20 @@
 
 	import Link from '$lib/icons/Link.svelte';
 	export let data: PageData;
+
+	$: links = data.links.map(link => ({
+		...link,
+		target: data.users.find(u => u.id === link.target_id)!,
+		target_icon: data.icons.find(i => i.targetId === link.target_id)!.imageUrl
+	}));
 </script>
 
 <div class="main">
 	{#if data.links.length}
 		<h1>{$t('settings.roblox.verification.list')}</h1>
 		<div class="users">
-			{#each data.users as user, key}
-				<RobloxUserLink user={user} icon={user.icon} link={data.links[key]}/>
+			{#each links as link}
+				<RobloxUserLink user={link.target} icon={link.target_icon} link={link}/>
 			{/each}
 		</div>
 	{/if}

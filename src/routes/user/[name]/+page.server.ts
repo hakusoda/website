@@ -1,9 +1,10 @@
 import { error } from '@sveltejs/kit';
 
 import { getUser } from '$lib/api';
-import { RobloxLinkType } from '$lib/enums';
+import { hasFlag } from '$lib/util';
 import { getUserRobloxLinks } from '$lib/database';
 import type { PageServerLoad } from './$types';
+import { RobloxLinkType, RobloxLinkFlag } from '$lib/enums';
 import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
 export const load = (async ({ parent, params: { name } }) => {
 	const { user } = await parent();
@@ -11,7 +12,7 @@ export const load = (async ({ parent, params: { name } }) => {
 	if (!profile)
 		throw error(404);
 
-	const robloxLinks = getUserRobloxLinks(profile.id, RobloxLinkType.User).then(l => l.filter(l => l.public));
+	const robloxLinks = getUserRobloxLinks(profile.id, RobloxLinkType.User).then(l => l.filter(l => l.public && hasFlag(l.flags, RobloxLinkFlag.Verified)));
 	return {
 		profile,
 		robloxLinks,

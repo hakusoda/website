@@ -51,7 +51,7 @@
 			<div class="roblox">
 				{#each data.robloxUsers as user}
 					<a href={`https://roblox.com/users/${user.id}/profile`} target="_blank">
-						<Avatar src={user.icon} size="xxs" circle/>
+						<Avatar src={user.icon.imageUrl} size="xxs" circle/>
 						{user.displayName}
 					</a>
 				{/each}

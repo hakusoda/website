@@ -12,15 +12,11 @@ export const load = (async ({ parent }) => {
 		throw redirect(302, '/login');
 
 	const links = getUserRobloxLinks(user.id, RobloxLinkType.User);
+	const users = links.then(links => getRobloxUsers(links.map(link => link.target_id)));
 	return {
 		links,
-		users: links.then(async l => {
-			if (!l.length)
-				return [];
-			const users = getRobloxUsers(l.map(l => l.target_id));
-			const icons = await getRobloxAvatars(l.map(l => l.target_id));
-			return users.then(u => u.map((u, k) => ({ ...u, icon: icons[k] })));
-		})
+		users,
+		icons: users.then(users => getRobloxAvatars(users.map(user => user.id)))
 	};
 }) satisfies PageServerLoad;
 

@@ -1,17 +1,21 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 import supabase from '$lib/supabase';
 import { ROBLOX_SECRET } from '$env/static/private';
 import { PUBLIC_ROBLOX_ID } from '$env/static/public';
 import { getRobloxUserInfo } from '$lib/verification';
-import { request, getRobloxAvatars } from '$lib/api';
 import { RobloxLinkType, RobloxLinkFlag } from '$lib/enums';
+import { request, getRobloxUser, getRobloxAvatars } from '$lib/api';
 export const load = (async ({ url, locals: { getSession } }) => {
 	const session = (await getSession())!;
 
+	const code = url.searchParams.get('code');
+	if (!code)
+		throw error(400, 'invalid code');
+
 	const params = new URLSearchParams();
-	params.set('code', url.searchParams.get('code')!);
+	params.set('code', code);
 	params.set('client_id', PUBLIC_ROBLOX_ID);
 	params.set('grant_type', 'authorization_code');
 	params.set('client_secret', ROBLOX_SECRET);
@@ -21,7 +25,8 @@ export const load = (async ({ url, locals: { getSession } }) => {
 	});
 	if (response.error) {
 		console.log(response);
-		throw error(500, 'something went wrong...');
+		throw redirect(302, '/roblox/authorise');
+		//throw error(500, (response as any).error_description);
 	}
 
 	const { scope, id_token, expires_in, token_type, access_token, refresh_token } = response.data;
@@ -36,7 +41,7 @@ export const load = (async ({ url, locals: { getSession } }) => {
 	});
 	if (response2.error) {
 		console.log(response2.error);
-		throw error(500, 'something went wrong...');
+		throw error(500, response2.error.message);
 	}
 
 	const response3 = await getRobloxUserInfo(access_token, token_type);
@@ -54,12 +59,13 @@ export const load = (async ({ url, locals: { getSession } }) => {
 	}).select('id');
 	if (response4.error) {
 		console.log(response4.error);
-		throw error(500, 'something went wrong...');
+		throw error(500, response4.error.message);
 	}
 
+	const id = response3.data.sub;
 	return {
-		user: response3.data,
-		icon: getRobloxAvatars([response3.data.sub], '150x150').then(data => data[0]),
+		user: getRobloxUser(id),
+		icon: getRobloxAvatars([id], '150x150').then(data => data[0]),
 		linkId: response4.data[0].id
 	};
 }) satisfies PageServerLoad;

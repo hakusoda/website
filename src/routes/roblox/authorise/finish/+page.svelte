@@ -28,14 +28,14 @@
 
 <div class="main">
 	<h1>{$t('roblox.verification.finish')}</h1>
-	<a class="user" href={`https://www.roblox.com/users/${data.user.sub}/profile`}>
-		<Avatar src={data.icon} size="md"/>
+	<a class="user" href={`https://www.roblox.com/users/${data.user?.id}/profile`} target="_blank">
+		<Avatar src={data.icon.imageUrl} size="md"/>
 		<div class="name">
-			<h1>{data.user.nickname}</h1>
-			<p>@{data.user.preferred_username}</p>
+			<h1>{data.user?.displayName}</h1>
+			<p>@{data.user?.name}</p>
 		</div>
 	</a>
-	<p class="sub">{$t('roblox.verification.finish.sub', [data.user.created_at * 1000, data.user.sub])}</p>
+	<p class="sub">{$t('roblox.verification.finish.sub', [data.user?.created, data.user?.id])}</p>
 	{#if error}
 		<p>{$t('error.unknown')}</p>
 	{/if}
