@@ -7,6 +7,12 @@ export function getRobloxUserInfo(token: string, tokenType: string) {
 	});
 }
 
+export function getDiscordUser(token: string, tokenType: string) {
+	return request<DiscordUserResponse>('https://discord.com/api/v10/users/@me', 'GET', null, {
+		authorization: `${tokenType} ${token}`
+	});
+}
+
 export function getDiscordAuthInfo(token: string, tokenType: string) {
 	return request<DiscordAuthInfoResponse>('https://discord.com/api/v10/oauth2/@me', 'GET', null, {
 		authorization: `${tokenType} ${token}`
@@ -62,4 +68,22 @@ export interface DiscordAuthInfoResponse {
 
 export interface RobloxUserInfoResponse {
 	sub: string
+}
+
+export interface DiscordUserResponse {
+	id: string
+	email: string
+	flags: number
+	locale: string
+	banner: unknown
+	avatar: string | null
+	username: string
+	verified: boolean
+	mfa_enabled: boolean
+	global_name: string | null
+	accent_color: string
+	banner_color: string
+	public_flags: number
+	premium_type: number
+	discriminator: string
 }

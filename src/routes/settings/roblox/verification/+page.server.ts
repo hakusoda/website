@@ -13,10 +13,16 @@ export const load = (async ({ parent }) => {
 
 	const links = getUserRobloxLinks(user.id, RobloxLinkType.User);
 	const users = links.then(links => getRobloxUsers(links.map(link => link.target_id)));
+	if (user.mellow_pending)
+		await supabase.from('users').update({
+			mellow_pending: false
+		}).eq('id', user.id);
+
 	return {
 		links,
 		users,
-		icons: users.then(users => getRobloxAvatars(users.map(user => user.id)))
+		icons: users.then(users => getRobloxAvatars(users.map(user => user.id))),
+		mellow: user.mellow_pending
 	};
 }) satisfies PageServerLoad;
 

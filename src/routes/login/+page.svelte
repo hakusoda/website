@@ -13,14 +13,13 @@
 		});
 	};
 
-	$: if (data.session) {
+	$: if (data.session)
 		getUser(data.session.user.id).then(user => {
 			if (user)
 				goto(`/user/${user.username}`);
 			else
 				goto('/login/profile');
 		});
-	}
 </script>
 
 <div class="main">

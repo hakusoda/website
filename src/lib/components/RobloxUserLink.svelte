@@ -3,7 +3,7 @@
 
 	import { t } from '../localisation';
 	import { RobloxLinkFlag } from '../enums';
-	import type { RobloxLink, RobloxUser } from '../types';
+	import type { PartialRobloxUser, RobloxLink } from '../types';
 
 	import Avatar from './Avatar.svelte';
 
@@ -15,7 +15,7 @@
 	import RobloxIcon from '../icons/RobloxIcon.svelte';
 	export let icon: string;
 	export let link: RobloxLink;
-	export let user: RobloxUser;
+	export let user: PartialRobloxUser;
 
 	let trigger: () => void;
 

@@ -49,6 +49,7 @@ export default {
 		'settings.roblox.verification': 'Linked Accounts',
 		'settings.roblox.verification.list': 'Linked Roblox Accounts',
 		'settings.roblox.verification.add': 'Link Roblox Account',
+		'settings.roblox.verification.mellow': 'It appears that you signed-up via mellow, you can now close this page, and return to Discord.',
 
 		'error.page': '(。>︿<)_θ',
 		'error.page2': 'oh noes, something\'s wrong!',

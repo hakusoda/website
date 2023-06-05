@@ -6,6 +6,8 @@ export interface User {
 	flags: number
 	username: string
 	avatar_url: string
+	mellow_ids: string[]
+	mellow_pending: boolean
 
 	created: string
 }
