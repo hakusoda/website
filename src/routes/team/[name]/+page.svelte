@@ -1,0 +1,161 @@
+<script lang="ts">
+	import { Tabs } from '@voxelified/voxeliface';
+	import { writable } from 'svelte/store';
+
+	import { t } from '$lib/localisation';
+	import type { PageData } from './$types';
+
+	import Avatar from '$lib/components/Avatar.svelte';
+
+	import Star from '$lib/icons/Star.svelte';
+	import Sunrise from '$lib/icons/Sunrise.svelte';
+	export let data: PageData;
+
+	$: team = data.team;
+
+	let tab = writable(0);
+</script>
+
+<div class="main">
+	<div class="card">
+		<div class="header">
+			<Avatar src={team.avatar_url}/>
+			<h1>{team.display_name}</h1>
+		</div>
+		{#if team.bio}
+			<div class="separator"/>
+			{team.bio}
+		{/if}
+		<div class="separator"/>
+		<div class="counter">
+			<Sunrise/>
+			<p>{$t('team.joined', [team.created_at])}</p>
+		</div>
+		<div class="separator"/>
+		<div class="counter">
+			<Star/>
+			<p>{$t('team.id', [team.name])}</p>
+		</div>
+	</div>
+	<Tabs.Root bind:value={tab}>
+		<Tabs.Item title={$t('team.members')} value={0}>
+			<div class="members">
+				{#each data.members as item}
+					<a class="member" href={`/user/${item.username}`}>
+						<Avatar src={item.avatar_url} size="sm2" circle/>
+						<div class="name">
+							<h1>{item.name ?? item.username}</h1>
+							<p>@{item.username}</p>
+						</div>
+						<div class="details">
+							<p>{$t(`team_role.${item.role}`)}</p>
+							<p>{$t('profile.joined', [item.joined_at])}</p>
+						</div>
+					</a>
+				{/each}
+			</div>
+		</Tabs.Item>
+	</Tabs.Root>
+</div>
+
+<svelte:head>
+	<title>{team.display_name}</title>
+</svelte:head>
+
+<style lang="scss">
+	.main {
+		margin: 128px 32px 64px;
+		display: flex;
+		.card {
+			width: 416px;
+			height: fit-content;
+			padding: 24px;
+			position: relative;
+			min-width: 416px;
+			background: var(--background-secondary);
+			padding-top: 32px;
+			border-radius: 16px;
+			.header {
+				gap: 32px;
+				top: -96px;
+				display: flex;
+				position: absolute;
+				align-items: center;
+				h1 {
+					width: max-content;
+					margin: 0;
+					font-size: 2.5em;
+				}
+			}
+			.separator {
+				width: 100%;
+				height: 1px;
+				margin: 16px 0;
+				background: var(--border-secondary);
+			}
+			.counter {
+				gap: 6px;
+				width: fit-content;
+				display: flex;
+				position: relative;
+				align-items: end;
+				margin-bottom: 12px;
+				p {
+					color: var(--color-tertiary);
+					margin: 0;
+					white-space: nowrap;
+				}
+			}
+		}
+		:global(.tabs-container) {
+			width: 100%;
+			margin-left: 32px;
+		}
+		.members {
+			gap: 16px 32px;
+			display: flex;
+			flex-wrap: wrap;
+			.member {
+				flex: 1 0 auto;
+				display: flex;
+				padding: 16px;
+				position: relative;
+				margin-top: 32px;
+				background: var(--background-secondary);
+				border-radius: 16px;
+				flex-direction: column;
+				text-decoration: none;
+				:global(.avatar) {
+					top: -24px;
+					left: 16px;
+					position: absolute;
+					box-shadow: 0 8px 16px 0 #00000040;
+					background: var(--background-tertiary);
+				}
+				.name {
+					margin-left: 88px;
+					h1 {
+						margin: 0;
+						font-size: 1.4em;
+						font-weight: 700;
+					}
+					p {
+						color: var(--color-secondary);
+						margin: 4px 0 0;
+						font-size: .9em;
+					}
+				}
+				.details {
+					display: flex;
+					margin-top: 24px;
+					justify-content: space-between;
+					p {
+						color: var(--color-secondary);
+						margin: 0;
+						font-size: .9em;
+					}
+				}
+			}
+		}
+	}
+</style>

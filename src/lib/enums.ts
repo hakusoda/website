@@ -4,6 +4,12 @@ export enum UserFlags {
 	Tester = 1 << 2
 }
 
+export enum TeamRole {
+	Member,
+	Admin = 200,
+	Owner = 255
+}
+
 export enum RobloxLinkType {
 	User,
 	GroupRole

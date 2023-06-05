@@ -1,4 +1,4 @@
-import type { Platform, RobloxLinkType, RobloxLinkFlag } from './enums';
+import type { TeamRole, RobloxLinkType, RobloxLinkFlag } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -10,6 +10,21 @@ export interface User {
 	mellow_pending: boolean
 
 	created: string
+}
+
+export interface Team {
+	id: string
+	bio: string
+	name: string
+	members: TeamMember[]
+	created_at: string
+	display_name: string
+}
+
+export interface TeamMember {
+	role: TeamRole
+	user_id: string
+	joined_at: string
 }
 
 export interface RobloxLink {

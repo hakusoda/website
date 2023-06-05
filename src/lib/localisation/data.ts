@@ -9,6 +9,14 @@ export default {
 		'profile.joined': 'Joined {0|time_ago}',
 		'profile.roblox': 'Known on Roblox as:',
 
+		'team.id': 'Team ID: {0}',
+		'team.joined': 'Created {0|time_ago}',
+		'team.members': 'Members',
+
+		'team_role.0': 'Team Member',
+		'team_role.200': 'Team Administrator',
+		'team_role.255': 'Team Owner',
+
 		'user_role.2': 'Staff',
 		'user_role.4': 'Tester',
 
