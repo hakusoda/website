@@ -64,6 +64,12 @@
 
 <PageLoader/>
 
+<svelte:head>
+	<meta property="og:type" content="website">
+	<meta name="theme-color" content="#cc6699">
+	<meta name="og:site_name" content="Voxelified">
+</svelte:head>
+
 <style lang="scss">
 	.app {
 		height: 100vh;

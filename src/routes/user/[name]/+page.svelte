@@ -67,6 +67,11 @@
 
 <svelte:head>
 	<title>{user.name ?? user.username}</title>
+	<meta content={`${user.name ?? user.username} (@${user.username})`} property="og:title">
+	<meta content={user.bio} property="og:description">
+	<meta content={user.avatar_url} property="og:image">
+	<meta name="og:type" content="profile">
+	<meta property="profile:username" content={user.username}>
 </svelte:head>
 
 <style lang="scss">

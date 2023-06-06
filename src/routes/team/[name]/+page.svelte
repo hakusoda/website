@@ -60,6 +60,11 @@
 
 <svelte:head>
 	<title>{team.display_name}</title>
+	<meta content={team.display_name} property="og:title">
+	<meta content={team.bio} property="og:description">
+	<meta content={team.avatar_url} property="og:image">
+	<meta name="og:type" content="profile">
+	<meta property="profile:username" content={team.name}>
 </svelte:head>
 
 <style lang="scss">

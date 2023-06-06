@@ -8,7 +8,8 @@
 </div>
 
 <svelte:head>
-	<title>voxelified</title>
+	<title>Voxelified</title>
+	<meta content="Voxelified Home" property="og:title">
 </svelte:head>
 
 <style lang="scss">
