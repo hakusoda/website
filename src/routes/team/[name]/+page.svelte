@@ -64,10 +64,12 @@
 
 <style lang="scss">
 	.main {
+		gap: 32px;
 		margin: 128px 32px 64px;
 		display: flex;
+		flex-wrap: wrap;
 		.card {
-			width: 416px;
+			flex: 1 1 20%;
 			height: fit-content;
 			padding: 24px;
 			position: relative;
@@ -78,13 +80,16 @@
 			.header {
 				gap: 32px;
 				top: -96px;
+				width: calc(100vw - 128px);
 				display: flex;
 				position: absolute;
 				align-items: center;
 				h1 {
-					width: max-content;
 					margin: 0;
+					overflow: hidden;
 					font-size: 2.5em;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 				}
 			}
 			.separator {
@@ -108,15 +113,14 @@
 			}
 		}
 		:global(.tabs-container) {
-			width: 100%;
-			margin-left: 32px;
+			flex: 1 1 40%;
 		}
 		.members {
 			gap: 16px 32px;
 			display: flex;
 			flex-wrap: wrap;
 			.member {
-				flex: 1 0 auto;
+				flex: 1 1 calc(50% - 48px);
 				display: flex;
 				padding: 16px;
 				position: relative;
@@ -146,8 +150,10 @@
 					}
 				}
 				.details {
+					gap: 24px;
 					display: flex;
 					margin-top: 24px;
+					white-space: nowrap;
 					justify-content: space-between;
 					p {
 						color: var(--color-secondary);
@@ -155,6 +161,21 @@
 						font-size: .9em;
 					}
 				}
+			}
+		}
+	}
+	@media (max-width: 512px) {
+		.main {
+			margin: 128px 0 64px;
+			.card {
+				width: 100%;
+				border-radius: 0;
+			}
+			:global(.tabs-container .buttons) {
+				border-radius: 0 !important;
+			}
+			.members .member {
+				border-radius: 0;
 			}
 		}
 	}

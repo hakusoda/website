@@ -159,4 +159,13 @@
 			}
 		}
 	}
+	@media (max-width: 512px) {
+		.main {
+			margin: 128px 0 16px;
+			.card {
+				width: 100%;
+				border-radius: 0;
+			}
+		}
+	}
 </style>

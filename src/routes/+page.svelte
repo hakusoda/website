@@ -14,11 +14,15 @@
 <style lang="scss">
 	.landing {
 		height: 100%;
+		padding: 32px 64px;
 		display: flex;
+		overflow: hidden;
 		align-items: center;
 		flex-direction: column;
 		justify-content: center;
 		img {
+			height: auto;
+			max-width: 100%;
 			border-radius: 16px;
 		}
 		p {
