@@ -1,4 +1,4 @@
-import kit from '@sveltejs/kit';
+import * as kit from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
