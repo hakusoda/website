@@ -11,30 +11,28 @@
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	export let data: PageData;
 
-	$: team = data.team;
-
 	let tab = writable(0);
 </script>
 
 <div class="main">
 	<div class="card">
 		<div class="header">
-			<Avatar src={team.avatar_url}/>
-			<h1>{team.display_name}</h1>
+			<Avatar src={data.avatar_url}/>
+			<h1>{data.display_name}</h1>
 		</div>
-		{#if team.bio}
+		{#if data.bio}
 			<div class="separator"/>
-			{team.bio}
+			{data.bio}
 		{/if}
 		<div class="separator"/>
 		<div class="counter">
 			<Sunrise/>
-			<p>{$t('team.joined', [team.created_at])}</p>
+			<p>{$t('team.joined', [data.created_at])}</p>
 		</div>
 		<div class="separator"/>
 		<div class="counter">
 			<Star/>
-			<p>{$t('team.id', [team.name])}</p>
+			<p>{$t('team.id', [data.name])}</p>
 		</div>
 	</div>
 	<Tabs.Root bind:value={tab}>
@@ -59,12 +57,12 @@
 </div>
 
 <svelte:head>
-	<title>{team.display_name}</title>
-	<meta content={team.display_name} property="og:title">
-	<meta content={team.bio} property="og:description">
-	<meta content={team.avatar_url} property="og:image">
+	<title>{data.display_name}</title>
+	<meta content={data.display_name} property="og:title">
+	<meta content={data.bio} property="og:description">
+	<meta content={data.avatar_url} property="og:image">
 	<meta name="og:type" content="profile">
-	<meta property="profile:username" content={team.name}>
+	<meta property="profile:username" content={data.name}>
 </svelte:head>
 
 <style lang="scss">

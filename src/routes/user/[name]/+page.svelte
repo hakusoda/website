@@ -5,73 +5,94 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 
+	import Star from '$lib/icons/Star.svelte';
 	import Person from '$lib/icons/Person.svelte';
+	import People from '$lib/icons/People.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	import Voxelified from '$lib/icons/Voxelified.svelte';
 	export let data: PageData;
-
-	$: user = data.profile!;
 </script>
 
 <div class="main">
 	<div class="card">
 		<div class="header">
-			<Avatar src={user.avatar_url} circle/>
+			<Avatar src={data.avatar_url} circle/>
 			<div class="name">
 				<h1>
-					{user.name ?? user.username}
+					{data.name ?? data.username}
 				</h1>
-				<p>@{user.username}</p>
+				<p>@{data.username}</p>
 			</div>
 		</div>
 		<div class="buttons">
 			<div class="roles">
 				{#each Object.values(UserFlags) as flag}
-					{#if typeof flag === 'number' && flag && (user.flags & flag) === flag}
+					{#if typeof flag === 'number' && flag && (data.flags & flag) === flag}
 						<p class="role"><Voxelified/>{$t(`user_role.${flag}`)}</p>
 					{/if}
 				{/each}
 			</div>
 		</div>
-		{#if user.bio}
+		{#if data.bio}
 			<div class="separator"/>
-			{user.bio}
+			{data.bio}
 		{/if}
 		<div class="separator"/>
 		<div class="counter">
 			<Sunrise/>
-			<p>{$t('profile.joined', [user.created])}</p>
+			<p>{$t('profile.joined', [data.created_at])}</p>
 		</div>
-		{#if data.robloxLinks.length}
+		{#if data.teams.length}
+			<div class="separator"/>
+			<div class="counter">
+				<People/>
+				<p>{$t(`profile.teams.${data.teams.length === 1}`, [data.teams.length])}</p>
+			</div>
+			<div class="teams">
+				{#each data.teams as item}
+					<a href={`/team/${item.name}`}>
+						<Avatar src={item.avatar_url} size="sm"/>
+						<div class="info">
+							<div class="name">
+								<p class="display">{item.display_name}</p>
+								<p class="id">{item.name}</p>
+							</div>
+							<p class="details">{$t('profile.teams.item.details', [item.members.length, data.name ?? data.username, $t(`team_role.${item.role}.profile`)])}</p>
+						</div>
+					</a>
+				{/each}
+			</div>
+		{/if}
+		{#if data.roblox_links.length}
 			<div class="separator"/>
 			<div class="counter">
 				<Person/>
 				<p>{$t('profile.roblox')}</p>
 			</div>
 			<div class="roblox">
-				{#each data.robloxUsers as user}
-					<a href={`https://roblox.com/users/${user.id}/profile`} target="_blank">
-						<Avatar src={user.icon.imageUrl} size="xxs" circle/>
-						{user.displayName}
+				{#each data.roblox_users as item}
+					<a href={`https://roblox.com/users/${item.id}/profile`} target="_blank">
+						<Avatar src={item.icon.imageUrl} size="xxs" circle/>
+						{item.displayName}
 					</a>
 				{/each}
 			</div>
 		{/if}
 		<div class="separator"/>
 		<div class="counter">
-			<Person/>
-			<p>{$t('profile.id', [user.id])}</p>
+			<Star/>
+			<p>{$t('profile.id', [data.id])}</p>
 		</div>
 	</div>
 </div>
 
 <svelte:head>
-	<title>{user.name ?? user.username}</title>
-	<meta content={`${user.name ?? user.username} (@${user.username})`} property="og:title">
-	<meta content={user.bio} property="og:description">
-	<meta content={user.avatar_url} property="og:image">
+	<title>{data.name ?? data.username}</title>
+	<meta content={`${data.name ?? data.username} (@${data.username})`} property="og:title">
+	<meta content={data.bio} property="og:description">
+	<meta content={data.avatar_url} property="og:image">
 	<meta name="og:type" content="profile">
-	<meta property="profile:username" content={user.username}>
+	<meta property="profile:username" content={data.username}>
 </svelte:head>
 
 <style lang="scss">
@@ -160,6 +181,47 @@
 					background: var(--background-tertiary);
 					align-items: center;
 					border-radius: 24px;
+				}
+			}
+			.teams {
+				gap: 8px;
+				display: flex;
+				flex-direction: column;
+				a {
+					gap: 16px;
+					width: -webkit-fill-available;
+					margin: 0;
+					display: flex;
+					padding: 8px 24px 8px 8px;
+					font-size: 1em;
+					background: var(--background-tertiary);
+					font-weight: 500;
+					align-items: center;
+					border-radius: 8px;
+					text-decoration: none;
+					.info {
+						.name {
+							display: flex;
+							align-items: end;
+							margin-bottom: 4px;
+							.display {
+								margin: 0;
+							}
+							.id {
+								color: var(--color-secondary);
+								margin: 0;
+								opacity: 0.75;
+								font-size: .8em;
+								font-weight: 500;
+								margin-left: 8px;
+							}
+						}
+						.details {
+							color: var(--color-secondary);
+							margin: 0;
+							font-size: .8em;
+						}
+					}
 				}
 			}
 		}

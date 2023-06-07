@@ -9,7 +9,7 @@ export interface User {
 	mellow_ids: string[]
 	mellow_pending: boolean
 
-	created: string
+	created_at: string
 }
 
 export interface Team {
@@ -21,10 +21,38 @@ export interface Team {
 	display_name: string
 }
 
+export interface DatabaseTeam {
+	id: string
+	bio: string | null
+	name: string
+	members: {
+		role: TeamRole
+		user: {
+			id: string
+			bio: string | null
+			name: string | null
+			flags: number
+			username: string
+			joined_at: string
+			created_at: string
+			avatar_url: string
+		}
+		joined_at: string
+	}[]
+	created_at: string
+	display_name: string
+}
+
 export interface TeamMember {
+	id: string
+	bio: string | null
+	name: string | null
 	role: TeamRole
-	user_id: string
+	flags: number
+	username: string
 	joined_at: string
+	created_at: string
+	avatar_url: string
 }
 
 export interface RobloxLink {

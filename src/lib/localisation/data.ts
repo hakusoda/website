@@ -8,14 +8,20 @@ export default {
 		'profile.id': 'User ID: {0}',
 		'profile.joined': 'Joined {0|time_ago}',
 		'profile.roblox': 'Known on Roblox as:',
+		'profile.teams.false': 'Part of {0|number} teams:',
+		'profile.teams.true': 'Part of a team:',
+		'profile.teams.item.details': '{0} Member{0|s} • {1} is {2}',
 
 		'team.id': 'Team ID: {0}',
 		'team.joined': 'Created {0|time_ago}',
 		'team.members': 'Members',
 
 		'team_role.0': 'Team Member',
+		'team_role.0.profile': 'a member',
 		'team_role.200': 'Team Administrator',
+		'team_role.200.profile': 'an administrator',
 		'team_role.255': 'Team Owner',
+		'team_role.255.profile': 'the owner',
 
 		'user_role.2': 'Staff',
 		'user_role.4': 'Tester',

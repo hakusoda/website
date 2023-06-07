@@ -1,10 +1,6 @@
 import type { User, RobloxUser, ApiResponse, PartialRobloxUser } from './types';
 export const API_BASE = 'https://api.voxelified.com/v1';
 
-export function getUser(userId: string) {
-	return request<User>(`user/${userId}`).then(response => response.error ? null : response.data);
-}
-
 export function getRobloxUser(userId: string | number) {
 	return request<RobloxUser>(`https://users.roblox.com/v1/users/${userId}`)
 		.then(response => response.error ? null : response.data);

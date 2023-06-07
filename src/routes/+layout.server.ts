@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 
-import { getUser } from '$lib/api.js';
-import type { LayoutServerLoad } from './$types.js';
+import { getUser } from '$lib/database';
+import type { LayoutServerLoad } from './$types';
 export const load = (async ({ url, locals: { getSession } }) => {
 	const session = await getSession();
 	const user = session ? await getUser(session.user.id) : null;

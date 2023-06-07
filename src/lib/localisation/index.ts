@@ -4,6 +4,7 @@ import data from './data';
 import { LOCALES } from '../constants';
 const numFormatter = new Intl.NumberFormat();
 const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
+	s: value => parseInt(value) === 1 ? '' : 's',
 	number: value => numFormatter.format(parseInt(value)),
 	time_ago: (value, trans) => {
 		const diff = Date.now() - new Date(value).getTime();
