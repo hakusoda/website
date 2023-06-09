@@ -77,7 +77,7 @@
 <svelte:head>
 	<title>{data.display_name}</title>
 	<meta content={data.display_name} property="og:title">
-	<meta content={data.bio} property="og:description">
+	<meta content={data.summary} property="og:description">
 	<meta content={data.avatar_url} property="og:image">
 	<meta name="og:type" content="profile">
 	<meta property="profile:username" content={data.name}>
