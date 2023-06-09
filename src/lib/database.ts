@@ -46,7 +46,7 @@ export function getUserAvatar(userId: string) {
 }
 
 export async function getTeam(teamId: string) {
-	let filter = supabase.from('teams').select<string, DatabaseTeam>('id, bio, name, flags, members:team_members ( role, user:users ( id, bio, name, flags, username, created_at ), joined_at ), created_at, display_name').limit(1);
+	let filter = supabase.from('teams').select<string, DatabaseTeam>('id, bio, name, flags, members:team_members ( role, user:users ( id, bio, name, flags, username, created_at ), joined_at ), projects ( id, name, summary, created_at, display_name, contributors:project_contributors ( id ), external_contributors ), created_at, display_name').limit(1);
 	if (isUUID(teamId))
 		filter = filter.eq('id', teamId);
 	else
@@ -68,10 +68,23 @@ export async function getTeam(teamId: string) {
 			role: member.role,
 			joined_at: member.joined_at
 		})).sort((a, b) => b.role - a.role || (a.name ?? a.username).localeCompare(b.name ?? b.username)),
+		projects: data.projects.map(project => ({
+			...project,
+			avatar_url: getProjectAvatar(project.id),
+			banner_url: getProjectBanner(project.id)
+		})).sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
 		avatar_url: getTeamAvatar(data.id)
 	};
 }
 
 export function getTeamAvatar(teamId: string) {
 	return supabase.storage.from('avatars').getPublicUrl(`team/${teamId}.png`).data.publicUrl;
+}
+
+export function getProjectAvatar(projectId: string) {
+	return supabase.storage.from('avatars').getPublicUrl(`project/${projectId}.png`).data.publicUrl;
+}
+
+export function getProjectBanner(projectId: string) {
+	return supabase.storage.from('banners').getPublicUrl(`project/${projectId}.webp`).data.publicUrl;
 }

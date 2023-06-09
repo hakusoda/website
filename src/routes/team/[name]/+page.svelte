@@ -53,6 +53,22 @@
 				{/each}
 			</div>
 		</Tabs.Item>
+		<Tabs.Item title={$t('team.projects')} value={1}>
+			<div class="projects">
+				{#each data.projects as item}
+					<a class="item" href={`/project/${item.name}`} style={`--banner: url("${item.banner_url}")`}>
+						<Avatar src={item.avatar_url} size="sm2" transparent/>
+						<div class="name">
+							<h1>{item.display_name}</h1>
+							<p>{item.summary}</p>
+						</div>
+						<div class="details">
+							<p>{$t('project.card', [item.created_at, item.contributors.length + item.external_contributors])}</p>
+						</div>
+					</a>
+				{/each}
+			</div>
+		</Tabs.Item>
 	</Tabs.Root>
 </div>
 
@@ -166,6 +182,66 @@
 				}
 			}
 		}
+		.projects {
+			gap: 16px 32px;
+			display: flex;
+			flex-direction: column;
+			.item {
+				flex: 1 1 calc(50% - 48px);
+				display: flex;
+				padding: 16px;
+				position: relative;
+				margin-top: 32px;
+				background: var(--background-secondary);
+				border-radius: 16px;
+				flex-direction: column;
+				text-decoration: none;
+				&:before {
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					opacity: .5;
+					content: '';
+					display: block;
+					position: absolute;
+					background: no-repeat center/cover var(--banner);
+					mask-image: linear-gradient(to bottom, #fff -40%, #ffffff00 80%);
+					border-radius: 16px;
+					-webkit-mask-image: -webkit-gradient(linear, left -40%, left 80%, from(#fff), to(#ffffff00));
+				}
+				:global(.avatar) {
+					top: -24px;
+					left: 16px;
+					filter: drop-shadow(0 8px 4px #00000040);
+					position: absolute;
+				}
+				.name {
+					z-index: 1;
+					margin-left: 88px;
+					h1 {
+						margin: 0;
+					}
+					p {
+						color: var(--color-secondary);
+						margin: 8px 0 0;
+						font-size: .9em;
+					}
+				}
+				.details {
+					gap: 24px;
+					display: flex;
+					margin-top: 24px;
+					white-space: nowrap;
+					justify-content: space-between;
+					p {
+						color: var(--color-secondary);
+						margin: 0;
+						font-size: .9em;
+					}
+				}
+			}
+		}
 	}
 	@media (max-width: 512px) {
 		.main {
@@ -178,6 +254,9 @@
 				border-radius: 0 !important;
 			}
 			.members .member {
+				border-radius: 0;
+			}
+			.projects .item {
 				border-radius: 0;
 			}
 		}

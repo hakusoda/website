@@ -43,7 +43,7 @@ export const load = (async ({ params: { name } }) => {
 			role: team.role,
 			...team.team,
 			avatar_url: getTeamAvatar(team.team.id)
-		})),
+		})).sort((a, b) => a.display_name.localeCompare(b.display_name)),
 		avatar_url: getUserAvatar(data.id),
 		roblox_users: robloxUsers.map((user, index) => ({
 			...user,

@@ -39,6 +39,15 @@ export interface DatabaseTeam {
 		}
 		joined_at: string
 	}[]
+	projects: {
+		id: string
+		name: string
+		summary: string
+		created_at: string
+		display_name: string
+		contributors: { id: string }[]
+		external_contributors: number
+	}[]
 	created_at: string
 	display_name: string
 }

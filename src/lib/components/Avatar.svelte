@@ -94,6 +94,7 @@
 			border-radius: 50%;
 		}
 		&.transparent {
+			box-shadow: none;
 			background: none;
 		}
 	}

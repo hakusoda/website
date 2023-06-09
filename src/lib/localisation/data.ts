@@ -15,6 +15,20 @@ export default {
 		'team.id': 'Team ID: {0}',
 		'team.joined': 'Created {0|time_ago}',
 		'team.members': 'Members',
+		'team.projects': 'Projects',
+
+		'members': '{0} Member{0|s}',
+
+		'project.author.0': 'by ',
+		'project.author.1': ', and {0} contributor{0|s}',
+		'project.website': 'Visit Website',
+		'project.github': 'GitHub Repository',
+		'project.about': 'About this project',
+		'project.about.empty': 'This project has no description yet.',
+		'project.contributors': 'Contributors',
+		'project.contributors.external': '... plus {0} external contributor{0|s}.',
+		'project.id': 'Project ID: {0}',
+		'project.card': 'Created {0|time_ago} • {1} Contributor{1|s}',
 
 		'team_role.0': 'Team Member',
 		'team_role.0.profile': 'a member',
