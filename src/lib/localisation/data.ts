@@ -57,6 +57,7 @@ export default {
 		'user_action.other.logout': 'Sign out',
 
 		'login.github' : 'Continue with GitHub',
+		'login.discord': 'Continue with Discord',
 
 		'signup': 'Create an Account',
 
