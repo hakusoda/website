@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { get, writable } from 'svelte/store';
 	import { Button, Select, TextInput, DropdownMenu } from '@voxelified/voxeliface';
-	import type { Writable } from 'svelte/store';
 
 	import { t } from '$lib/localisation';
 	import { MellowBindRequirementType, MellowBindType } from '$lib/enums';
@@ -18,13 +16,14 @@
 	let trigger: () => void;
 	let bindData: string[] = [];
 	let bindName = 'Unnamed Binding';
-	let bindType = writable(MellowBindType.DiscordRoles);
+	let bindType = MellowBindType.DiscordRoles;
 	let createError = '';
 	let roleTrigger: () => void;
 	let creatingBind = false;
-	let requirements: [Writable<MellowBindRequirementType>, string[]][] = [];
+	let requirements: [MellowBindRequirementType, string[]][] = [];
+	let requirementTrigger: () => void;
 
-	$: hasVerifiedType = requirements.some(i => get(i[0]) === MellowBindRequirementType.HasVerifiedUserLink) ? MellowBindRequirementType.HasRobloxGroupRole : MellowBindRequirementType.HasVerifiedUserLink;
+	$: hasVerifiedType = requirements.some(i => i[0] === MellowBindRequirementType.HasVerifiedUserLink) ? MellowBindRequirementType.HasRobloxGroupRole : MellowBindRequirementType.HasVerifiedUserLink;
 	const createBind = async () => {
 		createError = '';
 		creatingBind = true;
@@ -32,10 +31,10 @@
 			body: JSON.stringify({
 				name: bindName,
 				data: bindData,
-				type: get(bindType),
+				type: bindType,
 				requirements: requirements.map(item => ({
-					data: item[1],
-					type: get(item[0])
+					type: item[0],
+					data: item[1]
 				}))
 			}),
             method: 'POST'
@@ -53,13 +52,12 @@
 		if (response.status === 200)
 			data.binds = data.binds.filter(bind => bind.id !== id);
 	};
-	const addRequirement = () => {
-		const type = hasVerifiedType ? MellowBindRequirementType.HasRobloxGroupRole : MellowBindRequirementType.HasVerifiedUserLink;
-		requirements = [...requirements, [writable(type), []]];
+	const addRequirement = (type: any) => {
+		requirements = [...requirements, [type, []]];
 	};
 	const resetAdd = () => {
 		bindData = [], bindName = 'Unnamed Binding', requirements = [];
-		bindType.set(MellowBindType.DiscordRoles);
+		bindType = MellowBindType.DiscordRoles;
 	};
 </script>
 
@@ -97,7 +95,7 @@
 
 		<div class="field">
 			<p class="modal-label">{$t('mellow.server.settings.roblox.binds.create.type')}</p>
-			<Select.Root value={bindType}>
+			<Select.Root bind:value={bindType}>
 				<p>{$t('mellow.server.settings.roblox.binds.create.type.category')}</p>
 				{#each Object.values(MellowBindType) as item}
 					{#if typeof item === 'number'}
@@ -110,7 +108,7 @@
 		</div>
 	</div>
 
-	{#if $bindType === MellowBindType.DiscordRoles}
+	{#if bindType === MellowBindType.DiscordRoles}
 		<p class="modal-label">{$t('mellow.server.settings.roblox.binds.create.discord_roles')}</p>
 		<div class="roles">
 			{#each bindData as item}
@@ -142,9 +140,9 @@
 			<div class="item">
 				<div class="field">
 					<p class="label">{$t('mellow.server.settings.roblox.binds.create.requirement')}</p>
-					<Select.Root value={item[0]}>
+					<Select.Root bind:value={item[0]}>
 						{#each Object.values(MellowBindRequirementType) as type}
-							{#if typeof type === 'number' && (type || !hasVerifiedType || get(item[0]) === MellowBindRequirementType.HasVerifiedUserLink)}
+							{#if typeof type === 'number' && (type || !hasVerifiedType || item[0] === MellowBindRequirementType.HasVerifiedUserLink)}
 								<Select.Item value={type}>
 									{$t(`mellow_bind.requirement.${type}`)}
 								</Select.Item>
@@ -152,7 +150,7 @@
 						{/each}
 					</Select.Root>
 				</div>
-				{#if get(item[0]) === MellowBindRequirementType.HasRobloxGroupRole}
+				{#if item[0] === MellowBindRequirementType.HasRobloxGroupRole}
 					<div class="field">
 						<p class="label">{$t('mellow.server.settings.roblox.binds.create.requirement.group_role')}</p>
 						<TextInput bind:value={item[1][0]} placeholder="search to come later..."/>
@@ -164,9 +162,19 @@
 			</div>
 		{/each}
 	</div>
-	<Button on:click={addRequirement}>
-		<Plus/>{$t('mellow.server.settings.roblox.binds.create.requirements.add')}
-	</Button>
+	<DropdownMenu bind:trigger={requirementTrigger}>
+		<Button slot="trigger" on:click={requirementTrigger}>
+			<Plus/>{$t('mellow.server.settings.roblox.binds.create.requirements.add')}
+		</Button>
+		<p>{$t('mellow.server.settings.roblox.binds.create.requirements')}</p>
+		{#each Object.values(MellowBindRequirementType) as type}
+			{#if typeof type === 'number' && (type || !hasVerifiedType)}
+				<button type="button" on:click={() => addRequirement(type)}>
+					{$t(`mellow_bind.requirement.${type}`)}
+				</button>
+			{/if}
+		{/each}
+	</DropdownMenu>
 
 	{#if createError}
 		<p>{createError}</p>

@@ -265,10 +265,10 @@
   dependencies:
     svelte "^3.59.1"
 
-"@voxelified/voxeliface@^1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@voxelified/voxeliface/-/voxeliface-1.4.3.tgz#952570cc490e7fb259a2544ad7fd6d6f22e610b0"
-  integrity sha512-dduJIEk6+sa27Va7bx3qqbZ9X3BYtF6F8Bd/UiNbIZxvpBJpQKfLt1OSNBJTM1bm3Gr/ePjAbWD4qdYqIQgiLg==
+"@voxelified/voxeliface@^1.4.4":
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/@voxelified/voxeliface/-/voxeliface-1.4.4.tgz#d6f27367967de6e9248c5f0ae3931d1f303c56b0"
+  integrity sha512-j8uG45xa76ASaphSzBbnkvyqeIPYMeALIbd1Gz4QFNu5kCLzN//qy8DRfBpak2iXTNHabz18SgvBJvC9opGgaQ==
   dependencies:
     svelte "^3.59.1"
 

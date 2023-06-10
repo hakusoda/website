@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Tabs } from '@voxelified/voxeliface';
-	import { writable } from 'svelte/store';
 
 	import { t } from '$lib/localisation';
 	import type { PageData } from './$types';
@@ -11,7 +10,7 @@
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	export let data: PageData;
 
-	let tab = writable(0);
+	let tab = 0;
 </script>
 
 <div class="main">
