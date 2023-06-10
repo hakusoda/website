@@ -1,5 +1,8 @@
 export default {
 	'en-AU': {
+		'action.edit': 'Edit',
+		'action.cancel': 'Cancel',
+		'action.delete': 'Delete',
 		'action.create_account': 'Create Account',
 
 		'home': 'Home',
@@ -78,6 +81,31 @@ export default {
 		'settings.roblox.verification.list': 'Linked Roblox Accounts',
 		'settings.roblox.verification.add': 'Link Roblox Account',
 		'settings.roblox.verification.mellow': 'It appears that you signed-up via mellow, you can now close this page, and return to Discord.',
+
+		'settings.mellow': 'mellow Bot',
+		'settings.mellow.servers': 'Discord Servers',
+
+		'mellow.server.settings.roblox': 'Roblox',
+		'mellow.server.settings.roblox.binds': 'Bindings',
+		'mellow.server.settings.roblox.binds.create': 'Create Binding',
+		'mellow.server.settings.roblox.binds.create.button': 'Create New Binding',
+		'mellow.server.settings.roblox.binds.create.name': 'Display Name',
+		'mellow.server.settings.roblox.binds.create.type': 'Bind to',
+		'mellow.server.settings.roblox.binds.create.type.category': 'Binding Types',
+		'mellow.server.settings.roblox.binds.create.discord_roles': 'Discord Roles',
+		'mellow.server.settings.roblox.binds.create.discord_roles.options': 'Other Options',
+		'mellow.server.settings.roblox.binds.create.discord_roles.add_all': 'Add All Roles',
+		'mellow.server.settings.roblox.binds.create.requirements': 'Requirements',
+		'mellow.server.settings.roblox.binds.create.requirements.add': 'Add New Requirement',
+		'mellow.server.settings.roblox.binds.create.requirement': 'Requirement',
+		'mellow.server.settings.roblox.binds.create.requirement.group_role': 'Group Role ID',
+		'mellow.server.settings.roblox.binds.create.finish': 'Finish & Create Bind',
+
+		'mellow_bind.type.0': 'Discord Roles',
+		'mellow_bind.bound.0': 'Bound to {0} Discord Role{0|s}',
+		'mellow_bind.requirement.0': 'User must have a Verified Roblox Account',
+		'mellow_bind.requirement.1': 'User must have a Group Role',
+		'mellow_bind.requirements': '{0} requirement{0|s}',
 
 		'error.page': '(。>︿<)_θ',
 		'error.page2': 'oh noes, something\'s wrong!',

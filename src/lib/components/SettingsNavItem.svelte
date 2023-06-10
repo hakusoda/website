@@ -8,7 +8,7 @@
 </script>
 
 <a href={path} class="focusable" class:active>
-	{$t(`settings.${id}`)}
+	{$t(id)}
 </a>
 
 <style lang="scss">
@@ -21,6 +21,7 @@
 		&.active, &:hover {
 			box-shadow: var(--button-shadow);
 			background: var(--background-secondary);
+			text-decoration: none;
 		}
 	}
 </style>

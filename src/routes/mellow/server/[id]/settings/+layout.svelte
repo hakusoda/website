@@ -1,18 +1,15 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
+	import { page } from '$app/stores';
 	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
+
+	$: base = `/mellow/server/${$page.params.id}/settings`;
 </script>
 
 <div class="main">
 	<div class="nav">
-		<p>{$t('settings')}</p>
-		<SettingsNavItem id="settings.account" path="/settings/account"/>
-	
-		<p>{$t('settings.roblox')}</p>
-		<SettingsNavItem id="settings.roblox.verification" path="/settings/roblox/verification"/>
-
-		<p>{$t('settings.mellow')}</p>
-		<SettingsNavItem id="settings.mellow.servers" path="/settings/mellow/servers"/>
+		<p>{$t('mellow.server.settings.roblox')}</p>
+		<SettingsNavItem id="mellow.server.settings.roblox.binds" path={`${base}/roblox/binds`}/>
 	</div>
 	<slot/>
 </div>

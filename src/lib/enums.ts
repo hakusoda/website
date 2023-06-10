@@ -23,3 +23,11 @@ export enum RobloxLinkFlag {
 export enum Platform {
 	Discord
 }
+
+export enum MellowBindType {
+	DiscordRoles
+}
+export enum MellowBindRequirementType {
+	HasVerifiedUserLink,
+	HasRobloxGroupRole
+}
