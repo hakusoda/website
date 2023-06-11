@@ -71,7 +71,7 @@
 
 	let groupRoles: Record<string, RobloxGroupRole[]> = {};
 	let roleSearchId: string | null = null;
-	$: if (roleSearchId) {
+	$: if (roleSearchId && !groupRoles[roleSearchId]) {
 		const id = roleSearchId.toString();
 		fetch(`/api/roblox/group-roles?id=${id}`)
 			.then(response => response.json())

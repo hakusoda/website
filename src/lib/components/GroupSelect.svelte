@@ -46,14 +46,20 @@
 			{/if}
 			<ChevronDown/>
 		</button>
-		{#if state || cached.length === 0}
+		{#if state || !cached.length}
 			<p>{$t(searching ? 'group_select.searching' : results.length ? 'group_select.select' : query ? 'group_select.empty' : 'group_select.enter')}</p>
 			<TextInput bind:value={query} placeholder={$t('group_select.search')}/>
 			{#if results.length}
 				<p>{$t('group_select.results', [results.length])}</p>
 			{/if}
 			{#each results as item}
-				<button type="button">
+				<button type="button" on:click={() => {
+					state = 0, query = '';
+					value = item.id.toString();
+					onChange?.(value);
+					if (!cached.some(group => group.id === item.id))
+						localStorage.setItem('recent-bind-groups', JSON.stringify(cached = [...cached, item]));
+				}}>
 					<Avatar src={item.icon} size="xxxs"/>
 					{item.name}
 				</button>
