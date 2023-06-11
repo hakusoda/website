@@ -2,39 +2,34 @@
 	import { Button, Select, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
-	import type { RobloxGroupRole, PartialRobloxGroup } from '$lib/types';
-	import { MellowBindType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
+	import type { RobloxGroupRole } from '$lib/types';
+	import { MellowBindType, MellowLinkImportType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
 
 	import Modal from '$lib/components/Modal.svelte';
-	import Avatar from '$lib/components/Avatar.svelte';
+	import GroupSelect from '$lib/components/GroupSelect.svelte';
 
 	import X from '$lib/icons/X.svelte';
 	import Plus from '$lib/icons/Plus.svelte';
 	import Check from '$lib/icons/Check.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
-	import ChevronDown from '$lib/icons/ChevronDown.svelte';
 	export let data: PageData;
 
 	let trigger: () => void;
 	let bindData: string[] = [];
 	let bindName = 'Unnamed Link';
 	let bindType = MellowBindType.DiscordRoles;
-	let groupSearch = '';
 	let createError = '';
 	let creatingBind = false;
 	let requirements: [MellowBindRequirementType, string[]][] = [];
 	let requirementsType = MellowBindRequirementsType.MeetAll;
 	let requirementTrigger: () => void;
 
-	let filterRoles = '';
 	let roleTrigger: () => void;
-	let roleReqType = 0;
-	let roleSearchId = 0;
-	let roleReqIndex = 0;
-	let groupRoleTrigger: () => void;
-	let groupRoleModalTrigger: () => void;
+
+	let importType: MellowLinkImportType | null = null;
+	let importTarget: string | null = null;
+	let importTrigger: () => void;
 
 	$: hasVerifiedType = requirements.some(i => i[0] === MellowBindRequirementType.HasVerifiedUserLink) ? MellowBindRequirementType.HasRobloxGroupRole : MellowBindRequirementType.HasVerifiedUserLink;
 	const createBind = async () => {
@@ -74,31 +69,14 @@
 		bindType = MellowBindType.DiscordRoles;
 	};
 
-	let groupRoles: RobloxGroupRole[] = [];
-	let foundGroups: (PartialRobloxGroup & { icon: string })[] = [];
-	$: if (groupSearch) {
-		const body = groupSearch;
-		setTimeout(async () => {
-			if (groupSearch === body) {
-				const response = await fetch('?/searchGroups', {
-					body,
-					method: 'POST'
-				});
-				
-				const result = deserialize(await response.text());
-				foundGroups = result.type === 'success' ? result.data as any : [];
-			}
-		}, 1000);
+	let groupRoles: Record<string, RobloxGroupRole[]> = {};
+	let roleSearchId: string | null = null;
+	$: if (roleSearchId) {
+		const id = roleSearchId.toString();
+		fetch(`/api/roblox/group-roles?id=${id}`)
+			.then(response => response.json())
+			.then(data => groupRoles[id] = data);
 	}
-
-	$: if (roleSearchId)
-		fetch('?/getRoles', {
-			body: roleSearchId.toString(),
-			method: 'POST'
-		}).then(async response => {
-			const result = deserialize(await response.text());
-			groupRoles = result.type === 'success' ? result.data as any : [];
-		});
 </script>
 
 <div class="main">
@@ -112,7 +90,7 @@
 					<p>{$t(`mellow_bind.explanation.${item.type}`, [item.target_ids])} {$t(`mellow_bind.explanation.end.${item.requirements_type}`, [item.requirements.length])}</p>
 				</div>
 				<div class="buttons">
-					<Button>{$t('action.edit')}</Button>
+					<Button title="coming soon!!!" disabled>{$t('action.edit')}</Button>
 					<Button on:click={() => deleteBind(item.id)}><Trash/></Button>
 				</div>
 			</div>
@@ -122,6 +100,19 @@
 		<Button on:click={trigger}>
 			<Plus/>{$t('mellow.server.settings.roblox.binds.create.button')}
 		</Button>
+		<DropdownMenu bind:trigger={importTrigger}>
+			<Button slot="trigger" on:click={importTrigger} title="coming soon!!!" disabled>
+				<Plus/>{$t('mellow.server.settings.roblox.binds.import')}
+			</Button>
+			<p>{$t('mellow.server.settings.roblox.binds.import.category')}</p>
+			{#each Object.values(MellowLinkImportType) as type}
+				{#if typeof type === 'number'}
+					<button type="button" on:click={() => importType = +type}>
+						{$t(`mellow.server.settings.roblox.binds.import.type.${type}`)}
+					</button>
+				{/if}
+			{/each}
+		</DropdownMenu>
 	</div>
 </div>
 
@@ -153,7 +144,7 @@
 		<p class="modal-label">{$t('mellow.server.settings.roblox.binds.create.discord_roles')}</p>
 		<div class="roles">
 			{#each bindData as item}
-				<button class="item focusable" type="button" on:click={() => bindData = bindData.filter(i => i !== item)}>
+				<button class="item focusable" type="button" title={$t('action.remove')} on:click={() => bindData = bindData.filter(i => i !== item)}>
 					{data.roles.find(role => role.id === item)?.name}
 				</button>
 			{/each}
@@ -186,61 +177,35 @@
 				{/if}
 			{/each}
 		</Select.Root>
-		{#each requirements as item, index}
+		{#each requirements as item}
 			<div class="item">
 				<div class="rfields">
 					<p class="title">{$t(`mellow_bind.requirement.${item[0]}`)}</p>
 					{#if item[0] === MellowBindRequirementType.HasRobloxGroupRole}
-						<div class="field">
-							<p class="label">{$t('mellow.server.settings.roblox.binds.create.requirement.group_role')}</p>
-							<DropdownMenu bind:trigger={groupRoleTrigger}>
-								<button class="group-role" type="button" slot="trigger" on:click={groupRoleTrigger}>
-									{item[1][0] ?? 'None'}
-									<ChevronDown/>
-								</button>
-								<p>Recent Groups</p>
-								{#each JSON.parse(localStorage.getItem('recent-bind-groups') || '[]') || [] as item}
-									<button type="button" on:click={() => (roleReqIndex = index, roleReqType = 0, roleSearchId = item.id)}>
-										<Avatar src={item.icon} size="xxxs"/>
-										{item.name}
-									</button>
-								{/each}
-								<button type="button" on:click={() => {
-									roleReqIndex = index, roleReqType = 0;
-									groupRoleModalTrigger();
-								}}>
-									Search
-								</button>
-							</DropdownMenu>
+						<div class="fields">
+							<div class="field">
+								<p class="label">{$t('mellow.server.settings.roblox.binds.create.requirement.group')}</p>
+								<GroupSelect bind:value={item[1][0]} onChange={value => roleSearchId = value}/>
+							</div>
+							{#if groupRoles[item[1][0]]}
+								<div class="field">
+									<p class="label">{$t('mellow.server.settings.roblox.binds.create.requirement.group_role')}</p>
+									<Select.Root bind:value={item[1][1]} placeholder={$t('mellow.server.settings.roblox.binds.create.requirement.group_role.placeholder')}>
+										{#each groupRoles[item[1][0]] as role}
+											<Select.Item value={role.id.toString()}>
+												{role.name}
+											</Select.Item>
+										{/each}
+									</Select.Root>
+								</div>
+							{/if}
 						</div>
 					{/if}
 					{#if item[0] === MellowBindRequirementType.HasRobloxGroupRankInRange}
 						<div class="fields">
 							<div class="field">
 								<p class="label">{$t('mellow.server.settings.roblox.binds.create.requirement.group')}</p>
-								<DropdownMenu bind:trigger={groupRoleTrigger}>
-									<button class="group-role" type="button" slot="trigger" on:click={groupRoleTrigger}>
-										{item[1][0] ?? 'None'}
-										<ChevronDown/>
-									</button>
-									<p>Recent Groups</p>
-									{#each JSON.parse(localStorage.getItem('recent-bind-groups') || '[]') || [] as item}
-										<button type="button" on:click={() => requirements = requirements.map((i, j) => {
-											if (j === index)
-												return [i[0], [item.id.toString(), ...i[1].splice(1)]];
-											return i;
-										})}>
-											<Avatar src={item.icon} size="xxxs"/>
-											{item.name}
-										</button>
-									{/each}
-									<button type="button" on:click={() => {
-										roleReqIndex = index, roleReqType = 1;
-										groupRoleModalTrigger();
-									}}>
-										Search
-									</button>
-								</DropdownMenu>
+								<GroupSelect bind:value={item[1][0]}/>
 							</div>
 							<div class="field">
 								<p class="label">{$t('mellow.server.settings.roblox.binds.create.requirement.rank_from')}</p>
@@ -289,65 +254,10 @@
 	</div>
 </Modal>
 
-<Modal bind:trigger={groupRoleModalTrigger}>
-	<h1>Search for Group</h1>
-	<TextInput bind:value={groupSearch} placeholder="Search for Group"/>
-
-	<p>found groupss:</p>
-	<div class="groups">
-		{#each foundGroups as item}
-			<form method="dialog">
-				<button class="item" on:click={() => {
-					if (roleReqType)
-						requirements[roleReqIndex][1][0] = item.id.toString();
-					else
-						roleSearchId = item.id;
-					const value = JSON.parse(localStorage.getItem('recent-bind-groups') || '[]') || [];
-					localStorage.setItem('recent-bind-groups', JSON.stringify([...value, item]));
-				}}>
-					<Avatar src={item.icon} size="xs" transparent/>
-					<div class="name">
-						<h1>{item.name}</h1>
-						<p>{$t('mellow.server.settings.roblox.binds.create.group.details', [item])}</p>
-					</div>
-				</button>
-			</form>
-		{/each}
-	</div>
-
-	<form method="dialog">
-		<Button>
-			<X/>{$t('action.cancel')}
-		</Button>
-	</form>
-</Modal>
-
-{#if roleSearchId}
+{#if importType === MellowLinkImportType.RobloxGroupRolesToDiscordRoles}
 	<Modal autoOpen>
-		<h1>Select Role</h1>
-		<p class="modal-label">Filter</p>
-		<TextInput bind:value={filterRoles}/>
-		
-		<div class="group-roles">
-			{#each groupRoles.filter(role => role.name.toLowerCase().startsWith(filterRoles) && role.rank > 0) as item}
-				<button class="item" type="button" on:click={() => (roleSearchId = 0, requirements[roleReqIndex][1][0] = item.id.toString())}>
-					<h1>{item.name}</h1>
-					<p>{$t('mellow.server.settings.roblox.binds.create.group_role.details', [item])}</p>
-				</button>
-			{/each}
-		</div>
-
-		<div class="modal-buttons">
-			<Button on:click={() => {
-				roleSearchId = 0;
-				groupRoleModalTrigger();
-			}}>
-				<X/>Choose another Group
-			</Button>
-			<Button on:click={() => roleSearchId = 0}>
-				<X/>{$t('action.cancel')}
-			</Button>
-		</div>
+		<p class="modal-label">{$t('group_select')}</p>
+		<GroupSelect bind:value={importTarget}/>
 	</Modal>
 {/if}
 
@@ -430,26 +340,6 @@
 		}
 	}
 
-	.group-role {
-		color: var(--color-primary);
-		height: 32px;
-		border: none;
-		display: flex;
-		padding: 0 16px;
-		font-size: .75em;
-		min-width: 192px;
-		background: none;
-		transition: box-shadow 0.25s;
-		box-shadow: 0 0 0 1px var(--border-primary);
-		align-items: center;
-		font-family: var(--font-primary);
-		border-radius: 4px;
-		justify-content: space-between;
-		&:hover {
-			box-shadow: 0 0 0 1px var(--border-secondary);
-		}
-	}
-
 	.fields {
 		gap: 16px;
 		display: flex;
@@ -471,11 +361,14 @@
 			cursor: pointer;
 			display: flex;
 			padding: 0 12px;
-			font-size: .9em;
+			font-size: .8em;
 			background: var(--background-primary);
 			align-items: center;
 			font-family: var(--font-primary);
 			border-radius: 16px;
+			&:hover {
+				box-shadow: inset 0 0 0 1px var(--border-secondary);
+			}
 		}
 		:global(.content) {
 			overflow: auto;
@@ -483,73 +376,11 @@
 		}
 	}
 
-	.groups {
-		gap: 8px;
-		display: flex;
-		flex-direction: column;
-		.item {
-			width: 100%;
-			color: var(--color-primary);
-			border: none;
-			cursor: pointer;
-			display: flex;
-			padding: 8px 16px;
-			font-size: 1em;
-			text-align: start;
-			background: var(--background-tertiary);
-			align-items: center;
-			font-family: var(--font-primary);
-			border-radius: 8px;
-			.name {
-				margin-left: 16px;
-				h1 {
-					margin: 0;
-					font-size: 1em;
-					font-weight: 500;
-				}
-				p {
-					color: var(--color-secondary);
-					margin: 4px 0 0;
-					font-size: .8em;
-				}
-			}
-		}
-	}
-
-	.group-roles {
-		gap: 8px;
-		display: flex;
-		margin-top: 8px;
-		flex-direction: column;
-		.item {
-			width: 100%;
-			color: var(--color-primary);
-			border: none;
-			cursor: pointer;
-			padding: 8px 16px;
-			font-size: 1em;
-			text-align: start;
-			background: var(--background-tertiary);
-			font-family: var(--font-primary);
-			border-radius: 8px;
-			h1 {
-				margin: 0;
-				font-size: 1em;
-				font-weight: 500;
-			}
-			p {
-				color: var(--color-secondary);
-				margin: 4px 0 0;
-				font-size: .8em;
-			}
-		}
-	}
-
 	.modal-label {
 		color: var(--color-secondary);
 		margin: 0 0 6px;
 		font-size: .9em;
-		&:not(:nth-child(2)) {
+		&:not(:first-child):not(:nth-child(2)) {
 			margin-top: 24px;
 		}
 	}

@@ -36,3 +36,7 @@ export enum MellowBindRequirementsType {
 	MeetAll,
 	MeetOne
 }
+
+export enum MellowLinkImportType {
+	RobloxGroupRolesToDiscordRoles
+}
