@@ -89,6 +89,38 @@ export interface RobloxUser extends PartialRobloxUser {
 	externalAppDisplayName: null
 }
 
+export interface PartialRobloxGroup {
+	id: number
+	name: string
+	memberCount: number
+	hasVerifiedBadge: boolean
+}
+
+export interface RobloxLookupGroupsResponse {
+	data: PartialRobloxGroup[]
+}
+
+export interface RobloxThumbnailsResponse {
+	data: {
+		state: 'Success' | 'Error'
+		imageUrl: string
+		targetId: number
+	}[]
+}
+
+export interface RobloxGroupRole {
+	id: number
+	name: string
+	rank: number
+	description: string
+	memberCount: number
+}
+
+export interface RobloxGroupRolesResponse {
+	roles: RobloxGroupRole[]
+	groupId: number
+}
+
 export type ApiResponse<T> = {
 	error: true
 	error_id: string

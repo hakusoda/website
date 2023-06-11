@@ -21,7 +21,7 @@
 		color: var(--color-primary);
 		border: none;
 		padding: 16px 24px;
-		overflow: visible;
+		overflow: auto;
 		min-width: 40%;
 		font-size: initial;
 		animation: .5s show;

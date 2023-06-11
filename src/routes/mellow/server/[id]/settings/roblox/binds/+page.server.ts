@@ -5,7 +5,8 @@ import supabase from '$lib/supabase';
 import { getDiscordServerRoles } from '$lib/discord';
 import { verifyServerMembership } from '$lib/util/server';
 import type { Actions, PageServerLoad } from './$types';
-import { MellowBindType, MellowBindRequirementType } from '$lib/enums';
+import { lookupRobloxGroups, getRobloxGroupRoles, getRobloxGroupAvatars } from '$lib/api';
+import { MellowBindType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
 export const load = (async ({ params: { id } }) => {
 	const { data, error } = await supabase.from('mellow_binds').select<string, {
 		id: string
@@ -19,7 +20,8 @@ export const load = (async ({ params: { id } }) => {
 			type: MellowBindRequirementType
 			created_at: string
 		}[]
-	}>('id, name, type, created_at, target_ids, requirements:mellow_bind_requirements ( id, type, data, created_at )').eq('server_id', id);
+		requirements_type: MellowBindRequirementsType
+	}>('id, name, type, created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data, created_at )').eq('server_id', id);
 	if (error) {
 		console.error(error);
 		throw kit.error(500, error.message);
@@ -46,7 +48,8 @@ const CREATE_SCHEMA = z.object({
 	requirements: z.array(z.object({
 		data: z.array(z.string().max(100)),
 		type: z.nativeEnum(MellowBindRequirementType)
-	}))
+	})),
+	requirementsType: z.nativeEnum(MellowBindRequirementsType)
 });
 
 export const actions = {
@@ -67,7 +70,8 @@ export const actions = {
 			type: data.type,
 			creator: session.user.id,
 			server_id: id,
-			target_ids: data.data
+			target_ids: data.data,
+			requirements_type: data.requirementsType
 		}).select('id').limit(1).single();
 		if (response2.error) {
 			console.log(response2.error);
@@ -100,5 +104,28 @@ export const actions = {
 		}
 
 		return {};
+	},
+	searchGroups: async ({ locals: { getSession }, params: { id }, request }) => {
+		await verifyServerMembership(await getSession(), id);
+
+		const body = await request.text();
+		if (typeof body !== 'string')
+			throw kit.error(400, 'Invalid Request Body');
+
+		const groups = await lookupRobloxGroups(body);
+		const icons = await getRobloxGroupAvatars(groups.map(group => group.id));
+		return groups.map(group => ({
+			...group,
+			icon: icons.find(i => i.targetId === group.id)?.imageUrl
+		}));
+	},
+	getRoles: async ({ locals: { getSession }, params: { id }, request }) => {
+		await verifyServerMembership(await getSession(), id);
+
+		const body = await request.text();
+		if (typeof body !== 'string')
+			throw kit.error(400, 'Invalid Request Body');
+
+		return await getRobloxGroupRoles(body);
 	}
 } satisfies Actions;
