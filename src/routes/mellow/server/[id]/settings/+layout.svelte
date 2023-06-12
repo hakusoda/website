@@ -10,6 +10,8 @@
 	<div class="nav">
 		<p>{$t('mellow.server.settings.roblox')}</p>
 		<SettingsNavItem id="mellow.server.settings.roblox.binds" path={`${base}/roblox/binds`}/>
+
+		<SettingsNavItem id="mellow.server.settings.return" path="/settings/mellow/servers" footer/>
 	</div>
 	<slot/>
 </div>
@@ -17,6 +19,7 @@
 <style lang="scss">
 	.main {
 		display: flex;
+		min-height: 100%;
 		.nav {
 			width: 25%;
 			margin: 16px 0 16px 16px;

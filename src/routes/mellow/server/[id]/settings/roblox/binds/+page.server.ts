@@ -12,6 +12,10 @@ export const load = (async ({ params: { id } }) => {
 		id: string
 		name: string
 		type: MellowBindType
+		creator: {
+			name: string | null
+			username: string
+		}
 		created_at: string
 		target_ids: string[]
 		requirements: {
@@ -21,7 +25,7 @@ export const load = (async ({ params: { id } }) => {
 			created_at: string
 		}[]
 		requirements_type: MellowBindRequirementsType
-	}>('id, name, type, created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data, created_at )').eq('server_id', id);
+	}>('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data, created_at )').eq('server_id', id);
 	if (error) {
 		console.error(error);
 		throw kit.error(500, error.message);

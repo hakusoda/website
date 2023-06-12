@@ -3,7 +3,9 @@
 
 	import { t } from '$lib/localisation';
 	import type { PageData } from './$types';
+	import { mellowLinkViewMode } from '$lib/settings';
 	import type { RobloxGroupRole } from '$lib/types';
+	import { MellowLinkListViewMode } from '$lib/enums';
 	import { MellowBindType, MellowLinkImportType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
 
 	import Modal from '$lib/components/Modal.svelte';
@@ -77,16 +79,21 @@
 			.then(response => response.json())
 			.then(data => groupRoles[id] = data);
 	}
+
+	let bindFilter = '';
+
+	$: compact = $mellowLinkViewMode === MellowLinkListViewMode.Compact;
 </script>
 
 <div class="main">
-	<p>this page is unfinished...</p>
 	<div class="binds">
-		{#each data.binds as item}
-			<div class="item">
+		{#each data.binds.filter(item => item.name.toLowerCase().includes(bindFilter)) as item}
+			<div class="item" class:compact>
 				<div class="name">
 					<h1>{item.name}</h1>
-					<p>{$t(`mellow_bind.bound.${item.type}`, [item.target_ids.length])} • {$t('mellow_bind.requirements', [item.requirements.length])}</p>
+					{#if !compact}
+						<p>{$t('mellow_bind.creator')} <a href={`/user/${item.creator.username}`}>{item.creator.name ?? item.creator.username}</a>, {$t('time_ago', [item.created_at])}</p>
+					{/if}
 					<p>{$t(`mellow_bind.explanation.${item.type}`, [item.target_ids])} {$t(`mellow_bind.explanation.end.${item.requirements_type}`, [item.requirements.length])}</p>
 				</div>
 				<div class="buttons">
@@ -96,6 +103,7 @@
 			</div>
 		{/each}
 	</div>
+	<div class="fade"/>
 	<div class="buttons">
 		<Button on:click={trigger}>
 			<Plus/>{$t('mellow.server.settings.roblox.binds.create.button')}
@@ -113,6 +121,16 @@
 				{/if}
 			{/each}
 		</DropdownMenu>
+		<TextInput bind:value={bindFilter} placeholder={$t('action.search')}/>
+		<Select.Root bind:value={$mellowLinkViewMode}>
+			{#each Object.values(MellowLinkListViewMode) as item}
+				{#if typeof item === 'number'}
+					<Select.Item value={item}>
+						{$t(`mellow_bind.view_mode.${item}`)}
+					</Select.Item>
+				{/if}
+			{/each}
+		</Select.Root>
 	</div>
 </div>
 
@@ -264,10 +282,16 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 32px 256px 32px 64px;
+		margin: 0px 192px 32px 64px;
+		display: flex;
+		position: relative;
+		flex-direction: column;
 		.binds {
 			gap: 16px;
+			height: 100%;
 			display: flex;
+			padding: 32px 0;
+			overflow: auto;
 			flex-direction: column;
 			.item {
 				display: flex;
@@ -284,7 +308,7 @@
 					p {
 						color: var(--color-secondary);
 						margin: 4px 0 0;
-						font-size: .8em;
+						font-size: .75em;
 					}
 				}
 				.buttons {
@@ -292,12 +316,33 @@
 					display: flex;
 					margin-left: auto;
 				}
+				&.compact {
+					padding: 8px 16px;
+					border-radius: 8px;
+					.name {
+						font-size: .9em;
+						h1 {
+							margin-bottom: 4px;
+						}
+					}
+				}
 			}
+		}
+		.fade {
+			left: 0;
+			width: 100%;
+			bottom: 48px;
+			height: 32px;
+			position: absolute;
+			background: linear-gradient(to bottom, transparent, var(--background-primary));
 		}
 		& > .buttons {
 			gap: 16px;
 			display: flex;
-			margin-top: 24px;
+			margin-top: 16px;
+			:global(input) {
+				margin-left: auto;
+			}
 		}
 	}
 

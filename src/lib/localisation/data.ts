@@ -4,6 +4,7 @@ export default {
 		'action.cancel': 'Cancel',
 		'action.delete': 'Delete',
 		'action.remove': 'Remove',
+		'action.search': 'Search',
 		'action.create_account': 'Create Account',
 
 		'home': 'Home',
@@ -86,6 +87,7 @@ export default {
 
 		'settings.mellow': 'mellow Bot',
 		'settings.mellow.servers': 'Discord Servers',
+		'settings.mellow.servers.server.details': 'Managed by {0} user{0|s}',
 
 		'mellow.server.settings.roblox': 'Roblox',
 		'mellow.server.settings.roblox.binds': 'Links',
@@ -112,6 +114,7 @@ export default {
 		'mellow.server.settings.roblox.binds.import': 'Import Links',
 		'mellow.server.settings.roblox.binds.import.category': 'Import Types',
 		'mellow.server.settings.roblox.binds.import.type.0': 'Roblox Group Roles → Discord Roles',
+		'mellow.server.settings.return': 'Return to Server List',
 
 		'group_select': 'Select Group',
 		'group_select.recent': 'Recent Groups',
@@ -124,6 +127,9 @@ export default {
 
 		'mellow_bind.type.0': 'Discord Roles',
 		'mellow_bind.bound.0': 'Linked to {0} Discord Role{0|s}',
+		'mellow_bind.creator': 'Created by',
+		'mellow_bind.view_mode.0': 'Default View',
+		'mellow_bind.view_mode.1': 'Compact View',
 		'mellow_bind.requirement.0': 'Must have a Verified Roblox Account',
 		'mellow_bind.requirement.1': 'Must have a Roblox Group Role',
 		'mellow_bind.requirement.2': 'Must have a Roblox Group Rank in range',

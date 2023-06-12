@@ -40,3 +40,8 @@ export enum MellowBindRequirementsType {
 export enum MellowLinkImportType {
 	RobloxGroupRolesToDiscordRoles
 }
+
+export enum MellowLinkListViewMode {
+	Default,
+	Compact
+}

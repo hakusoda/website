@@ -1,10 +1,13 @@
 <script lang="ts">
 	import '@voxelified/voxeliface/styles.scss';
+	import { inject } from '@vercel/analytics';
 	import { Header, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation'; 
+	import { dev } from '$app/environment';
 	import { theme } from '$lib/settings';
 	import type { LayoutData } from './$types';
+	inject({ mode: dev ? 'development' : 'production' });
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';

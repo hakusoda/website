@@ -6,8 +6,9 @@ export const load = (async () => {
 	const { data, error } = await supabase.from('mellow_servers').select<string, {
 		id: string
 		name: string
+		members: { id: string }[]
 		avatar_url: string
-	}>('id, name, avatar_url');
+	}>('id, name, avatar_url, members:mellow_server_members ( id )');
 	if (error) {
 		console.error(error);
 		throw kit.error(500, error.message);

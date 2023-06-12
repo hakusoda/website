@@ -3,11 +3,12 @@
 	import { page } from '$app/stores';
 	export let id: string;
 	export let path: string;
+	export let footer = false;
 
 	$: active = $page.url.pathname === path;
 </script>
 
-<a href={path} class="focusable" class:active>
+<a href={path} class="focusable" class:active class:footer>
 	{$t(id)}
 </a>
 
@@ -22,6 +23,9 @@
 			box-shadow: var(--button-shadow);
 			background: var(--background-secondary);
 			text-decoration: none;
+		}
+		&.footer {
+			margin-top: auto;
 		}
 	}
 </style>
