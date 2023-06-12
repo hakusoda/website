@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 
 	export let autoOpen = false;
-	export const trigger = () => dialog.showModal();
+	export const trigger = () => dialog.open ? dialog.close() : dialog.showModal();
 	export const close = () => dialog.close();
 
 	let dialog: HTMLDialogElement;

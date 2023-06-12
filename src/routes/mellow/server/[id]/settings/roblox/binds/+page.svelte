@@ -2,6 +2,7 @@
 	import { Button, Select, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
+	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
 	import { mellowLinkViewMode } from '$lib/settings';
 	import type { RobloxGroupRole } from '$lib/types';
@@ -24,6 +25,7 @@
 	let createError = '';
 	let creatingBind = false;
 	let requirements: [MellowBindRequirementType, string[]][] = [];
+	let linksContainer: HTMLDivElement;
 	let requirementsType = MellowBindRequirementsType.MeetAll;
 	let requirementTrigger: () => void;
 
@@ -50,10 +52,15 @@
 			}),
             method: 'POST'
         });
-		if (response.status === 200) {
-			location.reload();
-		} else
-			creatingBind = !(createError = (await response.json()).error.message);
+		const result = deserialize(await response.text());
+		if (result.type === 'success') {
+			data.binds = [...data.binds, result.data as any];
+			creatingBind = false;
+			trigger();
+			resetAdd();
+			setTimeout(() => linksContainer.scrollTo({ top: linksContainer.scrollHeight, behavior: 'smooth' }), 100);
+		} else if (result.type === 'error')
+			creatingBind = !(createError = result.error);
 	};
 	const deleteBind = async (id: string) => {
 		const response = await fetch('?/delete', {
@@ -86,7 +93,7 @@
 </script>
 
 <div class="main">
-	<div class="binds">
+	<div class="binds" bind:this={linksContainer}>
 		{#each data.binds.filter(item => item.name.toLowerCase().includes(bindFilter)) as item}
 			<div class="item" class:compact>
 				<div class="name">

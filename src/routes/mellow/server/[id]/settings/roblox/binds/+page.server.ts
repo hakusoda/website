@@ -23,10 +23,9 @@ export const load = (async ({ params: { id } }) => {
 			id: string
 			data: string[]
 			type: MellowBindRequirementType
-			created_at: string
 		}[]
 		requirements_type: MellowBindRequirementsType
-	}>('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data, created_at )').eq('server_id', id);
+	}>('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data )').eq('server_id', id);
 	if (error) {
 		console.error(error);
 		throw kit.error(500, error.message);
@@ -77,7 +76,7 @@ export const actions = {
 			server_id: id,
 			target_ids: data.data,
 			requirements_type: data.requirementsType
-		}).select('id').limit(1).single();
+		}).select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type').limit(1).single();
 		if (response2.error) {
 			console.log(response2.error);
 			throw kit.error(500, response2.error.message);
@@ -87,13 +86,16 @@ export const actions = {
 			type: item.type,
 			data: item.data,
 			bind_id: response2.data.id
-		})));
+		}))).select('id, type, data');
 		if (response3.error) {
 			console.log(response3.error);
 			throw kit.error(500, response3.error.message);
 		}
 
-		return {};
+		return {
+			...response2.data,
+			requirements: response3.data
+		};
 	},
 	delete: async ({ locals: { getSession }, params: { id }, request }) => {
 		await verifyServerMembership(await getSession(), id);
