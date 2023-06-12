@@ -45,3 +45,9 @@ export enum MellowLinkListViewMode {
 	Default,
 	Compact
 }
+
+export enum RequestErrorType {
+	InvalidBody,
+	Unauthenticated,
+	DatabaseUpdate
+}

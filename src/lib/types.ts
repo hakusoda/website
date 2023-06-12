@@ -1,4 +1,5 @@
-import type { TeamRole, RobloxLinkType, RobloxLinkFlag } from './enums';
+import type { ZodIssue } from 'zod';
+import type { TeamRole, RequestErrorType, RobloxLinkType, RobloxLinkFlag } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -119,6 +120,11 @@ export interface RobloxGroupRole {
 export interface RobloxGroupRolesResponse {
 	roles: RobloxGroupRole[]
 	groupId: number
+}
+
+export interface RequestError {
+	error_id: RequestErrorType
+	zod_issues?: ZodIssue[]
 }
 
 export type ApiResponse<T> = {

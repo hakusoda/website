@@ -19,7 +19,7 @@
 	$: if (data.session)
 		getUser(data.session.user.id).then(user => {
 			if (user)
-				goto(`/user/${user.username}`);
+				location.reload();
 			else
 				goto('/login/profile');
 		});

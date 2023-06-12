@@ -1,16 +1,52 @@
 <script lang="ts">
+	import { Button, TextInput } from '@voxelified/voxeliface';
+
 	import { t } from '$lib/localisation';
 	import { UserFlags } from '$lib/enums';
+	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
+	import type { RequestError } from '$lib/types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Description from '$lib/components/Description.svelte';
+	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
+	import X from '$lib/icons/X.svelte';
 	import Star from '$lib/icons/Star.svelte';
+	import Check from '$lib/icons/Check.svelte';
 	import Person from '$lib/icons/Person.svelte';
 	import People from '$lib/icons/People.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
+	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import Voxelified from '$lib/icons/Voxelified.svelte';
 	export let data: PageData;
+
+	let saving = false;
+	let editing = false;
+	let editBio = data.bio || '';
+	let editName = data.name || data.username;
+	let saveError: RequestError | null = null;
+	$: if (!editing)
+		editBio = data.bio || '', editName = data.name || data.username;
+	else
+		editBio = editBio.slice(0, 200), editName = editName.slice(0, 20);
+
+	const save = async () => {
+		saving = !(saveError = null);
+		const response = await fetch('?/edit', {
+			body: JSON.stringify({
+				bio: editBio.length ? editBio : null,
+				name: editName.length ? editName : null
+			}),
+            method: 'POST'
+        });
+		const result = deserialize(await response.text());
+		if (result.type === 'success')
+			location.reload();
+		else if (result.type === 'failure')
+			saveError = result.data as any, saving = false;
+		console.log(result);
+	};
 </script>
 
 <div class="main">
@@ -18,71 +54,94 @@
 		<div class="header">
 			<Avatar src={data.avatar_url} circle/>
 			<div class="name">
-				<h1>
-					{data.name ?? data.username}
-				</h1>
+				<h1>{editName || data.username}</h1>
 				<p>@{data.username}</p>
 			</div>
 		</div>
-		<div class="buttons">
-			<div class="roles">
-				{#each Object.values(UserFlags) as flag}
-					{#if typeof flag === 'number' && flag && (data.flags & flag) === flag}
-						<p class="role"><Voxelified/>{$t(`user_role.${flag}`)}</p>
-					{/if}
-				{/each}
+		{#if !editing}
+			<div class="buttons">
+				<div class="roles">
+					{#each Object.values(UserFlags) as flag}
+						{#if typeof flag === 'number' && flag && (data.flags & flag) === flag}
+							<p class="role"><Voxelified/>{$t(`user_role.${flag}`)}</p>
+						{/if}
+					{/each}
+				</div>
+				{#if data.id === data.user?.id}
+					<Button on:click={() => editing = true}>
+						<PencilFill/>{$t('action.edit_profile')}
+					</Button>
+				{/if}
 			</div>
-		</div>
-		{#if data.bio}
-			<div class="separator"/>
-			{data.bio}
-		{/if}
-		<div class="separator"/>
-		<div class="counter">
-			<Sunrise/>
-			<p>{$t('profile.joined', [data.created_at])}</p>
-		</div>
-		{#if data.teams.length}
+			{#if data.bio}
+				<div class="separator"/>
+				<Description value={data.bio}/>
+			{/if}
 			<div class="separator"/>
 			<div class="counter">
-				<People/>
-				<p>{$t(`profile.teams.${data.teams.length === 1}`, [data.teams.length])}</p>
+				<Sunrise/>
+				<p>{$t('profile.joined', [data.created_at])}</p>
 			</div>
-			<div class="teams">
-				{#each data.teams as item}
-					<a href={`/team/${item.name}`}>
-						<Avatar src={item.avatar_url} size="sm"/>
-						<div class="info">
-							<div class="name">
-								<p class="display">{item.display_name}</p>
-								<p class="id">{item.name}</p>
+			{#if data.teams.length}
+				<div class="separator"/>
+				<div class="counter">
+					<People/>
+					<p>{$t(`profile.teams.${data.teams.length === 1}`, [data.teams.length])}</p>
+				</div>
+				<div class="teams">
+					{#each data.teams as item}
+						<a href={`/team/${item.name}`}>
+							<Avatar src={item.avatar_url} size="sm"/>
+							<div class="info">
+								<div class="name">
+									<p class="display">{item.display_name}</p>
+									<p class="id">{item.name}</p>
+								</div>
+								<p class="details">{$t('profile.teams.item.details', [item.members.length, data.name ?? data.username, $t(`team_role.${item.role}.profile`)])}</p>
 							</div>
-							<p class="details">{$t('profile.teams.item.details', [item.members.length, data.name ?? data.username, $t(`team_role.${item.role}.profile`)])}</p>
-						</div>
-					</a>
-				{/each}
-			</div>
-		{/if}
-		{#if data.roblox_links.length}
+						</a>
+					{/each}
+				</div>
+			{/if}
+			{#if data.roblox_links.length}
+				<div class="separator"/>
+				<div class="counter">
+					<Person/>
+					<p>{$t('profile.roblox')}</p>
+				</div>
+				<div class="roblox">
+					{#each data.roblox_users as item}
+						<a href={`https://roblox.com/users/${item.id}/profile`} target="_blank">
+							<Avatar src={item.icon.imageUrl} size="xxs" circle/>
+							{item.displayName}
+						</a>
+					{/each}
+				</div>
+			{/if}
 			<div class="separator"/>
 			<div class="counter">
-				<Person/>
-				<p>{$t('profile.roblox')}</p>
+				<Star/>
+				<p>{$t('profile.id', [data.id])}</p>
 			</div>
-			<div class="roblox">
-				{#each data.roblox_users as item}
-					<a href={`https://roblox.com/users/${item.id}/profile`} target="_blank">
-						<Avatar src={item.icon.imageUrl} size="xxs" circle/>
-						{item.displayName}
-					</a>
-				{/each}
+		{:else}
+			<p class="field-label">{$t('profile.name')}</p>
+			<TextInput bind:value={editName} placeholder={data.username}/>
+
+			<p class="field-label">{$t('profile.bio')}</p>
+			<TextInput bind:value={editBio} multiline placeholder={$t('profile.bio.empty')}/>
+
+			<RequestErrorUI data={saveError}/>
+			<div class="edit-buttons">
+				<Button on:click={save} disabled={saving || (editName === (data.name || data.username) && editBio === data.bio)}>
+					<Check/>
+					{$t('action.save_changes')}
+				</Button>
+				<Button on:click={() => editing = false} disabled={saving}>
+					<X/>
+					{$t('action.cancel')}
+				</Button>
 			</div>
 		{/if}
-		<div class="separator"/>
-		<div class="counter">
-			<Star/>
-			<p>{$t('profile.id', [data.id])}</p>
-		</div>
 	</div>
 </div>
 
@@ -148,6 +207,27 @@
 						align-items: center;
 					}
 				}
+			}
+			.edit-buttons {
+				gap: 16px;
+				display: flex;
+				margin-top: 16px;
+			}
+			.field-label {
+				color: var(--color-secondary);
+				margin: 32px 0 8px;
+				font-size: .9em;
+				&:first-of-type {
+					margin-top: 16px;
+				}
+			}
+			:global(.text-input) {
+				width: 100%;
+			}
+			:global(.text-input[contenteditable]) {
+				height: 128px;
+				overflow: auto;
+				max-height: 128px;
 			}
 			.separator {
 				width: 100%;

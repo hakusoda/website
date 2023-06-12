@@ -1,9 +1,12 @@
+import { z } from 'zod';
 import * as kit from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
-import type { TeamRole } from '$lib/enums';
-import type { PageServerLoad } from './$types';
+import type { RequestError } from '$lib/types';
+import { DISPLAY_NAME_REGEX } from '$lib/constants';
+import { TeamRole, RequestErrorType } from '$lib/enums';
+import type { Actions, PageServerLoad } from './$types';
 import { getUserAvatar, getTeamAvatar } from '$lib/database';
 import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
 export const config = { regions: ['iad1'] };
@@ -52,3 +55,33 @@ export const load = (async ({ params: { name } }) => {
 		}))
 	};
 }) satisfies PageServerLoad;
+
+const EDIT_PROFILE_SCHEMA = z.object({
+	bio: z.string().max(200).nullable(),
+	name: z.string().regex(DISPLAY_NAME_REGEX).nullable()
+});
+
+export const actions = {
+	edit: async ({ locals: { getSession }, request }) => {
+		const session = await getSession();
+		if (!session)
+			return kit.fail(401, { error_id: RequestErrorType.Unauthenticated } satisfies RequestError);
+
+		const data = EDIT_PROFILE_SCHEMA.safeParse(await request.json());
+		if (!data.success) {
+			console.error(data.error);
+			return kit.fail(400, {
+				error_id: RequestErrorType.InvalidBody,
+				zod_issues: data.error.issues
+			} satisfies RequestError);
+		}
+
+		const { error } = await supabase.from('users').update(data.data).eq('id', session.user.id);
+		if (error) {
+			console.error(error);
+			return kit.fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		}
+
+		return {};
+	}
+} satisfies Actions;

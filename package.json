@@ -9,6 +9,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"deploy": "vercel deploy --prod",
+		"deploy:preview": "vercel deploy",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync"
 	},
