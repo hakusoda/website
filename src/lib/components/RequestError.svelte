@@ -4,10 +4,11 @@
 
 	import ArrowRightShort from '../icons/ArrowRightShort.svelte';
 	export let data: RequestError | null = null;
+	export let background = 'var(--background-secondary)';
 </script>
 
 {#if data}
-	<div class="request-error">
+	<div class="request-error" style={`--bg: ${background}`}>
 		<div class="container message">
 			<p class="title">{$t('request_error.title')}</p>
 			<p class="message">{$t(`request_error.${data.error_id}`)}</p>
@@ -50,7 +51,7 @@
 			padding: 4px 6px;
 			position: absolute;
 			font-size: .75em;
-			background: var(--background-secondary);
+			background: var(--bg);
 		}
 		&.message {
 			border-color: #ff767680;

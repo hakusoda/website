@@ -58,7 +58,7 @@ export const load = (async ({ params: { name } }) => {
 
 const EDIT_PROFILE_SCHEMA = z.object({
 	bio: z.string().max(200).nullable(),
-	name: z.string().regex(DISPLAY_NAME_REGEX).nullable()
+	name: z.string().regex(DISPLAY_NAME_REGEX).min(3).max(20).nullable()
 });
 
 export const actions = {

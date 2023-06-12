@@ -6,6 +6,7 @@ export default {
 		'action.remove': 'Remove',
 		'action.search': 'Search',
 		'action.edit_profile': 'Edit Profile',
+		'action.view_profile': 'View Profile',
 		'action.save_changes': 'Save Changes',
 		'action.create_account': 'Create Account',
 
