@@ -2,6 +2,7 @@ import * as kit from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import type { PageServerLoad } from './$types';
+export const config = { regions: ['iad1'] };
 export const load = (async () => {
 	const { data, error } = await supabase.from('mellow_servers').select<string, {
 		id: string

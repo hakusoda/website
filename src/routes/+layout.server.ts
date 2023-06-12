@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 
 import { getUser } from '$lib/database';
 import type { LayoutServerLoad } from './$types';
+export const config = { runtime: 'edge' };
 export const load = (async ({ url, locals: { getSession } }) => {
 	const session = await getSession();
 	const user = session ? await getUser(session.user.id) : null;

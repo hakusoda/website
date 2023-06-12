@@ -6,6 +6,7 @@ import type { TeamRole } from '$lib/enums';
 import type { PageServerLoad } from './$types';
 import { getUserAvatar, getTeamAvatar } from '$lib/database';
 import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
+export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { name } }) => {
 	const { data, error } = await supabase.from('users').select<string, {
 		id: string

@@ -7,6 +7,7 @@ import { verifyServerMembership } from '$lib/util/server';
 import type { Actions, PageServerLoad } from './$types';
 import { lookupRobloxGroups, getRobloxGroupRoles, getRobloxGroupAvatars } from '$lib/api';
 import { MellowBindType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
+export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
 	const { data, error } = await supabase.from('mellow_binds').select<string, {
 		id: string

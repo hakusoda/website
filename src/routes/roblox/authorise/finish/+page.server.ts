@@ -7,6 +7,7 @@ import { PUBLIC_ROBLOX_ID } from '$env/static/public';
 import { getRobloxUserInfo } from '$lib/verification';
 import { RobloxLinkType, RobloxLinkFlag } from '$lib/enums';
 import { request, getRobloxUser, getRobloxAvatars } from '$lib/api';
+export const config = { regions: ['iad1'] };
 export const load = (async ({ url, locals: { getSession } }) => {
 	const session = (await getSession())!;
 
@@ -72,7 +73,9 @@ export const load = (async ({ url, locals: { getSession } }) => {
 
 export const actions = {
 	default: async ({ locals: { getSession }, request }) => {
-		const session = (await getSession())!;
+		const session = await getSession();
+		if (!session)
+			throw error(401);
 
 		const data = await request.text();
 		const response4 = await supabase.from('roblox_links').update({

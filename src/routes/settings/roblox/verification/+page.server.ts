@@ -6,6 +6,7 @@ import { RobloxLinkType } from '$lib/enums';
 import { getUserRobloxLinks } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
 import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
+export const config = { regions: ['iad1'] };
 export const load = (async ({ parent }) => {
 	const { user } = await parent();
 	if (!user)

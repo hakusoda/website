@@ -4,6 +4,7 @@ import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
 import type { PageServerLoad } from './$types';
 import { getUserAvatar, getTeamAvatar, getProjectAvatar, getProjectBanner } from '$lib/database';
+export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { name } }) => {
 	const { data, error } = await supabase.from('projects').select<string, {
 		id: string
