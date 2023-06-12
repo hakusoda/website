@@ -2,10 +2,12 @@
 	import { DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '../localisation';
-	import { RobloxLinkFlag } from '../enums';
-	import type { PartialRobloxUser, RobloxLink } from '../types';
+	import { deserialize } from '$app/forms';
+	import { RobloxLinkFlag, RequestErrorType } from '../enums';
+	import type { RobloxLink, RequestError, PartialRobloxUser } from '../types';
 
 	import Avatar from './Avatar.svelte';
+	import RequestErrorUI from './RequestError.svelte';
 
 	import X from '../icons/X.svelte';
 	import Eye from '../icons/Eye.svelte';
@@ -19,18 +21,20 @@
 
 	let trigger: () => void;
 
-	let error = '';
+	let error: RequestError | null = null;
 	let unlinking = false;
-	const action = async (event: Event, body: string = link.id) => {
-		error = '';
+	const action = async (action: string, body: string = link.id) => {
+		error = null;
 		unlinking = true;
-       	const response = await fetch((event.target as HTMLFormElement).action, {
-			body,
-            method: 'POST'
-        });
-		if (response.status === 200)
+       	const response = await fetch(action, { body, method: 'POST' });
+		const result = deserialize(await response.text());
+		if (result.type === 'success')
 			return location.reload();
-		unlinking = !(error = response.statusText);
+		else if (result.type === 'failure')
+			error = result.data as any;
+		else if (result.type === 'error')
+			error = { error_id: RequestErrorType.Offline } satisfies RequestError;
+		unlinking = false;
     };
 </script>
 
@@ -55,26 +59,20 @@
 		<div class="button">
 			<CaretDown/>
 		</div>
+		<RequestErrorUI data={error}/>
 	</button>
 	<p>{user.displayName} (@{user.name})</p>
 	<a href={`https://roblox.com/users/${user.id}/profile`} target="_blank">
 		<RobloxIcon/>{$t('roblox_link.view')}
 	</a>
 	<div class="separator"/>
-	<form method="POST" action="?/changeVisibility" on:submit|preventDefault={e => action(e, `${link.id}:${!link.public}`)}>
-		<button>
-			<Eye/>{$t(`roblox_link.change_visibility.${link.public}`)}
-		</button>
-	</form>
-	<form method="POST" action="?/unlink" on:submit|preventDefault={action}>
-		<button>
-			<Trash/>{$t('roblox_link.delete')}
-		</button>
-	</form>
+	<button type="button" on:click={() => action('?/changeVisibility', `${link.id}:${!link.public}`)}>
+		<Eye/>{$t(`roblox_link.change_visibility.${link.public}`)}
+	</button>
+	<button type="button" on:click={() => action('?/unlink')}>
+		<Trash/>{$t('roblox_link.delete')}
+	</button>
 </DropdownMenu>
-{#if error}
-	<p>{error}</p>
-{/if}
 
 <style lang="scss">
 	:global(.users .container) {
@@ -89,6 +87,7 @@
 		display: flex;
 		padding: 8px 16px 8px 8px;
 		font-size: 1em;
+		flex-wrap: wrap;
 		text-align: start;
 		background: var(--background-secondary);
 		align-items: center;

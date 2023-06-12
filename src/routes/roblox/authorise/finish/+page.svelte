@@ -3,26 +3,32 @@
 
 	import { t } from '$lib/localisation';
 	import { goto } from '$app/navigation';
+	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
+	import { RequestErrorType } from '$lib/enums';
+	import type { RequestError } from '$lib/types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
 	import X from '$lib/icons/X.svelte';
 	import Check from '$lib/icons/Check.svelte';
 	export let data: PageData;
 
-	let error = false;
+	let error: RequestError | null = null;
 	let finishing = false;
-	const submit = async (event: Event) => {
-		error = false;
+	const submit = async () => {
+		error = null;
 		finishing = true;
-       	const response = await fetch((event.target as HTMLFormElement).action, {
-			body: data.linkId,
-            method: 'POST'
-        });
-		if (response.status === 200)
+       	const response = await fetch('?/confirm', { body: data.linkId,  method: 'POST' });
+		const result = deserialize(await response.text());
+		if (result.type === 'success')
 			return goto('/settings/roblox/verification');
-		finishing = !(error = true);
+		else if (result.type === 'failure')
+			error = result.data as any;
+		else if (result.type === 'error')
+			error = { error_id: RequestErrorType.Offline } satisfies RequestError;
+		finishing = false;
     }
 </script>
 
@@ -36,15 +42,11 @@
 		</div>
 	</a>
 	<p class="sub">{$t('roblox.verification.finish.sub', [data.user?.created, data.user?.id])}</p>
-	{#if error}
-		<p>{$t('error.unknown')}</p>
-	{/if}
+	<RequestErrorUI data={error}/>
 	<div class="buttons">
-		<form method="POST" on:submit|preventDefault={submit}>
-			<Button disabled={finishing}>
-				<Check/>{$t('roblox.verification.finish.yes')}
-			</Button>
-		</form>
+		<Button on:click={submit} disabled={finishing}>
+			<Check/>{$t('roblox.verification.finish.yes')}
+		</Button>
 		<Button href="/roblox/authorise" disabled={finishing}>
 			<X/>{$t('roblox.verification.finish.no')}
 		</Button>

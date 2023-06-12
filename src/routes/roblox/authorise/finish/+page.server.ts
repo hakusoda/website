@@ -72,7 +72,7 @@ export const load = (async ({ url, locals: { getSession } }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	default: async ({ locals: { getSession }, request }) => {
+	confirm: async ({ locals: { getSession }, request }) => {
 		const session = await getSession();
 		if (!session)
 			throw error(401);

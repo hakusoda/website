@@ -2,10 +2,11 @@ import { fail, redirect } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
-import { RobloxLinkType } from '$lib/enums';
+import type { RequestError } from '$lib/types';
 import { getUserRobloxLinks } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
 import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
+import { RobloxLinkType, RequestErrorType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ parent }) => {
 	const { user } = await parent();
@@ -31,37 +32,37 @@ export const actions = {
 	unlink: async ({ locals: { getSession }, request }) => {
 		const session = await getSession();
 		if (!session)
-			return fail(401);
+			return fail(401, { error_id: RequestErrorType.Unauthenticated } satisfies RequestError);
 
 		const id = await request.text();
 		if (!isUUID(id))
-			return fail(400);
+			return fail(400, { error_id: RequestErrorType.InvalidBody } satisfies RequestError);
 
 		const response = await supabase.from('roblox_links').delete().eq('id', id).eq('owner', session.user.id);
 		if (response.error) {
 			console.error(response.error);
-			return fail(500);
+			return fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
-		return { success: true };
+		return {};
 	},
 	changeVisibility: async ({ locals: { getSession }, request }) => {
 		const session = await getSession();
 		if (!session)
-			return fail(401);
+			return fail(401, { error_id: RequestErrorType.Unauthenticated } satisfies RequestError);
 
 		const [id, value] = (await request.text()).split(':');
-		if (!isUUID(id))
-			return fail(400);
+		if (!isUUID(id) || !value)
+			return fail(400, { error_id: RequestErrorType.InvalidBody } satisfies RequestError);
 
 		const response = await supabase.from('roblox_links').update({
 			public: value === 'true'
 		}).eq('id', id).eq('owner', session.user.id);
 		if (response.error) {
 			console.error(response.error);
-			return fail(500);
+			return fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
-		return { success: true };
+		return {};
 	}
 } satisfies Actions;
