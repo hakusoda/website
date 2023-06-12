@@ -33,7 +33,7 @@
 
 	let userMenuTrigger: () => void;
 
-	const analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
+	const { analyticsId } = data;
 	$: if (browser && analyticsId)
 		webVitals({
 			path: $page.url.pathname,
