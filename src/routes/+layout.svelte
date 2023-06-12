@@ -4,8 +4,10 @@
 	import { Header, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation'; 
-	import { dev } from '$app/environment';
+	import { page } from '$app/stores';
 	import { theme } from '$lib/settings';
+	import { webVitals } from '$lib/vitals';
+	import { dev, browser } from '$app/environment';
 	import type { LayoutData } from './$types';
 	inject({ mode: dev ? 'development' : 'production' });
 
@@ -30,6 +32,14 @@
 	export let data: LayoutData;
 
 	let userMenuTrigger: () => void;
+
+	const analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
+	$: if (browser && analyticsId)
+		webVitals({
+			path: $page.url.pathname,
+			params: $page.params,
+			analyticsId
+		});
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>

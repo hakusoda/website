@@ -28,6 +28,7 @@
 		"@vercel/analytics": "^1.0.1",
 		"@voxelified/svelte-localisation": "^1.0.0",
 		"@voxelified/voxeliface": "^1.4.4",
+		"web-vitals": "^3.3.2",
 		"zod": "^3.21.4"
 	}
 }
