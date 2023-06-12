@@ -20,6 +20,7 @@
 	dialog {
 		color: var(--color-primary);
 		border: none;
+		outline: none;
 		padding: 16px 24px;
 		overflow: auto;
 		min-width: 40%;

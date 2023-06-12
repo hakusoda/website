@@ -5,12 +5,13 @@
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
 	import { mellowLinkViewMode } from '$lib/settings';
-	import type { RobloxGroupRole } from '$lib/types';
-	import { MellowLinkListViewMode } from '$lib/enums';
+	import type { RequestError, RobloxGroupRole } from '$lib/types';
+	import { RequestErrorType, MellowLinkListViewMode } from '$lib/enums';
 	import { MellowBindType, MellowLinkImportType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
 
 	import Modal from '$lib/components/Modal.svelte';
 	import GroupSelect from '$lib/components/GroupSelect.svelte';
+	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
 	import X from '$lib/icons/X.svelte';
 	import Plus from '$lib/icons/Plus.svelte';
@@ -22,7 +23,7 @@
 	let bindData: string[] = [];
 	let bindName = 'Unnamed Link';
 	let bindType = MellowBindType.DiscordRoles;
-	let createError = '';
+	let createError: RequestError | null = null;
 	let creatingBind = false;
 	let requirements: [MellowBindRequirementType, string[]][] = [];
 	let linksContainer: HTMLDivElement;
@@ -37,7 +38,7 @@
 
 	$: hasVerifiedType = requirements.some(i => i[0] === MellowBindRequirementType.HasVerifiedUserLink) ? MellowBindRequirementType.HasRobloxGroupRole : MellowBindRequirementType.HasVerifiedUserLink;
 	const createBind = async () => {
-		createError = '';
+		createError = null;
 		creatingBind = true;
 		const response = await fetch('?/create', {
 			body: JSON.stringify({
@@ -59,8 +60,10 @@
 			trigger();
 			resetAdd();
 			setTimeout(() => linksContainer.scrollTo({ top: linksContainer.scrollHeight, behavior: 'smooth' }), 100);
-		} else if (result.type === 'error')
-			creatingBind = !(createError = result.error);
+		} else if (result.type === 'failure')
+			creatingBind = !(createError = result.data as any);
+		else if (result.type === 'error')
+			creatingBind = !(createError = { error_id: RequestErrorType.Offline });
 	};
 	const deleteBind = async (id: string) => {
 		const response = await fetch('?/delete', {
@@ -263,9 +266,7 @@
 		{/each}
 	</DropdownMenu>
 
-	{#if createError}
-		<p>{createError}</p>
-	{/if}
+	<RequestErrorUI data={createError}/>
 	<p class="explanation">{$t(`mellow_bind.explanation.${bindType}`, [bindData])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
 	<div class="modal-buttons">
 		<Button on:click={createBind} disabled={creatingBind}>

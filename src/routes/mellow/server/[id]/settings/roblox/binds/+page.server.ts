@@ -1,12 +1,14 @@
 import { z } from 'zod';
 import * as kit from '@sveltejs/kit';
+import type { ZodIssue } from 'zod';
 
 import supabase from '$lib/supabase';
+import type { RequestError } from '$lib/types';
 import { getDiscordServerRoles } from '$lib/discord';
 import { verifyServerMembership } from '$lib/util/server';
 import type { Actions, PageServerLoad } from './$types';
 import { lookupRobloxGroups, getRobloxGroupRoles, getRobloxGroupAvatars } from '$lib/api';
-import { MellowBindType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
+import { MellowBindType, RequestErrorType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
 	const { data, error } = await supabase.from('mellow_binds').select<string, {
@@ -47,10 +49,10 @@ export const load = (async ({ params: { id } }) => {
 
 const CREATE_SCHEMA = z.object({
 	name: z.string().max(50),
-	data: z.array(z.string().max(100)),
+	data: z.array(z.string().max(100)).min(1).max(100),
 	type: z.nativeEnum(MellowBindType),
 	requirements: z.array(z.object({
-		data: z.array(z.string().max(100)),
+		data: z.array(z.string().max(100)).max(5),
 		type: z.nativeEnum(MellowBindRequirementType)
 	})),
 	requirementsType: z.nativeEnum(MellowBindRequirementsType)
@@ -65,10 +67,54 @@ export const actions = {
 		const response = CREATE_SCHEMA.safeParse(body);
 		if (!response.success) {
 			console.log(response.error);
-			throw kit.error(400, 'Invalid Request Body');
+			return kit.fail(400, {
+				error_id: RequestErrorType.InvalidBody,
+				zod_issues: response.error.issues
+			} satisfies RequestError);
 		}
 
 		const { data } = response;
+		const issues: ZodIssue[] = [];
+		for (const [index, { type, data: rData }] of Object.entries(data.requirements)) {
+			if (type === MellowBindRequirementType.HasRobloxGroupRole || type === MellowBindRequirementType.HasRobloxGroupRankInRange) {
+				if (!isFinite(+rData[0]))
+					issues.push({
+						code: 'custom',
+						path: ['requirements', index, 'data', 0],
+						message: ''
+					});
+			}
+
+			if (type === MellowBindRequirementType.HasRobloxGroupRole) {
+				if (!isFinite(+rData[1]))
+					issues.push({
+						code: 'custom',
+						path: ['requirements', index, 'data', 1],
+						message: ''
+					});
+			} else if (type === MellowBindRequirementType.HasRobloxGroupRankInRange) {
+				const [_, min, max] = rData;
+				if (!min || !isFinite(+min) || +min <= 0)
+					issues.push({
+						code: 'custom',
+						path: ['requirements', index, 'data', 1],
+						message: ''
+					});
+				if (!max || !isFinite(+max) || +max > 255)
+					issues.push({
+						code: 'custom',
+						path: ['requirements', index, 'data', 2],
+						message: ''
+					});
+			}
+		}
+
+		if (issues.length)
+			return kit.fail(400, {
+				error_id: RequestErrorType.InvalidBody,
+				zod_issues: issues
+			} satisfies RequestError);
+
 		const response2 = await supabase.from('mellow_binds').insert({
 			name: data.name,
 			type: data.type,
@@ -79,7 +125,7 @@ export const actions = {
 		}).select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type').limit(1).single();
 		if (response2.error) {
 			console.log(response2.error);
-			throw kit.error(500, response2.error.message);
+			return kit.fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
 		const response3 = await supabase.from('mellow_bind_requirements').insert(data.requirements.map(item => ({
@@ -89,7 +135,7 @@ export const actions = {
 		}))).select('id, type, data');
 		if (response3.error) {
 			console.log(response3.error);
-			throw kit.error(500, response3.error.message);
+			return kit.fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
 		return {

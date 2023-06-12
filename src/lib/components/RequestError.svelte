@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { t } from '../localisation';
 	import type { RequestError } from '../types';
+
+	import ArrowRightShort from '../icons/ArrowRightShort.svelte';
 	export let data: RequestError | null = null;
 </script>
 
@@ -15,7 +17,14 @@
 				<p class="title">{$t('request_error.zod')}</p>
 				{#each data.zod_issues as item}
 					<div class="item">
-						<p class="path">{item.path.join('.')}</p>
+						<p class="path">
+							{#each item.path as key, index}
+								{#if index && index < item.path.length}
+									<ArrowRightShort/>
+								{/if}
+								{key}
+							{/each}
+						</p>
 						<p class="message">{$t(`zod_issue.${item.code}`, [item])}</p>
 					</div>
 				{/each}
@@ -59,10 +68,13 @@
 				font-size: .9em;
 				align-items: center;
 				.path {
+					gap: 2px;
 					color: #fff;
 					margin: 0;
+					display: flex;
 					padding: 4px 6px;
 					background: #ff767680;
+					align-items: center;
 					font-family: monospace;
 					border-radius: 4px;
 				}

@@ -153,6 +153,8 @@ export default {
 		'request_error.0': 'There were issues with your request, please change your input and try again.',
 		'request_error.1': 'You are not signed-in.',
 		'request_error.2': 'An unexpected error occurred while updating our database.',
+		'request_error.3': 'One of the requirements is missing its group value.',
+		'request_error.4': 'Check your internet connection.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 

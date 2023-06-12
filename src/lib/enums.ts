@@ -49,5 +49,7 @@ export enum MellowLinkListViewMode {
 export enum RequestErrorType {
 	InvalidBody,
 	Unauthenticated,
-	DatabaseUpdate
+	DatabaseUpdate,
+	MellowLinkRequirementMissingRole,
+	Offline
 }
