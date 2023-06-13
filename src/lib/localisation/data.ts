@@ -5,6 +5,8 @@ export default {
 		'action.delete': 'Delete',
 		'action.remove': 'Remove',
 		'action.search': 'Search',
+		'action.finish': 'Finish',
+		'action.choose_file': 'Choose File',
 		'action.edit_profile': 'Edit Profile',
 		'action.view_profile': 'View Profile',
 		'action.save_changes': 'Save Changes',
@@ -17,11 +19,14 @@ export default {
 		'profile.bio': 'Bio',
 		'profile.bio.empty': 'Tell the world what you\'re all about!',
 		'profile.name': 'Display Name',
+		'profile.avatar': 'Avatar',
 		'profile.joined': 'Joined {0|time_ago}',
 		'profile.roblox': 'Known on Roblox as:',
 		'profile.teams.false': 'Part of {0|number} teams:',
 		'profile.teams.true': 'Part of a team:',
 		'profile.teams.item.details': '{0} Member{0|s} • {1} is {2}',
+
+		'avatar_file.size': 'Image should be at least 256x256.',
 
 		'team.id': 'Team ID: {0}',
 		'team.joined': 'Created {0|time_ago}',
@@ -156,6 +161,7 @@ export default {
 		'request_error.2': 'An unexpected error occurred while updating our database.',
 		'request_error.3': 'One of the requirements is missing its group value.',
 		'request_error.4': 'Check your internet connection.',
+		'request_error.5': 'This error cant\'t be recognised, or hasn\'t been implemented yet.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 

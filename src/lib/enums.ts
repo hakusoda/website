@@ -51,5 +51,6 @@ export enum RequestErrorType {
 	Unauthenticated,
 	DatabaseUpdate,
 	MellowLinkRequirementMissingRole,
-	Offline
+	Offline,
+	Unknown
 }

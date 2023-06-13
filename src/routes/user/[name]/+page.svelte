@@ -2,12 +2,14 @@
 	import { Button, TextInput } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { UserFlags } from '$lib/enums';
+	import { API_BASE } from '$lib/constants';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
 	import type { RequestError } from '$lib/types';
+	import { UserFlags, RequestErrorType } from '$lib/enums';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import AvatarFile from '$lib/components/AvatarFile.svelte';
 	import Description from '$lib/components/Description.svelte';
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
@@ -26,6 +28,7 @@
 	let editBio = data.bio || '';
 	let editName = data.name || data.username;
 	let saveError: RequestError | null = null;
+	$: editChanged = editName === (data.name || data.username) && editBio === data.bio;
 	$: if (!editing)
 		editBio = data.bio || '', editName = data.name || data.username;
 	else
@@ -33,26 +36,46 @@
 
 	const save = async () => {
 		saving = !(saveError = null);
-		const response = await fetch('?/edit', {
-			body: JSON.stringify({
-				bio: editBio.length ? editBio : null,
-				name: editName.length ? editName : null
-			}),
-            method: 'POST'
-        });
-		const result = deserialize(await response.text());
-		if (result.type === 'success')
-			location.reload();
-		else if (result.type === 'failure')
-			saveError = result.data as any, saving = false;
-		console.log(result);
+		if (editChanged) {
+			const response = await fetch('?/edit', {
+				body: JSON.stringify({
+					bio: editBio.length ? editBio : null,
+					name: editName.length ? editName : null
+				}),
+				method: 'POST'
+			});
+			const result = deserialize(await response.text());
+			if (result.type === 'success') {
+				if (newAvatar)
+					uploadAvatar();
+				else
+					location.reload();
+			} else if (result.type === 'failure')
+				saving = (saveError = result.data as any);
+		} else if (newAvatar)
+			uploadAvatar();
 	};
+
+	let newAvatar: ArrayBuffer | null = null;
+	let newAvatarUri: string | null = null;
+	const uploadAvatar = () => fetch(`${API_BASE}/user/${data.id}/icon`, {
+		body: newAvatar,
+		method: 'PATCH',
+		headers: {
+			authorization: `Bearer ${data.session?.access_token}`
+		}
+	}).then(response => {
+		if (response.status === 200)
+			location.reload();
+		else
+			saving = !(saveError = { error_id: RequestErrorType.Unknown });
+	});
 </script>
 
 <div class="main">
 	<div class="card">
 		<div class="header">
-			<Avatar src={data.avatar_url} circle/>
+			<Avatar src={newAvatarUri ?? data.avatar_url} circle/>
 			<div class="name">
 				<h1>{editName || data.username}</h1>
 				<p>@{data.username}</p>
@@ -130,9 +153,12 @@
 			<p class="field-label">{$t('profile.bio')}</p>
 			<TextInput bind:value={editBio} multiline placeholder={$t('profile.bio.empty')}/>
 
+			<p class="field-label">{$t('profile.avatar')}</p>
+			<AvatarFile name={data.name ?? data.username} image={data.avatar_url} bind:result={newAvatar} bind:resultUri={newAvatarUri}/>
+
 			<RequestErrorUI data={saveError}/>
 			<div class="edit-buttons">
-				<Button on:click={save} disabled={saving || (editName === (data.name || data.username) && editBio === data.bio)}>
+				<Button on:click={save} disabled={saving || (editChanged && !newAvatar)}>
 					<Check/>
 					{$t('action.save_changes')}
 				</Button>
@@ -215,7 +241,7 @@
 			}
 			.field-label {
 				color: var(--color-secondary);
-				margin: 32px 0 8px;
+				margin: 24px 0 8px;
 				font-size: .9em;
 				&:first-of-type {
 					margin-top: 16px;
