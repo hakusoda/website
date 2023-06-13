@@ -15,7 +15,7 @@ declare global {
 			getSession(): Promise<Session | null>
 		}
 		interface PageData {
-			session: Session | null
+			session: Promise<Session | null>
 		}
 		// interface Platform {}
 	}

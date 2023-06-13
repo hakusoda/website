@@ -1,25 +1,19 @@
 <script lang="ts">
-	export let src: Promise<string | null> | string | null = null;
+	export let src: string | null = null;
 	export let size: 'xxxs' | 'xxs' | 'xs' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let circle = false;
 	export let transparent = false;
 
 	import Question from '../icons/Question.svelte';
-	import Hourglass from '../icons/Hourglass.svelte';
 	$: className = `avatar ${size}${circle ? ' circle' : ''}${transparent ? ' transparent' : ''}`;
 </script>
 
 {#if src}
-	{#await src}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div class={className} on:click><Hourglass/><slot/></div>
-	{:then image}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div class={className} on:click>
-			<img src={image} alt="avatar"/>
-			<slot/>
-		</div>
-	{/await}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div class={className} on:click>
+		<img {src} alt="avatar"/>
+		<slot/>
+	</div>
 {:else}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class={className} on:click><Question size={32}/></div>

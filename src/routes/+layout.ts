@@ -3,7 +3,7 @@ import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON } from '$env/static/public';
 
 import type { Database } from '../app';
 import type { LayoutLoad } from './$types';
-export const load = (async ({ fetch, data, depends }) => {
+export const load = (async ({ data, fetch, depends }) => {
 	depends('supabase:auth');
 
 	const supabase = createSupabaseLoadClient<Database>({
@@ -13,6 +13,11 @@ export const load = (async ({ fetch, data, depends }) => {
 		serverSession: data.session
 	});
 
-	const { data: { session } } = await supabase.auth.getSession();
-	return { user: data.user, supabase, session }
+	const session = supabase.auth.getSession().then(response => response.data.session);
+	return {
+		user: data.user,
+		session,
+		supabase,
+		analyticsId: data.analyticsId
+	};
 }) satisfies LayoutLoad;

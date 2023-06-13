@@ -6,7 +6,6 @@
 	import type { PartialRobloxGroup } from '../types';
 
 	import Search from '../icons/Search.svelte';
-	import Hourglass from '../icons/Hourglass.svelte';
 	import ChevronDown from '../icons/ChevronDown.svelte';
 	export let value: string | null = null;
 	export let onChange: ((newValue: string) => void) | null = null;
