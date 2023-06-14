@@ -68,8 +68,8 @@ export const actions = {
 		if (!response.success) {
 			console.log(response.error);
 			return kit.fail(400, {
-				error_id: RequestErrorType.InvalidBody,
-				zod_issues: response.error.issues
+				error: RequestErrorType.InvalidBody,
+				issues: response.error.issues
 			} satisfies RequestError);
 		}
 
@@ -111,8 +111,8 @@ export const actions = {
 
 		if (issues.length)
 			return kit.fail(400, {
-				error_id: RequestErrorType.InvalidBody,
-				zod_issues: issues
+				error: RequestErrorType.InvalidBody,
+				issues: issues
 			} satisfies RequestError);
 
 		const response2 = await supabase.from('mellow_binds').insert({
@@ -125,7 +125,7 @@ export const actions = {
 		}).select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type').limit(1).single();
 		if (response2.error) {
 			console.log(response2.error);
-			return kit.fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
 		const response3 = await supabase.from('mellow_bind_requirements').insert(data.requirements.map(item => ({
@@ -135,7 +135,7 @@ export const actions = {
 		}))).select('id, type, data');
 		if (response3.error) {
 			console.log(response3.error);
-			return kit.fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
 		return {

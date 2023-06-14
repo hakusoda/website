@@ -2,11 +2,11 @@
 	import { Button, TextInput } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { API_BASE } from '$lib/constants';
+	import { UserFlags } from '$lib/enums';
 	import { deserialize } from '$app/forms';
+	import { uploadAvatar } from '$lib/api';
 	import type { PageData } from './$types';
 	import type { RequestError } from '$lib/types';
-	import { UserFlags, RequestErrorType } from '$lib/enums';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
@@ -47,28 +47,22 @@
 			const result = deserialize(await response.text());
 			if (result.type === 'success') {
 				if (newAvatar)
-					uploadAvatar();
+					uploadAvatar2();
 				else
 					location.reload();
 			} else if (result.type === 'failure')
-				saving = (saveError = result.data as any);
+				saving = !(saveError = result.data as any);
 		} else if (newAvatar)
-			uploadAvatar();
+			uploadAvatar2();
 	};
 
 	let newAvatar: ArrayBuffer | null = null;
 	let newAvatarUri: string | null = null;
-	const uploadAvatar = () => fetch(`${API_BASE}/user/${data.id}/icon`, {
-		body: newAvatar,
-		method: 'PATCH',
-		headers: {
-			authorization: `Bearer ${data.session?.access_token}`
-		}
-	}).then(response => {
-		if (response.status === 200)
+	const uploadAvatar2 = () => uploadAvatar(data.session!.access_token!, data.id, newAvatar!).then(response => {
+		if (response.success)
 			location.reload();
 		else
-			saving = !(saveError = { error_id: RequestErrorType.Unknown });
+			saving = !(saveError = response);
 	});
 </script>
 

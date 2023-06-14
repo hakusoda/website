@@ -30,14 +30,14 @@ export const actions = {
 	edit: async ({ locals: { getSession }, request }) => {
 		const session = await getSession();
 		if (!session)
-			return fail(401, { error_id: RequestErrorType.Unauthenticated } satisfies RequestError);
+			return fail(401, { error: RequestErrorType.Unauthenticated } satisfies RequestError);
 
 		const data = EDIT_PROFILE_SCHEMA.safeParse(await request.json());
 		if (!data.success) {
 			console.log(data.error);
 			return fail(400, {
-				error_id: RequestErrorType.InvalidBody,
-				zod_issues: data.error.issues
+				error: RequestErrorType.InvalidBody,
+				issues: data.error.issues
 			} satisfies RequestError);
 		}
 
@@ -46,7 +46,7 @@ export const actions = {
 		}).eq('id', session.user.id);
 		if (response.error) {
 			console.error(response.error);
-			return fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			return fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
 		return {};

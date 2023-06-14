@@ -11,12 +11,12 @@
 	<div class="request-error" style={`--bg: ${background}`}>
 		<div class="container message">
 			<p class="title">{$t('request_error.title')}</p>
-			<p class="message">{$t(`request_error.${data.error_id}`)}</p>
+			<p class="message">{$t(`request_error.${data.error}`)}</p>
 		</div>
-		{#if data.zod_issues?.length}
+		{#if data.issues?.length}
 			<div class="container zod-issues">
 				<p class="title">{$t('request_error.zod')}</p>
-				{#each data.zod_issues as item}
+				{#each data.issues as item}
 					<div class="item">
 						<p class="path">
 							{#each item.path as key, index}

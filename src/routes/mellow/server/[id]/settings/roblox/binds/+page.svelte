@@ -63,7 +63,7 @@
 		} else if (result.type === 'failure')
 			creatingBind = !(createError = result.data as any);
 		else if (result.type === 'error')
-			creatingBind = !(createError = { error_id: RequestErrorType.Offline });
+			creatingBind = !(createError = { error: RequestErrorType.Offline });
 	};
 	const deleteBind = async (id: string) => {
 		const response = await fetch('?/delete', {

@@ -10,7 +10,7 @@
 	import X from '../icons/X.svelte';
 	import Check from '../icons/Check.svelte';
 	export let name: string;
-	export let image: string;
+	export let image: string | null = null;
 	export let result: ArrayBuffer | null;
 	export let resultUri: string | null;
 
@@ -56,7 +56,9 @@
 </script>
 
 <div class="avatar-file">
-	<Avatar src={image} size="sm"/>
+	{#if image}
+		<Avatar src={image} size="sm" circle/>
+	{/if}
 	<Button on:click={() => input.click()}>
 		{$t('action.choose_file')}
 	</Button>
@@ -111,6 +113,7 @@
 		width: 100%;
 		height: 100%;
 		display: flex;
+		z-index: 1000;
 		position: fixed;
 		background: #00000080;
 		.avatar-cropper-modal {

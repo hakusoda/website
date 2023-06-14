@@ -65,21 +65,21 @@ export const actions = {
 	edit: async ({ locals: { getSession }, request }) => {
 		const session = await getSession();
 		if (!session)
-			return kit.fail(401, { error_id: RequestErrorType.Unauthenticated } satisfies RequestError);
+			return kit.fail(401, { error: RequestErrorType.Unauthenticated } satisfies RequestError);
 
 		const data = EDIT_PROFILE_SCHEMA.safeParse(await request.json());
 		if (!data.success) {
 			console.error(data.error);
 			return kit.fail(400, {
-				error_id: RequestErrorType.InvalidBody,
-				zod_issues: data.error.issues
+				error: RequestErrorType.InvalidBody,
+				issues: data.error.issues
 			} satisfies RequestError);
 		}
 
 		const { error } = await supabase.from('users').update(data.data).eq('id', session.user.id);
 		if (error) {
 			console.error(error);
-			return kit.fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
 		return {};

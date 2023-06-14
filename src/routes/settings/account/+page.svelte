@@ -31,7 +31,7 @@
 		else if (result.type === 'failure')
 			error = result.data as any;
 		else if (result.type === 'error')
-			error = { error_id: RequestErrorType.Offline } satisfies RequestError;
+			error = { error: RequestErrorType.Offline } satisfies RequestError;
 		saving = false;
 	};
 </script>

@@ -32,16 +32,16 @@ export const actions = {
 	unlink: async ({ locals: { getSession }, request }) => {
 		const session = await getSession();
 		if (!session)
-			return fail(401, { error_id: RequestErrorType.Unauthenticated } satisfies RequestError);
+			return fail(401, { error: RequestErrorType.Unauthenticated } satisfies RequestError);
 
 		const id = await request.text();
 		if (!isUUID(id))
-			return fail(400, { error_id: RequestErrorType.InvalidBody } satisfies RequestError);
+			return fail(400, { error: RequestErrorType.InvalidBody } satisfies RequestError);
 
 		const response = await supabase.from('roblox_links').delete().eq('id', id).eq('owner', session.user.id);
 		if (response.error) {
 			console.error(response.error);
-			return fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			return fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
 		return {};
@@ -49,18 +49,18 @@ export const actions = {
 	changeVisibility: async ({ locals: { getSession }, request }) => {
 		const session = await getSession();
 		if (!session)
-			return fail(401, { error_id: RequestErrorType.Unauthenticated } satisfies RequestError);
+			return fail(401, { error: RequestErrorType.Unauthenticated } satisfies RequestError);
 
 		const [id, value] = (await request.text()).split(':');
 		if (!isUUID(id) || !value)
-			return fail(400, { error_id: RequestErrorType.InvalidBody } satisfies RequestError);
+			return fail(400, { error: RequestErrorType.InvalidBody } satisfies RequestError);
 
 		const response = await supabase.from('roblox_links').update({
 			public: value === 'true'
 		}).eq('id', id).eq('owner', session.user.id);
 		if (response.error) {
 			console.error(response.error);
-			return fail(500, { error_id: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			return fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
 		return {};

@@ -22,6 +22,7 @@ export default {
 		'profile.avatar': 'Avatar',
 		'profile.joined': 'Joined {0|time_ago}',
 		'profile.roblox': 'Known on Roblox as:',
+		'profile.username': 'Username',
 		'profile.teams.false': 'Part of {0|number} teams:',
 		'profile.teams.true': 'Part of a team:',
 		'profile.teams.item.details': '{0} Member{0|s} • {1} is {2}',
@@ -75,7 +76,6 @@ export default {
 		'signup': 'Create an Account',
 
 		'create_profile': 'Set-up your profile',
-		'create_profile.avatar': 'Recommend size: 256x256',
 		'create_profile.username': 'Enter username',
 		'create_profile.finish': 'Create Profile',
 		'create_profile.error': 'An error occurred.',
@@ -161,7 +161,8 @@ export default {
 		'request_error.2': 'An unexpected error occurred while updating our database.',
 		'request_error.3': 'One of the requirements is missing its group value.',
 		'request_error.4': 'Check your internet connection.',
-		'request_error.5': 'This error cant\'t be recognised, or hasn\'t been implemented yet.',
+		'request_error.5': 'This error can\'t be recognised, or hasn\'t been implemented yet.',
+		'request_error.invalid_body': 'There were issues with your request, please change your input and try again.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 

@@ -123,14 +123,13 @@ export interface RobloxGroupRolesResponse {
 }
 
 export interface RequestError {
-	error_id: RequestErrorType
-	zod_issues?: ZodIssue[]
+	error: RequestErrorType
+	issues?: ZodIssue[]
 }
 
-export type ApiResponse<T> = {
-	error: true
-	error_id: string
+export type ApiResponse<T> = RequestError & {
+	success: false
 } | {
 	data: T
-	error: false
+	success: true
 }
