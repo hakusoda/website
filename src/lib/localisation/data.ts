@@ -193,7 +193,7 @@ export default {
 		'time_ago.1_1': '{0} minute ago',
 		'time_ago.2_0': '{0} hours ago',
 		'time_ago.2_1': '{0} hour ago',
-		'time_ago.3_0': '{0} days ago',
+		'time_ago.3_0': '{0} days ago at {1}:{2} {3}',
 		'time_ago.3_1': 'yesterday',
 		'time_ago.4_0': '{0} months ago',
 		'time_ago.4_1': 'last month',
