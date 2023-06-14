@@ -148,7 +148,7 @@ export default {
 		'mellow_bind.requirements_type.1': 'Must meet at least one',
 		'mellow_bind.requirements': '{0} Requirement{0|s}',
 		'mellow_bind.explanation.0': 'Users receive {0.length} Discord Role{0.length|s}',
-		'mellow_bind.explanation.end.0': ' if they meet all requirements.',
+		'mellow_bind.explanation.end.0': ' if they meet {0} requirement{0|s}.',
 		'mellow_bind.explanation.end.1': ' if they meet at least one of {0} requirement{0|s}.',
 
 		'error.page': '(。>︿<)_θ',
