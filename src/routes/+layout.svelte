@@ -5,6 +5,7 @@
 
 	import { t } from '$lib/localisation'; 
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import { theme } from '$lib/settings';
 	import { webVitals } from '$lib/vitals';
 	import { dev, browser } from '$app/environment';
@@ -14,8 +15,11 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
 
+	import GearFill from '$lib/icons/GearFill.svelte';
 	import CaretDown from '$lib/icons/CaretDown.svelte';
+	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import Voxelified from '$lib/icons/Voxelified.svelte';
+	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
 	$: [themeName, themeColour] = $theme.split('_');
 	const themeHues: Record<string, number> = {
 		purple: 280
@@ -40,6 +44,8 @@
 			params: $page.params,
 			analyticsId
 		});
+
+	const signout = () => data.supabase.auth.signOut().then(() => goto('/'));
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
@@ -56,11 +62,17 @@
 					<CaretDown/>
 				</button>
 				<p>{data.user.name ?? data.user.username}</p>
-				<a href={`/user/${data.user.username}`}>{$t('user_action.user.profile')}</a>
+				<a href={`/user/${data.user.username}`}>
+					<PersonFill/>{$t('user_action.user.profile')}
+				</a>
 				<div class="separator"/>
-				<a href="/settings/account">{$t('user_action.settings')}</a>
+				<a href="/settings/account">
+					<GearFill/>{$t('user_action.settings')}
+				</a>
 				<div class="separator"/>
-				<a href="/">{$t('user_action.other.logout')}</a>
+				<button type="button" on:click={signout}>
+					<BoxArrowRight/>{$t('user_action.other.logout')}
+				</button>
 			</DropdownMenu>
 		{:else if !data.session}
 			<a href="/login" class="nav-link signup">{$t('action.create_account')}</a>
