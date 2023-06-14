@@ -2,24 +2,20 @@ import { z } from 'zod';
 import { fail, error } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
-import { getUserAvatar } from '$lib/database';
 import { USERNAME_REGEX } from '$lib/constants';
 import { RequestErrorType } from '$lib/enums';
 import type { RequestError } from '$lib/types';
 import type { Actions, PageServerLoad } from './$types';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ locals: { getSession } }) => {
-	const session = await getSession()!;
-	const response = await supabase.from('users').select('name, username, created_at').eq('id', session.user.id).limit(1).single();
+	const session = (await getSession())!;
+	const response = await supabase.from('users').select('name, username, avatar_url, created_at').eq('id', session.user.id).limit(1).single();
 	if (response.error) {
 		console.error(response.error);
 		throw error(500);
 	}
 
-	return {
-		...response.data,
-		avatar_url: getUserAvatar(session.user.id)
-	};
+	return response.data;
 }) satisfies PageServerLoad;
 
 const EDIT_PROFILE_SCHEMA = z.object({

@@ -6,7 +6,7 @@ export interface User {
 	name: string | null
 	flags: number
 	username: string
-	avatar_url: string
+	avatar_url: string | null
 	mellow_ids: string[]
 	mellow_pending: boolean
 
@@ -18,6 +18,7 @@ export interface Team {
 	bio: string
 	name: string
 	members: TeamMember[]
+	avatar_url: string | null
 	created_at: string
 	display_name: string
 }
@@ -35,8 +36,8 @@ export interface DatabaseTeam {
 			flags: number
 			username: string
 			joined_at: string
+			avatar_url: string | null
 			created_at: string
-			avatar_url: string
 		}
 		joined_at: string
 	}[]
@@ -44,11 +45,14 @@ export interface DatabaseTeam {
 		id: string
 		name: string
 		summary: string
+		avatar_url: string | null
+		banner_url: string | null
 		created_at: string
 		display_name: string
 		contributors: { id: string }[]
 		external_contributors: number
 	}[]
+	avatar_url: string | null
 	created_at: string
 	display_name: string
 }
@@ -61,8 +65,8 @@ export interface TeamMember {
 	flags: number
 	username: string
 	joined_at: string
+	avatar_url: string | null
 	created_at: string
-	avatar_url: string
 }
 
 export interface RobloxLink {

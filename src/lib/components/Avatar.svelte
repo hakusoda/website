@@ -87,6 +87,10 @@
 			height: 128px;
 			box-shadow: 0 8px 16px 2px #00000040;
 			border-radius: 8px;
+			:global(svg) {
+				width: 48px;
+				height: 48px;
+			}
 		}
 		&.xl {
 			width: 256px;

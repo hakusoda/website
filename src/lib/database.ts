@@ -41,12 +41,8 @@ export async function getUsers(userIds: string[]) {
 	}));
 }
 
-export function getUserAvatar(userId: string) {
-	return supabase.storage.from('avatars').getPublicUrl(`user/${userId}.png`).data.publicUrl;
-}
-
 export async function getTeam(teamId: string) {
-	let filter = supabase.from('teams').select<string, DatabaseTeam>('id, bio, name, flags, members:team_members ( role, user:users ( id, bio, name, flags, username, created_at ), joined_at ), projects ( id, name, summary, created_at, display_name, contributors:project_contributors ( id ), external_contributors ), created_at, display_name').limit(1);
+	let filter = supabase.from('teams').select<string, DatabaseTeam>('id, bio, name, flags, members:team_members ( role, user:users ( id, bio, name, flags, username, avatar_url, created_at ), joined_at ), projects ( id, name, summary, avatar_url, banner_url, created_at, display_name, contributors:project_contributors ( id ), external_contributors ), avatar_url, created_at, display_name').limit(1);
 	if (isUUID(teamId))
 		filter = filter.eq('id', teamId);
 	else
@@ -64,27 +60,9 @@ export async function getTeam(teamId: string) {
 		...data,
 		members: data.members.map(member => ({
 			...member.user,
-			avatar_url: getUserAvatar(member.user.id),
 			role: member.role,
 			joined_at: member.joined_at
 		})).sort((a, b) => b.role - a.role || (a.name ?? a.username).localeCompare(b.name ?? b.username)),
-		projects: data.projects.map(project => ({
-			...project,
-			avatar_url: getProjectAvatar(project.id),
-			banner_url: getProjectBanner(project.id)
-		})).sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)),
-		avatar_url: getTeamAvatar(data.id)
+		projects: data.projects.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
 	};
-}
-
-export function getTeamAvatar(teamId: string) {
-	return supabase.storage.from('avatars').getPublicUrl(`team/${teamId}.png`).data.publicUrl;
-}
-
-export function getProjectAvatar(projectId: string) {
-	return supabase.storage.from('avatars').getPublicUrl(`project/${projectId}.png`).data.publicUrl;
-}
-
-export function getProjectBanner(projectId: string) {
-	return supabase.storage.from('banners').getPublicUrl(`project/${projectId}.webp`).data.publicUrl;
 }
