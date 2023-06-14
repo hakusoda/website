@@ -1,12 +1,21 @@
 <script>
 	import { t } from '$lib/localisation';
     import { page } from '$app/stores';
+	import { RequestErrorType } from '$lib/enums';
+
+	$: status = $page.status;
 </script>
 
 <div class="main">
 	<h1>{$t('error.page')}</h1>
 	<h2>{$t('error.page2')}</h2>
-	<p>{$t('error.page3', [$page.status, $page.error.message])}</p>
+	<p>
+		{#if status === 403}
+			{$t(`request_error.${RequestErrorType.Unauthorised}`)}
+		{:else}
+			{$t('error.page3', [status, $page.error.message])}
+		{/if}
+	</p>
 </div>
 
 <style lang="scss">

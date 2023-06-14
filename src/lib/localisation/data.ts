@@ -162,6 +162,7 @@ export default {
 		'request_error.3': 'One of the requirements is missing its group value.',
 		'request_error.4': 'Check your internet connection.',
 		'request_error.5': 'This error can\'t be recognised, or hasn\'t been implemented yet.',
+		'request_error.6': 'You don\'t have permission to access this resource.',
 		'request_error.invalid_body': 'There were issues with your request, please change your input and try again.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
