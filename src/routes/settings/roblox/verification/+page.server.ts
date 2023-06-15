@@ -2,6 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
+import { MELLOW_KEY } from '$env/static/private';
 import type { RequestError } from '$lib/types';
 import { getUserRobloxLinks } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
@@ -15,10 +16,17 @@ export const load = (async ({ parent }) => {
 
 	const links = getUserRobloxLinks(user.id, RobloxLinkType.User);
 	const users = links.then(links => getRobloxUsers(links.map(link => link.target_id)));
-	if (user.mellow_pending)
+	if (user.mellow_pending) {
 		await supabase.from('users').update({
 			mellow_pending: false
 		}).eq('id', user.id);
+
+		fetch('https://mellow.voxelified.com/signup-finished', {
+			body: `${user.id}:${user.mellow_ids[0]}`,
+			method: 'POST',
+			headers: { 'x-api-key': MELLOW_KEY }
+		});
+	}
 
 	return {
 		links,

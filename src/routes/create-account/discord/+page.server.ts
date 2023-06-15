@@ -2,7 +2,6 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 import supabase from '$lib/supabase';
-import { MELLOW_KEY } from '$env/static/private';
 import { getDiscordToken, getDiscordUser } from '$lib/verification';
 export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }) => {
 	const session = await getSession();
@@ -13,20 +12,20 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 	if (!code)
 		throw error(400, 'invalid code');
 	const response = await getDiscordToken(code, `${url.origin}/create-account/discord`);
-	if (response.error) {
+	if (!response.success) {
 		console.error(response);
 		throw error(500, (response as any).error_description);
 	}
 
 	const { token_type, access_token } = response.data;
 	const response2 = await getDiscordUser(access_token, token_type);
-	if (response2.error) {
+	if (!response2.success) {
 		console.error(response2);
 		throw error(500, (response2 as any).error_description);
 	}
 
 	const user = response2.data;
-	const avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+	const avatar_url = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
 	const response3 = await supabase.auth.admin.createUser({
 		email: user.email,
 		app_metadata: {
@@ -38,9 +37,9 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 			iss: 'https://discord.com/api',
 			name: user.username,
 			email: user.email,
-			picture: avatar,
+			picture: avatar_url,
 			full_name: user.global_name,
-			avatar_url: avatar,
+			avatar_url,
 			provider_id: user.id,
 			email_verified: true
 		},
@@ -51,18 +50,12 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 		throw error(500, response3.error.message);
 	}
 
-	fetch(avatar).then(async response => {
-		if (response.status === 200)
-			supabase.storage.from('avatars').upload(`user/${response3.data.user.id}.png`, await response.arrayBuffer()).catch(console.error);
-		else
-			console.error(response.status, response.statusText);
-	}).catch(console.error);
-
 	const username = user.username.replace(/\W/g, '');
 	const response4 = await supabase.from('users').insert({
 		id: response3.data.user.id,
 		name: user.global_name,
 		username,
+		avatar_url,
 		mellow_ids: [user.id],
 		mellow_pending: true
 	});
@@ -86,12 +79,5 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 		token: response5.data.properties.email_otp
 	});
 
-	fetch('https://mellow.voxelified.com/signup-finished', {
-		body: `${response3.data.user.id}:${user.id}`,
-		method: 'POST',
-		headers: {
-			'x-api-key': MELLOW_KEY
-		}
-	});
 	throw redirect(302, '/roblox/authorise');
 }) satisfies PageServerLoad;
