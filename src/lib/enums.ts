@@ -53,5 +53,6 @@ export enum RequestErrorType {
 	MellowLinkRequirementMissingRole,
 	Offline,
 	Unknown,
-	Unauthorised
+	Unauthorised,
+	ExternalRequestError
 }

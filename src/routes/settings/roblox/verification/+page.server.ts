@@ -1,4 +1,4 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, error, redirect } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
@@ -17,15 +17,17 @@ export const load = (async ({ parent }) => {
 	const links = getUserRobloxLinks(user.id, RobloxLinkType.User);
 	const users = links.then(links => getRobloxUsers(links.map(link => link.target_id)));
 	if (user.mellow_pending) {
-		await supabase.from('users').update({
-			mellow_pending: false
-		}).eq('id', user.id);
-
-		fetch('https://mellow.voxelified.com/signup-finished', {
+		const response = await fetch('https://mellow.voxelified.com/signup-finished', {
 			body: `${user.id}:${user.mellow_ids[0]}`,
 			method: 'POST',
 			headers: { 'x-api-key': MELLOW_KEY }
 		});
+		if (response.status !== 200)
+			throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+
+		await supabase.from('users').update({
+			mellow_pending: false
+		}).eq('id', user.id);
 	}
 
 	return {

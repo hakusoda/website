@@ -4,6 +4,11 @@
 	import { RequestErrorType } from '$lib/enums';
 
 	$: status = $page.status;
+
+	let message;
+	$: try {
+		message = $t(`request_error.${Number(JSON.parse($page.error.message).error)}`);
+	} catch (err) {}
 </script>
 
 <div class="main">
@@ -12,6 +17,8 @@
 	<p>
 		{#if status === 403}
 			{$t(`request_error.${RequestErrorType.Unauthorised}`)}
+		{:else if message}
+			{message}
 		{:else}
 			{$t('error.page3', [status, $page.error.message])}
 		{/if}

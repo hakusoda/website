@@ -163,6 +163,7 @@ export default {
 		'request_error.4': 'Check your internet connection.',
 		'request_error.5': 'This error can\'t be recognised, or hasn\'t been implemented yet.',
 		'request_error.6': 'You don\'t have permission to access this resource.',
+		'request_error.7': 'An unexpected error occurred while making a request to an external source.',
 		'request_error.unauthorised': 'You don\'t have permission to access this resource.',
 		'request_error.invalid_body': 'There were issues with your request, please change your input and try again.',
 		'request_error.database_error': 'An unexpected error occurred while updating our database.',
