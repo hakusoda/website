@@ -45,7 +45,14 @@
 			analyticsId
 		});
 
-	const signout = () => data.supabase.auth.signOut().then(() => goto('/'));
+	const signout = () => data.supabase.auth.signOut().then(async () => {
+		await (window as any).cookieStore?.getAll?.().then(async (cookies: any[]) => {
+			for (const item of cookies)
+				if (item.name.includes('auth-token'))
+					await (window as any).cookieStore.delete(item.name);
+		}).catch(console.error);
+		location.href = '/';
+	});
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
@@ -56,9 +63,7 @@
 			<DropdownMenu bind:trigger={userMenuTrigger}>
 				<button class="user focusable" type="button" slot="trigger" on:click={userMenuTrigger}>
 					<Avatar src={data.user.avatar_url} size="xs" circle/>
-					<p class="name">
-						{data.user.name ?? data.user.username}
-					</p>
+					<p class="name">{data.user.name ?? data.user.username}</p>
 					<CaretDown/>
 				</button>
 				<p>{data.user.name ?? data.user.username}</p>

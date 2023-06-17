@@ -8,6 +8,7 @@ const cachedUsers: Record<string, {
 	id: string
 	name: string | null
 	username: string
+	avatar_url: string
 	mellow_ids: string[]
 	mellow_pending: boolean
 } | null> = {};
