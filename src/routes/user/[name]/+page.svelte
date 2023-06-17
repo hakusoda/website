@@ -30,7 +30,7 @@
 	let saveError: RequestError | null = null;
 	$: editChanged = editName === (data.name || data.username) && editBio === data.bio;
 	$: if (!editing)
-		editBio = data.bio || '', editName = data.name || data.username;
+		editBio = data.bio || '', editName = data.name || data.username, newAvatar = null, newAvatarUri = null;
 	else
 		editBio = editBio.slice(0, 200), editName = editName.slice(0, 20);
 
