@@ -21,7 +21,7 @@ const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 		if (day > 0) {
 			const hrs = date.getHours();
 			const mins = date.getMinutes();
-			return trans(ta(3, day), [day, hrs % 12, mins > 9 ? mins : `0${mins}`, hrs > 11 ? 'PM' : 'AM']);
+			return trans(ta(3, day), [day, (hrs % 12) + 1, mins > 9 ? mins : `0${mins}`, hrs > 11 ? 'PM' : 'AM']);
 		}
 
 		const hour = Math.floor(diff / 3600000);
