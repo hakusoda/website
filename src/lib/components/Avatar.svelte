@@ -1,11 +1,12 @@
 <script lang="ts">
 	export let src: string | null = null;
 	export let size: 'xxxs' | 'xxs' | 'xs' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
+	export let hover = false;
 	export let circle = false;
 	export let transparent = false;
 
 	import Question from '../icons/Question.svelte';
-	$: className = `avatar ${size}${circle ? ' circle' : ''}${transparent ? ' transparent' : ''}`;
+	$: className = `avatar ${size}${circle ? ' circle' : ''}${transparent ? ' transparent' : ''}${hover ? ' hover' : ''}`;
 </script>
 
 {#if src}
@@ -76,6 +77,9 @@
 				width: 24px;
 				height: 24px;
 			}
+			&.hover {
+				filter: drop-shadow(0 8px 8px #00000080);
+			}
 		}
 		&.md {
 			width: 96px;
@@ -103,6 +107,11 @@
 		&.transparent {
 			box-shadow: none;
 			background: none;
+		}
+		&.hover {
+			filter: drop-shadow(0 16px 8px #00000040);
+			background: none;
+			box-shadow: none;
 		}
 	}
 </style>

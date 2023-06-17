@@ -16,7 +16,7 @@
 <div class="main">
 	<div class="card">
 		<div class="header">
-			<Avatar src={data.avatar_url}/>
+			<Avatar src={data.avatar_url} hover/>
 			<h1>{data.display_name}</h1>
 		</div>
 		{#if data.bio}
@@ -39,7 +39,7 @@
 			<div class="members">
 				{#each data.members as item}
 					<a class="member" href={`/user/${item.username}`}>
-						<Avatar src={item.avatar_url} size="sm2" circle/>
+						<Avatar src={item.avatar_url} size="sm2" hover circle/>
 						<div class="name">
 							<h1>{item.name ?? item.username}</h1>
 							<p>@{item.username}</p>
@@ -56,7 +56,7 @@
 			<div class="projects">
 				{#each data.projects as item}
 					<a class="item" href={`/project/${item.name}`} style={`--banner: url("${item.banner_url}")`}>
-						<Avatar src={item.avatar_url} size="sm2" transparent/>
+						<Avatar src={item.avatar_url} size="sm2" hover/>
 						<div class="name">
 							<h1>{item.display_name}</h1>
 							<p>{item.summary}</p>
@@ -151,8 +151,6 @@
 					top: -24px;
 					left: 16px;
 					position: absolute;
-					box-shadow: 0 8px 16px 0 #00000040;
-					background: var(--background-tertiary);
 				}
 				.name {
 					margin-left: 88px;
@@ -212,7 +210,6 @@
 				:global(.avatar) {
 					top: -24px;
 					left: 16px;
-					filter: drop-shadow(0 8px 4px #00000040);
 					position: absolute;
 				}
 				.name {

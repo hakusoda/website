@@ -69,7 +69,7 @@
 <div class="main">
 	<div class="card">
 		<div class="header">
-			<Avatar src={newAvatarUri ?? data.avatar_url} circle/>
+			<Avatar src={newAvatarUri ?? data.avatar_url} hover circle/>
 			<div class="name">
 				<h1>{editName || data.username}</h1>
 				<p>@{data.username}</p>
@@ -108,7 +108,7 @@
 				<div class="teams">
 					{#each data.teams as item}
 						<a href={`/team/${item.name}`}>
-							<Avatar src={item.avatar_url} size="sm"/>
+							<Avatar src={item.avatar_url} size="sm" transparent/>
 							<div class="info">
 								<div class="name">
 									<p class="display">{item.display_name}</p>

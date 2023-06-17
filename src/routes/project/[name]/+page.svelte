@@ -16,7 +16,7 @@
 	<div class="header">
 		<img src={data.banner_url} alt="banner" class="banner"/>
 		<div class="details">
-			<Avatar src={data.avatar_url} size="md" transparent/>
+			<Avatar src={data.avatar_url} size="md" hover/>
 			<div class="title">
 				<div class="name">
 					<h1>{data.display_name}</h1>
@@ -99,13 +99,12 @@
 			.details {
 				gap: 24px 0;
 				display: flex;
-				padding: 20px 0 24px 176px;
+				padding: 8px 0 24px 176px;
 				position: relative;
 				flex-wrap: wrap;
 				:global(.avatar) {
-					top: -32px;
+					top: -48px;
 					left: 48px;
-					filter: drop-shadow(0 16px 8px #00000040);
 					position: absolute
 				}
 				.title {
