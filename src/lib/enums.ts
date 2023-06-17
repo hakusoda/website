@@ -54,5 +54,6 @@ export enum RequestErrorType {
 	Offline,
 	Unknown,
 	Unauthorised,
-	ExternalRequestError
+	ExternalRequestError,
+	NotFound
 }

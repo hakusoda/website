@@ -9,6 +9,7 @@
 <div class="main">
 	<div class="nav">
 		<p>{$t('mellow.server.settings.roblox')}</p>
+		<SettingsNavItem id="mellow.server.settings.roblox.global" path={`${base}/roblox/global`}/>
 		<SettingsNavItem id="mellow.server.settings.roblox.binds" path={`${base}/roblox/binds`}/>
 
 		<SettingsNavItem id="mellow.server.settings.return" path="/settings/mellow/servers" footer/>
