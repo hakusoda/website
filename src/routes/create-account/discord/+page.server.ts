@@ -74,7 +74,7 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 	}
 
 	await supabase2.auth.verifyOtp({
-		type: 'magiclink',
+		type: 'email',
 		email: user.email,
 		token: response5.data.properties.email_otp
 	});
