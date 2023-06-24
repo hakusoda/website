@@ -21,7 +21,7 @@
 
 	let trigger: () => void;
 	let bindData: string[] = [];
-	let bindName = 'Unnamed Link';
+	let bindName = '';
 	let bindType = MellowBindType.DiscordRoles;
 	let createError: RequestError | null = null;
 	let creatingBind = false;
@@ -42,7 +42,7 @@
 		creatingBind = true;
 		const response = await fetch('?/create', {
 			body: JSON.stringify({
-				name: bindName,
+				name: bindName || 'Unnamed Link',
 				data: bindData,
 				type: bindType,
 				requirements: requirements.map(item => ({
@@ -77,7 +77,7 @@
 		requirements = [...requirements, [type, []]];
 	};
 	const resetAdd = () => {
-		bindData = [], bindName = 'Unnamed Link', requirements = [];
+		bindData = [], bindName = '', requirements = [];
 		bindType = MellowBindType.DiscordRoles;
 	};
 
@@ -150,7 +150,7 @@
 	<div class="fields">
 		<div class="field">
 			<p class="modal-label">{$t('mellow.server.settings.roblox.binds.create.name')}</p>
-			<TextInput bind:value={bindName}/>
+			<TextInput bind:value={bindName} placeholder="Unnamed Link"/>
 		</div>
 
 		<div class="field">
@@ -243,6 +243,12 @@
 								<p class="label">{$t('mellow.server.settings.roblox.binds.create.requirement.rank_to')}</p>
 								<TextInput bind:value={item[1][2]} placeholder="Rank"/>
 							</div>
+						</div>
+					{/if}
+					{#if item[0] === MellowBindRequirementType.InRobloxGroup}
+						<div class="field">
+							<p class="label">{$t('mellow.server.settings.roblox.binds.create.requirement.group')}</p>
+							<GroupSelect bind:value={item[1][0]}/>
 						</div>
 					{/if}
 				</div>

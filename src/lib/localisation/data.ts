@@ -149,6 +149,8 @@ export default {
 		'mellow_bind.requirement.0': 'Must have a Verified Roblox Account',
 		'mellow_bind.requirement.1': 'Must have a Roblox Group Role',
 		'mellow_bind.requirement.2': 'Must have a Roblox Group Rank in range',
+		'mellow_bind.requirement.3': 'Must be in a Roblox Group',
+		'mellow_bind.requirement.4': 'Must be friends with someone',
 		'mellow_bind.requirements_type.0': 'Must meet all',
 		'mellow_bind.requirements_type.1': 'Must meet at least one',
 		'mellow_bind.requirements': '{0} Requirement{0|s}',

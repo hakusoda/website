@@ -30,7 +30,9 @@ export enum MellowBindType {
 export enum MellowBindRequirementType {
 	HasVerifiedUserLink,
 	HasRobloxGroupRole,
-	HasRobloxGroupRankInRange
+	HasRobloxGroupRankInRange,
+	InRobloxGroup,
+	//IsFriendsWith
 }
 export enum MellowBindRequirementsType {
 	MeetAll,

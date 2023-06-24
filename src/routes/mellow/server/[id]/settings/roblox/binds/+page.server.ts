@@ -37,7 +37,7 @@ export const load = (async ({ params: { id } }) => {
 		throw kit.error(500);
 
 	const roles = await getDiscordServerRoles(id);
-	if (roles.error) {
+	if (!roles.success) {
 		console.log(roles.error);
 		throw kit.error(500);
 	}
