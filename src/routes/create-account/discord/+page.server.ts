@@ -46,7 +46,7 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 		email_confirm: true
 	});
 	if (response3.error) {
-		console.log(response3.error);
+		console.error(response3.error);
 		throw error(500, response3.error.message);
 	}
 
@@ -60,7 +60,7 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 		mellow_pending: true
 	});
 	if (response4.error) {
-		console.log(response4.error);
+		console.error(response4.error);
 		throw error(500, response4.error.message);
 	}
 
@@ -69,7 +69,7 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 		email: user.email
 	});
 	if (response5.error) {
-		console.log(response5.error);
+		console.error(response5.error);
 		throw error(500, response5.error.message);
 	}
 

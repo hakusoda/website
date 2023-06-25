@@ -24,8 +24,8 @@ export const load = (async ({ url, locals: { getSession } }) => {
 	const response = await request<TokenResponse>('https://apis.roblox.com/oauth/v1/token', 'POST', params, {
 		'content-type': 'application/x-www-form-urlencoded'
 	});
-	if (response.error) {
-		console.log(response);
+	if (!response.success) {
+		console.error(response);
 		throw redirect(302, '/roblox/authorise');
 		//throw error(500, (response as any).error_description);
 	}
@@ -41,13 +41,13 @@ export const load = (async ({ url, locals: { getSession } }) => {
 		refresh_token
 	});
 	if (response2.error) {
-		console.log(response2.error);
+		console.error(response2.error);
 		throw error(500, response2.error.message);
 	}
 
 	const response3 = await getRobloxUserInfo(access_token, token_type);
-	if (response3.error) {
-		console.log(response3.error);
+	if (!response3.success) {
+		console.error(response3.error);
 		throw error(500, 'something went wrong...');
 	}
 
@@ -59,7 +59,7 @@ export const load = (async ({ url, locals: { getSession } }) => {
 		target_id: response3.data.sub
 	}).select('id');
 	if (response4.error) {
-		console.log(response4.error);
+		console.error(response4.error);
 		throw error(500, response4.error.message);
 	}
 
@@ -82,7 +82,7 @@ export const actions = {
 			flags: RobloxLinkFlag.Verified
 		}).eq('id', data).eq('owner', session.user.id);
 		if (response4.error) {
-			console.log(response4.error);
+			console.error(response4.error);
 			throw error(500, 'something went wrong...');
 		}
 	}

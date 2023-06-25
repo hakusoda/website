@@ -1,12 +1,12 @@
 import { z } from 'zod';
 import * as kit from '@sveltejs/kit';
-import type { ZodIssue } from 'zod';
 
 import supabase from '$lib/supabase';
 import type { RequestError } from '$lib/types';
 import { verifyServerMembership } from '$lib/util/server';
+import { createMellowServerAuditLog } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
-import { MellowBindType, RequestErrorType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
+import { RequestErrorType, MellowServerAuditLogType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
 	const { data, error } = await supabase.from('mellow_servers').select<string, {
@@ -50,5 +50,9 @@ export const actions = {
 			console.error(response2.error);
 			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
+
+		createMellowServerAuditLog(MellowServerAuditLogType.UpdateRobloxGlobalSettings, session.user.id, id, {
+			default_nickname: ['NOT IMPLEMENTED', data.defaultNickname]
+		});
 	}
 } satisfies Actions;

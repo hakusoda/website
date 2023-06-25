@@ -30,7 +30,7 @@ export const actions = {
 
 		const data = EDIT_PROFILE_SCHEMA.safeParse(await request.json());
 		if (!data.success) {
-			console.log(data.error);
+			console.error(data.error);
 			return fail(400, {
 				error: RequestErrorType.InvalidBody,
 				issues: data.error.issues

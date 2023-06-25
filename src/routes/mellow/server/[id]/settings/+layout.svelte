@@ -2,12 +2,17 @@
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
 	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
+	import type { LayoutData } from './$types';
+	export let data: LayoutData;
 
 	$: base = `/mellow/server/${$page.params.id}/settings`;
 </script>
 
 <div class="main">
 	<div class="nav">
+		<p>{data.name}</p>
+		<SettingsNavItem id="mellow.server.settings.audit_log" path={`${base}/audit-log`}/>
+
 		<p>{$t('mellow.server.settings.roblox')}</p>
 		<SettingsNavItem id="mellow.server.settings.roblox.global" path={`${base}/roblox/global`}/>
 		<SettingsNavItem id="mellow.server.settings.roblox.binds" path={`${base}/roblox/binds`}/>

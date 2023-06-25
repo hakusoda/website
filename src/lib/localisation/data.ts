@@ -100,6 +100,8 @@ export default {
 		'settings.mellow.servers': 'Discord Servers',
 		'settings.mellow.servers.server.details': 'Managed by {0} user{0|s}',
 
+		'mellow.server.settings.audit_log': 'Audit Log',
+
 		'mellow.server.settings.roblox': 'Roblox',
 		'mellow.server.settings.roblox.global': 'Global Settings',
 		'mellow.server.settings.roblox.global.nickname': 'Default Nickname',
@@ -132,6 +134,12 @@ export default {
 		'mellow.server.settings.roblox.binds.import.type.0': 'Roblox Group Roles → Discord Roles',
 		'mellow.server.settings.return': 'Return to Server List',
 
+		'mellow_server_audit_log.type.0': 'added this server to mellow',
+		'mellow_server_audit_log.type.1': 'created a Roblox Link named {0.data.name}',
+		'mellow_server_audit_log.type.2': 'updated the Global Roblox Settings',
+		'mellow_server_audit_log.type.2.default_nickname': 'Changed the Default Nickname from "{0.data.default_nickname.0}" to "{0.data.default_nickname.1}"',
+		'mellow_server_audit_log.type.3': 'deleted a Roblox Link named {0.data.name}',
+
 		'group_select': 'Select Group',
 		'group_select.recent': 'Recent Groups',
 		'group_select.search': 'Search for Group',
@@ -154,6 +162,7 @@ export default {
 		'mellow_bind.requirements_type.0': 'Must meet all',
 		'mellow_bind.requirements_type.1': 'Must meet at least one',
 		'mellow_bind.requirements': '{0} Requirement{0|s}',
+		'mellow_bind.requirements.with': 'with {0} requirement{0|s}',
 		'mellow_bind.explanation.0': 'Users receive {0.length} Discord Role{0.length|s}',
 		'mellow_bind.explanation.end.0': ' if they meet {0} requirement{0|s}.',
 		'mellow_bind.explanation.end.1': ' if they meet at least one of {0} requirement{0|s}.',

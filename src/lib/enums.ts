@@ -48,6 +48,13 @@ export enum MellowLinkListViewMode {
 	Compact
 }
 
+export enum MellowServerAuditLogType {
+	CreateServer,
+	CreateRobloxLink,
+	UpdateRobloxGlobalSettings,
+	DeleteRobloxLink
+}
+
 export enum RequestErrorType {
 	InvalidBody,
 	Unauthenticated,

@@ -6,9 +6,10 @@ import supabase from '$lib/supabase';
 import type { RequestError } from '$lib/types';
 import { getDiscordServerRoles } from '$lib/discord';
 import { verifyServerMembership } from '$lib/util/server';
+import { createMellowServerAuditLog } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
 import { lookupRobloxGroups, getRobloxGroupRoles, getRobloxGroupAvatars } from '$lib/api';
-import { MellowBindType, RequestErrorType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
+import { MellowBindType, RequestErrorType, MellowServerAuditLogType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
 	const { data, error } = await supabase.from('mellow_binds').select<string, {
@@ -38,7 +39,7 @@ export const load = (async ({ params: { id } }) => {
 
 	const roles = await getDiscordServerRoles(id);
 	if (!roles.success) {
-		console.log(roles.error);
+		console.error(roles.error);
 		throw kit.error(500);
 	}
 	return {
@@ -66,7 +67,7 @@ export const actions = {
 		const body = await request.json();
 		const response = CREATE_SCHEMA.safeParse(body);
 		if (!response.success) {
-			console.log(response.error);
+			console.error(response.error);
 			return kit.fail(400, {
 				error: RequestErrorType.InvalidBody,
 				issues: response.error.issues
@@ -124,7 +125,7 @@ export const actions = {
 			requirements_type: data.requirementsType
 		}).select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type').limit(1).single();
 		if (response2.error) {
-			console.log(response2.error);
+			console.error(response2.error);
 			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
@@ -134,28 +135,39 @@ export const actions = {
 			bind_id: response2.data.id
 		}))).select('id, type, data');
 		if (response3.error) {
-			console.log(response3.error);
+			console.error(response3.error);
 			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
+		createMellowServerAuditLog(MellowServerAuditLogType.CreateRobloxLink, session!.user.id, id, {
+			name: data.name,
+			type: data.type,
+			targets: data.data.length,
+			requirements: data.requirements.length,
+			requirements_type: data.requirementsType
+		});
 		return {
 			...response2.data,
 			requirements: response3.data
 		};
 	},
 	delete: async ({ locals: { getSession }, params: { id }, request }) => {
-		await verifyServerMembership(await getSession(), id);
+		const session = await getSession();
+		await verifyServerMembership(session, id);
 
 		const body = await request.text();
 		if (typeof body !== 'string')
 			throw kit.error(400, 'Invalid Request Body');
 
-		const response = await supabase.from('mellow_binds').delete().eq('id', body).eq('server_id', id);
+		const response = await supabase.from('mellow_binds').delete().eq('id', body).eq('server_id', id).select('name').single();
 		if (response.error) {
-			console.log(response.error);
+			console.error(response.error);
 			throw kit.error(500, response.error.message);
 		}
 
+		createMellowServerAuditLog(MellowServerAuditLogType.DeleteRobloxLink, session!.user.id, id, {
+			name: response.data.name
+		});
 		return {};
 	},
 	searchGroups: async ({ locals: { getSession }, params: { id }, request }) => {
