@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Tabs } from '@voxelified/voxeliface';
+	import { Tabs, Button } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
 	import type { PageData } from './$types';
@@ -8,6 +8,7 @@
 
 	import Star from '$lib/icons/Star.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
+	import GearFill from '$lib/icons/GearFill.svelte';
 	export let data: PageData;
 
 	let tab = 0;
@@ -19,6 +20,13 @@
 			<Avatar src={data.avatar_url} hover/>
 			<h1>{data.display_name}</h1>
 		</div>
+		{#if data.user && data.members.some(member => member.id === data.user?.id)}
+			<div class="buttons">
+				<Button href={`/team/${data.name}/settings/profile`}>
+					<GearFill/>{$t('action.manage')}
+				</Button>
+			</div>
+		{/if}
 		{#if data.bio}
 			<div class="separator"/>
 			{data.bio}
@@ -109,6 +117,11 @@
 					white-space: nowrap;
 					text-overflow: ellipsis;
 				}
+			}
+			.buttons {
+				gap: 8px;
+				display: flex;
+				justify-content: end;
 			}
 			.separator {
 				width: 100%;

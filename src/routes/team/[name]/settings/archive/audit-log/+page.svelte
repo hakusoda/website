@@ -1,20 +1,20 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
     import type { PageData } from './$types';
-	import { MellowServerAuditLogType } from '$lib/enums';
+	import { TeamAuditLogType } from '$lib/enums';
     
 	import AuditLog from '$lib/components/AuditLog.svelte';
     export let data: PageData;
 
 	let open: string[] = [];
-	const OPENABLE = [MellowServerAuditLogType.CreateRobloxLink, MellowServerAuditLogType.UpdateRobloxGlobalSettings];
+	const OPENABLE = [TeamAuditLogType.UpdateProfile];
 </script>
 
 <div class="main">
 	{#each data.items as item}
 		<AuditLog
 			open={open.includes(item.id)}
-			text={$t(`mellow_server_audit_log.type.${item.type}`, [item])}
+			text={$t(`team_audit_log.type.${item.type}`, [item])}
 			author={item.author.username}
 			avatar={item.author.avatar_url}
 			openable={OPENABLE.includes(item.type)}
@@ -22,14 +22,7 @@
 			authorName={item.author.name}
 			on:click={OPENABLE.includes(item.type) ? () => open = open.includes(item.id) ? open.filter(i => i !== item.id) : [...open, item.id] : null}
 		>
-			{#if item.type === MellowServerAuditLogType.UpdateRobloxGlobalSettings}
-				{#if item.data.default_nickname}
-					<p>{$t('mellow_server_audit_log.type.2.default_nickname', [item])}</p>
-				{/if}
-			{/if}
-			{#if item.type === MellowServerAuditLogType.CreateRobloxLink}
-				<p>{$t(`mellow_bind.bound.${item.data.type}`, [item.data.targets])}, {$t('mellow_bind.requirements.with', [item.data.requirements])}</p>
-			{/if}
+			
 		</AuditLog>
 	{/each}
 </div>

@@ -1,7 +1,7 @@
 import supabase from './supabase';
 import { isUUID } from './util';
 import type { User, RobloxLink, DatabaseTeam } from './types';
-import type { RobloxLinkType, MellowServerAuditLogType } from './enums';
+import type { RobloxLinkType, TeamAuditLogType, MellowServerAuditLogType } from './enums';
 export function getUserRobloxLinks(userId: string, linkType?: RobloxLinkType) {
 	const filter = supabase.from('roblox_links').select<string, RobloxLink>('*').eq('owner', userId);
 	if (linkType !== undefined)
@@ -65,6 +65,17 @@ export async function getTeam(teamId: string) {
 		})).sort((a, b) => b.role - a.role || (a.name ?? a.username).localeCompare(b.name ?? b.username)),
 		projects: data.projects.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
 	};
+}
+
+export async function createTeamAuditLog(type: TeamAuditLogType, author_id: string, team_id: string, data?: any) {
+	const { error } = await supabase.from('team_audit_logs').insert({
+		type,
+		data,
+		team_id,
+		author_id
+	});
+	if (error)
+		console.error(error);
 }
 
 export async function createMellowServerAuditLog(type: MellowServerAuditLogType, author_id: string, server_id: string, data?: any, target_link_id?: string) {

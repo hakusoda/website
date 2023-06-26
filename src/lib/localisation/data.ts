@@ -6,6 +6,7 @@ export default {
 		'action.remove': 'Remove',
 		'action.search': 'Search',
 		'action.finish': 'Finish',
+		'action.manage': 'Manage',
 		'action.choose_file': 'Choose File',
 		'action.edit_profile': 'Edit Profile',
 		'action.view_profile': 'View Profile',
@@ -33,6 +34,12 @@ export default {
 		'team.joined': 'Created {0|time_ago}',
 		'team.members': 'Members',
 		'team.projects': 'Projects',
+
+		'team.settings.profile': 'Profile',
+		'team.settings.profile.header': 'Team Profile',
+		'team.settings.profile.name': 'Team Name',
+		'team.settings.archive': 'Archive',
+		'team.settings.archive.audit_log': 'Audit Log',
 
 		'members': '{0} Member{0|s}',
 
@@ -139,6 +146,15 @@ export default {
 		'mellow_server_audit_log.type.2': 'updated the Global Roblox Settings',
 		'mellow_server_audit_log.type.2.default_nickname': 'Changed the Default Nickname from "{0.data.default_nickname.0}" to "{0.data.default_nickname.1}"',
 		'mellow_server_audit_log.type.3': 'deleted a Roblox Link named {0.data.name}',
+
+		'team_audit_log.type.0': 'created the team',
+		'team_audit_log.type.1': 'renamed the team from "{0.data.0}" to "{0.data.1}"',
+		'team_audit_log.type.2': 'changed the team avatar',
+		'team_audit_log.type.3': 'modified the team profile',
+		'team_audit_log.type.4': 'created a new project named "{0.data.name}"',
+		'team_audit_log.type.5': 'modified the PLACEHOLDER project',
+		'team_audit_log.type.6': 'changed the PLACEHOLDER project\'s avatar',
+		'team_audit_log.type.7': 'changed the PLACEHOLDER project\'s banner',
 
 		'group_select': 'Select Group',
 		'group_select.recent': 'Recent Groups',

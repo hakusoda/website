@@ -55,6 +55,17 @@ export enum MellowServerAuditLogType {
 	DeleteRobloxLink
 }
 
+export enum TeamAuditLogType {
+	CreateTeam,
+	RenameTeam,
+	UpdateAvatar,
+	UpdateProfile,
+	CreateProject,
+	UpdateProject,
+	UpdateProjectAvatar,
+	UpdateProjectBanner
+}
+
 export enum RequestErrorType {
 	InvalidBody,
 	Unauthenticated,
