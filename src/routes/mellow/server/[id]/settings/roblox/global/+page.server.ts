@@ -51,7 +51,7 @@ export const actions = {
 			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
-		createMellowServerAuditLog(MellowServerAuditLogType.UpdateRobloxGlobalSettings, session.user.id, id, {
+		await createMellowServerAuditLog(MellowServerAuditLogType.UpdateRobloxGlobalSettings, session.user.id, id, {
 			default_nickname: ['NOT IMPLEMENTED', data.defaultNickname]
 		});
 	}

@@ -139,7 +139,7 @@ export const actions = {
 			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
-		createMellowServerAuditLog(MellowServerAuditLogType.CreateRobloxLink, session!.user.id, id, {
+		await createMellowServerAuditLog(MellowServerAuditLogType.CreateRobloxLink, session!.user.id, id, {
 			name: data.name,
 			type: data.type,
 			targets: data.data.length,
@@ -165,7 +165,7 @@ export const actions = {
 			throw kit.error(500, response.error.message);
 		}
 
-		createMellowServerAuditLog(MellowServerAuditLogType.DeleteRobloxLink, session!.user.id, id, {
+		await createMellowServerAuditLog(MellowServerAuditLogType.DeleteRobloxLink, session!.user.id, id, {
 			name: response.data.name
 		});
 		return {};
