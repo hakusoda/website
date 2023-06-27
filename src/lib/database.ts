@@ -1,6 +1,6 @@
 import supabase from './supabase';
 import { isUUID } from './util';
-import type { User, RobloxLink, DatabaseTeam } from './types';
+import type { User, RobloxLink, DatabaseTeam, UserNotification } from './types';
 import type { RobloxLinkType, TeamAuditLogType, MellowServerAuditLogType } from './enums';
 export function getUserRobloxLinks(userId: string, linkType?: RobloxLinkType) {
 	const filter = supabase.from('roblox_links').select<string, RobloxLink>('*').eq('owner', userId);
@@ -15,30 +15,18 @@ export function getUserRobloxLinks(userId: string, linkType?: RobloxLinkType) {
 
 export async function getUser(userId: string) {
 	const { data, error } = await supabase.from('users').select<string, User>('*').eq('id', userId).limit(1).maybeSingle();
-	if (error) {
+	if (error)
 		console.error(error);
-		return null;
-	}
 
-	if (!data)
-		return null;
-	return {
-		...data,
-		avatar_url: supabase.storage.from('avatars').getPublicUrl(`user/${data.id}.png`).data.publicUrl
-	};
+	return data;
 }
 
 export async function getUsers(userIds: string[]) {
 	const { data, error } = await supabase.from('users').select<string, User>('*').in('id', userIds);
-	if (error) {
+	if (error)
 		console.error(error);
-		return [];
-	}
 
-	return data.map(user => ({
-		...user,
-		avatar_url: supabase.storage.from('avatars').getPublicUrl(`user/${user.id}.png`).data.publicUrl
-	}));
+	return data ?? [];
 }
 
 export async function getTeam(teamId: string) {
@@ -65,6 +53,14 @@ export async function getTeam(teamId: string) {
 		})).sort((a, b) => b.role - a.role || (a.name ?? a.username).localeCompare(b.name ?? b.username)),
 		projects: data.projects.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
 	};
+}
+
+export async function getUserNotifications(userId: string) {
+	const { data, error } = await supabase.from('user_notifications').select<string, UserNotification>('id, data, type, state, created_at, target_user:users!user_notifications_target_user_id_fkey ( name, username, avatar_url ), target_team:teams ( name, avatar_url, display_name )').eq('user_id', userId).order('created_at', { ascending: false });
+	if (error)
+		console.error(error);
+
+	return data ?? [];
 }
 
 export async function createTeamAuditLog(type: TeamAuditLogType, author_id: string, team_id: string, data?: any) {

@@ -66,6 +66,20 @@ export enum TeamAuditLogType {
 	UpdateProjectBanner
 }
 
+export enum UserNotificationType {
+	TeamInvite,
+	RemovedFromTeam,
+	RobloxAccountRemoved,
+	SOMETHING,
+	TeamMemberJoined,
+	TeamMemberLeft
+}
+
+export enum UserNotificationState {
+	Unread,
+	Read
+}
+
 export enum RequestErrorType {
 	InvalidBody,
 	Unauthenticated,

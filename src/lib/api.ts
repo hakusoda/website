@@ -51,7 +51,13 @@ export function createProfile(token: string, username: string) {
 }
 
 export function uploadAvatar(token: string, userId: string, newAvatar: ArrayBuffer) {
-	return request(`${API_BASE}/user/${userId}/icon`, 'PATCH', newAvatar, {
+	return request(`user/${userId}/icon`, 'PATCH', newAvatar, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function markNotificationAsRead(token: string, userId: string, notificationId: string) {
+	return request(`user/${userId}/notification/${notificationId}/read`, 'POST', null, {
 		authorization: `Bearer ${token}`
 	});
 }

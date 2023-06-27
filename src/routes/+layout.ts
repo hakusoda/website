@@ -18,6 +18,7 @@ export const load = (async ({ data, fetch, depends }) => {
 		user: data.user,
 		session,
 		supabase,
-		analyticsId: data.analyticsId
+		analyticsId: data.analyticsId,
+		notifications: data.notifications
 	};
 }) satisfies LayoutLoad;

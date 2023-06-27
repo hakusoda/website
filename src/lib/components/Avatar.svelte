@@ -59,6 +59,9 @@
 				width: 16px;
 				height: 16px;
 			}
+			&.hover {
+				filter: drop-shadow(0 2px 4px #000000);
+			}
 		}
 		&.sm {
 			width: 48px;

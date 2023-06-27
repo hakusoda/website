@@ -1,5 +1,5 @@
 import type { ZodIssue } from 'zod';
-import type { TeamRole, RequestErrorType, RobloxLinkType, RobloxLinkFlag } from './enums';
+import type { TeamRole, RequestErrorType, RobloxLinkType, RobloxLinkFlag, UserNotificationType, UserNotificationState } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -11,6 +11,24 @@ export interface User {
 	mellow_pending: boolean
 
 	created_at: string
+}
+
+export interface UserNotification {
+	id: string
+	data: any
+	type: UserNotificationType
+	state: UserNotificationState
+	created_at: string
+	target_user: {
+		name: string
+		username: string
+		avatar_url: string | null
+	} | null
+	target_team: {
+		name: string
+		avatar_url: string | null
+		display_name: string
+	} | null
 }
 
 export interface Team {

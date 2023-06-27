@@ -5,16 +5,19 @@
 
 	import { t } from '$lib/localisation'; 
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 	import { theme } from '$lib/settings';
 	import { webVitals } from '$lib/vitals';
 	import { dev, browser } from '$app/environment';
 	import type { LayoutData } from './$types';
+	import { UserNotificationState } from '$lib/enums';
+	import { markNotificationAsRead } from '$lib/api';
+	import { getUserNotificationUrl } from '$lib/util';
 	inject({ mode: dev ? 'development' : 'production' });
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
 
+	import Bell from '$lib/icons/Bell.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
 	import CaretDown from '$lib/icons/CaretDown.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
@@ -36,6 +39,7 @@
 	export let data: LayoutData;
 
 	let userMenuTrigger: () => void;
+	let notificationsTrigger: () => void;
 
 	const { analyticsId } = data;
 	$: if (browser && analyticsId)
@@ -53,13 +57,57 @@
 		}).catch(console.error);
 		location.href = '/';
 	});
+
+	$: unreadNotifications = data.notifications.filter(item => item.state === UserNotificationState.Unread);
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
 	<Header>
 		<a href="/" class="logo"><Voxelified size={40}/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
-		{#if data.user}
+		{#if data.session && data.user}
+			<DropdownMenu bind:trigger={notificationsTrigger}>
+				<button class="notifications focusable" class:unread={data.notifications.some(item => item.state === UserNotificationState.Unread)} type="button" slot="trigger" on:click={notificationsTrigger}>
+					<Bell/>
+					{#if unreadNotifications.length}
+						{unreadNotifications.length}
+					{/if}
+				</button>
+				<p>{$t('notifications', [data.notifications.length, unreadNotifications.length])}</p>
+				{#if data.notifications.length}
+					<div class="notifications-container">
+						{#each data.notifications as item}
+							<a href={getUserNotificationUrl(item)} class="notification" on:click={() => {
+								item.state = UserNotificationState.Read;
+								if (data.session && data.user) // can't use typescript here :(
+									markNotificationAsRead(data.session.access_token, data.user.id, item.id);
+							}}>
+								<Avatar src={item.target_team?.avatar_url ?? item.target_user?.avatar_url} size="sm"/>
+								{#if item.target_user && item.target_team}
+									<Avatar src={item.target_user.avatar_url} size="xxs" circle transparent/>
+								{/if}
+								<div class="details">
+									<p class="time">
+										{$t(`user_notification.type.${item.type}`)} • {$t('time_ago', [item.created_at])}
+									</p>
+									<h1>{$t(`user_notification.type.${item.type}.summary`, [item, item.target_user?.name ?? `@${item.target_user?.username}`])}</h1>
+									<p class="time">
+										{$t(`user_notification.type.${item.type}.footer`, [item])}
+									</p>
+								</div>
+								{#if !item.state}
+									<div class="unread"/>
+								{/if}
+							</a>
+						{/each}
+					</div>
+					<button type="button" class="mark-read">
+						{$t('notifications.read_all')}
+					</button>
+				{:else}
+					<p class="notifications-empty">{$t('notifications.empty')}</p>
+				{/if}
+			</DropdownMenu>
 			<DropdownMenu bind:trigger={userMenuTrigger}>
 				<button class="user focusable" type="button" slot="trigger" on:click={userMenuTrigger}>
 					<Avatar src={data.user.avatar_url} size="xs" circle/>
@@ -126,8 +174,9 @@
 
 	:global(header) {
 		display: flex;
-		:global(.container) {
-			margin-left: auto;
+		align-items: center;
+		:global(.container:first-of-type) {
+			margin: 0 32px 0 auto;
 		}
 	}
 	.logo {
@@ -142,6 +191,83 @@
 		&.signup {
 			margin-left: auto;
 		}
+	}
+	.notifications {
+		gap: 8px;
+		color: var(--color-secondary);
+		border: none;
+		cursor: pointer;
+		padding: 8px;
+		display: flex;
+		background: none;
+		font-family: var(--font-primary);
+		border-radius: 8px;
+		&:hover {
+			color: var(--color-primary);
+		}
+		&.unread {
+			color: var(--button-color);
+			background: var(--button-background);
+		}
+	}
+	.notifications-container {
+		overflow: auto;
+		max-height: 256px;
+	}
+	.notification {
+		gap: 16px;
+		height: 64px;
+		padding: 0 16px 0 8px;
+		position: relative;
+		transition: .25s opacity, .25s box-shadow, .25s background;
+		:global(.avatar):not(:first-child) {
+			top: 36px;
+			left: 36px;
+			position: absolute;
+		}
+		.details {
+			margin-right: 32px;
+			.time {
+				color: var(--color-secondary);
+				margin: 0;
+				padding: 0;
+				line-height: unset;
+			}
+			h1 {
+				margin: 4px 0 2px;
+				font-size: 1.2em;
+				font-weight: 400;
+				white-space: nowrap;
+			}
+		}
+		.unread {
+			width: 8px;
+			height: 8px;
+			background: var(--button-background);
+			box-shadow: 0 0 8px 4px var(--button-background);
+			margin-left: auto;
+			border-radius: 50%;
+		}
+		&:hover {
+			background: var(--background-secondary);
+		}
+		&:not(:has(.unread)) {
+			opacity: 0.5;
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
+	.notifications-empty {
+		color: var(--color-tertiary);
+		font-size: 1.1em;
+		white-space: pre;
+	}
+	.mark-read {
+		padding: 0 12px;
+		margin-top: 8px;
+		box-shadow: var(--button-shadow);
+		background: var(--background-secondary);
 	}
 	.user {
 		color: var(--color-secondary);

@@ -1,5 +1,17 @@
+import { UserNotificationType } from '$lib/enums';
+import type { UserNotification } from '../types';
 export function createDiscordRedirectUri(origin: string) {
 	return `${origin}/roblox/verify/platform/discord`;
+}
+
+export function getUserNotificationUrl({ type, target_user, target_team }: UserNotification) {
+	if (type === UserNotificationType.RobloxAccountRemoved)
+		return '/settings/roblox/verification'
+	if (target_team)
+		return `/team/${target_team.name}`;
+	if (target_user)
+		return `/user/${target_user.username}`;
+	return '';
 }
 
 export const uuidRegex = /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/;

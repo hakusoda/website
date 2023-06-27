@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 
 import { env } from '$env/dynamic/private';
 import supabase from '$lib/supabase';
+import { getUserNotifications } from '$lib/database';
 import type { LayoutServerLoad } from './$types';
 
 const cachedUsers: Record<string, {
@@ -19,9 +20,11 @@ export const load = (async ({ url, locals: { getSession } }) => {
 	if (session && !user && url.pathname !== '/login/profile')
 		throw redirect(302, '/login/profile');
 
+	const notifications = session ? await getUserNotifications(session.user.id) : [];
 	return {
 		user,
 		session,
-		analyticsId: env.VERCEL_ANALYTICS_ID
+		analyticsId: env.VERCEL_ANALYTICS_ID,
+		notifications
 	};
 }) satisfies LayoutServerLoad;
