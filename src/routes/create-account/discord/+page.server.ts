@@ -2,26 +2,37 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 import supabase from '$lib/supabase';
+import { RequestErrorType } from '$lib/enums';
+import type { RequestError } from '$lib/types';
 import { getDiscordToken, getDiscordUser } from '$lib/verification';
 export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }) => {
 	const session = await getSession();
 	if (session)
-		throw error(400, 'you already have an account');
+		throw error(400, JSON.stringify({
+			error: RequestErrorType.Unknown
+		} satisfies RequestError));
 
 	const code = url.searchParams.get('code');
 	if (!code)
-		throw error(400, 'invalid code');
+		throw error(400, JSON.stringify({
+			error: RequestErrorType.InvalidBody
+		} satisfies RequestError));
+
 	const response = await getDiscordToken(code, `${url.origin}/create-account/discord`);
 	if (!response.success) {
 		console.error(response);
-		throw error(500, (response as any).error_description);
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.ExternalRequestError
+		} satisfies RequestError));
 	}
 
 	const { token_type, access_token } = response.data;
 	const response2 = await getDiscordUser(access_token, token_type);
 	if (!response2.success) {
 		console.error(response2);
-		throw error(500, (response2 as any).error_description);
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.ExternalRequestError
+		} satisfies RequestError));
 	}
 
 	const user = response2.data;
@@ -47,7 +58,9 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 	});
 	if (response3.error) {
 		console.error(response3.error);
-		throw error(500, response3.error.message);
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.DatabaseUpdate
+		} satisfies RequestError));
 	}
 
 	const username = user.username.replace(/\W/g, '');
@@ -61,7 +74,9 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 	});
 	if (response4.error) {
 		console.error(response4.error);
-		throw error(500, response4.error.message);
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.DatabaseUpdate
+		} satisfies RequestError));
 	}
 
 	const response5 = await supabase.auth.admin.generateLink({
@@ -70,7 +85,9 @@ export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }
 	});
 	if (response5.error) {
 		console.error(response5.error);
-		throw error(500, response5.error.message);
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.ExternalRequestError
+		} satisfies RequestError));
 	}
 
 	await supabase2.auth.verifyOtp({

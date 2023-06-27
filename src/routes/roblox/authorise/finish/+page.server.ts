@@ -5,15 +5,18 @@ import supabase from '$lib/supabase';
 import { ROBLOX_SECRET } from '$env/static/private';
 import { PUBLIC_ROBLOX_ID } from '$env/static/public';
 import { getRobloxUserInfo } from '$lib/verification';
-import { RobloxLinkType, RobloxLinkFlag } from '$lib/enums';
+import type { RequestError } from '$lib/types';
 import { request, getRobloxUser, getRobloxAvatars } from '$lib/api';
+import { RobloxLinkType, RobloxLinkFlag, RequestErrorType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ url, locals: { getSession } }) => {
 	const session = (await getSession())!;
 
 	const code = url.searchParams.get('code');
 	if (!code)
-		throw error(400, 'invalid code');
+		throw error(400, JSON.stringify({
+			error: RequestErrorType.InvalidBody
+		} satisfies RequestError));
 
 	const params = new URLSearchParams();
 	params.set('code', code);
@@ -42,13 +45,17 @@ export const load = (async ({ url, locals: { getSession } }) => {
 	});
 	if (response2.error) {
 		console.error(response2.error);
-		throw error(500, response2.error.message);
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.DatabaseUpdate
+		} satisfies RequestError));
 	}
 
 	const response3 = await getRobloxUserInfo(access_token, token_type);
 	if (!response3.success) {
 		console.error(response3.error);
-		throw error(500, 'something went wrong...');
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.ExternalRequestError
+		} satisfies RequestError));
 	}
 
 	const response4 = await supabase.from('roblox_links').insert({
@@ -60,7 +67,9 @@ export const load = (async ({ url, locals: { getSession } }) => {
 	}).select('id');
 	if (response4.error) {
 		console.error(response4.error);
-		throw error(500, response4.error.message);
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.DatabaseUpdate
+		} satisfies RequestError));
 	}
 
 	const id = response3.data.sub;

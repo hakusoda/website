@@ -12,7 +12,9 @@ export const load = (async ({ locals: { getSession } }) => {
 	const response = await supabase.from('users').select('name, username, avatar_url, created_at').eq('id', session.user.id).limit(1).single();
 	if (response.error) {
 		console.error(response.error);
-		throw error(500);
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.ExternalRequestError
+		} satisfies RequestError));
 	}
 
 	return response.data;

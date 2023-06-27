@@ -34,11 +34,15 @@ export const load = (async ({ params: { name } }) => {
 	}>('id, bio, name, flags, username, avatar_url, created_at, teams:team_members ( role, team:teams ( id, name, avatar_url, display_name, members:team_members ( id ) ) ), roblox_links ( target_id )').eq(isUUID(name) ? 'id' : 'username', name).eq('roblox_links.public', true).gte('roblox_links.flags', 2).limit(1).maybeSingle();
 	if (error) {
 		console.error(error);
-		throw kit.error(500, error.message);
+		throw kit.error(500, JSON.stringify({
+			error: RequestErrorType.ExternalRequestError
+		} satisfies RequestError));
 	}
 
 	if (!data)
-		throw kit.error(404);
+		throw kit.error(404, JSON.stringify({
+			error: RequestErrorType.NotFound
+		} satisfies RequestError));
 
 	const robloxUsers = await getRobloxUsers(data.roblox_links.map(l => l.target_id));
 	const robloxIcons = await getRobloxAvatars(robloxUsers.map(l => l.id));
