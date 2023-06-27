@@ -63,7 +63,7 @@
 		<Tabs.Item title={$t('team.projects')} value={1}>
 			<div class="projects">
 				{#each data.projects as item}
-					<a class="item" href={`/project/${item.name}`} style={`--banner: url("${item.banner_url}")`}>
+					<a class="item" href={`/project/${item.name}`} style={`--banner: url("${item.banner_url}"); --project-color: ${item.theme_color ?? 'var(--background-secondary)'}`}>
 						<Avatar src={item.avatar_url} size="sm2" hover/>
 						<div class="name">
 							<h1>{item.display_name}</h1>
@@ -198,14 +198,16 @@
 			flex-direction: column;
 			.item {
 				flex: 1 1 calc(50% - 48px);
+				color: color-mix(in srgb, var(--project-color) 20%, #fff);
 				display: flex;
 				padding: 16px;
 				position: relative;
 				margin-top: 32px;
-				background: var(--background-secondary);
+				background: var(--project-color);
 				border-radius: 16px;
 				flex-direction: column;
 				text-decoration: none;
+				--pcolor2: color-mix(in srgb, var(--project-color) 40%, #fff);
 				&:before {
 					top: 0;
 					left: 0;
@@ -232,7 +234,7 @@
 						margin: 0;
 					}
 					p {
-						color: var(--color-secondary);
+						color: var(--pcolor2);
 						margin: 8px 0 0;
 						font-size: .9em;
 					}
@@ -244,7 +246,7 @@
 					white-space: nowrap;
 					justify-content: space-between;
 					p {
-						color: var(--color-secondary);
+						color: var(--pcolor2);
 						margin: 0;
 						font-size: .9em;
 					}

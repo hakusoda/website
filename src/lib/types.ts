@@ -66,6 +66,7 @@ export interface DatabaseTeam {
 		avatar_url: string | null
 		banner_url: string | null
 		created_at: string
+		theme_color: string | null
 		display_name: string
 		contributors: { id: string }[]
 		external_contributors: number

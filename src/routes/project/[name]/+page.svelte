@@ -12,7 +12,7 @@
 	export let data: PageData;
 </script>
 
-<div class="main">
+<div class="main" style={`--project-color: ${data.theme_color ?? 'var(--background-secondary)'}`}>
 	<div class="header">
 		<img src={data.banner_url} alt="banner" class="banner"/>
 		<div class="details">
@@ -85,10 +85,15 @@
 
 <style lang="scss">
 	.main {
-		margin: 32px;
+		color: color-mix(in srgb, var(--project-color) 20%, #fff);
+		padding: 32px;
+		background: color-mix(in srgb, var(--project-color) 50%, #000);
+		--pbg3: color-mix(in srgb, var(--project-color) 90%, #000);
+		--pcolor2: color-mix(in srgb, var(--project-color) 50%, #fff);
+		--pcolor3: color-mix(in srgb, var(--project-color) 40%, #fff);
 		.header {
 			overflow: hidden;
-			background: var(--background-secondary);
+			background: var(--project-color);
 			border-radius: 16px;
 			.banner {
 				width: 100%;
@@ -115,13 +120,13 @@
 							margin: 0;
 						}
 						.author {
-							color: var(--color-secondary);
+							color: var(--pcolor2);
 							margin: 0 0 4px 8px;
 							font-size: .9em;
 						}
 					}
 					p {
-						color: var(--color-secondary);
+						color: var(--pcolor2);
 						margin: 8px 0 0;
 						font-size: .9em;
 					}
@@ -136,7 +141,7 @@
 		.info-card {
 			padding: 24px;
 			margin-top: 32px;
-			background: var(--background-secondary);
+			background: var(--project-color);
 			border-radius: 16px;
 			h1 {
 				margin: 0;
@@ -146,7 +151,7 @@
 		}
 		.about {
 			p {
-				color: var(--color-tertiary);
+				color: var(--pcolor2);
 				margin: 16px 0 0;
 			}
 		}
@@ -159,7 +164,7 @@
 				.item {
 					display: flex;
 					padding: 8px 24px 8px 8px;
-					background: var(--background-tertiary);
+					background: var(--pbg3);
 					align-items: center;
 					border-radius: 8px;
 					text-decoration: none;
@@ -170,7 +175,7 @@
 							font-size: 1.2em;
 						}
 						p {
-							color: var(--color-secondary);
+							color: var(--pcolor2);
 							margin: 2px 0 0;
 							font-size: .8em;
 						}
@@ -178,7 +183,7 @@
 				}
 			}
 			.other {
-				color: var(--color-secondary);
+				color: var(--pcolor2);
 				margin: 16px 0 0;
 				font-size: .9em;
 			}
@@ -189,7 +194,7 @@
 			flex-direction: column;
 			p {
 				gap: 8px;
-				color: var(--color-tertiary);
+				color: var(--pcolor3);
 				margin: 0;
 				display: flex;
 			}
