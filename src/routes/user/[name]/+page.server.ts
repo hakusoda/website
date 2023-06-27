@@ -60,8 +60,8 @@ export const load = (async ({ params: { name } }) => {
 }) satisfies PageServerLoad;
 
 const EDIT_PROFILE_SCHEMA = z.object({
-	bio: z.string().max(200).nullable(),
-	name: z.string().regex(DISPLAY_NAME_REGEX).min(3).max(20).nullable()
+	bio: z.string().max(200).nullable().optional(),
+	name: z.string().regex(DISPLAY_NAME_REGEX).min(3).max(20).nullable().optional()
 });
 
 export const actions = {

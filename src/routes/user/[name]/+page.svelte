@@ -28,7 +28,7 @@
 	let editBio = data.bio || '';
 	let editName = data.name || data.username;
 	let saveError: RequestError | null = null;
-	$: editChanged = editName === (data.name || data.username) && editBio === data.bio;
+	$: editChanged = editName !== (data.name || data.username) || editBio !== data.bio;
 	$: if (!editing)
 		editBio = data.bio || '', editName = data.name || data.username, newAvatar = null, newAvatarUri = null;
 	else
@@ -39,8 +39,8 @@
 		if (editChanged) {
 			const response = await fetch('?/edit', {
 				body: JSON.stringify({
-					bio: editBio.length ? editBio : null,
-					name: editName.length ? editName : null
+					bio: editBio === data.bio ? undefined : editBio.length ? editBio : null,
+					name: editName === (data.name || data.username) ? undefined : editName.length ? editName : null
 				}),
 				method: 'POST'
 			});
@@ -152,7 +152,7 @@
 
 			<RequestErrorUI data={saveError}/>
 			<div class="edit-buttons">
-				<Button on:click={save} disabled={saving || (editChanged && !newAvatar)}>
+				<Button on:click={save} disabled={saving || (!editChanged && !newAvatar)}>
 					<Check/>
 					{$t('action.save_changes')}
 				</Button>
