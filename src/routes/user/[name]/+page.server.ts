@@ -5,11 +5,12 @@ import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
 import type { RequestError } from '$lib/types';
 import { DISPLAY_NAME_REGEX } from '$lib/constants';
-import { TeamRole, RequestErrorType } from '$lib/enums';
 import type { Actions, PageServerLoad } from './$types';
 import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
+import { TeamRole, RequestErrorType, UserNotificationType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
-export const load = (async ({ params: { name } }) => {
+export const load = (async ({ params: { name }, parent }) => {
+	const { session } = await parent();
 	const { data, error } = await supabase.from('users').select<string, {
 		id: string
 		bio: string | null
@@ -25,13 +26,16 @@ export const load = (async ({ params: { name } }) => {
 				display_name: string
 			}
 		}[]
+		burger: {
+			type: UserNotificationType
+		}[]
 		username: string
 		avatar_url: string
 		created_at: string
 		roblox_links: {
 			target_id: number
 		}[]
-	}>('id, bio, name, flags, username, avatar_url, created_at, teams:team_members ( role, team:teams ( id, name, avatar_url, display_name, members:team_members ( id ) ) ), roblox_links!roblox_links_owner_fkey ( target_id )').eq(isUUID(name) ? 'id' : 'username', name).eq('roblox_links.public', true).gte('roblox_links.flags', 2).limit(1).maybeSingle();
+	}>('id, bio, name, flags, username, avatar_url, created_at, teams:team_members ( role, team:teams ( id, name, avatar_url, display_name, members:team_members ( id ) ) ), roblox_links!roblox_links_owner_fkey ( target_id ), burger:user_notifications!user_notifications_user_id_fkey ( type )').eq(isUUID(name) ? 'id' : 'username', name).eq('roblox_links.public', true).gte('roblox_links.flags', 2).eq('user_notifications.target_user_id', session?.user.id).eq('user_notifications.type', UserNotificationType.SOMETHING).limit(1).maybeSingle();
 	if (error) {
 		console.error(error);
 		throw kit.error(500, JSON.stringify({
@@ -80,6 +84,29 @@ export const actions = {
 		}
 
 		const { error } = await supabase.from('users').update(data.data).eq('id', session.user.id);
+		if (error) {
+			console.error(error);
+			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		}
+
+		return {};
+	},
+	burger: async ({ locals: { getSession }, params: { name } }) => {
+		const session = await getSession();
+		if (!session)
+			return kit.fail(401, { error: RequestErrorType.Unauthenticated } satisfies RequestError);
+
+		const response = await supabase.from('users').select('id').eq(isUUID(name) ? 'id' : 'username', name).limit(1).single();
+		if (response.error) {
+			console.error(response.error);
+			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		}
+
+		const { error } = await supabase.from('user_notifications').upsert({
+			type: UserNotificationType.SOMETHING,
+			user_id: response.data.id,
+			target_user_id: session.user.id
+		});
 		if (error) {
 			console.error(error);
 			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);

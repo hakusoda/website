@@ -16,6 +16,7 @@
 	import X from '$lib/icons/X.svelte';
 	import Star from '$lib/icons/Star.svelte';
 	import Check from '$lib/icons/Check.svelte';
+	import Burger from '$lib/icons/Burger.svelte';
 	import Person from '$lib/icons/Person.svelte';
 	import People from '$lib/icons/People.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
@@ -64,6 +65,20 @@
 		else
 			saving = !(saveError = response);
 	});
+
+	let burgering = false;
+	const burger = async () => {
+		burgering = true;
+		const response = await fetch('?/burger', {
+			body: '',
+			method: 'POST'
+		});
+		const result = deserialize(await response.text());
+		if (result.type === 'success')
+			location.reload();
+		else if (result.type === 'failure')
+			burgering = false;
+	};
 </script>
 
 <div class="main">
@@ -87,6 +102,10 @@
 				{#if data.id === data.user?.id}
 					<Button on:click={() => editing = true}>
 						<PencilFill/>{$t('action.edit_profile')}
+					</Button>
+				{:else}
+					<Button on:click={burger} disabled={burgering || data.burger.length} title={$t(`profile.burger.${!!data.burger.length}`)}>
+						<Burger/>
 					</Button>
 				{/if}
 			</div>
