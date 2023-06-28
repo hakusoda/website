@@ -2,6 +2,7 @@
 	import { DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '../localisation';
+	import { page } from '$app/stores';
 	import { deserialize } from '$app/forms';
 	import { RobloxLinkFlag, RequestErrorType } from '../enums';
 	import type { RobloxLink, RequestError, PartialRobloxUser } from '../types';
@@ -36,13 +37,20 @@
 			error = { error: RequestErrorType.Offline } satisfies RequestError;
 		unlinking = false;
     };
+
+	$: isPrimary = link.id === $page.data.primaryId;
 </script>
 
 <DropdownMenu bind:trigger>
 	<button slot="trigger" type="button" class="user-link" on:click={trigger} disabled={unlinking}>
 		<Avatar src={icon} size="sm" circle/>
 		<div class="name">
-			<p class="nickname">{user.displayName}</p>
+			<p class="nickname">
+				{user.displayName}
+				{#if isPrimary}
+					<span class="primary">{$t('roblox_link.primary')}</span>
+				{/if}
+			</p>
 			<div class="flags">
 				{#if link.flags}
 					{#each Object.values(RobloxLinkFlag) as flag}
@@ -66,6 +74,9 @@
 		<RobloxIcon/>{$t('roblox_link.view')}
 	</a>
 	<div class="separator"/>
+	<button type="button" on:click={() => action('?/setPrimary')} disabled={isPrimary}>
+		{$t('roblox_link.make_primary')}
+	</button>
 	<button type="button" on:click={() => action('?/changeVisibility', `${link.id}:${!link.public}`)}>
 		<Eye/>{$t(`roblox_link.change_visibility.${link.public}`)}
 	</button>
@@ -99,6 +110,11 @@
 				margin: 0 0 2px;
 				font-size: 1.1em;
 				font-weight: 500;
+				.primary {
+					color: hsl(330 65% 75%);
+					font-size: .8em;
+					margin-left: 4px;
+				}
 			}
 			.flags {
 				gap: 16px;

@@ -30,11 +30,18 @@ export const load = (async ({ parent }) => {
 		}).eq('id', user.id);
 	}
 
+	const response = await supabase.from('users').select('primary_roblox_link_id').eq('id', user.id).limit(1).single();
+	if (response.error) {
+		console.error(response.error);
+		throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+	}
+
 	return {
 		links,
 		users,
 		icons: users.then(users => getRobloxAvatars(users.map(user => user.id))),
-		mellow: user.mellow_pending
+		mellow: user.mellow_pending,
+		primaryId: response.data.primary_roblox_link_id
 	};
 }) satisfies PageServerLoad;
 
@@ -49,6 +56,25 @@ export const actions = {
 			return fail(400, { error: RequestErrorType.InvalidBody } satisfies RequestError);
 
 		const response = await supabase.from('roblox_links').delete().eq('id', id).eq('owner', session.user.id);
+		if (response.error) {
+			console.error(response.error);
+			return fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		}
+
+		return {};
+	},
+	setPrimary: async ({ locals: { getSession }, request }) => {
+		const session = await getSession();
+		if (!session)
+			return fail(401, { error: RequestErrorType.Unauthenticated } satisfies RequestError);
+
+		const id = await request.text();
+		if (!isUUID(id))
+			return fail(400, { error: RequestErrorType.InvalidBody } satisfies RequestError);
+
+		const response = await supabase.from('users').update({
+			primary_roblox_link_id: id
+		}).eq('id', session.user.id);
 		if (response.error) {
 			console.error(response.error);
 			return fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);

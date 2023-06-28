@@ -69,6 +69,8 @@ export default {
 		'roblox_link.visible.true': 'Public, will be displayed on your profile, and available via the Rest API.',
 		'roblox_link.visible.false': 'Private, only you and your connected services can see this.',
 		'roblox_link.view': 'View on Roblox',
+		'roblox_link.primary': 'Primary, all services will use this by default',
+		'roblox_link.make_primary': 'Make Primary',
 		'roblox_link.change_visibility.true': 'Make Private',
 		'roblox_link.change_visibility.false': 'Make Public',
 		'roblox_link.delete': 'Unlink Account',
