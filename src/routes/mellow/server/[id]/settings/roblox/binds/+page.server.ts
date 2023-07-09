@@ -59,6 +59,10 @@ const CREATE_SCHEMA = z.object({
 	requirementsType: z.nativeEnum(MellowBindRequirementsType)
 });
 
+const UPDATE_SCHEMA = CREATE_SCHEMA.extend({
+	target: z.string()
+});
+
 export const actions = {
 	create: async ({ locals: { getSession }, params: { id }, request }) => {
 		const session = (await getSession())!;
@@ -157,18 +161,67 @@ export const actions = {
 
 		const body = await request.text();
 		if (typeof body !== 'string')
-			throw kit.error(400, 'Invalid Request Body');
+			return kit.fail(400, { error: RequestErrorType.InvalidBody } satisfies RequestError);
 
 		const response = await supabase.from('mellow_binds').delete().eq('id', body).eq('server_id', id).select('name').single();
 		if (response.error) {
 			console.error(response.error);
-			throw kit.error(500, response.error.message);
+			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
 		await createMellowServerAuditLog(MellowServerAuditLogType.DeleteRobloxLink, session!.user.id, id, {
 			name: response.data.name
 		});
 		return {};
+	},
+	update: async ({ locals: { getSession }, params: { id }, request }) => {
+		const session = await getSession();
+		await verifyServerMembership(session, id);
+
+		const body = await request.json();
+		const response = UPDATE_SCHEMA.safeParse(body);
+		if (!response.success) {
+			console.error(response.error);
+			return kit.fail(400, {
+				error: RequestErrorType.InvalidBody,
+				issues: response.error.issues
+			} satisfies RequestError);
+		}
+
+		const { data } = response;
+
+		const response2 = await supabase.from('mellow_binds').update({
+			name: data.name,
+			type: data.type,
+			server_id: id,
+			target_ids: data.data,
+			requirements_type: data.requirementsType
+		}).eq('id', data.target).eq('server_id', id).select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data )').single();
+		if (response2.error) {
+			console.error(response2.error);
+			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		}
+
+		const response3 = await supabase.from('mellow_bind_requirements').delete().eq('bind_id', data.target);
+		if (response3.error) {
+			console.error(response3.error);
+			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		}
+
+		const response4 = await supabase.from('mellow_bind_requirements').insert(data.requirements.map(item => ({
+			type: item.type,
+			data: item.data,
+			bind_id: data.target
+		}))).select('id, type, data');
+		if (response4.error) {
+			console.error(response4.error);
+			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		}
+
+		return {
+			...response2.data,
+			requirements: response4.data
+		};
 	},
 	searchGroups: async ({ locals: { getSession }, params: { id }, request }) => {
 		await verifyServerMembership(await getSession(), id);
