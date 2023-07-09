@@ -10,9 +10,7 @@ import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
 import { RobloxLinkType, RequestErrorType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ parent }) => {
-	const { user } = await parent();
-	if (!user)
-		throw redirect(302, '/login');
+	const user = (await parent()).user!;
 
 	const links = getUserRobloxLinks(user.id, RobloxLinkType.User);
 	const users = links.then(links => getRobloxUsers(links.map(link => link.target_id)));

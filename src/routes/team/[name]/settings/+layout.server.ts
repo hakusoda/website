@@ -5,8 +5,8 @@ import { isUUID } from '$lib/util';
 import { RequestErrorType } from '$lib/enums';
 import type { RequestError } from '$lib/types';
 import type { LayoutServerLoad } from './$types';
-export const load = (async ({ params: { name }, locals: { getSession } }) => {
-	const session = await getSession();
+export const load = (async ({ params: { name }, parent }) => {
+	const { session } = await parent();
 	if (!session)
 		throw redirect(302, '/login');
 
