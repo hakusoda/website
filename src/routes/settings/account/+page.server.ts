@@ -9,7 +9,7 @@ import type { Actions, PageServerLoad } from './$types';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ parent }) => {
 	const { session } = await parent();
-	const response = await supabase.from('users').select('name, username, avatar_url, created_at').eq('id', session.user.id).limit(1).single();
+	const response = await supabase.from('users').select('name, username, avatar_url, created_at').eq('id', session!.user.id).limit(1).single();
 	if (response.error) {
 		console.error(response.error);
 		throw error(500, JSON.stringify({

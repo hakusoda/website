@@ -5,8 +5,8 @@ import { RequestErrorType } from '$lib/enums';
 import type { RequestError } from '$lib/types';
 import type { LayoutServerLoad } from './$types';
 import { verifyServerMembership } from '$lib/util/server';
-export const load = (async ({ params: { id }, locals: { getSession } }) => {
-	await verifyServerMembership(await getSession(), id);
+export const load = (async ({ params: { id }, parent }) => {
+	await verifyServerMembership((await parent()).session, id);
 
 	const { data, error } = await supabase.from<string, {
 		name: string

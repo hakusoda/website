@@ -9,8 +9,8 @@ import type { RequestError } from '$lib/types';
 import { request, getRobloxUser, getRobloxAvatars } from '$lib/api';
 import { RobloxLinkType, RobloxLinkFlag, RequestErrorType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
-export const load = (async ({ url, locals: { getSession } }) => {
-	const session = (await getSession())!;
+export const load = (async ({ url, parent }) => {
+	const session = (await parent()).session!;
 
 	const code = url.searchParams.get('code');
 	if (!code)

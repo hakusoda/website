@@ -1,14 +1,16 @@
-import * as kit from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 
+import { RequestErrorType } from '$lib/enums';
+import type { RequestError } from '$lib/types';
 import type { RequestHandler } from './$types';
 import { lookupRobloxGroups, getRobloxGroupAvatars } from '$lib/api';
 export const GET = (async ({ url, locals: { getSession } }) => {
 	if (!await getSession())
-		throw kit.error(401);
+		throw error(401);
 
 	const body = url.searchParams.get('query');
 	if (typeof body !== 'string')
-		throw kit.error(400, 'Invalid Request Body');
+		throw error(400, JSON.stringify({ error: RequestErrorType.InvalidBody } satisfies RequestError));
 
 	const groups = await lookupRobloxGroups(body);
 	const icons = await getRobloxGroupAvatars(groups.map(group => group.id));

@@ -5,8 +5,8 @@ import supabase from '$lib/supabase';
 import { RequestErrorType } from '$lib/enums';
 import type { RequestError } from '$lib/types';
 import { getDiscordToken, getDiscordUser } from '$lib/verification';
-export const load = (async ({ url, locals: { getSession, supabase: supabase2 } }) => {
-	const session = await getSession();
+export const load = (async ({ url, locals: { supabase: supabase2 }, parent }) => {
+	const { session } = await parent();
 	if (session)
 		throw error(400, JSON.stringify({
 			error: RequestErrorType.Unknown

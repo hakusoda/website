@@ -10,7 +10,7 @@ export const load = (async ({ parent }) => {
 		name: string
 		members: { id: string }[]
 		avatar_url: string
-	}>('id, name, avatar_url, members:mellow_server_members!inner ( id )').in('members.user_id', [session.user.id]);
+	}>('id, name, avatar_url, members:mellow_server_members!inner ( id )').in('members.user_id', [session!.user.id]);
 	if (error) {
 		console.error(error);
 		throw kit.error(500, error.message);
