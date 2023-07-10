@@ -13,6 +13,8 @@ export default {
 		'action.save_changes': 'Save Changes',
 		'action.create_account': 'Create Account',
 
+		'label.disabled': 'Disabled',
+
 		'home': 'Home',
 		'home.landing': 'under construction...',
 
@@ -113,6 +115,11 @@ export default {
 
 		'mellow.server.settings.audit_log': 'Audit Log',
 
+		'mellow.server.settings.logging': 'Logging',
+		'mellow.server.settings.logging.channel': 'Logging Channel',
+		'mellow.server.settings.logging.channel.category': 'Discord Channels',
+		'mellow.server.settings.logging.types': 'Actions to log',
+
 		'mellow.server.settings.roblox': 'Roblox',
 		'mellow.server.settings.roblox.global': 'Global Settings',
 		'mellow.server.settings.roblox.global.nickname': 'Default Nickname',
@@ -158,6 +165,9 @@ export default {
 		'mellow_server_audit_log.type.4.target_ids': 'Set {0.data.target_ids} targets',
 		'mellow_server_audit_log.type.4.requirements': 'Set {0.data.requirements} requirements',
 		'mellow_server_audit_log.type.4.requirements_type': 'Changed the requirements type from {0.data.requirements_type.0} to {0.data.requirements_type.1}',
+
+		'mellow_server_logging_type.1': 'Mellow Audit Log',
+		'mellow_server_logging_type.2': 'Server Profile Sync',
 
 		'team_audit_log.type.0': 'created the team',
 		'team_audit_log.type.1': 'renamed the team from "{0.data.0}" to "{0.data.1}"',

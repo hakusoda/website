@@ -1,5 +1,5 @@
 import type { ZodIssue } from 'zod';
-import type { TeamRole, MellowBindType, RequestErrorType, RobloxLinkType, RobloxLinkFlag, UserNotificationType, UserNotificationState, MellowBindRequirementType, MellowBindRequirementsType } from './enums';
+import type { TeamRole, MellowBindType, RequestErrorType, RobloxLinkType, RobloxLinkFlag, DiscordChannelType, UserNotificationType, UserNotificationState, MellowBindRequirementType, MellowBindRequirementsType } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -160,6 +160,30 @@ export interface MellowLink {
 		type: MellowBindRequirementType
 	}[]
 	requirements_type: MellowBindRequirementsType
+}
+
+export interface DiscordRole {
+	id: string
+	name: string
+	icon: string | null
+	flags: number
+	color: number
+	hoist: boolean
+	managed: boolean
+	position: number
+	permissions: string
+	mentionable: boolean
+	description: string | null
+	unicode_emoji: string | null
+}
+
+export interface DiscordChannel {
+	id: string
+	name: string
+	type: DiscordChannelType
+	guild_id?: string
+	position?: number
+	permission_overwrites?: any[]
 }
 
 export interface RequestError {

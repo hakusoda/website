@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Button, Select, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
+	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import { mellowLinkViewMode } from '$lib/settings';
 	import type { RobloxGroupRole } from '$lib/types';
@@ -46,12 +48,22 @@
 	let bindFilter = '';
 
 	$: compact = $mellowLinkViewMode === MellowLinkListViewMode.Compact;
+	$: highlighted = $page.url.searchParams.get('highlight');
+
+	const linkItems: HTMLDivElement[] = [];
+	onMount(() => {
+		if (highlighted)
+			linksContainer.scrollTo({
+				top: linkItems[data.binds.findIndex(item => item.id === highlighted)].offsetTop - linksContainer.clientHeight / 2,
+				behavior: 'smooth'
+			});
+	});
 </script>
 
 <div class="main">
 	<div class="binds" bind:this={linksContainer}>
-		{#each data.binds.filter(item => item.name.toLowerCase().includes(bindFilter)) as item}
-			<div class="item" class:compact>
+		{#each data.binds.filter(item => item.name.toLowerCase().includes(bindFilter)) as item, index}
+			<div class="item" class:compact class:highlighted={highlighted === item.id} bind:this={linkItems[index]}>
 				<div class="name">
 					<h1>{item.name}</h1>
 					{#if !compact}
@@ -161,6 +173,9 @@
 							margin-bottom: 4px;
 						}
 					}
+				}
+				&.highlighted {
+					animation: 1s infinite alternate basic-focus;
 				}
 			}
 		}

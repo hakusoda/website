@@ -56,6 +56,12 @@ export enum MellowServerAuditLogType {
 	UpdateRobloxLink
 }
 
+export enum MellowServerLogType {
+	None,
+	AuditLog = 1 << 0,
+	ServerProfileSync = 1 << 1
+}
+
 export enum TeamAuditLogType {
 	CreateTeam,
 	RenameTeam,
@@ -91,4 +97,20 @@ export enum RequestErrorType {
 	Unauthorised,
 	ExternalRequestError,
 	NotFound
+}
+
+// https://discord.com/developers/docs/resources/channel#channel-object-channel-types
+export enum DiscordChannelType {
+	GuildText,
+	UserDM,
+	GuildVoice,
+	GroupDM,
+	GuildCategory,
+	GuildAnnouncement,
+	AnnouncementThread = 10,
+	PublicThread,
+	PrivateThread,
+	GuildStageVoice,
+	GuildDirectory,
+	GuildForum
 }
