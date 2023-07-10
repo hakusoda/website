@@ -7,7 +7,7 @@
     export let data: PageData;
 
 	let open: string[] = [];
-	const OPENABLE = [MellowServerAuditLogType.CreateRobloxLink, MellowServerAuditLogType.UpdateRobloxGlobalSettings];
+	const OPENABLE = [MellowServerAuditLogType.CreateRobloxLink, MellowServerAuditLogType.UpdateRobloxGlobalSettings, MellowServerAuditLogType.UpdateRobloxLink];
 </script>
 
 <div class="main">
@@ -29,6 +29,23 @@
 			{/if}
 			{#if item.type === MellowServerAuditLogType.CreateRobloxLink}
 				<p>{$t(`mellow_bind.bound.${item.data.type}`, [item.data.targets])}, {$t('mellow_bind.requirements.with', [item.data.requirements])}</p>
+			{/if}
+			{#if item.type === MellowServerAuditLogType.UpdateRobloxLink}
+				{#if item.data.name[1]}
+					<p>{$t('mellow_server_audit_log.type.4.name', [item])}</p>
+				{/if}
+				{#if item.data.type[1]}
+					<p>{$t('mellow_server_audit_log.type.4.type', [item])}</p>
+				{/if}
+				{#if item.data.target_ids}
+					<p>{$t('mellow_server_audit_log.type.4.target_ids', [item])}</p>
+				{/if}
+				{#if item.data.requirements}
+					<p>{$t('mellow_server_audit_log.type.4.requirements', [item])}</p>
+				{/if}
+				{#if item.data.requirements_type[1]}
+					<p>{$t('mellow_server_audit_log.type.4.requirements_type', [item])}</p>
+				{/if}
 			{/if}
 		</AuditLog>
 	{/each}

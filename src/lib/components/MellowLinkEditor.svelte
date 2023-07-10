@@ -53,17 +53,19 @@
 	const save = async () => {
 		saving = !(saveError = null);
 		if (target) {
+			const newName = name || 'Unnamed Link';
+			const newRequirements = requirements.map(item => ({
+				type: item[0],
+				data: item[1]
+			}));
 			const response = await fetch('?/update', {
 				body: JSON.stringify({
-					type,
-					name: name || 'Unnamed Link',
-					data: targets,
+					type: type === target.type ? undefined : type,
+					name: newName === target.name ? undefined : newName,
+					data: JSON.stringify(targets) === JSON.stringify(target.target_ids) ? undefined : targets,
 					target: target.id,
-					requirements: requirements.map(item => ({
-						type: item[0],
-						data: item[1]
-					})),
-					requirementsType
+					requirements: JSON.stringify(newRequirements) === JSON.stringify(target.requirements.map(item => ({ type: item.type, data: item.data }))) ? undefined : newRequirements,
+					requirementsType: requirementsType === target.requirements_type ? undefined : requirementsType
 				}),
 				method: 'POST'
 			});

@@ -152,6 +152,12 @@ export default {
 		'mellow_server_audit_log.type.2': 'updated the Global Roblox Settings',
 		'mellow_server_audit_log.type.2.default_nickname': 'Changed the Default Nickname from "{0.data.default_nickname.0}" to "{0.data.default_nickname.1}"',
 		'mellow_server_audit_log.type.3': 'deleted a Roblox Link named {0.data.name}',
+		'mellow_server_audit_log.type.4': 'updated the "{0.data.name.0}" Roblox Link',
+		'mellow_server_audit_log.type.4.name': 'Changed the name from "{0.data.name.0}" to "{0.data.name.1}"',
+		'mellow_server_audit_log.type.4.type': 'Changed the type from {0.data.type.0} to {0.data.type.1}',
+		'mellow_server_audit_log.type.4.target_ids': 'Set {0.data.target_ids} targets',
+		'mellow_server_audit_log.type.4.requirements': 'Set {0.data.requirements} requirements',
+		'mellow_server_audit_log.type.4.requirements_type': 'Changed the requirements type from {0.data.requirements_type.0} to {0.data.requirements_type.1}',
 
 		'team_audit_log.type.0': 'created the team',
 		'team_audit_log.type.1': 'renamed the team from "{0.data.0}" to "{0.data.1}"',

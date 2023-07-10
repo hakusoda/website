@@ -52,7 +52,8 @@ export enum MellowServerAuditLogType {
 	CreateServer,
 	CreateRobloxLink,
 	UpdateRobloxGlobalSettings,
-	DeleteRobloxLink
+	DeleteRobloxLink,
+	UpdateRobloxLink
 }
 
 export enum TeamAuditLogType {

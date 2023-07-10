@@ -59,8 +59,16 @@ const CREATE_SCHEMA = z.object({
 	requirementsType: z.nativeEnum(MellowBindRequirementsType)
 });
 
-const UPDATE_SCHEMA = CREATE_SCHEMA.extend({
-	target: z.string()
+const UPDATE_SCHEMA =  z.object({
+	name: z.string().max(50).optional(),
+	data: z.array(z.string().max(100)).min(1).max(100).optional(),
+	type: z.nativeEnum(MellowBindType).optional(),
+	target: z.string(),
+	requirements: z.array(z.object({
+		data: z.array(z.string().max(100)).max(5),
+		type: z.nativeEnum(MellowBindRequirementType)
+	})).optional(),
+	requirementsType: z.nativeEnum(MellowBindRequirementsType).optional()
 });
 
 export const actions = {
@@ -133,14 +141,19 @@ export const actions = {
 			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
-		const response3 = await supabase.from('mellow_bind_requirements').insert(data.requirements.map(item => ({
-			type: item.type,
-			data: item.data,
-			bind_id: response2.data.id
-		}))).select('id, type, data');
-		if (response3.error) {
-			console.error(response3.error);
-			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		let requirements = [];
+		if (data.requirements.length) {
+			const response3 = await supabase.from('mellow_bind_requirements').insert(data.requirements.map(item => ({
+				type: item.type,
+				data: item.data,
+				bind_id: response2.data.id
+			}))).select('id, type, data');
+			if (response3.error) {
+				console.error(response3.error);
+				return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			}
+
+			requirements = response3.data;
 		}
 
 		await createMellowServerAuditLog(MellowServerAuditLogType.CreateRobloxLink, session!.user.id, id, {
@@ -152,7 +165,7 @@ export const actions = {
 		});
 		return {
 			...response2.data,
-			requirements: response3.data
+			requirements
 		};
 	},
 	delete: async ({ locals: { getSession }, params: { id }, request }) => {
@@ -190,38 +203,63 @@ export const actions = {
 
 		const { data } = response;
 
-		const response2 = await supabase.from('mellow_binds').update({
-			name: data.name,
-			type: data.type,
-			server_id: id,
-			target_ids: data.data,
-			requirements_type: data.requirementsType
-		}).eq('id', data.target).eq('server_id', id).select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data )').single();
-		if (response2.error) {
-			console.error(response2.error);
-			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		const response1 = await supabase.from('mellow_binds').select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data )').eq('id', data.target).eq('server_id', id).single();
+		if (response1.error) {
+			console.error(response1.error);
+			return kit.fail(500, { error: RequestErrorType.ExternalRequestError } satisfies RequestError);
 		}
 
-		const response3 = await supabase.from('mellow_bind_requirements').delete().eq('bind_id', data.target);
-		if (response3.error) {
-			console.error(response3.error);
-			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		let final = response1.data;
+		if (data.name !== undefined || data.type !== undefined || data.data || data.requirements_type !== undefined) {
+			const response2 = await supabase.from('mellow_binds').update({
+				name: data.name,
+				type: data.type,
+				target_ids: data.data,
+				requirements_type: data.requirementsType
+			}).eq('id', data.target).eq('server_id', id).select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type').single();
+			if (response2.error) {
+				console.error(response2.error);
+				return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			}
+
+			final = {
+				...final,
+				...response2.data
+			};
 		}
 
-		const response4 = await supabase.from('mellow_bind_requirements').insert(data.requirements.map(item => ({
-			type: item.type,
-			data: item.data,
-			bind_id: data.target
-		}))).select('id, type, data');
-		if (response4.error) {
-			console.error(response4.error);
-			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+		if (data.requirements) {
+			const response3 = await supabase.from('mellow_bind_requirements').delete().eq('bind_id', data.target);
+			if (response3.error) {
+				console.error(response3.error);
+				return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			}
+
+			if (data.requirements.length) {
+				const response4 = await supabase.from('mellow_bind_requirements').insert(data.requirements.map(item => ({
+					type: item.type,
+					data: item.data,
+					bind_id: data.target
+				}))).select('id, type, data');
+				if (response4.error) {
+					console.error(response4.error);
+					return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+				}
+
+				final.requirements = response4.data;
+			} else
+				final.requirements = [];
 		}
 
-		return {
-			...response2.data,
-			requirements: response4.data
-		};
+		await createMellowServerAuditLog(MellowServerAuditLogType.UpdateRobloxLink, session!.user.id, id, {
+			name: [response1.data.name, data.name],
+			type: [response1.data.type, data.type],
+			target_ids: data.data?.length,
+			requirements: data.requirements?.length,
+			requirements_type: [response1.data.requirements_type, data.requirementsType]
+		});
+
+		return final;
 	},
 	searchGroups: async ({ locals: { getSession }, params: { id }, request }) => {
 		await verifyServerMembership(await getSession(), id);

@@ -69,8 +69,11 @@
 			}
 		}
 		& > .details {
+			gap: 8px;
+			display: flex;
 			padding: 16px;
 			border-top: 1px solid var(--border-secondary);
+			flex-direction: column;
 			:global(p) {
 				color: var(--color-tertiary);
 				margin: 0;

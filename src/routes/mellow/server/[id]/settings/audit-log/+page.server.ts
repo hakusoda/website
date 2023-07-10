@@ -2,7 +2,7 @@ import * as kit from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import type { PageServerLoad } from './$types';
-import type { MellowBindType, MellowServerAuditLogType } from '$lib/enums';
+import type { MellowBindType, MellowServerAuditLogType, MellowBindRequirementsType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
 	const { data, error } = await supabase.from('mellow_server_audit_logs')
@@ -54,7 +54,19 @@ interface MellowServerAuditLogDeleteRobloxLink extends MellowServerAuditLogBase 
 	type: MellowServerAuditLogType.DeleteRobloxLink
 }
 
+interface MellowServerAuditLogUpdateRobloxLink extends MellowServerAuditLogBase {
+	data: {
+		name: [string, string | undefined]
+		type: [MellowBindType, MellowBindType | undefined]
+		target_ids?: number
+		requirements?: number
+		requirements_type: [MellowBindRequirementsType, MellowBindRequirementsType | undefined]
+	}
+	type: MellowServerAuditLogType.UpdateRobloxLink
+}
+
 type MellowServerAuditLog =
 	MellowServerAuditLogCreateRobloxLink |
 	MellowServerAuditLogUpdateRobloxGlobalSettings |
-	MellowServerAuditLogDeleteRobloxLink
+	MellowServerAuditLogDeleteRobloxLink |
+	MellowServerAuditLogUpdateRobloxLink
