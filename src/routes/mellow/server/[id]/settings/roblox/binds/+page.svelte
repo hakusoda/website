@@ -55,7 +55,7 @@
 				<div class="name">
 					<h1>{item.name}</h1>
 					{#if !compact}
-						<p>{$t('mellow_bind.creator')} <a href={`/user/${item.creator.username}`}>{item.creator.name ?? item.creator.username}</a>, {$t('time_ago', [item.created_at])}</p>
+						<p>{$t('mellow_bind.creator')} <a href={`/user/${item.creator.username}`}>{item.creator.name ?? item.creator.username}</a> {$t('time_ago', [item.created_at])}{#if item.last_edit}{$t('mellow_bind.edited')} <a href={`/user/${item.last_edit.author.username}`}>{item.last_edit.author.name ?? item.last_edit.author.username}</a> {$t('time_ago', [item.last_edit.created_at])}{/if}</p>
 					{/if}
 					<p>{$t(`mellow_bind.explanation.${item.type}`, [item.target_ids])} {$t(`mellow_bind.explanation.end.${item.requirements_type}`, [item.requirements.length])}</p>
 				</div>

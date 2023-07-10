@@ -16,6 +16,14 @@ export const load = (async ({ params: { id } }) => {
 		id: string
 		name: string
 		type: MellowBindType
+		edits: {
+			type: MellowServerAuditLogType
+			author: {
+				name: string | null
+				username: string
+			}
+			created_at: string
+		}[]
 		creator: {
 			name: string | null
 			username: string
@@ -28,7 +36,7 @@ export const load = (async ({ params: { id } }) => {
 			type: MellowBindRequirementType
 		}[]
 		requirements_type: MellowBindRequirementsType
-	}>('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data )').eq('server_id', id);
+	}>('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data ), edits:mellow_server_audit_logs ( type, author:users ( name, username ), created_at )').eq('server_id', id);
 	if (error) {
 		console.error(error);
 		throw kit.error(500, error.message);
@@ -43,7 +51,14 @@ export const load = (async ({ params: { id } }) => {
 		throw kit.error(500);
 	}
 	return {
-		binds: data,
+		binds: data.map(item => {
+			const edits = item.edits.filter(item => item.type === MellowServerAuditLogType.UpdateRobloxLink);
+			return {
+				...item,
+				edits: undefined,
+				last_edit: edits.reverse()[0]
+			};
+		}),
 		roles: roles.data.filter(role => role.name !== '@everyone' && !role.managed).sort((a, b) => b.position - a.position).map(role => ({ id: role.id, name: role.name }))
 	};
 }) satisfies PageServerLoad;
@@ -162,7 +177,7 @@ export const actions = {
 			targets: data.data.length,
 			requirements: data.requirements.length,
 			requirements_type: data.requirementsType
-		});
+		}, response2.data.id);
 		return {
 			...response2.data,
 			requirements
@@ -202,6 +217,12 @@ export const actions = {
 		}
 
 		const { data } = response;
+
+		const user = await supabase.from('users').select('name, username').eq('id', session!.user.id).single();
+		if (user.error) {
+			console.error(user.error);
+			return kit.fail(500, { error: RequestErrorType.ExternalRequestError } satisfies RequestError);
+		}
 
 		const response1 = await supabase.from('mellow_binds').select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data )').eq('id', data.target).eq('server_id', id).single();
 		if (response1.error) {
@@ -257,9 +278,16 @@ export const actions = {
 			target_ids: data.data?.length,
 			requirements: data.requirements?.length,
 			requirements_type: [response1.data.requirements_type, data.requirementsType]
-		});
+		}, data.target);
 
-		return final;
+		return {
+			...final,
+			last_edit: {
+				type: MellowServerAuditLogType.UpdateRobloxLink,
+				author: user.data,
+				created_at: Date.now()
+			}
+		};
 	},
 	searchGroups: async ({ locals: { getSession }, params: { id }, request }) => {
 		await verifyServerMembership(await getSession(), id);

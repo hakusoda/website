@@ -203,6 +203,7 @@ export default {
 		'mellow_bind.type.0': 'Discord Roles',
 		'mellow_bind.bound.0': 'Linked to {0} Discord Role{0|s}',
 		'mellow_bind.creator': 'Created by',
+		'mellow_bind.edited': ', edited by',
 		'mellow_bind.view_mode.0': 'Default View',
 		'mellow_bind.view_mode.1': 'Compact View',
 		'mellow_bind.requirement.0': 'Must have a Verified Roblox Account',

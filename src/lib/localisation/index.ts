@@ -33,6 +33,8 @@ const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 			return trans(ta(1, minute), [minute]);
 
 		const second = Math.floor(diff / 1000);
+		if (!second)
+			return trans('time_ago.0_1');
 		return trans(ta(0, second), [second]);
 	}
 });
