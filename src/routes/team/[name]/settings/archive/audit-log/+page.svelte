@@ -31,7 +31,7 @@
 	.main {
 		gap: 16px;
 		width: 100%;
-		margin: 32px;
+		padding: 32px;
 		display: flex;
 		overflow: hidden auto;
 		flex-direction: column;

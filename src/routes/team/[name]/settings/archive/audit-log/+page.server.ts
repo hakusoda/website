@@ -7,7 +7,7 @@ import type { TeamAuditLogType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { name } }) => {
 	const { data, error } = await supabase.from('team_audit_logs')
-		.select<string, TeamAuditLog>('id, type, data, team:teams ( name ), author:users( name, username, avatar_url ), created_at').eq(isUUID(name) ? 'team_id' : 'team.name', name).order('created_at', { ascending: false });
+		.select<string, TeamAuditLog>('id, type, data, team:teams!inner ( name ), author:users( name, username, avatar_url ), created_at').eq(isUUID(name) ? 'team_id' : 'team.name', name).order('created_at', { ascending: false });
 	if (error) {
 		console.error(error);
 		throw kit.error(500, error.message);
