@@ -1,5 +1,5 @@
 import type { ZodIssue } from 'zod';
-import type { TeamRole, RequestErrorType, RobloxLinkType, RobloxLinkFlag, UserNotificationType, UserNotificationState } from './enums';
+import type { TeamRole, MellowBindType, RequestErrorType, RobloxLinkType, RobloxLinkFlag, UserNotificationType, UserNotificationState, MellowBindRequirementType, MellowBindRequirementsType } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -143,6 +143,23 @@ export interface RobloxGroupRole {
 export interface RobloxGroupRolesResponse {
 	roles: RobloxGroupRole[]
 	groupId: number
+}
+
+export interface MellowLink {
+	name: string
+	type: MellowBindType
+	creator: {
+		name: string | null
+		username: string
+	}
+	created_at: string
+	target_ids: string[]
+	requirements: {
+		id: string
+		data: string[]
+		type: MellowBindRequirementType
+	}[]
+	requirements_type: MellowBindRequirementsType
 }
 
 export interface RequestError {

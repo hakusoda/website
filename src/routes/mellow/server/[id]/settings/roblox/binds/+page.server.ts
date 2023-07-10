@@ -3,11 +3,11 @@ import * as kit from '@sveltejs/kit';
 import type { ZodIssue } from 'zod';
 
 import supabase from '$lib/supabase';
-import type { RequestError } from '$lib/types';
 import { getDiscordServerRoles } from '$lib/discord';
 import { verifyServerMembership } from '$lib/util/server';
 import { createMellowServerAuditLog } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
+import type { MellowLink, RequestError } from '$lib/types';
 import { lookupRobloxGroups, getRobloxGroupRoles, getRobloxGroupAvatars } from '$lib/api';
 import { MellowBindType, RequestErrorType, MellowServerAuditLogType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
@@ -141,7 +141,7 @@ export const actions = {
 			return kit.fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
-		let requirements = [];
+		let requirements: MellowLink['requirements'] = [];
 		if (data.requirements.length) {
 			const response3 = await supabase.from('mellow_bind_requirements').insert(data.requirements.map(item => ({
 				type: item.type,
@@ -210,7 +210,7 @@ export const actions = {
 		}
 
 		let final = response1.data;
-		if (data.name !== undefined || data.type !== undefined || data.data || data.requirements_type !== undefined) {
+		if (data.name !== undefined || data.type !== undefined || data.data || data.requirementsType !== undefined) {
 			const response2 = await supabase.from('mellow_binds').update({
 				name: data.name,
 				type: data.type,
