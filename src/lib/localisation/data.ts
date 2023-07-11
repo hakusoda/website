@@ -1,12 +1,14 @@
 export default {
 	'en-AU': {
 		'action.edit': 'Edit',
+		'action.reset': 'Reset',
 		'action.cancel': 'Cancel',
 		'action.delete': 'Delete',
 		'action.remove': 'Remove',
 		'action.search': 'Search',
 		'action.finish': 'Finish',
 		'action.manage': 'Manage',
+		'action.duplicate': 'Duplicate',
 		'action.choose_file': 'Choose File',
 		'action.edit_profile': 'Edit Profile',
 		'action.view_profile': 'View Profile',
@@ -152,6 +154,8 @@ export default {
 		'mellow_link_editor.requirement.group_role.placeholder': 'Select a Role',
 		'mellow_link_editor.requirement.rank_from': 'From',
 		'mellow_link_editor.requirement.rank_to': 'To',
+		'mellow_link_editor.requirement.link': 'Roblox Link',
+		'mellow_link_editor.requirement.link.placeholder': 'Select a Link',
 		'mellow_link_editor.finish': 'Create Link',
 
 		'mellow_server_audit_log.type.0': 'added this server to mellow',
@@ -221,6 +225,7 @@ export default {
 		'mellow_bind.requirement.2': 'Must have a Roblox Group Rank in range',
 		'mellow_bind.requirement.3': 'Must be in a Roblox Group',
 		'mellow_bind.requirement.4': 'Must be friends with someone',
+		'mellow_bind.requirement.5': 'Must meet another link',
 		'mellow_bind.requirements_type.0': 'Must meet all',
 		'mellow_bind.requirements_type.1': 'Must meet at least one',
 		'mellow_bind.requirements': '{0} Requirement{0|s}',

@@ -14,6 +14,7 @@
 	import X from '$lib/icons/X.svelte';
 	import Plus from '$lib/icons/Plus.svelte';
 	import Check from '$lib/icons/Check.svelte';
+	import Clipboard from '$lib/icons/Clipboard.svelte';
 	export let data: PageData;
 	export let target: PageData['binds'][number] | null = null;
 	export let onSave: () => void;
@@ -48,6 +49,15 @@
 		requirements = target.requirements.map(item => [item.type, item.data]), requirementsType = target.requirements_type;
 		editing = true;
 		trigger();
+	}
+
+	let itemRefs: HTMLDivElement[] = [];
+	let lastItemRefLength = 0;
+	$: {
+		const length = itemRefs.filter(item => item).length;
+		if (length > lastItemRefLength)
+			itemRefs.findLast(item => item)?.scrollIntoView({ block: 'center' });
+		lastItemRefLength = length;
 	}
 
 	const save = async () => {
@@ -111,7 +121,7 @@
 	const addRequirement = (type: any) => requirements = [...requirements, [type, []]];
 	const resetAdd = () => {
 		targets = [], name = '', requirements = [];
-		type = MellowBindType.DiscordRoles;
+		type = MellowBindType.DiscordRoles, requirementsType = MellowBindRequirementsType.MeetAll;
 		target = null;
 		editing = false;
 	};
@@ -178,8 +188,8 @@
 				{/if}
 			{/each}
 		</Select.Root>
-		{#each requirements as item}
-			<div class="item">
+		{#each requirements as item, index}
+			<div class="item" class:highlighted={index === requirements.length - 1} bind:this={itemRefs[index]}>
 				<div class="rfields">
 					<p class="title">{$t(`mellow_bind.requirement.${item[0]}`)}</p>
 					{#if item[0] === MellowBindRequirementType.HasRobloxGroupRole}
@@ -201,8 +211,7 @@
 								</div>
 							{/if}
 						</div>
-					{/if}
-					{#if item[0] === MellowBindRequirementType.HasRobloxGroupRankInRange}
+					{:else if item[0] === MellowBindRequirementType.HasRobloxGroupRankInRange}
 						<div class="fields">
 							<div class="field">
 								<p class="label">{$t('mellow_link_editor.requirement.group')}</p>
@@ -217,17 +226,32 @@
 								<TextInput bind:value={item[1][2]} placeholder="Rank"/>
 							</div>
 						</div>
-					{/if}
-					{#if item[0] === MellowBindRequirementType.InRobloxGroup}
+					{:else if item[0] === MellowBindRequirementType.InRobloxGroup}
 						<div class="field">
 							<p class="label">{$t('mellow_link_editor.requirement.group')}</p>
 							<GroupSelect bind:value={item[1][0]}/>
 						</div>
+					{:else if item[0] === MellowBindRequirementType.MeetsOtherLink}
+						<div class="field">
+							<p class="label">{$t('mellow_link_editor.requirement.link')}</p>
+							<Select.Root bind:value={item[1][0]} placeholder={$t('mellow_link_editor.requirement.link.placeholder')}>
+								{#each data.binds.filter(bind => bind.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowBindRequirementType.MeetsOtherLink && r[1][0] === bind.id)) as bind}
+									<Select.Item value={bind.id}>
+										{bind.name}
+									</Select.Item>
+								{/each}
+							</Select.Root>
+						</div>
 					{/if}
 				</div>
-				<button type="button" on:click={() => requirements = requirements.filter(i => i !== item)}>
-					<X/>
-				</button>
+				<div class="buttons">
+					<button type="button" title={$t('action.duplicate')} on:click={() => requirements = [...requirements, JSON.parse(JSON.stringify(item))]}>
+						<Clipboard/>
+					</button>
+					<button type="button" title={$t('action.delete')} on:click={() => requirements = requirements.filter(i => i !== item)}>
+						<X/>
+					</button>
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -249,7 +273,7 @@
 	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [targets])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
 	<div class="modal-buttons">
 		<Button on:click={save} disabled={saving}>
-			<Check/>{$t('mellow_link_editor.finish')}
+			<Check/>{$t(target ? 'action.save_changes' : 'mellow_link_editor.finish')}
 		</Button>
 		<form method="dialog">
 			<Button on:click={resetAdd} disabled={saving}>
@@ -286,15 +310,25 @@
 					font-size: .9em;
 				}
 			}
-			& > button {
-				color: var(--color-primary);
-				border: none;
-				cursor: pointer;
+			.buttons {
+				gap: 16px;
 				margin: 0 0 0 auto;
-				height: fit-content;
-				padding: 0;
 				display: flex;
-				background: none;
+				button {
+					color: var(--color-tertiary);
+					border: none;
+					cursor: pointer;
+					height: fit-content;
+					padding: 0;
+					display: flex;
+					background: none;
+					&:hover {
+						color: var(--color-primary);
+					}
+				}
+			}
+			&.highlighted {
+				animation: 1s 5 alternate basic-focus;
 			}
 		}
 	}
