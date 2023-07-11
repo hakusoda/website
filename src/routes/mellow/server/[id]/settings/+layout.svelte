@@ -11,12 +11,14 @@
 <div class="main">
 	<div class="nav">
 		<p>{data.name}</p>
-		<SettingsNavItem id="mellow.server.settings.audit_log" path={`${base}/audit-log`}/>
 		<SettingsNavItem id="mellow.server.settings.logging" path={`${base}/logging`}/>
 
 		<p>{$t('mellow.server.settings.roblox')}</p>
 		<SettingsNavItem id="mellow.server.settings.roblox.global" path={`${base}/roblox/global`}/>
 		<SettingsNavItem id="mellow.server.settings.roblox.binds" path={`${base}/roblox/binds`}/>
+
+		<p>{$t('team.settings.archive')}</p>
+		<SettingsNavItem id="mellow.server.settings.audit_log" path={`${base}/archive/audit-log`}/>
 
 		<SettingsNavItem id="mellow.server.settings.return" path="/settings/mellow/servers" footer/>
 	</div>
