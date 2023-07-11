@@ -18,7 +18,11 @@
 	const save = async () => {
 		saving = !(error = null);
 		const response = await fetch('?/edit', {
-			body: JSON.stringify({ types, channel }),
+			body: JSON.stringify({
+				types : types === data.logging_types ? undefined : types,
+				channel: channel === data.logging_channel_id ? undefined : channel,
+				channel_name: channel === data.logging_channel_id ? undefined : channel ? `#${data.channels.find(c => c.id === channel)?.name}` : null
+			}),
             method: 'POST'
         });
 		const result = deserialize(await response.text());

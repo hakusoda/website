@@ -162,6 +162,7 @@
 			flex-direction: column;
 		}
 
+		--color-link: hsl(330 90% 80%);
 		--button-color: hsl(330 100% 98%);
 		--button-color-active: hsl(330 100% 88%);
 		--button-background: hsl(330 50% 60%);

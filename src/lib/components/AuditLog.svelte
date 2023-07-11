@@ -79,6 +79,19 @@
 				margin: 0;
 				font-size: .9em;
 			}
+			:global(a) {
+				gap: 8px;
+				width: fit-content;
+				color: var(--color-link);
+				margin: 8px 0 0;
+				display: flex;
+				font-size: .9em;
+				align-items: center;
+			}
+			:global(.footer) {
+				color: var(--color-secondary);
+				font-size: .75em;
+			}
 		}
 	}
 </style>

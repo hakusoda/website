@@ -6,7 +6,7 @@ import type { MellowBindType, MellowServerAuditLogType, MellowBindRequirementsTy
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
 	const { data, error } = await supabase.from('mellow_server_audit_logs')
-		.select<string, MellowServerAuditLog>('id, type, data, author:users( name, username, avatar_url ), created_at').eq('server_id', id).order('created_at', { ascending: false });
+		.select<string, MellowServerAuditLog>('id, type, data, author:users( name, username, avatar_url ), created_at, target_link_id').eq('server_id', id).order('created_at', { ascending: false });
 	if (error) {
 		console.error(error);
 		throw kit.error(500, error.message);
@@ -27,6 +27,7 @@ interface MellowServerAuditLogBase {
 		avatar_url: string
 	}
 	created_at: string
+	target_link_id: string | null
 }
 
 interface MellowServerAuditLogCreateRobloxLink extends MellowServerAuditLogBase {
@@ -65,8 +66,18 @@ interface MellowServerAuditLogUpdateRobloxLink extends MellowServerAuditLogBase 
 	type: MellowServerAuditLogType.UpdateRobloxLink
 }
 
+interface MellowServerAuditLogUpdateLogging extends MellowServerAuditLogBase {
+	data: {
+		types: [number, number | undefined]
+		channel: [string | null, string | undefined | null]
+		channel_id: [string | null, string | undefined | null]
+	}
+	type: MellowServerAuditLogType.UpdateLogging
+}
+
 type MellowServerAuditLog =
 	MellowServerAuditLogCreateRobloxLink |
 	MellowServerAuditLogUpdateRobloxGlobalSettings |
 	MellowServerAuditLogDeleteRobloxLink |
-	MellowServerAuditLogUpdateRobloxLink
+	MellowServerAuditLogUpdateRobloxLink |
+	MellowServerAuditLogUpdateLogging

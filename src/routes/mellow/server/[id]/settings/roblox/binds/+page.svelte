@@ -130,7 +130,7 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 0px 64px 32px 64px;
+		margin: 0px 32px 32px 32px;
 		display: flex;
 		position: relative;
 		flex-direction: column;
@@ -138,7 +138,7 @@
 			gap: 16px;
 			height: 100%;
 			display: flex;
-			padding: 32px 0;
+			padding: 32px;
 			overflow: auto;
 			flex-direction: column;
 			.item {
@@ -189,8 +189,8 @@
 		}
 		& > .buttons {
 			gap: 16px;
+			margin: 16px 32px 0;
 			display: flex;
-			margin-top: 16px;
 			:global(input) {
 				margin-left: auto;
 			}
