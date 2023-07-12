@@ -75,6 +75,10 @@ export enum TeamAuditLogType {
 	UpdateProjectBanner
 }
 
+export enum ProjectFlag {
+	None
+}
+
 export enum UserNotificationType {
 	TeamInvite,
 	RemovedFromTeam,

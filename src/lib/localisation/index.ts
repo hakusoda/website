@@ -36,6 +36,14 @@ const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 		if (!second)
 			return trans('time_ago.0_1');
 		return trans(ta(0, second), [second]);
+	},
+	date: (value, trans) => {
+		const date = new Date(value);
+		return date.toLocaleDateString('en-US', {
+			day: '2-digit',
+			year: 'numeric',
+			month: 'long'
+		});
 	}
 });
 

@@ -2,6 +2,8 @@
 	import { Tabs, Button } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
+	import { hasFlag } from '$lib/util';
+	import { ProjectFlag } from '$lib/enums';
 	import type { PageData } from './$types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -66,11 +68,16 @@
 					<a class="item" href={`/project/${item.name}`} style={`--banner: url("${item.banner_url}"); --project-color: ${item.theme_color ?? 'var(--background-secondary)'}`}>
 						<Avatar src={item.avatar_url} size="sm2" hover/>
 						<div class="name">
-							<h1>{item.display_name}</h1>
+							<h1>
+								{item.display_name}
+								{#if item.archived_at}
+									<p class="archived">{$t('time_ago.archived', [item.archived_at])}</p>
+								{/if}
+							</h1>
 							<p>{item.summary}</p>
 						</div>
 						<div class="details">
-							<p>{$t('project.card', [item.created_at, item.contributors.length + item.external_contributors])}</p>
+							<p>{$t('time_ago.updated', [item.updated_at])} • {$t('project.contributors.count', [item.contributors.length + item.external_contributors])}</p>
 						</div>
 					</a>
 				{/each}
@@ -231,7 +238,21 @@
 					z-index: 1;
 					margin-left: 88px;
 					h1 {
+						gap: 16px;
 						margin: 0;
+						display: flex;
+						align-items: center;
+						.archived {
+							color: #e8c47d;
+							margin: 0;
+							border: 1px solid #e8c47d;
+							padding: 4px 8px;
+							font-size: .4em;
+							background: var(--background-primary);
+							font-weight: 500;
+							line-height: normal;
+							border-radius: 4px;
+						}
 					}
 					p {
 						color: var(--pcolor2);

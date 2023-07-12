@@ -4,6 +4,7 @@
 
 	import { t } from '$lib/localisation';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Markdown from '$lib/components/Markdown.svelte';
 
 	import Star from '$lib/icons/Star.svelte';
 	import GitHub from '$lib/icons/GitHub.svelte';
@@ -26,6 +27,9 @@
 				</div>
 				<p>{data.summary}</p>
 			</div>
+			{#if data.archived_at}
+				<p class="archived">{$t('project.archived', [data.archived_at])}</p>
+			{/if}
 			<div class="buttons">
 				{#if data.website_url}
 					<Button href={data.website_url} target="_blank">
@@ -42,7 +46,7 @@
 	</div>
 	<div class="info-card about">
 		<h1>{$t('project.about')}</h1>
-		<p>{data.bio ?? $t('project.about.empty')}</p>
+		<Markdown source={data.bio || `${$t('project.about.empty', [data])}${data.github_url ? $t('project.about.empty.github', [data]) : ''}`}/>
 	</div>
 	<div class="info-card contributors">
 		<h1>{$t('project.contributors')}</h1>
@@ -69,7 +73,9 @@
 		{/if}
 	</div>
 	<div class="info-card extra">
-		<p><Sunrise/>{$t('team.joined', [data.created_at])}</p>
+		<p><Sunrise/>{$t('time_ago.updated', [data.updated_at])}</p>
+		<p><Sunrise/>{$t('time_ago.created', [data.created_at])}</p>
+		<div class="separator"/>
 		<p><Star/>{$t('project.id', [data.id])}</p>
 	</div>
 </div>
@@ -91,6 +97,7 @@
 		--pbg3: color-mix(in srgb, var(--project-color) 90%, #000);
 		--pcolor2: color-mix(in srgb, var(--project-color) 50%, #fff);
 		--pcolor3: color-mix(in srgb, var(--project-color) 40%, #fff);
+		--pcolor4: color-mix(in srgb, var(--project-color) 80%, #fff);
 		.header {
 			overflow: hidden;
 			background: var(--project-color);
@@ -107,6 +114,7 @@
 				padding: 8px 0 24px 176px;
 				position: relative;
 				flex-wrap: wrap;
+				align-items: center;
 				:global(.avatar) {
 					top: -48px;
 					left: 48px;
@@ -131,6 +139,18 @@
 						font-size: .9em;
 					}
 				}
+				.archived {
+					color: #e8c47d;
+					margin: 0 auto;
+					height: fit-content;
+					border: 1px solid #e8c47d;
+					padding: 6px 10px;
+					font-size: .9em;
+					background: var(--background-primary);
+					font-weight: 500;
+					line-height: normal;
+					border-radius: 4px;
+				}
 				.buttons {
 					gap: 16px;
 					margin: auto 32px auto auto;
@@ -148,11 +168,18 @@
 				font-size: 1.5em;
 				font-weight: 600;
 			}
+			.separator {
+				width: 100%;
+				height: 1px;
+				margin: 8px 0;
+				background: var(--pcolor4);
+			}
 		}
 		.about {
-			p {
-				color: var(--pcolor2);
-				margin: 16px 0 0;
+			h1 {
+				font-size: 1.25em;
+				font-weight: 600;
+				margin-bottom: 24px;
 			}
 		}
 		.contributors {

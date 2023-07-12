@@ -62,10 +62,13 @@ export interface DatabaseTeam {
 	projects: {
 		id: string
 		name: string
+		flags: number
 		summary: string
 		avatar_url: string | null
 		banner_url: string | null
 		created_at: string
+		updated_at: string
+		archived_at: string | null
 		theme_color: string | null
 		display_name: string
 		contributors: { id: string }[]

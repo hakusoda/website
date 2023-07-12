@@ -22,7 +22,9 @@ export const load = (async ({ params: { name } }) => {
 		avatar_url: string
 		banner_url: string
 		created_at: string
+		updated_at: string
 		github_url: string | null
+		archived_at: string | null
 		website_url: string | null
 		theme_color: string | null
 		display_name: string
@@ -36,7 +38,7 @@ export const load = (async ({ params: { name } }) => {
 			}
 		}[]
 		external_contributors: number
-	}>('id, bio, name, summary, avatar_url, banner_url, created_at, github_url, website_url, theme_color, display_name, creator:teams ( id, name, avatar_url, display_name, members:team_members ( id ) ), contributors:project_contributors ( user:users ( id, name, username, avatar_url, created_at ) ), external_contributors').eq(isUUID(name) ? 'id' : 'name', name).limit(1).maybeSingle();
+	}>('id, bio, name, summary, avatar_url, banner_url, created_at, updated_at, github_url, archived_at, website_url, theme_color, display_name, creator:teams ( id, name, avatar_url, display_name, members:team_members ( id ) ), contributors:project_contributors ( user:users ( id, name, username, avatar_url, created_at ) ), external_contributors').eq(isUUID(name) ? 'id' : 'name', name).limit(1).maybeSingle();
 	if (error) {
 		console.error(error);
 		throw kit.error(500, JSON.stringify({

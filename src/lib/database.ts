@@ -30,7 +30,7 @@ export async function getUsers(userIds: string[]) {
 }
 
 export async function getTeam(teamId: string) {
-	let filter = supabase.from('teams').select<string, DatabaseTeam>('id, bio, name, flags, members:team_members ( role, user:users ( id, bio, name, flags, username, avatar_url, created_at ), joined_at ), projects ( id, name, summary, avatar_url, banner_url, created_at, theme_color, display_name, contributors:project_contributors ( id ), external_contributors ), avatar_url, created_at, display_name').limit(1);
+	let filter = supabase.from('teams').select<string, DatabaseTeam>('id, bio, name, flags, members:team_members ( role, user:users ( id, bio, name, flags, username, avatar_url, created_at ), joined_at ), projects ( id, name, flags, summary, avatar_url, banner_url, created_at, updated_at, archived_at, theme_color, display_name, contributors:project_contributors ( id ), external_contributors ), avatar_url, created_at, display_name').limit(1);
 	if (isUUID(teamId))
 		filter = filter.eq('id', teamId);
 	else

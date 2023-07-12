@@ -55,14 +55,16 @@ export default {
 
 		'project.author.0': 'by ',
 		'project.author.1': ', and {0} contributor{0|s}',
+		'project.archived': 'This project has been archived as of {0|date}.',
 		'project.website': 'Visit Website',
 		'project.github': 'GitHub Repository',
 		'project.about': 'About this project',
-		'project.about.empty': 'This project has no description yet.',
+		'project.about.empty': '# {0.display_name}\nThe authors of this project haven\'t written a description yet...',
+		'project.about.empty.github': '<br/>Perhaps try visiting the [GitHub Repository]({0.github_url}) for more information!',
 		'project.contributors': 'Contributors',
+		'project.contributors.count': '{0} Contributor{0|s}',
 		'project.contributors.external': '... plus {0} external contributor{0|s}.',
 		'project.id': 'Project ID: {0}',
-		'project.card': 'Created {0|time_ago} • {1} Contributor{1|s}',
 
 		'team_role.0': 'Team Member',
 		'team_role.0.profile': 'a member',
@@ -295,5 +297,8 @@ export default {
 		'time_ago.4_1': 'last month',
 		'time_ago.5_0': '{0} years ago',
 		'time_ago.5_1': 'last year',
+		'time_ago.created': 'Created {0|time_ago}',
+		'time_ago.updated': 'Updated {0|time_ago}',
+		'time_ago.archived': 'Archived {0|time_ago}'
 	}
 };
