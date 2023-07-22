@@ -3,21 +3,23 @@
 	export let size: 'xxxs' | 'xxs' | 'xs' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let hover = false;
 	export let circle = false;
+	export let background = '';
 	export let transparent = false;
 
 	import Question from '../icons/Question.svelte';
+	$: style = `background: ${background};`;
 	$: className = `avatar ${size}${circle ? ' circle' : ''}${transparent ? ' transparent' : ''}${hover ? ' hover' : ''}`;
 </script>
 
 {#if src}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class={className} on:click>
+	<div class={className} {style} on:click>
 		<img {src} alt="avatar"/>
 		<slot/>
 	</div>
 {:else}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class={className} on:click><Question size={32}/></div>
+	<div class={className} {style} on:click><Question size={32}/></div>
 {/if}
 
 <style lang="scss">

@@ -1,54 +1,107 @@
 <script lang="ts">
+	import { Button } from '@voxelified/voxeliface';
+
 	import { t } from '$lib/localisation';
+	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 	import type { PageData } from './$types';
+	import { createMellowServerDiscordRedirectUrl } from '$lib/util';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+
+	import X from '$lib/icons/X.svelte';
+	import ArrowClockwise from '$lib/icons/ArrowClockwise.svelte';
+	import BoxArrowUpRight from '$lib/icons/BoxArrowUpRight.svelte';
 	export let data: PageData;
+
+	$: if (browser && $page.url.searchParams.get('code'))
+		history.replaceState({}, '', '/settings/mellow/servers');
+	$: discordUrl = `https://discord.com/api/oauth2/authorize?client_id=1068554282481229885&redirect_uri=${encodeURIComponent(createMellowServerDiscordRedirectUrl($page.url.origin))}&response_type=code&scope=identify%20guilds`;
 </script>
 
 <div class="main">
 	<h1>{$t('settings.mellow.servers')}</h1>
+	<p class="add">{$t('settings.mellow.servers.add')}</p>
 	<div class="servers">
-		{#each data.servers as item}
-			<a class="item focusable" href={`/mellow/server/${item.id}/settings`}>
-				<Avatar src={item.avatar_url} size="sm"/>
+		{#each data.servers.sort((a, b) => a.name.localeCompare(b.name)) as item}
+			<div class="item focusable">
+				<Avatar src={item.avatar_url} size="sm2" transparent/>
 				<div class="name">
 					<h1>{item.name}</h1>
-					<p>{$t('settings.mellow.servers.server.details', [item.members.length])}</p>
+					<p>{$t('settings.mellow.servers.server.members', [item.members.length])}</p>
 				</div>
-			</a>
+				<div class="buttons">
+					<Button href={`/mellow/server/${item.id}/settings`}>
+						<BoxArrowUpRight/>{$t('action.view')}
+					</Button>
+					<Button>
+						<X/>{$t('action.leave')}
+					</Button>
+				</div>
+			</div>
+		{/each}
+		{#each data.allServers.filter(item => !data.servers.some(i => i.id === item.id)).sort((a, b) => a.name.localeCompare(b.name)) as item}
+			<div class="item focusable unknown">
+				<Avatar src={`https://cdn.discordapp.com/icons/${item.id}/${item.icon}.webp?size=128`} size="sm2" transparent/>
+				<div class="name">
+					<h1>{item.name}</h1>
+					<p>{$t('settings.mellow.servers.server.placeholder')}</p>
+				</div>
+			</div>
 		{/each}
 	</div>
+	<Button href={discordUrl}>
+		<ArrowClockwise/>{$t('settings.mellow.servers.refresh')}
+	</Button>
 </div>
 
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 32px 256px 32px 64px;
+		margin: 32px 128px 32px 64px;
+		.add {
+			color: var(--color-secondary);
+			font-size: .9em;
+		}
 		.servers {
 			gap: 16px;
+			margin: 24px 0 16px;
 			display: flex;
-			margin-top: 24px;
-			flex-direction: column;
+			flex-wrap: wrap;
 			.item {
+				width: calc(30% - 16px);
 				display: flex;
-				padding: 8px;
+				padding: 16px 8px;
 				background: var(--background-secondary);
 				align-items: center;
 				border-radius: 8px;
+				flex-direction: column;
 				text-decoration: none;
 				.name {
-					margin-left: 16px;
+					display: flex;
+					margin-top: 16px;
+					align-items: center;
+					flex-direction: column;
 					h1 {
 						margin: 0;
-						font-size: 1.2em;
+						font-size: 1.25em;
 						font-weight: 600;
 					}
 					p {
 						color: var(--color-secondary);
-						margin: 2px 0 0;
+						margin: 4px 0 0;
 						font-size: .8em;
 					}
+				}
+				&.unknown {
+					color: var(--color-tertiary);
+					background: none;
+					box-shadow: 0 0 0 1px var(--border-primary);
+				}
+				.buttons {
+					gap: 8px;
+					display: flex;
+					margin-top: 16px;
 				}
 			}
 		}

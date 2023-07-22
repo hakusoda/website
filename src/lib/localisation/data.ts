@@ -1,7 +1,9 @@
 export default {
 	'en-AU': {
 		'action.edit': 'Edit',
+		'action.view': 'View',
 		'action.reset': 'Reset',
+		'action.leave': 'Leave',
 		'action.cancel': 'Cancel',
 		'action.delete': 'Delete',
 		'action.remove': 'Remove',
@@ -111,15 +113,18 @@ export default {
 		'settings': 'Your Account',
 		'settings.account': 'Account',
 
-		'settings.roblox': 'Roblox',
+		'settings.roblox': 'Roblox Settings',
 		'settings.roblox.verification': 'Linked Accounts',
 		'settings.roblox.verification.list': 'Linked Roblox Accounts',
 		'settings.roblox.verification.add': 'Link Roblox Account',
 		'settings.roblox.verification.mellow': 'It appears that you signed-up via mellow, you can now close this page, and return to Discord.',
 
-		'settings.mellow': 'mellow Bot',
+		'settings.mellow': 'mellow Settings',
 		'settings.mellow.servers': 'Discord Servers',
-		'settings.mellow.servers.server.details': 'Managed by {0} user{0|s}',
+		'settings.mellow.servers.add': 'Need to connect a Discord Server? Use mellow\'s /connect command in your server of choice.',
+		'settings.mellow.servers.server.members': 'Managed by {0} user{0|s}',
+		'settings.mellow.servers.server.placeholder': 'Unknown status, check back later.',
+		'settings.mellow.servers.refresh': 'Refresh Discord Servers',
 
 		'mellow.server.settings.audit_log': 'Audit Log',
 

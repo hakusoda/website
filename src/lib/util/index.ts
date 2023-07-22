@@ -4,6 +4,10 @@ export function createDiscordRedirectUri(origin: string) {
 	return `${origin}/roblox/verify/platform/discord`;
 }
 
+export function createMellowServerDiscordRedirectUrl(origin: string) {
+	return `${origin}/settings/mellow/servers`;
+}
+
 export function getUserNotificationUrl({ type, target_user, target_team }: UserNotification) {
 	if (type === UserNotificationType.RobloxAccountRemoved)
 		return '/settings/roblox/verification'
