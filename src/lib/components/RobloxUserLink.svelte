@@ -42,7 +42,7 @@
 </script>
 
 <DropdownMenu bind:trigger>
-	<button slot="trigger" type="button" class="user-link" on:click={trigger} disabled={unlinking}>
+	<button slot="trigger" type="button" class="user-link" class:active={isPrimary} on:click={trigger} disabled={unlinking}>
 		<Avatar src={icon} size="sm" circle/>
 		<div class="name">
 			<p class="nickname">
@@ -99,8 +99,9 @@
 		padding: 8px 16px 8px 8px;
 		font-size: 1em;
 		flex-wrap: wrap;
+		background: none;
 		text-align: start;
-		background: var(--background-secondary);
+		box-shadow: 0 0 0 1px var(--border-primary);
 		align-items: center;
 		font-family: var(--font-primary);
 		border-radius: 8px;
@@ -136,6 +137,10 @@
 		&[disabled] {
 			cursor: not-allowed;
 			opacity: 0.5;
+		}
+		&.active {
+			box-shadow: none;
+			background: var(--background-secondary);
 		}
 	}
 </style>

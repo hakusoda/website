@@ -9,7 +9,7 @@
 		<SettingsNavItem id="settings.account" path="/settings/account"/>
 	
 		<p>{$t('settings.roblox')}</p>
-		<SettingsNavItem id="settings.roblox.verification" path="/settings/roblox/verification"/>
+		<SettingsNavItem id="settings.roblox.accounts" path="/settings/roblox/accounts"/>
 
 		<p>{$t('settings.mellow')}</p>
 		<SettingsNavItem id="settings.mellow.servers" path="/settings/mellow/servers"/>

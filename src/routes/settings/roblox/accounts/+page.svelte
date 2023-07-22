@@ -17,8 +17,9 @@
 </script>
 
 <div class="main">
+	<h1>{$t('settings.roblox.accounts.list')}</h1>
+	<p class="help">{$t('settings.roblox.accounts.help')}</p>
 	{#if data.links.length}
-		<h1>{$t('settings.roblox.verification.list')}</h1>
 		<div class="users">
 			{#each links as link}
 				<RobloxUserLink user={link.target} icon={link.target_icon} link={link}/>
@@ -26,9 +27,9 @@
 		</div>
 	{/if}
 
-	<Button href="/roblox/authorise"><Link/>{$t('settings.roblox.verification.add')}</Button>
+	<Button href="/roblox/authorise"><Link/>{$t('settings.roblox.accounts.add')}</Button>
 	{#if data.mellow}
-		<p class="mellow">{$t('settings.roblox.verification.mellow')}</p>
+		<p class="mellow">{$t('settings.roblox.accounts.mellow')}</p>
 	{/if}
 </div>
 
@@ -36,6 +37,10 @@
 	.main {
 		width: 100%;
 		margin: 32px 256px 32px 64px;
+		.help {
+			color: var(--color-secondary);
+			font-size: .9em;
+		}
 		.users {
 			gap: 8px;
 			display: flex;
