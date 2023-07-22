@@ -123,6 +123,8 @@ export default {
 
 		'mellow.server.settings.audit_log': 'Audit Log',
 
+		'mellow.server.settings.commands.custom': 'Custom Commands',
+
 		'mellow.server.settings.logging': 'Logging',
 		'mellow.server.settings.logging.channel': 'Logging Channel',
 		'mellow.server.settings.logging.channel.category': 'Discord Channels',
@@ -223,6 +225,7 @@ export default {
 		'group_select.empty': 'Nothing, try editing your query',
 		'group_select.select': 'Select a Group',
 		'group_select.results': '{0} Item{0|s}',
+		'group_select.back': 'Back to Recent',
 
 		'mellow_bind.type.0': 'Discord Roles',
 		'mellow_bind.bound.0': 'Linked to {0} Discord Role{0|s}',

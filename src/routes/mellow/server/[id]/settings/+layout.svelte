@@ -11,6 +11,7 @@
 <div class="main">
 	<div class="nav">
 		<p>{data.name}</p>
+		<SettingsNavItem id="mellow.server.settings.commands.custom" path={`${base}/commands/custom`}/>
 		<SettingsNavItem id="mellow.server.settings.logging" path={`${base}/logging`}/>
 
 		<p>{$t('mellow.server.settings.roblox')}</p>

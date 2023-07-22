@@ -2,10 +2,14 @@
 	import { TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '../localisation';
-	import Avatar from './Avatar.svelte';
 	import type { PartialRobloxGroup } from '../types';
 
+	import Avatar from './Avatar.svelte';
+	import Loader from './Loader.svelte';
+
+	import Check from '../icons/Check.svelte';
 	import Search from '../icons/Search.svelte';
+	import ArrowLeft from '../icons/ArrowLeft.svelte';
 	import ChevronDown from '../icons/ChevronDown.svelte';
 	export let value: string | null = null;
 	export let onChange: ((newValue: string) => void) | null = null;
@@ -48,6 +52,9 @@
 		{#if state || !cached.length}
 			<p>{$t(searching ? 'group_select.searching' : results.length ? 'group_select.select' : query ? 'group_select.empty' : 'group_select.enter')}</p>
 			<TextInput bind:value={query} placeholder={$t('group_select.search')}/>
+			{#if searching}
+				<Loader/>
+			{/if}
 			{#if results.length}
 				<p>{$t('group_select.results', [results.length])}</p>
 			{/if}
@@ -63,6 +70,9 @@
 					{item.name}
 				</button>
 			{/each}
+			<button type="button" on:click|stopPropagation={() => (state--, query = '')}>
+				<ArrowLeft/>{$t('group_select.back')}
+			</button>
 		{:else}
 			<p>{$t('group_select.recent')}</p>
 			{#each cached as item}
@@ -72,6 +82,9 @@
 				}}>
 					<Avatar src={item.icon} size="xxxs"/>
 					{item.name}
+					{#if item.id.toString() === value}
+						<Check/>
+					{/if}
 				</button>
 			{/each}
 			<button type="button" on:click|stopPropagation={() => state++}>
@@ -119,5 +132,8 @@
 	:global(.group-select-container .content) {
 		overflow: auto;
 		max-height: 192px;
+	}
+	:global(.group-select-container .content .icon-check) {
+		margin-left: auto;
 	}
 </style>

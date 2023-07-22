@@ -1,20 +1,21 @@
 <script lang="ts">
 	import { Button, Select, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
-	import { t } from '$lib/localisation';
+	import { t } from '../localisation';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from '../../routes/mellow/server/[id]/settings/roblox/binds/$types';
-	import type { RequestError, RobloxGroupRole } from '$lib/types';
-	import { MellowBindType, RequestErrorType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
+	import type { RequestError, RobloxGroupRole } from '../types';
+	import { MellowBindType, RequestErrorType, MellowBindRequirementType, MellowBindRequirementsType } from '../enums';
 
-	import Modal from '$lib/components/Modal.svelte';
-	import GroupSelect from '$lib/components/GroupSelect.svelte';
-	import RequestErrorUI from '$lib/components/RequestError.svelte';
+	import Modal from './Modal.svelte';
+	import Loader from './Loader.svelte';
+	import GroupSelect from './GroupSelect.svelte';
+	import RequestErrorUI from './RequestError.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import Plus from '$lib/icons/Plus.svelte';
-	import Check from '$lib/icons/Check.svelte';
-	import Clipboard from '$lib/icons/Clipboard.svelte';
+	import X from '../icons/X.svelte';
+	import Plus from '../icons/Plus.svelte';
+	import Check from '../icons/Check.svelte';
+	import Clipboard from '../icons/Clipboard.svelte';
 	export let data: PageData;
 	export let target: PageData['binds'][number] | null = null;
 	export let onSave: () => void;
@@ -35,12 +36,8 @@
 
 	let groupRoles: Record<string, RobloxGroupRole[]> = {};
 	let roleSearchId: string | null = null;
-	$: if (roleSearchId && !groupRoles[roleSearchId]) {
-		const id = roleSearchId.toString();
-		fetch(`/api/roblox/group-roles?id=${id}`)
-			.then(response => response.json())
-			.then(data => groupRoles[id] = data);
-	}
+	$: if (roleSearchId && !groupRoles[roleSearchId])
+		getGroupRoles(roleSearchId.toString());
 
 	$: hasVerifiedType = requirements.some(i => i[0] === MellowBindRequirementType.HasVerifiedUserLink) ? MellowBindRequirementType.HasRobloxGroupRole : MellowBindRequirementType.HasVerifiedUserLink;
 
@@ -49,6 +46,10 @@
 		requirements = target.requirements.map(item => [item.type, item.data]), requirementsType = target.requirements_type;
 		editing = true;
 		trigger();
+
+		for (const [type, data] of requirements)
+			if (type === MellowBindRequirementType.HasRobloxGroupRole || type === MellowBindRequirementType.HasRobloxGroupRankInRange || type === MellowBindRequirementType.InRobloxGroup)
+				getGroupRoles(data[0]);
 	}
 
 	let itemRefs: HTMLDivElement[] = [];
@@ -125,6 +126,9 @@
 		target = null;
 		editing = false;
 	};
+	const getGroupRoles = (id: string) => fetch(`/api/roblox/group-roles?id=${id}`)
+		.then(response => response.json() as Promise<RobloxGroupRole[]>)
+		.then(data => groupRoles[id] = data.filter(role => role.rank).sort((a, b) => b.rank - a.rank));
 </script>
 
 <Modal bind:trigger>
@@ -209,6 +213,8 @@
 										{/each}
 									</Select.Root>
 								</div>
+							{:else if item[1][0]}
+								<Loader/>
 							{/if}
 						</div>
 					{:else if item[0] === MellowBindRequirementType.HasRobloxGroupRankInRange}
@@ -232,16 +238,13 @@
 							<GroupSelect bind:value={item[1][0]}/>
 						</div>
 					{:else if item[0] === MellowBindRequirementType.MeetsOtherLink}
-						<div class="field">
-							<p class="label">{$t('mellow_link_editor.requirement.link')}</p>
-							<Select.Root bind:value={item[1][0]} placeholder={$t('mellow_link_editor.requirement.link.placeholder')}>
-								{#each data.binds.filter(bind => bind.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowBindRequirementType.MeetsOtherLink && r[1][0] === bind.id)) as bind}
-									<Select.Item value={bind.id}>
-										{bind.name}
-									</Select.Item>
-								{/each}
-							</Select.Root>
-						</div>
+						<Select.Root bind:value={item[1][0]} placeholder={$t('mellow_link_editor.requirement.link.placeholder')}>
+							{#each data.binds.filter(bind => bind.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowBindRequirementType.MeetsOtherLink && r[1][0] === bind.id)) as bind}
+								<Select.Item value={bind.id}>
+									{bind.name}
+								</Select.Item>
+							{/each}
+						</Select.Root>
 					{/if}
 				</div>
 				<div class="buttons">
