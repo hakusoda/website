@@ -23,6 +23,7 @@
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import Voxelified from '$lib/icons/Voxelified.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
+	import VoxelifiedBanner from '$lib/icons/VoxelifiedBanner.svelte';
 	$: [themeName, themeColour] = $theme.split('_');
 	const themeHues: Record<string, number> = {
 		purple: 280
@@ -63,7 +64,7 @@
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
 	<Header>
-		<a href="/" class="logo"><Voxelified size={40}/></a>
+		<a href="/" class="logo"><VoxelifiedBanner size={40}/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
 		{#if data.session && data.user}
 			<DropdownMenu bind:trigger={notificationsTrigger}>
@@ -134,8 +135,23 @@
 	<main class="app-content">
 		<slot/>
 		<footer>
-			voxel voxel voxel ified ified ified
-			<a href="/">placeholder</a>
+			<div class="header">
+				<p class="name">
+					<VoxelifiedBanner/>
+				</p>
+				<p class="oss">
+					{$t('footer.oss')}
+					<a href="https://github.com/Excalware">{$t('footer.oss.link')}</a>.
+				</p>
+			</div>
+			<div class="links">
+				<p>Resources</p>
+				<a href="https://github.com/Excalware">GitHub</a>
+			</div>
+			<div class="links">
+				<p>Community</p>
+				<a href="https://discord.com/invite/rs3r4dQu9P">Discord</a>
+			</div>
 		</footer>
 	</main>
 </div>
@@ -299,17 +315,35 @@
 	}
 
 	footer {
-		gap: 4px;
 		color: var(--color-secondary);
 		display: flex;
-		padding: 40px 24px;
+		padding: 40px 64px;
 		margin-top: auto;
 		background: var(--background-header);
-		flex-direction: column;
-		justify-content: center;
-		a {
-			color: var(--color-tertiary);
-			text-decoration: none;
+		align-items: center;
+		.header {
+			.name {
+				gap: 8px;
+				margin: 0;
+				display: flex;
+				font-size: 1.25em;
+				font-weight: 500;
+				align-items: center;
+			}
+			.oss {
+				font-size: .9em;
+				margin-top: 8px;
+			}
+		}
+		.links {
+			margin-left: 96px;
+			p {
+				margin: 0;
+				font-size: .8em;
+			}
+			a {
+				font-size: .9em;
+			}
 		}
 	}
 </style>

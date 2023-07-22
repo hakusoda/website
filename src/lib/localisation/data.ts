@@ -308,6 +308,9 @@ export default {
 		'time_ago.5_1': 'last year',
 		'time_ago.created': 'Created {0|time_ago}',
 		'time_ago.updated': 'Updated {0|time_ago}',
-		'time_ago.archived': 'Archived {0|time_ago}'
+		'time_ago.archived': 'Archived {0|time_ago}',
+
+		'footer.oss': 'Voxelified is',
+		'footer.oss.link': 'open-source'
 	}
 };
