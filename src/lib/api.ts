@@ -62,6 +62,18 @@ export function markNotificationAsRead(token: string, userId: string, notificati
 	});
 }
 
+export function markAllNotificationsAsRead(token: string, userId: string) {
+	return request(`user/${userId}/notifications/read`, 'POST', null, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function clearAllNotifications(token: string, userId: string) {
+	return request(`user/${userId}/notifications`, 'DELETE', null, {
+		authorization: `Bearer ${token}`
+	});
+}
+
 export function request<T = any>(path: string, method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' = 'GET', body?: any, headers?: Record<string, string>): Promise<ApiResponse<T>> {
 	return fetch(path.startsWith('http') ? path : `${API_BASE}/${path}`, {
 		body: body ? body instanceof URLSearchParams ? body.toString() : body instanceof ArrayBuffer ? body : JSON.stringify(body) : undefined,

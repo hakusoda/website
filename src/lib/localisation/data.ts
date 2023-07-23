@@ -229,6 +229,7 @@ export default {
 		'notifications': 'Notifications ({0} total, {1} unread)',
 		'notifications.empty': 'You\'re already up-to-date, nice!\n(～￣▽￣)～  no worries...',
 		'notifications.read_all': 'Mark all as Read',
+		'notifications.clear': 'Clear Notifications',
 
 		'group_select': 'Select Group',
 		'group_select.recent': 'Recent Groups',
