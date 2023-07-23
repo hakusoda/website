@@ -14,7 +14,7 @@
 <div class="main">
 	<h1>{$t('user_action.user.teams')}</h1>
 	<div class="teams">
-		{#each data.teams as item}
+		{#each data.teams.sort((a, b) => a.display_name.localeCompare(b.display_name)) as item}
 			<a class="item focusable" href={`/team/${item.name}`}>
 				<Avatar src={item.avatar_url} size="sm2"/>
 				<div class="name">
