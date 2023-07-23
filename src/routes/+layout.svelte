@@ -145,11 +145,11 @@
 				</p>
 			</div>
 			<div class="links">
-				<p>Resources</p>
+				<p>{$t('footer.resources')}</p>
 				<a href="https://github.com/Excalware">GitHub</a>
 			</div>
 			<div class="links">
-				<p>Community</p>
+				<p>{$t('footer.community')}</p>
 				<a href="https://discord.com/invite/rs3r4dQu9P">Discord</a>
 			</div>
 		</footer>

@@ -314,6 +314,8 @@ export default {
 		'time_ago.archived': 'Archived {0|time_ago}',
 
 		'footer.oss': 'Voxelified is',
-		'footer.oss.link': 'open-source'
+		'footer.oss.link': 'open-source',
+		'footer.resources': 'Resources',
+		'footer.community': 'Community'
 	}
 };
