@@ -93,6 +93,7 @@ export default {
 		'roblox_link.delete': 'Unlink Account',
 
 		'user_action.user.profile': 'Your Profile',
+		'user_action.user.teams': 'Your Teams',
 		'user_action.settings': 'Settings',
 		'user_action.other.logout': 'Sign out',
 
@@ -115,6 +116,9 @@ export default {
 
 		'settings': 'Your Account',
 		'settings.account': 'Account',
+
+		'settings.access': 'Access',
+		'settings.access.teams': 'Teams',
 
 		'settings.roblox': 'Roblox Settings',
 		'settings.roblox.accounts': 'Linked Accounts',

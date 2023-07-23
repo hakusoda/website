@@ -7,6 +7,9 @@
 	<div class="nav">
 		<p>{$t('settings')}</p>
 		<SettingsNavItem id="settings.account" path="/settings/account"/>
+
+		<p>{$t('settings.access')}</p>
+		<SettingsNavItem id="settings.access.teams" path="/settings/access/teams"/>
 	
 		<p>{$t('settings.roblox')}</p>
 		<SettingsNavItem id="settings.roblox.accounts" path="/settings/roblox/accounts"/>
@@ -20,6 +23,7 @@
 <style lang="scss">
 	.main {
 		display: flex;
+		min-height: 100%;
 		.nav {
 			width: 25%;
 			margin: 16px 0 16px 16px;

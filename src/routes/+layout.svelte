@@ -20,8 +20,8 @@
 	import Bell from '$lib/icons/Bell.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
 	import CaretDown from '$lib/icons/CaretDown.svelte';
+	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import Voxelified from '$lib/icons/Voxelified.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
 	import VoxelifiedBanner from '$lib/icons/VoxelifiedBanner.svelte';
 	$: [themeName, themeColour] = $theme.split('_');
@@ -118,6 +118,9 @@
 				<p>{data.user.name ?? data.user.username}</p>
 				<a href={`/user/${data.user.username}`}>
 					<PersonFill/>{$t('user_action.user.profile')}
+				</a>
+				<a href="/settings/access/teams">
+					<PeopleFill/>{$t('user_action.user.teams')}
 				</a>
 				<div class="separator"/>
 				<a href="/settings/account">
