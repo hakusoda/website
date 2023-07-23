@@ -23,7 +23,7 @@
        	const response = await fetch('?/confirm', { body: data.linkId,  method: 'POST' });
 		const result = deserialize(await response.text());
 		if (result.type === 'success')
-			return goto('/settings/roblox/verification');
+			return goto('/settings/roblox/accounts');
 		else if (result.type === 'failure')
 			error = result.data as any;
 		else if (result.type === 'error')

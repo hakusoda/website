@@ -10,7 +10,7 @@ export function createMellowServerDiscordRedirectUrl(origin: string) {
 
 export function getUserNotificationUrl({ type, target_user, target_team }: UserNotification) {
 	if (type === UserNotificationType.RobloxAccountRemoved)
-		return '/settings/roblox/verification'
+		return '/settings/roblox/accounts'
 	if (target_team)
 		return `/team/${target_team.name}`;
 	if (target_user)
