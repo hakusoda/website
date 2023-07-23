@@ -15,6 +15,5 @@ export const load = (async ({ parent }) => {
 		} satisfies RequestError));
 	}
 
-	console.log(response.data);
 	return { teams: response.data.map(item => item.team) };
 }) satisfies PageServerLoad;
