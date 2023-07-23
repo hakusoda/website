@@ -1,21 +1,34 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
 	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
+
+	import Discord from '$lib/icons/Discord.svelte';
+	import PeopleFill from '$lib/icons/PeopleFill.svelte';
+	import PersonFill from '$lib/icons/PersonFill.svelte';
+	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 </script>
 
 <div class="main">
 	<div class="nav">
 		<p>{$t('settings')}</p>
-		<SettingsNavItem id="settings.account" path="/settings/account"/>
+		<SettingsNavItem id="settings.account" path="/settings/account">
+			<PersonFill/>
+		</SettingsNavItem>
 
 		<p>{$t('settings.access')}</p>
-		<SettingsNavItem id="settings.access.teams" path="/settings/access/teams"/>
+		<SettingsNavItem id="settings.access.teams" path="/settings/access/teams">
+			<PeopleFill/>
+		</SettingsNavItem>
 	
 		<p>{$t('settings.roblox')}</p>
-		<SettingsNavItem id="settings.roblox.accounts" path="/settings/roblox/accounts"/>
+		<SettingsNavItem id="settings.roblox.accounts" path="/settings/roblox/accounts">
+			<RobloxIcon/>
+		</SettingsNavItem>
 
 		<p>{$t('settings.mellow')}</p>
-		<SettingsNavItem id="settings.mellow.servers" path="/settings/mellow/servers"/>
+		<SettingsNavItem id="settings.mellow.servers" path="/settings/mellow/servers">
+			<Discord/>
+		</SettingsNavItem>
 	</div>
 	<slot/>
 </div>

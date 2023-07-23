@@ -3,6 +3,9 @@
 	import { page } from '$app/stores';
 	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
 	import type { LayoutData } from './$types';
+
+	import Newspaper from '$lib/icons/Newspaper.svelte';
+	import PersonFill from '$lib/icons/PersonFill.svelte';
 	export let data: LayoutData;
 
 	$: base = `/team/${$page.params.name}/settings`;
@@ -11,10 +14,14 @@
 <div class="main">
 	<div class="nav">
 		<p>{data.display_name}</p>
-		<SettingsNavItem id="team.settings.profile" path={`${base}/profile`}/>
+		<SettingsNavItem id="team.settings.profile" path={`${base}/profile`}>
+			<PersonFill/>
+		</SettingsNavItem>
 
 		<p>{$t('team.settings.archive')}</p>
-		<SettingsNavItem id="team.settings.archive.audit_log" path={`${base}/archive/audit-log`}/>
+		<SettingsNavItem id="team.settings.archive.audit_log" path={`${base}/archive/audit-log`}>
+			<Newspaper/>
+		</SettingsNavItem>
 	</div>
 	<slot/>
 </div>
