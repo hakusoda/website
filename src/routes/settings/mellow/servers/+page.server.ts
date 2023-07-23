@@ -9,12 +9,14 @@ import { createMellowServerDiscordRedirectUrl } from '$lib/util';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ url, parent }) => {
 	const { session } = await parent();
-	const response = await supabase.from('mellow_servers').select<string, {
-		id: string
-		name: string
-		members: { id: string }[]
-		avatar_url: string
-	}>('id, name, avatar_url, members:mellow_server_members!inner ( id )').in('members.user_id', [session!.user.id]);
+	const response = await supabase.from('mellow_server_members').select<string, {
+		server: {
+			id: string
+			name: string
+			members: [{ count: number }]
+			avatar_url: string
+		}
+	}>('server:mellow_servers ( id, name, avatar_url, members:mellow_server_members ( count ) )').eq('user_id', session!.user.id);
 	if (response.error) {
 		console.error(response.error);
 		throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
@@ -63,5 +65,5 @@ export const load = (async ({ url, parent }) => {
 		allServers = response.data?.data ?? [];
 	}
 
-	return { servers: response.data, allServers };
+	return { servers: response.data.map(item => item.server), allServers };
 }) satisfies PageServerLoad;

@@ -37,7 +37,8 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 32px 128px 32px 64px;
+		padding: 32px 128px 32px 64px;
+		overflow: auto;
 		.teams {
 			gap: 16px;
 			display: flex;

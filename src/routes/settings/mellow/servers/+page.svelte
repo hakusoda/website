@@ -28,7 +28,7 @@
 				<Avatar src={item.avatar_url} size="sm2" transparent/>
 				<div class="name">
 					<h1>{item.name}</h1>
-					<p>{$t('settings.mellow.servers.server.members', [item.members.length])}</p>
+					<p>{$t('settings.mellow.servers.server.members', [item.members[0].count])}</p>
 				</div>
 				<div class="buttons">
 					<Button href={`/mellow/server/${item.id}/settings`}>
@@ -58,7 +58,8 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 32px 128px 32px 64px;
+		padding: 32px 128px 32px 64px;
+		overflow: auto;
 		.add {
 			color: var(--color-secondary);
 			font-size: .9em;
