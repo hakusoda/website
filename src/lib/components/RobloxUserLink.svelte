@@ -74,9 +74,11 @@
 		<RobloxIcon/>{$t('roblox_link.view')}
 	</a>
 	<div class="separator"/>
-	<button type="button" on:click={() => action('?/setPrimary')} disabled={isPrimary}>
-		{$t('roblox_link.make_primary')}
-	</button>
+	{#if !isPrimary}
+		<button type="button" on:click={() => action('?/setPrimary')} disabled={isPrimary}>
+			{$t('roblox_link.make_primary')}
+		</button>
+	{/if}
 	<button type="button" on:click={() => action('?/changeVisibility', `${link.id}:${!link.public}`)}>
 		<Eye/>{$t(`roblox_link.change_visibility.${link.public}`)}
 	</button>
