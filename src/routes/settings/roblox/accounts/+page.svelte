@@ -4,6 +4,7 @@
 	import { t } from '$lib/localisation';
 	import type { PageData } from './$types';
 
+	import MellowAd from '$lib/components/MellowAd.svelte';
 	import RobloxUserLink from '$lib/components/RobloxUserLink.svelte';
 
 	import Link from '$lib/icons/Link.svelte';
@@ -31,12 +32,14 @@
 	{#if data.mellow}
 		<p class="mellow">{$t('settings.roblox.accounts.mellow')}</p>
 	{/if}
+
+	<MellowAd/>
 </div>
 
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 32px 256px 32px 64px;
+		margin: 32px 128px 32px 64px;
 		.help {
 			color: var(--color-secondary);
 			font-size: .9em;

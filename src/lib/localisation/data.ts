@@ -126,6 +126,8 @@ export default {
 		'settings.roblox.accounts.list': 'Linked Roblox Accounts',
 		'settings.roblox.accounts.add': 'Link Roblox Account',
 		'settings.roblox.accounts.mellow': 'It appears that you signed-up via mellow, you can now close this page, and return to Discord.',
+		'settings.roblox.accounts.syncing': 'Want to sync your Discord Server with Roblox?',
+		'settings.roblox.accounts.syncing.summary': 'can give members roles depending on their Roblox Group Ranks, and much more!',
 
 		'settings.mellow': 'mellow Settings',
 		'settings.mellow.servers': 'Discord Servers',

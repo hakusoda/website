@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
+
+	import MellowAd from '$lib/components/MellowAd.svelte';
 </script>
 
 <div class="landing">
 	<img src="/landing.gif" alt="Landing Banner" width="688" height="311.5">
 	<p>{$t('home.landing')}</p>
+
+	<MellowAd/>
 </div>
 
 <svelte:head>
@@ -17,7 +21,6 @@
 		height: 100%;
 		padding: 32px 64px;
 		display: flex;
-		overflow: hidden;
 		align-items: center;
 		flex-direction: column;
 		justify-content: center;
