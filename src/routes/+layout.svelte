@@ -64,7 +64,7 @@
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
 	<Header>
-		<a href="/" class="logo"><VoxelifiedBanner size={40}/></a>
+		<a href="/" class="logo"><VoxelifiedBanner/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
 		{#if data.session && data.user}
 			<DropdownMenu bind:trigger={notificationsTrigger}>
