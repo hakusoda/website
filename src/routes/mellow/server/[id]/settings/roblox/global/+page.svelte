@@ -7,6 +7,8 @@
 	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
 
+	import Radio from '$lib/components/Radio.svelte';
+
 	import Check from '$lib/icons/Check.svelte';
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 	export let data: PageData;
@@ -14,10 +16,16 @@
 	let error: RequestError | null = null;
 	let saving = false;
 	let defaultNickname = data.default_nickname;
+	let syncUnknownUsers = data.sync_unknown_users;
+	let allowForcedSyncing = data.allow_forced_syncing;
 	const save = async () => {
 		saving = !(error = null);
 		const response = await fetch('?/edit', {
-			body: JSON.stringify({ defaultNickname }),
+			body: JSON.stringify({
+				defaultNickname: defaultNickname === data.default_nickname ? undefined : defaultNickname,
+				syncUnknownUsers: syncUnknownUsers === data.sync_unknown_users ? undefined : syncUnknownUsers,
+				allowForcedSyncing: allowForcedSyncing === data.allow_forced_syncing ? undefined : allowForcedSyncing
+			}),
             method: 'POST'
         });
 		const result = deserialize(await response.text());
@@ -42,9 +50,19 @@
 	{/if}
 	<TextInput bind:value={defaultNickname} placeholder={$t('mellow.server.settings.roblox.global.nickname.placeholder')}/>
 
+	<p class="input-label">{$t('mellow.server.settings.roblox.global.other')}</p>
+	<div class="radio-input">
+		<Radio bind:value={allowForcedSyncing}/>
+		<p>{$t('mellow.server.settings.roblox.global.allow_forced_syncing')}</p>
+	</div>
+	<div class="radio-input">
+		<Radio bind:value={syncUnknownUsers}/>
+		<p>{$t('mellow.server.settings.roblox.global.sync_unknown_users')}</p>
+	</div>
+
 	<RequestErrorUI data={error} background="var(--background-primary)"/>
 	<div class="buttons">
-		<Button on:click={save} disabled={saving || defaultNickname === data.default_nickname}>
+		<Button on:click={save} disabled={saving || (defaultNickname === data.default_nickname && syncUnknownUsers === data.sync_unknown_users && allowForcedSyncing === data.allow_forced_syncing)}>
 			<Check/>{$t('action.save_changes')}
 		</Button>
 	</div>
@@ -75,6 +93,16 @@
 		}
 		.buttons {
 			margin-top: 24px;
+		}
+		.radio-input {
+			display: flex;
+			margin-top: 8px;
+			align-items: center;
+			p {
+				margin: 0;
+				font-size: .9em;
+				margin-left: 16px;
+			}
 		}
 	}
 </style>

@@ -31,10 +31,22 @@
 			on:click={OPENABLE.includes(item.type) ? () => open = open.includes(item.id) ? open.filter(i => i !== item.id) : [...open, item.id] : null}
 		>
 			{#if item.type === MellowServerAuditLogType.UpdateRobloxGlobalSettings}
-				{#if item.data.default_nickname}
+				{#if item.data.default_nickname[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.2.default_nickname')}
 						value={item.data.default_nickname}
+					/>
+				{/if}
+				{#if item.data.sync_unknown_users?.[1] !== undefined}
+					<AuditLogChange
+						name={$t('mellow_server_audit_log.type.2.sync_unknown_users')}
+						value={item.data.sync_unknown_users}
+					/>
+				{/if}
+				{#if item.data.allow_forced_syncing?.[1] !== undefined}
+					<AuditLogChange
+						name={$t('mellow_server_audit_log.type.2.allow_forced_syncing')}
+						value={item.data.allow_forced_syncing}
 					/>
 				{/if}
 			{:else if item.type === MellowServerAuditLogType.CreateRobloxLink}
@@ -78,7 +90,7 @@
 					/>
 				{/if}
 			{/if}
-			{#if item.target_link_id || item.type === MellowServerAuditLogType.CreateRobloxLink || MellowServerAuditLogType.UpdateRobloxLink}
+			{#if item.target_link_id || item.type === MellowServerAuditLogType.CreateRobloxLink || item.type === MellowServerAuditLogType.UpdateRobloxLink}
 				{#if item.target_link_id}
 					<a href={`/mellow/server/${$page.params.id}/settings/roblox/binds?highlight=${item.target_link_id}`}>
 						{$t('action.view_roblox_link')}<BoxArrowUpRight size={12}/>

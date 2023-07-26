@@ -7,7 +7,7 @@ import type { RequestError } from '$lib/types';
 import { getUserRobloxLinks } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
 import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
-import { RobloxLinkType, RequestErrorType } from '$lib/enums';
+import { RobloxLinkType, RequestErrorType, UserConnectionType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ parent }) => {
 	const user = (await parent()).user!;
@@ -15,7 +15,7 @@ export const load = (async ({ parent }) => {
 	const users = links.then(links => getRobloxUsers(links.map(link => link.target_id)));
 	if (user.mellow_pending) {
 		const response = await fetch('https://mellow.voxelified.com/signup-finished', {
-			body: `${user.id}:${user.mellow_ids[0]}`,
+			body: `${user.id}:${user.connections.find(i => i.type === UserConnectionType.Discord)?.sub}`,
 			method: 'POST',
 			headers: { 'x-api-key': MELLOW_KEY }
 		});

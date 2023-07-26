@@ -43,7 +43,9 @@ interface MellowServerAuditLogCreateRobloxLink extends MellowServerAuditLogBase 
 
 interface MellowServerAuditLogUpdateRobloxGlobalSettings extends MellowServerAuditLogBase {
 	data: {
-		default_nickname?: [string, string]
+		default_nickname: [string, string | undefined]
+		sync_unknown_users?: [boolean, boolean | undefined]
+		allow_forced_syncing?: [boolean, boolean | undefined]
 	}
 	type: MellowServerAuditLogType.UpdateRobloxGlobalSettings
 }
