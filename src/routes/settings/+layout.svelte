@@ -14,6 +14,9 @@
 		<SettingsNavItem id="settings.account" path="/settings/account">
 			<PersonFill/>
 		</SettingsNavItem>
+		<SettingsNavItem id="settings.account.connections" path="/settings/account/connections">
+			<PersonFill/>
+		</SettingsNavItem>
 
 		<p>{$t('settings.access')}</p>
 		<SettingsNavItem id="settings.access.teams" path="/settings/access/teams">

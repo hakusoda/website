@@ -116,6 +116,9 @@ export default {
 
 		'settings': 'Your Account',
 		'settings.account': 'Account',
+		'settings.account.connections': 'Connections',
+		'settings.account.connections.summary': 'These connections can be used by other connected services, such as mellow, to identify you from other platforms.',
+		'settings.account.connections.add': 'Add Another',
 
 		'settings.access': 'Access',
 		'settings.access.teams': 'Teams',
@@ -227,6 +230,8 @@ export default {
 		'user_notification.type.5': 'Team Member Left',
 		'user_notification.type.5.summary': '{1} has left {0.target_team.display_name}',
 		'user_notification.type.5.footer': '',
+
+		'user_connection.type.0': 'Discord',
 
 		'notifications': 'Notifications ({0} total, {1} unread)',
 		'notifications.empty': 'You\'re already up-to-date, nice!\n(～￣▽￣)～  no worries...',

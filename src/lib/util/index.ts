@@ -8,6 +8,10 @@ export function createMellowServerDiscordRedirectUrl(origin: string) {
 	return `${origin}/settings/mellow/servers`;
 }
 
+export function createUserConnectionsDiscordRedirectUrl(origin: string) {
+	return `${origin}/settings/account/connections`;
+}
+
 export function getUserNotificationUrl({ type, target_user, target_team }: UserNotification) {
 	if (type === UserNotificationType.RobloxAccountRemoved)
 		return '/settings/roblox/accounts'

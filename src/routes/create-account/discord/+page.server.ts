@@ -2,9 +2,9 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 import supabase from '$lib/supabase';
-import { RequestErrorType } from '$lib/enums';
 import type { RequestError } from '$lib/types';
 import { getDiscordToken, getDiscordUser } from '$lib/verification';
+import { RequestErrorType, UserConnectionType } from '$lib/enums';
 export const load = (async ({ url, locals: { supabase: supabase2 }, parent }) => {
 	const { session } = await parent();
 	if (session)
@@ -36,7 +36,7 @@ export const load = (async ({ url, locals: { supabase: supabase2 }, parent }) =>
 	}
 
 	const user = response2.data;
-	const avatar_url = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+	const avatar_url = user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256` : null;
 	const response3 = await supabase.auth.admin.createUser({
 		email: user.email,
 		app_metadata: {
@@ -69,7 +69,6 @@ export const load = (async ({ url, locals: { supabase: supabase2 }, parent }) =>
 		name: user.global_name,
 		username,
 		avatar_url,
-		mellow_ids: [user.id],
 		mellow_pending: true
 	});
 	if (response4.error) {
@@ -79,12 +78,26 @@ export const load = (async ({ url, locals: { supabase: supabase2 }, parent }) =>
 		} satisfies RequestError));
 	}
 
-	const response5 = await supabase.auth.admin.generateLink({
-		type: 'magiclink',
-		email: user.email
+	const response5 = await supabase.from('user_connections').insert({
+		sub: user.id,
+		type: UserConnectionType.Discord,
+		name: `${user.global_name} (@${user.username})`,
+		user_id: response3.data.user.id,
+		metadata: user
 	});
 	if (response5.error) {
 		console.error(response5.error);
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.DatabaseUpdate
+		} satisfies RequestError));
+	}
+
+	const response6 = await supabase.auth.admin.generateLink({
+		type: 'magiclink',
+		email: user.email
+	});
+	if (response6.error) {
+		console.error(response6.error);
 		throw error(500, JSON.stringify({
 			error: RequestErrorType.ExternalRequestError
 		} satisfies RequestError));
@@ -93,7 +106,7 @@ export const load = (async ({ url, locals: { supabase: supabase2 }, parent }) =>
 	await supabase2.auth.verifyOtp({
 		type: 'email',
 		email: user.email,
-		token: response5.data.properties.email_otp
+		token: response6.data.properties.email_otp
 	});
 
 	throw redirect(302, '/roblox/authorise');

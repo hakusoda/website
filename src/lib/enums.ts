@@ -93,6 +93,10 @@ export enum UserNotificationState {
 	Read
 }
 
+export enum UserConnectionType {
+	Discord
+}
+
 export enum RequestErrorType {
 	InvalidBody,
 	Unauthenticated,

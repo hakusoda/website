@@ -19,12 +19,16 @@ export const load = (async ({ parent }) => {
 			method: 'POST',
 			headers: { 'x-api-key': MELLOW_KEY }
 		});
-		if (response.status !== 200)
+		if (response.status !== 200) {
+			console.error(await response.text());
 			throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+		}
 
 		await supabase.from('users').update({
 			mellow_pending: false
 		}).eq('id', user.id);
+
+		user.mellow_pending = false;
 	}
 
 	const response = await supabase.from('users').select('primary_roblox_link_id').eq('id', user.id).limit(1).single();
