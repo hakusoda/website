@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '@voxelified/voxeliface/styles.scss';
 	import { inject } from '@vercel/analytics';
-	import { Header, DropdownMenu } from '@voxelified/voxeliface';
+	import { DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation'; 
 	import { page } from '$app/stores';
@@ -67,7 +67,7 @@
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
-	<Header>
+	<header>
 		<a href="/" class="logo"><VoxelifiedBanner/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
 		{#if data.session && data.user}
@@ -151,7 +151,7 @@
 		{:else if !data.session}
 			<a href="/login" class="nav-link signup">{$t('action.create_account')}</a>
 		{/if}
-	</Header>
+	</header>
 	<main class="app-content">
 		<slot/>
 		<footer>
@@ -209,8 +209,10 @@
 		overflow: hidden auto;
 	}
 
-	:global(header) {
+	header {
 		display: flex;
+		padding: 8px 2rem;
+    	background: var(--background-header);
 		align-items: center;
 		:global(.container:first-of-type) {
 			margin: 0 32px 0 auto;
