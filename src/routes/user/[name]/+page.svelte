@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Button, TextInput } from '@voxelified/voxeliface';
+	import { Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
 	import { UserFlags } from '$lib/enums';
 	import { deserialize } from '$app/forms';
-	import { uploadAvatar } from '$lib/api';
 	import type { PageData } from './$types';
 	import type { RequestError } from '$lib/types';
+	import { uploadAvatar, createTeamInvite } from '$lib/api';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
@@ -22,6 +22,9 @@
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import Voxelified from '$lib/icons/Voxelified.svelte';
+	import EnvelopePlusFill from '$lib/icons/EnvelopePlusFill.svelte';
+	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
+	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
 	export let data: PageData;
 
 	let saving = false;
@@ -79,6 +82,13 @@
 		else if (result.type === 'failure')
 			burgering = false;
 	};
+
+	let dropdownTrigger: () => void;
+
+	const inviteToTeam = async (teamId: string) => {
+		await createTeamInvite(data.session!.access_token, teamId, data.id);
+		location.reload();
+	};
 </script>
 
 <div class="main">
@@ -108,6 +118,27 @@
 						<Burger/>
 					</Button>
 				{/if}
+				<DropdownMenu.Root bind:trigger={dropdownTrigger}>
+					<Button slot="trigger" on:click={dropdownTrigger}>
+						<ThreeDotsVertical/>
+					</Button>
+					<p>{data.name || data.username} (@{data.username})</p>
+					<DropdownMenu.Sub>
+						<svelte:fragment slot="trigger">
+							<EnvelopePlusFill/>{$t('action.invite_team')}
+						</svelte:fragment>
+						<p>{$t('profile.invite')}</p>
+						{#each data.my_teams as item}
+							<button type="button" on:click={() => inviteToTeam(item.id)}>
+								<Avatar src={item.avatar_url} size="xxs" transparent/>
+								{item.display_name}
+							</button>
+						{/each}
+					</DropdownMenu.Sub>
+					<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
+						<ClipboardPlusFill/>{$t('action.copy_id')}
+					</button>
+				</DropdownMenu.Root>
 			</div>
 			{#if data.bio}
 				<div class="separator"/>

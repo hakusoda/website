@@ -41,7 +41,7 @@
 	$: isPrimary = link.id === $page.data.primaryId;
 </script>
 
-<DropdownMenu bind:trigger>
+<DropdownMenu.Root bind:trigger>
 	<button slot="trigger" type="button" class="user-link" class:active={isPrimary} on:click={trigger} disabled={unlinking}>
 		<Avatar src={icon} size="sm" circle/>
 		<div class="name">
@@ -85,7 +85,7 @@
 	<button type="button" on:click={() => action('?/unlink')}>
 		<Trash/>{$t('roblox_link.delete')}
 	</button>
-</DropdownMenu>
+</DropdownMenu.Root>
 
 <style lang="scss">
 	:global(.users .container) {

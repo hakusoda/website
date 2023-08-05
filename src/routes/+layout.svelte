@@ -71,7 +71,7 @@
 		<a href="/" class="logo"><VoxelifiedBanner/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
 		{#if data.session && data.user}
-			<DropdownMenu bind:trigger={notificationsTrigger}>
+			<DropdownMenu.Root bind:trigger={notificationsTrigger}>
 				<button class="notifications focusable" class:unread={data.notifications.some(item => item.state === UserNotificationState.Unread)} type="button" slot="trigger" on:click={notificationsTrigger}>
 					<Bell/>
 					{#if unreadNotifications.length}
@@ -97,7 +97,7 @@
 									</p>
 									<h1>{$t(`user_notification.type.${item.type}.summary`, [item, item.target_user?.name ?? `@${item.target_user?.username}`])}</h1>
 									<p class="time">
-										{$t(`user_notification.type.${item.type}.footer`, [item])}
+										{$t(`user_notification.type.${item.type}.footer`, [item, item.target_user?.name ?? `@${item.target_user?.username}`])}
 									</p>
 								</div>
 								{#if !item.state}
@@ -125,8 +125,8 @@
 				{:else}
 					<p class="notifications-empty">{$t('notifications.empty')}</p>
 				{/if}
-			</DropdownMenu>
-			<DropdownMenu bind:trigger={userMenuTrigger}>
+			</DropdownMenu.Root>
+			<DropdownMenu.Root bind:trigger={userMenuTrigger}>
 				<button class="user focusable" type="button" slot="trigger" on:click={userMenuTrigger}>
 					<Avatar src={data.user.avatar_url} size="xs" circle/>
 					<p class="name">{data.user.name ?? data.user.username}</p>
@@ -147,7 +147,7 @@
 				<button type="button" on:click={signout}>
 					<BoxArrowRight/>{$t('user_action.other.logout')}
 				</button>
-			</DropdownMenu>
+			</DropdownMenu.Root>
 		{:else if !data.session}
 			<a href="/login" class="nav-link signup">{$t('action.create_account')}</a>
 		{/if}
@@ -372,5 +372,9 @@
 				font-size: .9em;
 			}
 		}
+	}
+
+	:global(.menu-content) {
+		width: max-content;
 	}
 </style>

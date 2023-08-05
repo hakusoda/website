@@ -39,7 +39,7 @@
 </script>
 
 <div class="group-select-container" style="display: contents">
-	<DropdownMenu bind:trigger>
+	<DropdownMenu.Root bind:trigger>
 		<button class="group-select" slot="trigger" on:click={trigger}>
 			{#if value}
 				<Avatar src={cachedValue?.icon} size="xxxs"/>
@@ -92,7 +92,7 @@
 				{$t('group_select.search')}
 			</button>
 		{/if}
-	</DropdownMenu>
+	</DropdownMenu.Root>
 </div>
 
 <style lang="scss">

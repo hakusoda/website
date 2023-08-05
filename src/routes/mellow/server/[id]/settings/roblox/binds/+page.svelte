@@ -87,7 +87,7 @@
 		<Button on:click={trigger}>
 			<Plus/>{$t('mellow.server.settings.roblox.binds.create')}
 		</Button>
-		<DropdownMenu bind:trigger={importTrigger}>
+		<DropdownMenu.Root bind:trigger={importTrigger}>
 			<Button slot="trigger" on:click={importTrigger} title="coming soon!!!" disabled>
 				<Plus/>{$t('mellow.server.settings.roblox.binds.import')}
 			</Button>
@@ -99,7 +99,7 @@
 					</button>
 				{/if}
 			{/each}
-		</DropdownMenu>
+		</DropdownMenu.Root>
 		<TextInput bind:value={bindFilter} placeholder={$t('action.search')}/>
 		<Select.Root bind:value={$mellowLinkViewMode}>
 			{#each Object.values(MellowLinkListViewMode) as item}

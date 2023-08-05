@@ -1,5 +1,5 @@
 import { RequestErrorType } from './enums';
-import type { User, RobloxUser, ApiResponse, PartialRobloxUser, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse } from './types';
+import type { User, RobloxUser, ApiResponse, PartialRobloxUser, CreateTeamResponse, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse } from './types';
 export const API_BASE = 'https://api.voxelified.com/v1';
 
 export function getUser(userId: string) {
@@ -74,6 +74,38 @@ export function clearAllNotifications(token: string, userId: string) {
 	});
 }
 
+export function createTeam(token: string, displayName: string) {
+	return request<CreateTeamResponse>('team', 'POST', {
+		display_name: displayName
+	}, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function uploadTeamAvatar(token: string, teamId: string, newAvatar: ArrayBuffer) {
+	return request(`team/${teamId}/icon`, 'PATCH', newAvatar, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function createTeamInvite(token: string, teamId: string, userId: string) {
+	return request(`team/${teamId}/invite`, 'POST', { user_id: userId }, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function acceptTeamInvite(token: string, teamId: string, inviteId: string) {
+	return request(`team/${teamId}/invite/${inviteId}`, 'PATCH', null, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function rejectTeamInvite(token: string, teamId: string, inviteId: string) {
+	return request(`team/${teamId}/invite/${inviteId}`, 'DELETE', null, {
+		authorization: `Bearer ${token}`
+	});
+}
+
 export function request<T = any>(path: string, method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' = 'GET', body?: any, headers?: Record<string, string>): Promise<ApiResponse<T>> {
 	return fetch(path.startsWith('http') ? path : `${API_BASE}/${path}`, {
 		body: body ? body instanceof URLSearchParams ? body.toString() : body instanceof ArrayBuffer ? body : JSON.stringify(body) : undefined,
@@ -83,11 +115,11 @@ export function request<T = any>(path: string, method: 'GET' | 'PUT' | 'POST' | 
 		if (data.error)
 			return { ...data, success: false };
 		else if (response.status < 200 || response.status > 399)
-			return { error: RequestErrorType.Unknown, success: false };
-		return { data, success: true };
+			return { error: 'unknown', success: false };
+		return { data, error: null, success: true };
 	}).catch(() => {
 		if (response.status < 200 || response.status > 399)
-			return { error: RequestErrorType.Unknown, success: false };
+			return { error: 'unknown', success: false };
 		return { success: true };
-	})).catch(() => ({ error: RequestErrorType.Unknown, success: false }));
+	})).catch(() => ({ error: 'unknown', success: false }));
 }

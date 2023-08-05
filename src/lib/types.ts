@@ -90,6 +90,15 @@ export interface TeamMember {
 	created_at: string
 }
 
+export interface TeamInvite {
+	id: string
+	author: {
+		name: string | null
+		username: string
+		avatar_url: string | null
+	} | null
+}
+
 export interface RobloxLink {
 	id: string
 	type: RobloxLinkType
@@ -193,9 +202,21 @@ export interface RequestError {
 	issues?: ZodIssue[]
 }
 
-export type ApiResponse<T> = RequestError & {
+export interface ApiRequestError {
+	error: any
+	issues?: ZodIssue[]
+}
+
+export type ApiResponse<T> = ApiRequestError & {
+	data: unknown
 	success: false
 } | {
 	data: T
+	error: null
 	success: true
+}
+
+export interface CreateTeamResponse {
+	id: string
+	name: string
 }

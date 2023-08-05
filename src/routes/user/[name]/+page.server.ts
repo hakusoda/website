@@ -32,10 +32,13 @@ export const load = (async ({ params: { name }, parent }) => {
 		username: string
 		avatar_url: string
 		created_at: string
+		team_invites: {
+			team_id: string
+		}[]
 		roblox_links: {
 			target_id: number
 		}[]
-	}>('id, bio, name, flags, username, avatar_url, created_at, teams:team_members ( role, team:teams ( id, name, avatar_url, display_name, members:team_members ( id ) ) ), roblox_links!roblox_links_owner_fkey ( target_id ), burger:user_notifications!user_notifications_user_id_fkey ( type )').eq(isUUID(name) ? 'id' : 'username', name).eq('roblox_links.public', true).gte('roblox_links.flags', 2).eq('user_notifications.target_user_id', session?.user.id).eq('user_notifications.type', UserNotificationType.SOMETHING).limit(1).maybeSingle();
+	}>('id, bio, name, flags, username, avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( role, team:teams ( id, name, avatar_url, display_name, members:team_members ( id ) ) ), team_invites!team_invites_user_id_fkey ( team_id ), roblox_links!roblox_links_owner_fkey ( target_id ), burger:user_notifications!user_notifications_user_id_fkey ( type )').eq(isUUID(name) ? 'id' : 'username', name).eq('roblox_links.public', true).gte('roblox_links.flags', 2).eq('user_notifications.target_user_id', session?.user.id).eq('user_notifications.type', UserNotificationType.SOMETHING).limit(1).maybeSingle();
 	if (error) {
 		console.error(error);
 		throw kit.error(500, JSON.stringify({
@@ -48,14 +51,34 @@ export const load = (async ({ params: { name }, parent }) => {
 			error: RequestErrorType.NotFound
 		} satisfies RequestError));
 
+	const myTeams = session ? await supabase.from('team_members').select<string, {
+		team: {
+			id: string
+			avatar_url: string
+			display_name: string
+		}
+	}>('role, team:teams ( id, avatar_url, display_name )').gte('role', 200).eq('user_id', session.user.id) : null;
+	if (myTeams?.error) {
+		console.error(myTeams.error);
+		throw kit.error(500, JSON.stringify({
+			error: RequestErrorType.ExternalRequestError
+		} satisfies RequestError));
+	}
+
 	const robloxUsers = await getRobloxUsers(data.roblox_links.map(l => l.target_id));
 	const robloxIcons = await getRobloxAvatars(robloxUsers.map(l => l.id));
+
+	const teams = data.teams.map(team => ({
+		role: team.role,
+		...team.team
+	})).sort((a, b) => a.display_name.localeCompare(b.display_name));
+	const my_teams = myTeams?.data?.map(item => item.team).sort((a, b) => a.display_name.localeCompare(b.display_name)) || [];
+	const team_invites = data.team_invites.filter(invite => my_teams.some(team => team.id === invite.team_id));
 	return {
 		...data,
-		teams: data.teams.map(team => ({
-			role: team.role,
-			...team.team
-		})).sort((a, b) => a.display_name.localeCompare(b.display_name)),
+		teams,
+		my_teams: my_teams.filter(item => !teams.some(team => team.id === item.id) && !team_invites.some(invite => invite.team_id === item.id)),
+		team_invites,
 		roblox_users: robloxUsers.map((user, index) => ({
 			...user,
 			icon: robloxIcons[index]

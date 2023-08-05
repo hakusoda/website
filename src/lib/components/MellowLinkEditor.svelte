@@ -163,7 +163,7 @@
 					{data.roles.find(role => role.id === item)?.name}
 				</button>
 			{/each}
-			<DropdownMenu bind:trigger={roleTrigger}>
+			<DropdownMenu.Root bind:trigger={roleTrigger}>
 				<button class="item" slot="trigger" on:click={roleTrigger}>
 					<Plus/>
 				</button>
@@ -177,7 +177,7 @@
 				<button type="button" on:click={() => targets = data.roles.map(role => role.id)}>
 					{$t('mellow_link_editor.discord_roles.add_all')}
 				</button>
-			</DropdownMenu>
+			</DropdownMenu.Root>
 		</div>
 	{/if}
 
@@ -258,7 +258,7 @@
 			</div>
 		{/each}
 	</div>
-	<DropdownMenu bind:trigger={requirementTrigger}>
+	<DropdownMenu.Root bind:trigger={requirementTrigger}>
 		<Button slot="trigger" on:click={requirementTrigger}>
 			<Plus/>{$t('mellow_link_editor.requirements.add')}
 		</Button>
@@ -270,7 +270,7 @@
 				</button>
 			{/if}
 		{/each}
-	</DropdownMenu>
+	</DropdownMenu.Root>
 
 	<RequestErrorUI data={saveError}/>
 	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [targets])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>

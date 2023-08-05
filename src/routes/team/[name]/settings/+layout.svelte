@@ -5,6 +5,7 @@
 	import type { LayoutData } from './$types';
 
 	import Newspaper from '$lib/icons/Newspaper.svelte';
+	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	export let data: LayoutData;
 
@@ -16,6 +17,11 @@
 		<p>{data.display_name}</p>
 		<SettingsNavItem id="team.settings.profile" path={`${base}/profile`}>
 			<PersonFill/>
+		</SettingsNavItem>
+
+		<p>{$t('team.settings.access')}</p>
+		<SettingsNavItem id="team.settings.access.members" path={`${base}/access/members`}>
+			<PeopleFill/>
 		</SettingsNavItem>
 
 		<p>{$t('team.settings.archive')}</p>

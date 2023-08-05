@@ -1,19 +1,21 @@
 <script lang="ts">
-	import { Tabs, Button } from '@voxelified/voxeliface';
+	import { Tabs, Button, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { hasFlag } from '$lib/util';
-	import { ProjectFlag } from '$lib/enums';
 	import type { PageData } from './$types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import TeamInvite from '$lib/modals/TeamInvite.svelte';
 
 	import Star from '$lib/icons/Star.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
+	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
+	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
 	export let data: PageData;
 
 	let tab = 0;
+	let dropdownTrigger: () => void;
 </script>
 
 <div class="main">
@@ -22,13 +24,22 @@
 			<Avatar src={data.avatar_url} hover/>
 			<h1>{data.display_name}</h1>
 		</div>
-		{#if data.user && data.members.some(member => member.id === data.user?.id)}
-			<div class="buttons">
+		<div class="buttons">
+			{#if data.user && data.members.some(member => member.id === data.user?.id)}
 				<Button href={`/team/${data.name}/settings/profile`}>
 					<GearFill/>{$t('action.manage')}
 				</Button>
-			</div>
-		{/if}
+			{/if}
+			<DropdownMenu.Root bind:trigger={dropdownTrigger}>
+				<Button slot="trigger" on:click={dropdownTrigger}>
+					<ThreeDotsVertical/>
+				</Button>
+				<p>{data.display_name} (@{data.name})</p>
+				<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
+					<ClipboardPlusFill/>{$t('action.copy_id')}
+				</button>
+			</DropdownMenu.Root>
+		</div>
 		{#if data.bio}
 			<div class="separator"/>
 			{data.bio}
@@ -85,6 +96,16 @@
 		</Tabs.Item>
 	</Tabs.Root>
 </div>
+
+{#if data.invite}
+	<TeamInvite
+		id={data.id}
+		name={data.display_name}
+		data={data.invite}
+		avatar={data.avatar_url}
+		userAvatar={data.user?.avatar_url}
+	/>
+{/if}
 
 <svelte:head>
 	<title>{data.display_name}</title>

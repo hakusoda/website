@@ -15,5 +15,5 @@ export const load = (async ({ parent }) => {
 		} satisfies RequestError));
 	}
 
-	return { teams: response.data.map(item => item.team) };
+	return { teams: response.data.map(item => item.team as any as typeof item.team[number]) };
 }) satisfies PageServerLoad;

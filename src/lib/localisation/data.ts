@@ -1,18 +1,24 @@
 export default {
 	'en-AU': {
 		'action.edit': 'Edit',
+		'action.next': 'Next',
 		'action.view': 'View',
 		'action.reset': 'Reset',
 		'action.retry': 'Retry',
 		'action.leave': 'Leave',
+		'action.accept': 'Accept',
 		'action.cancel': 'Cancel',
 		'action.delete': 'Delete',
 		'action.remove': 'Remove',
+		'action.reject': 'Reject',
 		'action.search': 'Search',
 		'action.finish': 'Finish',
 		'action.manage': 'Manage',
+		'action.copy_id': 'Copy ID',
 		'action.go_home': 'Go Home',
 		'action.duplicate': 'Duplicate',
+		'action.invite_team': 'Invite to Team',
+		'action.acknowledge': 'Acknowledge',
 		'action.get_support': 'Get Support',
 		'action.choose_file': 'Choose File',
 		'action.edit_profile': 'Edit Profile',
@@ -42,6 +48,7 @@ export default {
 		'profile.teams.false': 'Part of {0|number} teams:',
 		'profile.teams.true': 'Part of a team:',
 		'profile.teams.item.details': '{0} Member{0|s} • {1} is {2}',
+		'profile.invite': 'Teams you can invite this user to',
 
 		'avatar_file.size': 'Image should be at least 256x256.',
 
@@ -50,11 +57,24 @@ export default {
 		'team.members': 'Members',
 		'team.projects': 'Projects',
 
+		'team.invite': 'Welcome to {0}',
+		'team.invite.summary': 'This page is currently unfinished, and will pop into existence at a later date!',
+		'team.invite.done': 'Complete Setup',
+		'team.invite.skip': 'Skip this step',
+
 		'team.settings.profile': 'Profile',
 		'team.settings.profile.header': 'Team Profile',
 		'team.settings.profile.name': 'Team Name',
+		'team.settings.access': 'Access',
+		'team.settings.access.members': 'Members',
+		'team.settings.access.members.tab': 'Members ({0})',
+		'team.settings.access.members.invites': 'Pending Invitations ({0})',
+		'team.settings.access.members.invites.tip': 'You can invite people to the team by going to their profile, and tapping on the options menu.',
 		'team.settings.archive': 'Archive',
 		'team.settings.archive.audit_log': 'Audit Log',
+
+		'team_invite.author': 'Invited by',
+		'team_invite.author2': 'invited by',
 
 		'members': '{0} Member{0|s}',
 
@@ -122,6 +142,11 @@ export default {
 
 		'settings.access': 'Access',
 		'settings.access.teams': 'Teams',
+		'settings.access.teams.summary': 'This is a list of teams that you are currently a member of.',
+		'settings.access.teams.create': 'Create New Team',
+		'settings.access.teams.create.header': 'Set-up your team',
+		'settings.access.teams.create.name': 'Team Name',
+		'settings.access.teams.create.avatar': 'Profile Picture',
 
 		'settings.roblox': 'Roblox Settings',
 		'settings.roblox.accounts': 'Linked Accounts',
@@ -291,6 +316,7 @@ export default {
 		'request_error.invalid_body': 'There were issues with your request, please change your input and try again.',
 		'request_error.database_error': 'An unexpected error occurred while updating our database, please try again in a few minutes.',
 		'request_error.profile_exists': 'Your account already has a profile set-up, try refreshing.',
+		'request_error.no_permission': 'You do not have permission to complete this action.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 
@@ -333,6 +359,11 @@ export default {
 		'footer.oss': 'Voxelified is',
 		'footer.oss.link': 'open-source',
 		'footer.resources': 'Resources',
-		'footer.community': 'Community'
+		'footer.community': 'Community',
+
+		'modal.team_invite': 'You have been invited to join',
+		'modal.team_invite.summary': 'A member of {0} has invited you to join them!',
+		'modal.team_invite.welcome': 'Welcome to the team!',
+		'modal.team_invite.welcome.summary': 'You are now a member of {0}, woo-hoo!'
 	}
 };

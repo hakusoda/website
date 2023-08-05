@@ -7,12 +7,15 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	
 	import X from '$lib/icons/X.svelte';
+	import Plus from '$lib/icons/Plus.svelte';
 	import BoxArrowUpRight from '$lib/icons/BoxArrowUpRight.svelte';
 	export let data: PageData;
 </script>
 
 <div class="main">
 	<h1>{$t('user_action.user.teams')}</h1>
+	<p class="summary">{$t('settings.access.teams.summary')}</p>
+
 	<div class="teams">
 		{#each data.teams.sort((a, b) => a.display_name.localeCompare(b.display_name)) as item}
 			<a class="item focusable" href={`/team/${item.name}`}>
@@ -32,6 +35,10 @@
 			</a>
 		{/each}
 	</div>
+
+	<Button href="/settings/access/teams/create">
+		<Plus/>{$t('settings.access.teams.create')}
+	</Button>
 </div>
 
 <style lang="scss">
@@ -39,8 +46,15 @@
 		width: 100%;
 		padding: 32px 128px 32px 64px;
 		overflow: auto;
+		.summary {
+			color: var(--color-secondary);
+			font-size: .9em;
+			line-height: 1.25;
+			white-space: pre-wrap;
+		}
 		.teams {
 			gap: 16px;
+			margin: 0 0 16px;
 			display: flex;
 			flex-wrap: wrap;
 			.item {
