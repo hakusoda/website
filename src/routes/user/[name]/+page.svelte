@@ -1,27 +1,28 @@
 <script lang="ts">
-	import { Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
+	import { Tabs, Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { UserFlags } from '$lib/enums';
+	import { hasBit } from '$lib/util';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
 	import type { RequestError } from '$lib/types';
-	import { uploadAvatar, createTeamInvite } from '$lib/api';
+	import { TeamFlag, UserFlags, RequestErrorType } from '$lib/enums';
+	import { uploadAvatar, updateProfile, createTeamInvite } from '$lib/api';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
 	import Description from '$lib/components/Description.svelte';
-	import RequestErrorUI from '$lib/components/RequestError.svelte';
+	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 
 	import X from '$lib/icons/X.svelte';
 	import Star from '$lib/icons/Star.svelte';
-	import Check from '$lib/icons/Check.svelte';
 	import Burger from '$lib/icons/Burger.svelte';
 	import Person from '$lib/icons/Person.svelte';
 	import People from '$lib/icons/People.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import Voxelified from '$lib/icons/Voxelified.svelte';
+	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
 	import EnvelopePlusFill from '$lib/icons/EnvelopePlusFill.svelte';
 	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
 	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
@@ -39,26 +40,26 @@
 		editBio = editBio.slice(0, 200), editName = editName.slice(0, 20);
 
 	const save = async () => {
+		if (editName.length < 3)
+			return saveError = { error: RequestErrorType.NameTooShort };
 		saving = !(saveError = null);
+
 		if (editChanged) {
-			const response = await fetch('?/edit', {
-				body: JSON.stringify({
-					bio: editBio === data.bio ? undefined : editBio.length ? editBio : null,
-					name: editName === (data.name || data.username) ? undefined : editName.length ? editName : null
-				}),
-				method: 'POST'
+			const response = await updateProfile(data.session!.access_token, {
+				bio: editBio === data.bio ? undefined : editBio.length ? editBio : null,
+				name: editName === (data.name || data.username) ? undefined : editName.length ? editName : null
 			});
-			const result = deserialize(await response.text());
-			if (result.type === 'success') {
+			if (response.success) {
 				if (newAvatar)
 					uploadAvatar2();
 				else
 					location.reload();
-			} else if (result.type === 'failure')
-				saving = !(saveError = result.data as any);
+			} else
+				saving = !(saveError = response);
 		} else if (newAvatar)
 			uploadAvatar2();
 	};
+	const reset = () => (editBio = data.bio || '', editName = data.name || data.username, newAvatar = null, newAvatarUri = null, saveError = null);
 
 	let newAvatar: ArrayBuffer | null = null;
 	let newAvatarUri: string | null = null;
@@ -86,8 +87,11 @@
 	let dropdownTrigger: () => void;
 
 	const inviteToTeam = async (teamId: string) => {
-		await createTeamInvite(data.session!.access_token, teamId, data.id);
-		location.reload();
+		const result = await createTeamInvite(data.session!.access_token, teamId, data.id);
+		if (result.success)
+			location.reload();
+		else
+			alert($t(`request_error.${result.error as 0}`));
 	};
 </script>
 
@@ -113,7 +117,7 @@
 					<Button on:click={() => editing = true}>
 						<PencilFill/>{$t('action.edit_profile')}
 					</Button>
-				{:else}
+				{:else if data.session}
 					<Button on:click={burger} disabled={burgering || data.burger.length} title={$t(`profile.burger.${!!data.burger.length}`)}>
 						<Burger/>
 					</Button>
@@ -123,18 +127,22 @@
 						<ThreeDotsVertical/>
 					</Button>
 					<p>{data.name || data.username} (@{data.username})</p>
-					<DropdownMenu.Sub>
-						<svelte:fragment slot="trigger">
-							<EnvelopePlusFill/>{$t('action.invite_team')}
-						</svelte:fragment>
-						<p>{$t('profile.invite')}</p>
-						{#each data.my_teams as item}
-							<button type="button" on:click={() => inviteToTeam(item.id)}>
-								<Avatar src={item.avatar_url} size="xxs" transparent/>
-								{item.display_name}
-							</button>
-						{/each}
-					</DropdownMenu.Sub>
+					{#if data.session && data.id !== data.session.user.id}
+						<DropdownMenu.Sub>
+							<svelte:fragment slot="trigger">
+								<EnvelopePlusFill/>{$t('action.invite_team')}
+							</svelte:fragment>
+
+							<p>{$t('profile.invite')}</p>
+							{#each data.my_teams as item}
+								<button type="button" on:click={() => inviteToTeam(item.id)}>
+									<Avatar src={item.avatar_url} size="xxs" transparent/>
+									{item.display_name}
+								</button>
+							{/each}
+						</DropdownMenu.Sub>
+						<div class="separator"/>
+					{/if}
 					<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
 						<ClipboardPlusFill/>{$t('action.copy_id')}
 					</button>
@@ -149,27 +157,6 @@
 				<Sunrise/>
 				<p>{$t('profile.joined', [data.created_at])}</p>
 			</div>
-			{#if data.teams.length}
-				<div class="separator"/>
-				<div class="counter">
-					<People/>
-					<p>{$t(`profile.teams.${data.teams.length === 1}`, [data.teams.length])}</p>
-				</div>
-				<div class="teams">
-					{#each data.teams as item}
-						<a href={`/team/${item.name}`}>
-							<Avatar src={item.avatar_url} size="sm" transparent/>
-							<div class="info">
-								<div class="name">
-									<p class="display">{item.display_name}</p>
-									<p class="id">{item.name}</p>
-								</div>
-								<p class="details">{$t('profile.teams.item.details', [item.members.length, data.name ?? data.username, $t(`team_role.${item.role}.profile`)])}</p>
-							</div>
-						</a>
-					{/each}
-				</div>
-			{/if}
 			{#if data.roblox_links.length}
 				<div class="separator"/>
 				<div class="counter">
@@ -200,12 +187,7 @@
 			<p class="field-label">{$t('profile.avatar')}</p>
 			<AvatarFile name={data.name ?? data.username} image={data.avatar_url} bind:result={newAvatar} bind:resultUri={newAvatarUri}/>
 
-			<RequestErrorUI data={saveError}/>
 			<div class="edit-buttons">
-				<Button on:click={save} disabled={saving || (!editChanged && !newAvatar)}>
-					<Check/>
-					{$t('action.save_changes')}
-				</Button>
 				<Button on:click={() => editing = false} disabled={saving}>
 					<X/>
 					{$t('action.cancel')}
@@ -213,7 +195,39 @@
 			</div>
 		{/if}
 	</div>
+	{#if data.teams.length}
+		<Tabs.Root value={0}>
+			<Tabs.Item title={$t('profile.teams', [data.teams.length])} value={0}>
+				<div class="teams">
+					{#each data.teams as item}
+						<a href={`/team/${item.name}`}>
+							<div class="header">
+								<Avatar src={item.avatar_url} size="sm" transparent/>
+								<div class="name">
+									<h1 title={item.display_name}>
+										{item.display_name}
+										{#if hasBit(item.flags, TeamFlag.Verified)}
+											<PatchCheckFill/>
+										{/if}
+									</h1>
+									<p>@{item.name}</p>
+								</div>
+							</div>
+						</a>
+					{/each}
+				</div>
+			</Tabs.Item>
+		</Tabs.Root>
+	{/if}
 </div>
+
+<UnsavedChanges
+	show={data.user?.id === data.id && (editName !== data.name || editBio !== data.bio || !!newAvatar)}
+	error={saveError ? $t(`request_error.${saveError.error}`) : ''}
+	{save}
+	{reset}
+	{saving}
+/>
 
 <svelte:head>
 	<title>{data.name ?? data.username}</title>
@@ -226,8 +240,10 @@
 
 <style lang="scss">
 	.main {
+		gap: 32px;
 		margin: 128px 32px 16px;
 		display: flex;
+		flex-wrap: wrap;
 		.card {
 			width: 416px;
 			height: fit-content;
@@ -252,8 +268,7 @@
 					}
 					p {
 						color: var(--color-secondary);
-						margin: 0;
-						margin-top: 4px;
+						margin: 4px 0 0;
 					}
 				}
 			}
@@ -299,7 +314,7 @@
 				overflow: auto;
 				max-height: 128px;
 			}
-			.separator {
+			& > .separator {
 				width: 100%;
 				height: 1px;
 				margin: 16px 0;
@@ -333,43 +348,50 @@
 					border-radius: 24px;
 				}
 			}
-			.teams {
-				gap: 8px;
+		}
+		:global(.tabs-container) {
+			flex: 1 1 40%;
+		}
+		.teams {
+			gap: 16px;
+			display: flex;
+			flex-wrap: wrap;
+			a {
+				flex: 1 1 calc(50% - 64px);
 				display: flex;
+				padding: 16px;
+				overflow: hidden;
+				background: var(--background-secondary);
+				border-radius: 16px;
 				flex-direction: column;
-				a {
-					gap: 16px;
-					width: -webkit-fill-available;
-					margin: 0;
+				text-decoration: none;
+				.header {
 					display: flex;
-					padding: 8px 24px 8px 8px;
-					font-size: 1em;
-					background: var(--background-tertiary);
-					font-weight: 500;
 					align-items: center;
-					border-radius: 8px;
-					text-decoration: none;
-					.info {
-						.name {
-							display: flex;
-							align-items: end;
-							margin-bottom: 4px;
-							.display {
-								margin: 0;
-							}
-							.id {
-								color: var(--color-secondary);
-								margin: 0;
-								opacity: 0.75;
-								font-size: .8em;
-								font-weight: 500;
-								margin-left: 8px;
+					.name {
+						width: 100%;
+						display: flex;
+						overflow: hidden;
+						margin-left: 16px;
+						flex-direction: column;
+						h1 {
+							margin: 0;
+							overflow: hidden;
+							max-width: 100%;
+							font-size: 1.25em;
+							font-weight: 600;
+							white-space: nowrap;
+							text-overflow: ellipsis;
+							:global(svg) {
+								color: var(--color-verified);
+								margin-left: 2px;
 							}
 						}
-						.details {
+						p {
 							color: var(--color-secondary);
-							margin: 0;
+							margin: 2px 0 0;
 							font-size: .8em;
+							line-height: normal;
 						}
 					}
 				}
@@ -381,6 +403,15 @@
 			margin: 128px 0 16px;
 			.card {
 				width: 100%;
+				border-radius: 0;
+			}
+			:global(.tabs-container .buttons) {
+				border-radius: 0 !important;
+			}
+			.teams a {
+				flex: unset;
+				width: 100%;
+				padding: 12px 16px;
 				border-radius: 0;
 			}
 		}

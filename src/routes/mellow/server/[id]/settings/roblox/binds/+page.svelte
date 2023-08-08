@@ -7,8 +7,8 @@
 	import type { PageData } from './$types';
 	import { mellowLinkViewMode } from '$lib/settings';
 	import type { RobloxGroupRole } from '$lib/types';
-	import { MellowLinkListViewMode } from '$lib/enums';
-	import { MellowLinkImportType } from '$lib/enums';
+	import { deleteMellowServerRobloxLink } from '$lib/api';
+	import { MellowLinkImportType, MellowLinkListViewMode } from '$lib/enums';
 
 	import Modal from '$lib/components/Modal.svelte';
 	import GroupSelect from '$lib/components/GroupSelect.svelte';
@@ -27,13 +27,12 @@
 	let importTarget: string | null = null;
 	let importTrigger: () => void;
 
-	const deleteBind = async (id: string) => {
-		const response = await fetch('?/delete', {
-			body: id,
-            method: 'POST'
-        });
-		if (response.status === 200)
+	const deleteLink = async (id: string) => {
+		const response = await deleteMellowServerRobloxLink(data.session!.access_token, $page.params.id, id);
+		if (response.success)
 			data.binds = data.binds.filter(bind => bind.id !== id);
+		else
+			alert($t(`request_error.${response.error as 0}`));
 	};
 
 	let groupRoles: Record<string, RobloxGroupRole[]> = {};
@@ -75,7 +74,7 @@
 					<Button on:click={() => target = item}>
 						<PencilFill/>{$t('action.edit')}
 					</Button>
-					<Button on:click={() => deleteBind(item.id)}>
+					<Button on:click={() => deleteLink(item.id)}>
 						<Trash/>
 					</Button>
 				</div>
@@ -115,6 +114,7 @@
 
 <MellowLinkEditor
 	onSave={() => linksContainer.scrollTo({ top: linksContainer.scrollHeight, behavior: 'smooth' })}
+	serverId={$page.params.id}
 	bind:data
 	bind:target
 	bind:trigger

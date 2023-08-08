@@ -3,46 +3,41 @@
 
 	import { t } from '$lib/localisation';
 	import { goto } from '$app/navigation';
-	import { deserialize } from '$app/forms';
+	import { updateTeam } from '$lib/api';
 	import type { PageData } from './$types';
 	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
-	export let data: PageData;
 
 	import Avatar from '$lib/components/Avatar.svelte';
-	import RequestErrorUI from '$lib/components/RequestError.svelte';
+	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 
-	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
+	export let data: PageData;
 
 	let error: RequestError | null = null;
 	let saving = false;
 	let name = data.name;
-	$: name = name.slice(0, 20);
+	$: name = name.slice(0, 20).toLowerCase().replace(/ /g, '_').replace(/\W/g, '');
 
 	const save = async () => {
+		if (name.length < 3)
+			return error = { error: RequestErrorType.NameTooShort } satisfies RequestError;
 		saving = !(error = null);
-		const response = await fetch('?/edit', {
-			body: JSON.stringify({ name }),
-			method: 'POST'
-		});
-		const result = deserialize(await response.text());
-		if (result.type === 'success') {
-			saving = false;
-			return goto(`/team/${name}/settings/profile`);
-		} else if (result.type === 'failure')
-			error = result.data as any;
-		else if (result.type === 'error')
-			error = { error: RequestErrorType.Offline } satisfies RequestError;
-		saving = false;
+		
+		const response = await updateTeam(data.session!.access_token, data.id, { name });
+		if (response.success)
+			return goto(`/team/${name}/settings/profile`).then(() => saving = false);
+
+		saving = !(error = response);
 	};
+	const reset = () => (name = data.name, error = null);
 </script>
 
 <div class="main">
 	<h1>{$t('team.settings.profile.header')}</h1>
 	<div class="profile">
 		<div class="header">
-			<Avatar src={data.avatar_url} size="md"/>
+			<Avatar src={data.avatar_url} size="md" hover/>
 			<div class="name">
 				<h1>{data.display_name}</h1>
 				<p>@{name}</p>
@@ -53,24 +48,25 @@
 				</Button>
 			</div>
 		</div>
-		<p class="details">{$t('team.joined', [data.created_at])}</p>
+		<p class="details">{$t('team.created.false', [data.created_at])}</p>
 	</div>
 
 	<p class="input-label">{$t('team.settings.profile.name')}</p>
 	<TextInput bind:value={name}/>
 
-	<RequestErrorUI data={error} background="var(--background-primary)"/>
-	<div class="buttons">
-		<Button on:click={save} disabled={saving || name === data.name}>
-			<PencilFill/>{$t('action.save_changes')}
-		</Button>
-	</div>
+	<UnsavedChanges
+		show={name !== data.name}
+		error={error ? $t(`request_error.${error.error}`) : ''}
+		{save}
+		{reset}
+		{saving}
+	/>
 </div>
 
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 32px 256px 32px 64px;
+		margin: 32px 128px 32px 64px;
 		.profile {
 			padding: 16px;
 			position: relative;
@@ -84,7 +80,6 @@
 					top: -32px;
 					left: 24px;
 					position: absolute;
-					box-shadow: 0 8px 16px 2px #00000040;
 				}
 				.name {
 					h1 {
@@ -114,9 +109,6 @@
 		.buttons {
 			gap: 16px;
 			display: flex;
-		}
-		& > .buttons {
-			margin-top: 32px;
 		}
 	}
 </style>

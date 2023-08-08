@@ -23,8 +23,9 @@
 								<p>@{item.user.username}</p>
 							</a>
 							<p>
-								{$t(`team_role.${item.role}`)} •
-								{$t('profile.joined', [item.joined_at])}{#if item.inviter}
+								{#if item.role}
+									{item.role.name} •
+								{/if}{$t('profile.joined', [item.joined_at])}{#if item.inviter}
 									, {$t('team_invite.author2')}
 									<a href={`/user/${item.inviter.username}`}>
 										{item.inviter.name || item.inviter.username}

@@ -1,22 +1,22 @@
-import * as kit from '@sveltejs/kit';
-
 import supabase from '$lib/supabase';
+import { requestError } from '$lib/util/server';
 import { RequestErrorType } from '$lib/enums';
-import type { RequestError } from '$lib/types';
 import type { LayoutServerLoad } from './$types';
 import { verifyServerMembership } from '$lib/util/server';
 export const load = (async ({ params: { id }, parent }) => {
 	await verifyServerMembership((await parent()).session, id);
 
-	const { data, error } = await supabase.from<string, {
+	const response = await supabase.from<string, {
 		name: string
-	}>('mellow_servers').select('name').eq('id', id).limit(1).single();
-	if (error) {
-		console.error(error);
-		throw kit.error(500, JSON.stringify({
-			error: RequestErrorType.ExternalRequestError
-		} satisfies RequestError));
+		avatar_url: string
+	}>('mellow_servers').select('name, avatar_url').eq('id', id).limit(1).maybeSingle();
+	if (response.error) {
+		console.error(response.error);
+		throw requestError(500, RequestErrorType.ExternalRequestError);
 	}
 
-	return data;
+	if (!response.data)
+		throw requestError(404, RequestErrorType.NotFound);
+
+	return response.data;
 }) satisfies LayoutServerLoad;

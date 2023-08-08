@@ -1,35 +1,49 @@
-import { error, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
-import { isUUID } from '$lib/util';
-import { RequestErrorType } from '$lib/enums';
-import type { RequestError } from '$lib/types';
+import { requestError } from '$lib/util/server';
+import { isUUID, hasBit } from '$lib/util';
 import type { LayoutServerLoad } from './$types';
+import { RequestErrorType, TeamRolePermission } from '$lib/enums';
 export const load = (async ({ params: { name }, parent }) => {
 	const { session } = await parent();
 	if (!session)
 		throw redirect(302, '/login');
 
 	const response = await supabase.from('teams').select<string, {
+		id: string
 		name: string
+		roles: {
+			id: string
+			name: string
+			creator: {
+				name: string | null
+				username: string
+			} | null
+			position: number
+			created_at: string
+			permissions: number
+		}[]
 		members: {
 			id: string
-			role: number
+			role: {
+				permissions: number
+			}
 		}[]
+		owner_id: string | null
 		avatar_url: string
 		created_at: string
 		display_name: string
-	}>('name, avatar_url, created_at, display_name, members:team_members( id:user_id, role )').eq(isUUID(name) ? 'id' : 'name', name).limit(1).single();
+	}>('id, name, roles:team_roles ( id, name, creator:users ( name, username ), position, created_at, permissions ), owner_id, avatar_url, created_at, display_name, members:team_members( id:user_id, role:team_roles ( permissions ) )').eq(isUUID(name) ? 'id' : 'name', name).order('position', { ascending: false, foreignTable: 'team_roles' }).limit(1).maybeSingle();
 	if (response.error) {
 		console.error(response.error);
-		throw error(500, JSON.stringify({
-			error: RequestErrorType.ExternalRequestError
-		} satisfies RequestError));
+		throw requestError(500, RequestErrorType.ExternalRequestError);
 	}
 
-	if (!response.data.members.some(member => member.id === session.user.id && member.role >= 200))
-		throw error(403, JSON.stringify({
-			error: RequestErrorType.Unauthorised
-		} satisfies RequestError));
+	if (!response.data)
+		throw requestError(404, RequestErrorType.NotFound);
+
+	if (session.user.id !== response.data.owner_id && !response.data.members.some(member => member.id === session.user.id && hasBit(member.role.permissions, TeamRolePermission.ManageTeam)))
+		throw requestError(403, RequestErrorType.Unauthorised);
 	return response.data;
 }) satisfies LayoutServerLoad;

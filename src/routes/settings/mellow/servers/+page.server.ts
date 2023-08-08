@@ -1,12 +1,11 @@
-import { error } from '@sveltejs/kit';
-
 import supabase from '$lib/supabase';
+import { requestError } from '$lib/util/server';
 import { getDiscordToken } from '$lib/verification';
 import { RequestErrorType } from '$lib/enums';
-import type { RequestError } from '$lib/types';
 import type { PageServerLoad } from './$types';
 import { createMellowServerDiscordRedirectUrl } from '$lib/util';
-export const config = { regions: ['iad1'] };
+
+export const config = { regions: ['iad1'], runtime: 'edge' };
 export const load = (async ({ url, parent }) => {
 	const { session } = await parent();
 	const response = await supabase.from('mellow_server_members').select<string, {
@@ -19,7 +18,7 @@ export const load = (async ({ url, parent }) => {
 	}>('server:mellow_servers ( id, name, avatar_url, members:mellow_server_members ( count ) )').eq('user_id', session!.user.id);
 	if (response.error) {
 		console.error(response.error);
-		throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+		throw requestError(500, RequestErrorType.ExternalRequestError);
 	}
 
 	let allServers: {
@@ -37,7 +36,7 @@ export const load = (async ({ url, parent }) => {
 		const response = await getDiscordToken(code, createMellowServerDiscordRedirectUrl(url.origin));
 		if (!response.success) {
 			console.error(response.error);
-			throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+			throw requestError(500, RequestErrorType.ExternalRequestError);
 		}
 
 		const response2 = await fetch('https://discord.com/api/v10/users/@me/guilds', {
@@ -51,7 +50,7 @@ export const load = (async ({ url, parent }) => {
 		}, { onConflict: 'user_id' });
 		if (response3.error) {
 			console.error(response3.error);
-			throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+			throw requestError(500, RequestErrorType.ExternalRequestError);
 		}
 
 		allServers = response2;
@@ -59,7 +58,7 @@ export const load = (async ({ url, parent }) => {
 		const response = await supabase.from('mellow_user_servers').select('data').eq('user_id', session.user.id).limit(1).maybeSingle();
 		if (response.error) {
 			console.error(response.error);
-			throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+			throw requestError(500, RequestErrorType.ExternalRequestError);
 		}
 
 		allServers = response.data?.data ?? [];

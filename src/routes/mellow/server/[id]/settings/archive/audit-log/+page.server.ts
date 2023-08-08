@@ -1,21 +1,24 @@
-import * as kit from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
+import { RequestErrorType } from '$lib/enums';
+import type { RequestError } from '$lib/types';
 import type { PageServerLoad } from './$types';
 import type { MellowBindType, MellowServerAuditLogType, MellowBindRequirementsType } from '$lib/enums';
+
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
-	const { data, error } = await supabase.from('mellow_server_audit_logs')
+	const response = await supabase.from('mellow_server_audit_logs')
 		.select<string, MellowServerAuditLog>('id, type, data, author:users( name, username, avatar_url ), created_at, target_link_id').eq('server_id', id).order('created_at', { ascending: false });
-	if (error) {
-		console.error(error);
-		throw kit.error(500, error.message);
-	}
+	if (response.error)
+		console.error(response.error);
 
-	if (!data)
-		throw kit.error(500);
+	if (response.error || !response.data)
+		throw error(500, JSON.stringify({
+			error: RequestErrorType.ExternalRequestError
+		} satisfies RequestError));
 
-	return { items: data };
+	return { items: response.data };
 }) satisfies PageServerLoad;
 
 interface MellowServerAuditLogBase {

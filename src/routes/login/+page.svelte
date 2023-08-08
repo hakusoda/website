@@ -2,16 +2,17 @@
 	import type { Provider } from '@supabase/supabase-js';
 
 	import { t } from '$lib/localisation';
+	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { getUser } from '$lib/api';
 	import type { PageData } from './$types';
+	export let data: PageData;
 
 	import GitHub from '$lib/icons/GitHub.svelte';
 	import Discord from '$lib/icons/Discord.svelte';
-	export let data: PageData;
 	const redirect = async (provider: Provider) => {
 		await data.supabase.auth.signInWithOAuth({
-			options: { redirectTo: `${data.url}/login` },
+			options: { redirectTo: `${$page.url.origin}/login` },
 			provider
 		});
 	};

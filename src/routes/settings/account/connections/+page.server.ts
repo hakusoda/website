@@ -1,12 +1,11 @@
-import { fail, error } from '@sveltejs/kit';
-
 import supabase from '$lib/supabase';
 import { getDiscordToken } from '$lib/verification';
-import type { RequestError } from '$lib/types';
+import { requestFail, requestError } from '$lib/util/server';
 import type { Actions, PageServerLoad } from './$types';
 import { RequestErrorType, UserConnectionType } from '$lib/enums';
 import { isUUID, createUserConnectionsDiscordRedirectUrl } from '$lib/util';
-export const config = { regions: ['iad1'] };
+
+export const config = { regions: ['iad1'], runtime: 'edge' };
 export const load = (async ({ url, parent }) => {
 	const { session } = await parent();
 	const code = url.searchParams.get('code');
@@ -14,7 +13,7 @@ export const load = (async ({ url, parent }) => {
 		const response = await getDiscordToken(code, createUserConnectionsDiscordRedirectUrl(url.origin));
 		if (!response.success) {
 			console.error(response.error);
-			throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+			throw requestError(500, RequestErrorType.ExternalRequestError);
 		}
 
 		const response2 = await fetch('https://discord.com/api/v10/users/@me', {
@@ -31,7 +30,7 @@ export const load = (async ({ url, parent }) => {
 		});
 		if (response3.error) {
 			console.error(response3.error);
-			throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+			throw requestError(500, RequestErrorType.ExternalRequestError);
 		}
 	}
 
@@ -44,9 +43,7 @@ export const load = (async ({ url, parent }) => {
 	}>('id, sub, name, type, metadata').eq('user_id', session!.user.id);
 	if (response.error) { 
 		console.error(response.error);
-		throw error(500, JSON.stringify({
-			error: RequestErrorType.ExternalRequestError
-		} satisfies RequestError));
+		throw requestError(500, RequestErrorType.ExternalRequestError);
 	}
 
 	return { connections: response.data };
@@ -56,16 +53,16 @@ export const actions = {
 	remove: async ({ locals: { getSession }, request }) => {
 		const session = await getSession();
 		if (!session)
-			return fail(401, { error: RequestErrorType.Unauthenticated } satisfies RequestError);
+			return requestFail(401, RequestErrorType.Unauthenticated);
 
 		const id = await request.text();
 		if (!isUUID(id))
-			return fail(400, { error: RequestErrorType.InvalidBody } satisfies RequestError);
+			return requestFail(400, RequestErrorType.InvalidBody);
 
 		const response = await supabase.from('user_connections').delete().eq('id', id).eq('user_id', session.user.id);
 		if (response.error) {
 			console.error(response.error);
-			return fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+			return requestFail(500, RequestErrorType.DatabaseUpdate);
 		}
 
 		return {};

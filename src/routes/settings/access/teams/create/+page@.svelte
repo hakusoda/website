@@ -23,7 +23,7 @@
 	let avatarUri: string | null = null;
 	let displayName = '';
 
-	$: name = displayName.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
+	$: name = displayName.toLowerCase().replace(/ /g, '_').replace(/\W/g, '');
 	const create = async () => {
 		creating = !(error = null);
 
@@ -49,7 +49,7 @@
 				<Avatar src={avatarUri} size="md"/>
 				<div class="name">
 					<h1>{displayName || 'My Team'}</h1>
-					<p>@{name || 'my-team'}</p>
+					<p>@{name || 'my_team'}</p>
 				</div>
 			</div>
 		</div>

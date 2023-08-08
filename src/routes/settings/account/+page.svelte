@@ -2,17 +2,16 @@
 	import { Button, TextInput } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { deserialize } from '$app/forms';
+	import { updateProfile } from '$lib/api';
 	import type { PageData } from './$types';
 	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
-	export let data: PageData;
 
 	import Avatar from '$lib/components/Avatar.svelte';
-	import RequestErrorUI from '$lib/components/RequestError.svelte';
+	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 
-	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
+	export let data: PageData;
 
 	let error: RequestError | null = null;
 	let saving = false;
@@ -20,24 +19,21 @@
 	$: username = username.slice(0, 20);
 
 	const save = async () => {
+		if (username.length < 3)
+			return error = { error: RequestErrorType.NameTooShort };
 		saving = !(error = null);
-		const response = await fetch('?/edit', {
-			body: JSON.stringify({ username }),
-			method: 'POST'
-		});
-		const result = deserialize(await response.text());
-		if (result.type === 'success')
+
+		const response = await updateProfile(data.session!.access_token, { username });
+		if (response.success)
 			return location.reload();
-		else if (result.type === 'failure')
-			error = result.data as any;
-		else if (result.type === 'error')
-			error = { error: RequestErrorType.Offline } satisfies RequestError;
-		saving = false;
+
+		saving = !(error = response);
 	};
+	const reset = () => (username = data.username, error = null);
 </script>
 
 <div class="main">
-	<h1>Your Account</h1>
+	<h1>{$t('settings')}</h1>
 	<div class="profile">
 		<div class="header">
 			<Avatar src={data.avatar_url} size="md" circle/>
@@ -54,15 +50,16 @@
 		<p class="details">{$t('profile.joined', [data.created_at])}</p>
 	</div>
 
-	<p class="input-label">Username</p>
+	<p class="input-label">{$t('settings.account.username')}</p>
 	<TextInput bind:value={username}/>
 
-	<RequestErrorUI data={error} background="var(--background-primary)"/>
-	<div class="buttons">
-		<Button on:click={save} disabled={saving || username === data.username}>
-			<PencilFill/>{$t('action.save_changes')}
-		</Button>
-	</div>
+	<UnsavedChanges
+		show={username !== data.username}
+		error={error ? $t(`request_error.${error.error}`) : ''}
+		{save}
+		{reset}
+		{saving}
+	/>
 </div>
 
 <style lang="scss">
@@ -112,9 +109,6 @@
 		.buttons {
 			gap: 16px;
 			display: flex;
-		}
-		& > .buttons {
-			margin-top: 32px;
 		}
 	}
 </style>

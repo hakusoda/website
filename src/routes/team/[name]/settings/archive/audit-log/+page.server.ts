@@ -1,22 +1,21 @@
-import * as kit from '@sveltejs/kit';
-
 import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
+import { requestError } from '$lib/util/server';
+import { RequestErrorType } from '$lib/enums';
 import type { PageServerLoad } from './$types';
 import type { TeamAuditLogType } from '$lib/enums';
-export const config = { regions: ['iad1'] };
+
+export const config = { regions: ['iad1'], runtime: 'edge' };
 export const load = (async ({ params: { name } }) => {
-	const { data, error } = await supabase.from('team_audit_logs')
+	const response = await supabase.from('team_audit_logs')
 		.select<string, TeamAuditLog>('id, type, data, team:teams!inner ( name ), author:users( name, username, avatar_url ), created_at').eq(isUUID(name) ? 'team_id' : 'team.name', name).order('created_at', { ascending: false });
-	if (error) {
-		console.error(error);
-		throw kit.error(500, error.message);
-	}
+	if (response.error)
+		console.error(response.error);
 
-	if (!data)
-		throw kit.error(500);
+	if (response.error || !response.data)
+		throw requestError(500, RequestErrorType.ExternalRequestError);
 
-	return { items: data };
+	return { items: response.data };
 }) satisfies PageServerLoad;
 
 interface TeamAuditLogBase {

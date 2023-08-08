@@ -16,6 +16,7 @@ declare global {
 		}
 		interface PageData {
 			session: Promise<Session | null>
+			supabase?: SupabaseClient<Database>
 		}
 		// interface Platform {}
 	}

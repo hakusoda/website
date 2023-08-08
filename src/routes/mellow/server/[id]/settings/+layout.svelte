@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
 	import type { LayoutData } from './$types';
+
+	import Avatar from '$lib/components/Avatar.svelte';
+	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
 
 	import Link from '$lib/icons/Link.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
@@ -16,7 +18,11 @@
 
 <div class="main">
 	<div class="nav">
-		<p>{data.name}</p>
+		<div class="server">
+			<Avatar src={data.avatar_url} size="sm" transparent/>
+			<h1>{data.name}</h1>
+		</div>
+
 		<SettingsNavItem id="mellow.server.settings.commands.custom" path={`${base}/commands/custom`}>
 			<DiamondFill/>
 		</SettingsNavItem>
@@ -48,6 +54,17 @@
 	.main {
 		display: flex;
 		min-height: 100%;
+		.server {
+			margin: 16px;
+			display: flex;
+			align-items: center;
+			h1 {
+				margin: 0 0 0 16px;
+				font-size: 1em;
+				font-weight: 500;
+			}
+		}
+
 		.nav {
 			width: 25%;
 			margin: 16px 0 16px 16px;

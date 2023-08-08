@@ -1,6 +1,6 @@
-import { RequestErrorType } from './enums';
-import type { User, RobloxUser, ApiResponse, PartialRobloxUser, CreateTeamResponse, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse } from './types';
+import type { User, RobloxUser, ApiResponse, PartialRobloxUser, UpdateTeamPayload, CreateTeamResponse, UpdateProfilePayload, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
 export const API_BASE = 'https://api.voxelified.com/v1';
+//export const API_BASE = 'http://localhost:3000/v1';
 
 export function getUser(userId: string) {
 	return request<User>(`user/${userId}`).then(response => response.success ? response.data : null);
@@ -50,6 +50,12 @@ export function createProfile(token: string, username: string) {
 	});
 }
 
+export function updateProfile(token: string, payload: UpdateProfilePayload) {
+	return request(`user`, 'PATCH', payload, {
+		authorization: `Bearer ${token}`
+	});
+}
+
 export function uploadAvatar(token: string, userId: string, newAvatar: ArrayBuffer) {
 	return request(`user/${userId}/icon`, 'PATCH', newAvatar, {
 		authorization: `Bearer ${token}`
@@ -82,6 +88,18 @@ export function createTeam(token: string, displayName: string) {
 	});
 }
 
+export function updateTeam(token: string, teamId: string, payload: UpdateTeamPayload) {
+	return request(`team/${teamId}`, 'PATCH', payload, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function leaveTeam(token: string, teamId: string) {
+	return request(`team/${teamId}/member`, 'DELETE', null, {
+		authorization: `Bearer ${token}`
+	});
+}
+
 export function uploadTeamAvatar(token: string, teamId: string, newAvatar: ArrayBuffer) {
 	return request(`team/${teamId}/icon`, 'PATCH', newAvatar, {
 		authorization: `Bearer ${token}`
@@ -102,6 +120,18 @@ export function acceptTeamInvite(token: string, teamId: string, inviteId: string
 
 export function rejectTeamInvite(token: string, teamId: string, inviteId: string) {
 	return request(`team/${teamId}/invite/${inviteId}`, 'DELETE', null, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function createMellowServerRobloxLink(token: string, serverId: string, payload: CreateMellowServerRobloxLinkPayload) {
+	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link`, 'POST', payload, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function deleteMellowServerRobloxLink(token: string, serverId: string, linkId: string) {
+	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link/${linkId}`, 'DELETE', null, {
 		authorization: `Bearer ${token}`
 	});
 }

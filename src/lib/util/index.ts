@@ -22,7 +22,7 @@ export function getUserNotificationUrl({ type, target_user, target_team }: UserN
 	return '';
 }
 
-export const uuidRegex = /\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/;
+export const uuidRegex = /^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/;
 
 export const isUUID = (uuid: string) => uuidRegex.test(uuid);
-export const hasFlag = (bits: number, bit: number) => (bits & bit) === bit;
+export const hasBit = (bits: number, bit: number) => (bits & bit) === bit;

@@ -2,7 +2,7 @@
 	import { Select, Button } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { hasFlag } from '$lib/util';
+	import { hasBit } from '$lib/util';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
 	import type { RequestError } from '$lib/types';
@@ -40,7 +40,7 @@
 	let enabled: boolean[] = [];
 	for (const type of Object.values(MellowServerLogType))
 		if (typeof type === 'number' && type)
-			enabled[type] = hasFlag(types, type);
+			enabled[type] = hasBit(types, type);
 
 	$: {
 		let newTypes = 0;

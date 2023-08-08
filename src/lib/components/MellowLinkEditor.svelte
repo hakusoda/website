@@ -4,6 +4,7 @@
 	import { t } from '../localisation';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from '../../routes/mellow/server/[id]/settings/roblox/binds/$types';
+	import { createMellowServerRobloxLink } from '$lib/api';
 	import type { RequestError, RobloxGroupRole } from '../types';
 	import { MellowBindType, RequestErrorType, MellowBindRequirementType, MellowBindRequirementsType } from '../enums';
 
@@ -20,6 +21,7 @@
 	export let target: PageData['binds'][number] | null = null;
 	export let onSave: () => void;
 	export let trigger: () => void;
+	export let serverId: string;
 
 	let roleTrigger: () => void;
 	let requirementTrigger: () => void;
@@ -91,30 +93,24 @@
 			else if (result.type === 'error')
 				saving = !(saveError = { error: RequestErrorType.Offline });
 		} else {
-			const response = await fetch('?/create', {
-				body: JSON.stringify({
-					type,
-					name: name || 'Unnamed Link',
-					data: targets,
-					requirements: requirements.map(item => ({
-						type: item[0],
-						data: item[1]
-					})),
-					requirementsType
-				}),
-				method: 'POST'
+			const response = await createMellowServerRobloxLink(data.session!.access_token, serverId, {
+				type,
+				name: name || 'Unnamed Link',
+				target_ids: targets,
+				requirements: requirements.map(item => ({
+					type: item[0],
+					data: item[1]
+				})),
+				requirements_type: requirementsType
 			});
-			const result = deserialize(await response.text());
-			if (result.type === 'success') {
-				data.binds = [...data.binds, result.data as any];
+			if (response.success) {
+				data.binds = [...data.binds, response.data as any];
 				saving = false;
 				trigger();
 				resetAdd();
 				setTimeout(onSave, 100);
-			} else if (result.type === 'failure')
-				saving = !(saveError = result.data as any);
-			else if (result.type === 'error')
-				saving = !(saveError = { error: RequestErrorType.Offline });
+			} else
+				saving = !(saveError = response);
 		}
 		target = null;
 		editing = false;

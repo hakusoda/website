@@ -2,98 +2,183 @@
 	import { Tabs, Button, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
+	import { hasBit } from '$lib/util';
+	import { leaveTeam } from '$lib/api';
 	import type { PageData } from './$types';
+	import { TeamFlag, TeamRolePermission } from '$lib/enums';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import TeamInvite from '$lib/modals/TeamInvite.svelte';
+	import Description from '$lib/components/Description.svelte';
 
 	import Star from '$lib/icons/Star.svelte';
+	import Link from '$lib/icons/Link.svelte';
+	import Person from '$lib/icons/Person.svelte';
+	import People from '$lib/icons/People.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
+	import StarFill from '$lib/icons/StarFill.svelte';
+	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
+	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
 	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
 	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
 	export let data: PageData;
 
 	let tab = 0;
 	let dropdownTrigger: () => void;
+
+	const leave = async () => {
+		const response = await leaveTeam(data.session!.access_token, data.id);
+		if (response.success)
+			location.reload();
+		else
+			alert($t(`request_error.${response.error as 0}`))
+	};
 </script>
 
 <div class="main">
 	<div class="card">
 		<div class="header">
 			<Avatar src={data.avatar_url} hover/>
-			<h1>{data.display_name}</h1>
+			<div class="name">
+				<h1>
+					{data.display_name}
+					{#each data.parent_affiliations as item}
+						<a href={`/team/${item.team.name}`}>
+							<Avatar src={item.team.avatar_url} size="xs" transparent/>
+						</a>
+					{/each}
+					{#if hasBit(data.flags, TeamFlag.Verified)}
+						<p><PatchCheckFill size={32}/></p>
+					{/if}
+				</h1>
+				<p>@{data.name}</p>
+			</div>
 		</div>
-		<div class="buttons">
-			{#if data.user && data.members.some(member => member.id === data.user?.id)}
-				<Button href={`/team/${data.name}/settings/profile`}>
-					<GearFill/>{$t('action.manage')}
-				</Button>
+		<div class="sub-header">
+			{#if data.website_url}
+				<a href={data.website_url}>
+					<Link/>
+					{data.website_url.replace(/^https?:\/\//g, '').replace(/\#.*$/g, '')}
+				</a>
 			{/if}
-			<DropdownMenu.Root bind:trigger={dropdownTrigger}>
-				<Button slot="trigger" on:click={dropdownTrigger}>
-					<ThreeDotsVertical/>
-				</Button>
-				<p>{data.display_name} (@{data.name})</p>
-				<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
-					<ClipboardPlusFill/>{$t('action.copy_id')}
-				</button>
-			</DropdownMenu.Root>
+			<div class="buttons">
+				{#if data.user && (data.owner?.id === data.user.id || data.members.some(member => member.id === data.user?.id && member.role && hasBit(member.role.permissions, TeamRolePermission.ManageTeam)))}
+					<Button href={`/team/${data.name}/settings/profile`}>
+						<GearFill/>{$t('action.manage')}
+					</Button>
+				{/if}
+				<DropdownMenu.Root bind:trigger={dropdownTrigger}>
+					<Button slot="trigger" on:click={dropdownTrigger}>
+						<ThreeDotsVertical/>
+					</Button>
+					<p>{data.display_name} (@{data.name})</p>
+					{#if data.user && data.user.id !== data.owner?.id}
+						<button type="button" on:click={leave}>
+							<BoxArrowRight/>{$t('action.leave_team')}
+						</button>
+						<div class="separator"/>
+					{/if}
+					<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
+						<ClipboardPlusFill/>{$t('action.copy_id')}
+					</button>
+				</DropdownMenu.Root>
+			</div>
 		</div>
 		{#if data.bio}
 			<div class="separator"/>
-			{data.bio}
+			<Description value={data.bio}/>
+		{/if}
+		{#if data.affiliations.length || data.parent_affiliations.length}
+			<div class="separator"/>
+			<div class="counter">
+				<People/>
+				<p>{$t('team.affiliations')}</p>
+			</div>
+			<div class="affiliations">
+				{#each [...data.affiliations, ...data.parent_affiliations].sort((a, b) => a.team.display_name.localeCompare(b.team.display_name)) as item}
+					<a href={`/team/${item.team.name}`}>
+						<Avatar src={item.team.avatar_url} size="xxs" transparent/>
+						{item.team?.display_name}
+					</a>
+				{/each}
+			</div>
 		{/if}
 		<div class="separator"/>
 		<div class="counter">
+			<Person/>
+			<p>
+				{$t(`team.owner.${!!data.owner}`)}
+				{#if data.owner}
+					<a href={`/user/${data.owner.username}`}>
+						{data.owner.name || `@${data.owner.username}`}
+					</a>
+				{/if}
+			</p>
+		</div>
+		<div class="counter">
 			<Sunrise/>
-			<p>{$t('team.joined', [data.created_at])}</p>
+			<p>
+				{$t(`team.created.${!!data.creator}`, [data.created_at])}
+				{#if data.creator}
+					<a href={`/user/${data.creator.username}`}>
+						{data.creator.name || `@${data.creator.username}`}
+					</a>
+				{/if}
+			</p>
 		</div>
 		<div class="separator"/>
 		<div class="counter">
 			<Star/>
-			<p>{$t('team.id', [data.name])}</p>
+			<p>{$t('team.id', [data.id])}</p>
 		</div>
 	</div>
 	<Tabs.Root bind:value={tab}>
-		<Tabs.Item title={$t('team.members')} value={0}>
+		<Tabs.Item title={$t('team.members', [data.members.length])} value={0}>
 			<div class="members">
 				{#each data.members as item}
 					<a class="member" href={`/user/${item.username}`}>
 						<Avatar src={item.avatar_url} size="sm2" hover circle/>
 						<div class="name">
-							<h1>{item.name ?? item.username}</h1>
+							<h1>
+								{#if item.id === data.owner?.id}
+									<StarFill size={20}/>
+								{/if}
+								{item.name ?? item.username}
+							</h1>
 							<p>@{item.username}</p>
 						</div>
 						<div class="details">
-							<p>{$t(`team_role.${item.role}`)}</p>
+							<p>{item.role?.name ?? $t('team_role.unknown')}</p>
 							<p>{$t('profile.joined', [item.joined_at])}</p>
 						</div>
 					</a>
 				{/each}
 			</div>
 		</Tabs.Item>
-		<Tabs.Item title={$t('team.projects')} value={1}>
-			<div class="projects">
-				{#each data.projects as item}
-					<a class="item" href={`/project/${item.name}`} style={`--banner: url("${item.banner_url}"); --project-color: ${item.theme_color ?? 'var(--background-secondary)'}`}>
-						<Avatar src={item.avatar_url} size="sm2" hover/>
-						<div class="name">
-							<h1>
-								{item.display_name}
-								{#if item.archived_at}
-									<p class="archived">{$t('time_ago.archived', [item.archived_at])}</p>
-								{/if}
-							</h1>
-							<p>{item.summary}</p>
-						</div>
-						<div class="details">
-							<p>{$t('time_ago.updated', [item.updated_at])} • {$t('project.contributors.count', [item.contributors.length + item.external_contributors])}</p>
-						</div>
-					</a>
-				{/each}
-			</div>
-		</Tabs.Item>
+		{#if data.projects.length}
+			<Tabs.Item title={$t('team.projects')} value={1}>
+				<div class="projects">
+					{#each data.projects as item}
+						<a class="item" href={`/project/${item.name}`} style={`--banner: url("${item.banner_url}"); --project-color: ${item.theme_color ?? 'var(--background-secondary)'}`}>
+							<Avatar src={item.avatar_url} size="sm2" hover/>
+							<div class="name">
+								<h1>
+									{item.display_name}
+									{#if item.archived_at}
+										<p class="archived">{$t('time_ago.archived', [item.archived_at])}</p>
+									{/if}
+								</h1>
+								<p>{item.summary}</p>
+							</div>
+							<div class="details">
+								<p>{$t('time_ago.updated', [item.updated_at])} • {$t('project.contributors.count', [item.contributors.length + item.external_contributors])}</p>
+							</div>
+						</a>
+					{/each}
+				</div>
+			</Tabs.Item>
+		{/if}
 	</Tabs.Root>
 </div>
 
@@ -138,20 +223,42 @@
 				display: flex;
 				position: absolute;
 				align-items: center;
-				h1 {
-					margin: 0;
-					overflow: hidden;
-					font-size: 2.5em;
-					white-space: nowrap;
-					text-overflow: ellipsis;
+				.name {
+					margin-bottom: 16px;
+					h1 {
+						gap: 16px;
+						margin: 0;
+						display: flex;
+						overflow: hidden;
+						font-size: 2.5em;
+						white-space: nowrap;
+						align-items: center;
+						text-overflow: ellipsis;
+						:global(svg) {
+							color: var(--color-verified);
+						}
+					}
+					p {
+						color: var(--color-secondary);
+						margin: 4px 0 0;
+					}
 				}
 			}
-			.buttons {
-				gap: 8px;
+			.sub-header {
 				display: flex;
-				justify-content: end;
+				align-items: end;
+				a {
+					gap: 8px;
+					display: flex;
+					align-items: center;
+				}
+				.buttons {
+					gap: 8px;
+					display: flex;
+					margin-left: auto;
+				}
 			}
-			.separator {
+			& > .separator {
 				width: 100%;
 				height: 1px;
 				margin: 16px 0;
@@ -168,6 +275,17 @@
 					color: var(--color-tertiary);
 					margin: 0;
 					white-space: nowrap;
+				}
+			}
+			.affiliations {
+				gap: 8px;
+				display: flex;
+				flex-direction: column;
+				a {
+					gap: 8px;
+					width: fit-content;
+					display: flex;
+					align-items: center;
 				}
 			}
 		}
@@ -196,9 +314,12 @@
 				.name {
 					margin-left: 88px;
 					h1 {
+						gap: 10px;
 						margin: 0;
+						display: flex;
 						font-size: 1.4em;
 						font-weight: 700;
+						align-items: center;
 					}
 					p {
 						color: var(--color-secondary);

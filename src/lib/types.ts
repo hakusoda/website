@@ -1,5 +1,5 @@
 import type { ZodIssue } from 'zod';
-import type { TeamRole, MellowBindType, RequestErrorType, RobloxLinkType, RobloxLinkFlag, DiscordChannelType, UserNotificationType, UserNotificationState, MellowBindRequirementType, MellowBindRequirementsType } from './enums';
+import type { MellowBindType, RequestErrorType, RobloxLinkType, RobloxLinkFlag, DiscordChannelType, UserNotificationType, UserNotificationState, MellowBindRequirementType, MellowBindRequirementsType } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -44,8 +44,25 @@ export interface DatabaseTeam {
 	id: string
 	bio: string | null
 	name: string
+	flags: number
+	roles: {
+		id: string
+		name: string
+		position: number
+		permissions: number
+	}[]
+	owner: {
+		id: string
+		name: string | null
+		username: string
+		avatar_url: string | null
+	} | null
+	creator: {
+		name: string | null
+		username: string
+		avatar_url: string | null
+	} | null
 	members: {
-		role: TeamRole
 		user: {
 			id: string
 			bio: string | null
@@ -56,6 +73,7 @@ export interface DatabaseTeam {
 			avatar_url: string | null
 			created_at: string
 		}
+		role_id: string
 		joined_at: string
 	}[]
 	projects: {
@@ -75,14 +93,33 @@ export interface DatabaseTeam {
 	}[]
 	avatar_url: string | null
 	created_at: string
+	website_url: string | null
 	display_name: string
+	affiliations: {
+		team: {
+			name: string
+			avatar_url: string | null
+			display_name: string
+		}
+	}[]
+	parent_affiliations: {
+		team: {
+			name: string
+			avatar_url: string | null
+			display_name: string
+		}
+	}[]
 }
 
 export interface TeamMember {
 	id: string
 	bio: string | null
 	name: string | null
-	role: TeamRole
+	role: {
+		id: string
+		name: string
+		position: number
+	}
 	flags: number
 	username: string
 	joined_at: string
@@ -219,4 +256,43 @@ export type ApiResponse<T> = ApiRequestError & {
 export interface CreateTeamResponse {
 	id: string
 	name: string
+}
+
+export interface UpdateTeamPayload {
+	name?: string
+	display_name?: string
+}
+
+export interface UpdateProfilePayload {
+	bio?: string | null
+	name?: string | null
+	username?: string
+}
+
+export interface CreateMellowServerRobloxLinkPayload {
+	name: string
+	type: MellowBindType
+	target_ids: string[]
+	requirements: {
+		data: string[]
+		type: MellowBindRequirementType
+	}[]
+	requirements_type: MellowBindRequirementsType
+}
+
+export interface CreateMellowServerRobloxLinkResponse {
+	id: string
+	name: string
+	creator: {
+		name: string | null
+		username: string
+	}
+	created_at: string
+	target_ids: string[]
+	requirements: {
+		id: string
+		data: string[]
+		type: MellowBindRequirementType
+	}[]
+	requirements_type: MellowBindRequirementsType
 }

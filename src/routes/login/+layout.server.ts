@@ -6,5 +6,4 @@ export const load = (async ({ url, parent }) => {
 		throw redirect(302, `/user/${user.username}`);
 	if (session && url.pathname !== '/login/profile')
 		throw redirect(302, `/login/profile`);
-	return { url: url.origin };
 }) satisfies LayoutServerLoad;

@@ -199,6 +199,7 @@
 		}
 
 		--color-link: hsl(330 90% 80%);
+		--color-verified: color-mix(in srgb, var(--button-background) 75%, #fff);
 		--button-color: hsl(330 100% 98%);
 		--button-color-active: hsl(330 100% 88%);
 		--button-background: hsl(330 50% 60%);
@@ -331,6 +332,14 @@
 		}
 		&:hover {
 			background: #ffffff40;
+		}
+	}
+	@media (max-width: 512px) {
+		.user .name {
+			display: none;
+		}
+		.user :global(svg) {
+			margin-left: 16px;
 		}
 	}
 	

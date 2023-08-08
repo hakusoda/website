@@ -4,10 +4,15 @@ export enum UserFlags {
 	Tester = 1 << 2
 }
 
-export enum TeamRole {
-	Member,
-	Admin = 200,
-	Owner = 255
+export enum TeamFlag {
+	None,
+	Verified = 1 << 0
+}
+
+export enum TeamRolePermission {
+	None,
+	ManageTeam = 1 << 0,
+	InviteUsers = 1 << 1
 }
 
 export enum RobloxLinkType {
@@ -106,7 +111,9 @@ export enum RequestErrorType {
 	Unknown,
 	Unauthorised,
 	ExternalRequestError,
-	NotFound
+	NotFound,
+	NoPermission,
+	NameTooShort
 }
 
 // https://discord.com/developers/docs/resources/channel#channel-object-channel-types

@@ -1,4 +1,4 @@
-import * as kit from '@sveltejs/kit';
+import  { error } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
@@ -7,7 +7,7 @@ import type { RequestError } from '$lib/types';
 import type { PageServerLoad } from './$types';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { name } }) => {
-	const { data, error } = await supabase.from('projects').select<string, {
+	const response = await supabase.from('projects').select<string, {
 		id: string
 		bio: string | null
 		name: string
@@ -39,19 +39,19 @@ export const load = (async ({ params: { name } }) => {
 		}[]
 		external_contributors: number
 	}>('id, bio, name, summary, avatar_url, banner_url, created_at, updated_at, github_url, archived_at, website_url, theme_color, display_name, creator:teams ( id, name, avatar_url, display_name, members:team_members ( id ) ), contributors:project_contributors ( user:users ( id, name, username, avatar_url, created_at ) ), external_contributors').eq(isUUID(name) ? 'id' : 'name', name).limit(1).maybeSingle();
-	if (error) {
-		console.error(error);
-		throw kit.error(500, JSON.stringify({
+	if (response.error) {
+		console.error(response.error);
+		throw error(500, JSON.stringify({
 			error: RequestErrorType.ExternalRequestError
 		} satisfies RequestError));
 	}
 
-	if (!data)
-		throw kit.error(404);
+	if (!response.data)
+		throw error(404);
 
 	return {
-		...data,
-		creator: data.creator,
-		contributors: data.contributors.map(item => item.user)
+		...response.data,
+		creator: response.data.creator,
+		contributors: response.data.contributors.map(item => item.user)
 	};
 }) satisfies PageServerLoad;

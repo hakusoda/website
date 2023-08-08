@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import { hasFlag } from '$lib/util';
+	import { hasBit } from '$lib/util';
     import type { PageData } from './$types';
 	import { MellowServerLogType, MellowServerAuditLogType } from '$lib/enums';
     
@@ -15,7 +15,7 @@
 	const OPENABLE = [MellowServerAuditLogType.CreateRobloxLink, MellowServerAuditLogType.UpdateRobloxGlobalSettings, MellowServerAuditLogType.UpdateRobloxLink, MellowServerAuditLogType.UpdateLogging];
 
 	const mapLogTypes = (old: number, now: number) =>
-		Object.values(MellowServerLogType).filter(i => typeof i === 'number' && i && hasFlag(old, i) && !hasFlag(now, i)).map(i => $t(`mellow_server_logging_type.${i as MellowServerLogType}`));
+		Object.values(MellowServerLogType).filter(i => typeof i === 'number' && i && hasBit(old, i) && !hasBit(now, i)).map(i => $t(`mellow_server_logging_type.${i as MellowServerLogType}`));
 </script>
 
 <div class="main">
