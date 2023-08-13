@@ -10,6 +10,7 @@
 	import GearFill from '$lib/icons/GearFill.svelte';
 	import ArrowLeft from '$lib/icons/ArrowLeft.svelte';
 	import Newspaper from '$lib/icons/Newspaper.svelte';
+	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import DiamondFill from '$lib/icons/DiamondFill.svelte';
 	export let data: LayoutData;
 
@@ -28,6 +29,11 @@
 		</SettingsNavItem>
 		<SettingsNavItem id="mellow.server.settings.logging" path={`${base}/logging`}>
 			<Newspaper/>
+		</SettingsNavItem>
+
+		<p>{$t('mellow.server.settings.access')}</p>
+		<SettingsNavItem id="mellow.server.settings.access.members" path={`${base}/access/members`}>
+			<PersonFill/>
 		</SettingsNavItem>
 
 		<p>{$t('mellow.server.settings.roblox')}</p>

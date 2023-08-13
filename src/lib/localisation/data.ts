@@ -175,6 +175,18 @@ export default {
 
 		'mellow.server.settings.commands.custom': 'Custom Commands',
 
+		'mellow.server.settings.access': 'Access',
+		'mellow.server.settings.access.members': 'Members',
+		'mellow.server.settings.access.members.header': 'Server Members',
+		'mellow.server.settings.access.members.summary': 'This is a list of all members in the connected Discord Server, along with their syncing information.',
+		'mellow.server.settings.access.members.item.syncable.false': 'Not connected to a Roblox Account',
+		'mellow.server.settings.access.members.item.syncable.true': 'Syncing as',
+		'mellow.server.settings.access.members.search': 'Search Members',
+		'mellow.server.settings.access.members.sort': 'Sort by',
+		'mellow.server.settings.access.members.sort.type.0': 'Name',
+		'mellow.server.settings.access.members.sort.type.1': 'Join Date',
+		'mellow.server.settings.access.members.sort.type.2': 'Sync Status',
+
 		'mellow.server.settings.logging': 'Logging',
 		'mellow.server.settings.logging.channel': 'Logging Channel',
 		'mellow.server.settings.logging.channel.category': 'Discord Channels',

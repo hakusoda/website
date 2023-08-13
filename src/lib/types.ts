@@ -234,6 +234,33 @@ export interface DiscordChannel {
 	permission_overwrites?: any[]
 }
 
+export interface DiscordPartialUser {
+	id: string
+	bot?: boolean
+	avatar: string | null
+	username: string
+	global_name: string | null
+	public_flags: number
+	discriminator: string
+	avatar_decoration: string | null
+}
+
+// https://discord.com/developers/docs/resources/guild#guild-member-object
+export interface DiscordMember {
+	deaf: boolean
+	mute: boolean
+	nick: string | null
+	user: DiscordPartialUser
+	flags: number
+	roles: string[]
+	avatar: string | null
+	pending: boolean
+	joined_at: string
+	permissions: string
+	premium_since: unknown
+	communication_disabled_until: unknown
+}
+
 export interface RequestError {
 	error: RequestErrorType
 	issues?: ZodIssue[]

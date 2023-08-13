@@ -6,10 +6,7 @@ import { verifyServerMembership } from '$lib/util/server';
 export const load = (async ({ params: { id }, parent }) => {
 	await verifyServerMembership((await parent()).session, id);
 
-	const response = await supabase.from<string, {
-		name: string
-		avatar_url: string
-	}>('mellow_servers').select('name, avatar_url').eq('id', id).limit(1).maybeSingle();
+	const response = await supabase.from('mellow_servers').select('name, avatar_url').eq('id', id).limit(1).maybeSingle();
 	if (response.error) {
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.ExternalRequestError);
