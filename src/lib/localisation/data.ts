@@ -373,6 +373,7 @@ export default {
 		'footer.oss': 'Voxelified is',
 		'footer.oss.link': 'open-source',
 		'footer.resources': 'Resources',
+		'footer.resources.status': 'Status',
 		'footer.community': 'Community',
 
 		'modal.team_invite': 'You have been invited to join',

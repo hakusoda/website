@@ -166,11 +166,12 @@
 			</div>
 			<div class="links">
 				<p>{$t('footer.resources')}</p>
-				<a href="https://github.com/Excalware">GitHub</a>
+				<a href="https://status.voxelified.com" target="_blank">Status</a>
+				<a href="https://github.com/Excalware" target="_blank">GitHub</a>
 			</div>
 			<div class="links">
 				<p>{$t('footer.community')}</p>
-				<a href="https://discord.com/invite/rs3r4dQu9P">Discord</a>
+				<a href="https://discord.com/invite/rs3r4dQu9P" target="_blank">Discord</a>
 			</div>
 		</footer>
 	</main>
@@ -356,7 +357,6 @@
 		padding: 40px 64px;
 		margin-top: auto;
 		background: var(--background-header);
-		align-items: center;
 		.header {
 			.name {
 				gap: 8px;
@@ -372,7 +372,10 @@
 			}
 		}
 		.links {
-			margin-left: 96px;
+			gap: 4px;
+			margin: 8px 0 0 96px;
+			display: flex;
+			flex-direction: column;
 			p {
 				margin: 0;
 				font-size: .8em;
