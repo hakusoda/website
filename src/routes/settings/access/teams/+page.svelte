@@ -10,9 +10,11 @@
 	
 	import Plus from '$lib/icons/Plus.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
+	import StarFill from '$lib/icons/StarFill.svelte';
+	import PeopleFill from '$lib/icons/PeopleFill.svelte';
+	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
 	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
-	import BoxArrowUpRight from '$lib/icons/BoxArrowUpRight.svelte';
 	export let data: PageData;
 </script>
 
@@ -35,8 +37,25 @@
 						<p>@{item.name}</p>
 					</div>
 				</div>
+				<div class="details">
+					<p>
+						<PersonFill size={14}/>
+						{item.role?.name ?? $t('team_role.unknown')}
+					</p>
+					<p>
+						<StarFill size={14}/>
+						{#if item.owner}
+							<a href={`/user/${item.owner.username}`}>
+								{item.owner.name || item.owner.username}
+							</a>
+						{:else}
+							{$t('team.owner.none')}
+						{/if}
+					</p>
+					<p><PeopleFill size={14}/>{item.members[0].count}</p>
+				</div>
 				<div class="buttons">
-					{#if data.session?.user.id === item.owner_id || (item.role && hasBit(item.role.permissions, TeamRolePermission.ManageTeam))}
+					{#if data.session?.user.id === item.owner?.id || (item.role && hasBit(item.role.permissions, TeamRolePermission.ManageTeam))}
 						<a href={`/team/${item.name}/settings/profile`}>
 							<GearFill/>{$t('action.manage')}
 						</a>
@@ -107,6 +126,22 @@
 							font-size: .8em;
 							line-height: normal;
 						}
+					}
+				}
+				.details {
+					gap: 8px;
+					margin: 8px 0 0;
+					display: flex;
+					p {
+						gap: 6px;
+						color: var(--color-secondary);
+						margin: 0;
+						display: flex;
+						padding: 4px 8px;
+						font-size: .75em;
+						box-shadow: 0 0 0 1px var(--border-secondary);
+						align-items: center;
+						border-radius: 16px;
 					}
 				}
 				.buttons {
