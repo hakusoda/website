@@ -22,7 +22,11 @@ export const load = (async ({ params: { name }, parent }) => {
 				id: string
 				name: string
 				flags: number
-				members: { id: string }[]
+				owner: {
+					name: string | null
+					username: string
+				} | null
+				members: [{ count: number }]
 				avatar_url: string
 				display_name: string
 			}
@@ -39,7 +43,7 @@ export const load = (async ({ params: { name }, parent }) => {
 		roblox_links: {
 			target_id: number
 		}[]
-	}>('id, bio, name, flags, username, avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( role:team_roles ( name ), team:teams ( id, name, flags, avatar_url, display_name, members:team_members ( id ) ) ), team_invites!team_invites_user_id_fkey ( team_id ), roblox_links!roblox_links_owner_fkey ( target_id ), burger:user_notifications!user_notifications_user_id_fkey ( type )').eq(isUUID(name) ? 'id' : 'username', name).eq('roblox_links.public', true).gte('roblox_links.flags', 2).eq('user_notifications.target_user_id', session?.user.id ?? EMPTY_UUID).eq('user_notifications.type', UserNotificationType.SOMETHING).limit(1).maybeSingle();
+	}>('id, bio, name, flags, username, avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( role:team_roles ( name ), team:teams ( id, name, flags, owner:users!teams_owner_id_fkey ( name, username ), avatar_url, display_name, members:team_members ( count ) ) ), team_invites!team_invites_user_id_fkey ( team_id ), roblox_links!roblox_links_owner_fkey ( target_id ), burger:user_notifications!user_notifications_user_id_fkey ( type )').eq(isUUID(name) ? 'id' : 'username', name).eq('roblox_links.public', true).gte('roblox_links.flags', 2).eq('user_notifications.target_user_id', session?.user.id ?? EMPTY_UUID).eq('user_notifications.type', UserNotificationType.SOMETHING).limit(1).maybeSingle();
 	if (response.error) {
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.ExternalRequestError);

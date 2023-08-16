@@ -10,8 +10,8 @@
 	import { uploadAvatar, updateProfile, createTeamInvite } from '$lib/api';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Markdown from '$lib/components/Markdown.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
-	import Description from '$lib/components/Description.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 
 	import X from '$lib/icons/X.svelte';
@@ -19,8 +19,10 @@
 	import Burger from '$lib/icons/Burger.svelte';
 	import Person from '$lib/icons/Person.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
+	import StarFill from '$lib/icons/StarFill.svelte';
 	import PencilFill from '$lib/icons/PencilFill.svelte';
-	import Voxelified from '$lib/icons/Voxelified.svelte';
+	import PeopleFill from '$lib/icons/PeopleFill.svelte';
+	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
 	import EnvelopePlusFill from '$lib/icons/EnvelopePlusFill.svelte';
 	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
@@ -108,7 +110,7 @@
 				<div class="roles">
 					{#each Object.values(UserFlags) as flag}
 						{#if typeof flag === 'number' && flag && (data.flags & flag) === flag}
-							<p class="role"><Voxelified/>{$t(`user_role.${flag}`)}</p>
+							<p class="role"><StarFill/>{$t(`user_role.${flag}`)}</p>
 						{/if}
 					{/each}
 				</div>
@@ -149,16 +151,16 @@
 			</div>
 			{#if data.bio}
 				<div class="separator"/>
-				<Description value={data.bio}/>
+				<Markdown source={data.bio.replace(/https:\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g, url => `[${url.substring(8)}](${url})`)}/>
 			{/if}
 			<div class="separator"/>
-			<div class="counter">
+			<div class="detail">
 				<Sunrise/>
 				<p>{$t('profile.joined', [data.created_at])}</p>
 			</div>
 			{#if data.roblox_links.length}
 				<div class="separator"/>
-				<div class="counter">
+				<div class="detail">
 					<Person/>
 					<p>{$t('profile.roblox')}</p>
 				</div>
@@ -172,7 +174,7 @@
 				</div>
 			{/if}
 			<div class="separator"/>
-			<div class="counter">
+			<div class="detail">
 				<Star/>
 				<p>{$t('profile.id', [data.id])}</p>
 			</div>
@@ -211,6 +213,26 @@
 									</h1>
 									<p>@{item.name}</p>
 								</div>
+							</div>
+							<div class="details">
+								<p>
+									<PersonFill size={14}/>
+									{item.role?.name ?? $t('team_role.unknown')}
+								</p>
+								<p>
+									<StarFill size={14}/>
+									{#if item.owner}
+										<a href={`/user/${item.owner.username}`}>
+											{item.owner.name || item.owner.username}
+										</a>
+									{:else}
+										{$t('team.owner.none')}
+									{/if}
+								</p>
+								<p>
+									<PeopleFill size={14}/>
+									{$t('members', [item.members[0].count])}
+								</p>
 							</div>
 						</a>
 					{/each}
@@ -284,10 +306,10 @@
 					margin-right: auto;
 					.role {
 						gap: 8px;
-						color: #e696ff;
+						color: hsl(260 80% 80%);
 						margin: 0;
 						display: flex;
-						font-weight: 600;
+						font-weight: 500;
 						align-items: center;
 					}
 				}
@@ -319,8 +341,8 @@
 				margin: 16px 0;
 				background: var(--border-secondary);
 			}
-			.counter {
-				gap: 6px;
+			.detail {
+				gap: 8px;
 				width: fit-content;
 				display: flex;
 				position: relative;
@@ -355,7 +377,7 @@
 			gap: 16px;
 			display: flex;
 			flex-wrap: wrap;
-			a {
+			& > a {
 				flex: 1 1 calc(50% - 64px);
 				display: flex;
 				padding: 16px;
@@ -393,6 +415,26 @@
 							line-height: normal;
 						}
 					}
+				}
+				.details {
+					gap: 8px;
+					height: fit-content;
+					margin: 16px 0 0;
+					display: flex;
+					p {
+						gap: 6px;
+						color: var(--color-secondary);
+						margin: 0;
+						display: flex;
+						padding: 4px 8px;
+						font-size: .75em;
+						box-shadow: 0 0 0 1px var(--border-secondary);
+						align-items: center;
+						border-radius: 16px;
+					}
+				}
+				&:hover {
+					box-shadow: inset 0 0 0 1px var(--border-secondary);
 				}
 			}
 		}
