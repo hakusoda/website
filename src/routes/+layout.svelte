@@ -128,7 +128,7 @@
 			</DropdownMenu.Root>
 			<DropdownMenu.Root bind:trigger={userMenuTrigger}>
 				<button class="user focusable" type="button" slot="trigger" on:click={userMenuTrigger}>
-					<Avatar src={data.user.avatar_url} size="xs" circle/>
+					<Avatar id={data.user.id} src={data.user.avatar_url} size="xs" circle/>
 					<p class="name">{data.user.name ?? data.user.username}</p>
 					<CaretDown/>
 				</button>

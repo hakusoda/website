@@ -18,7 +18,6 @@
 	import Star from '$lib/icons/Star.svelte';
 	import Burger from '$lib/icons/Burger.svelte';
 	import Person from '$lib/icons/Person.svelte';
-	import People from '$lib/icons/People.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import Voxelified from '$lib/icons/Voxelified.svelte';
@@ -98,7 +97,7 @@
 <div class="main">
 	<div class="card">
 		<div class="header">
-			<Avatar src={newAvatarUri ?? data.avatar_url} hover circle/>
+			<Avatar id={data.id} src={newAvatarUri ?? data.avatar_url} hover circle/>
 			<div class="name">
 				<h1>{editName || data.username}</h1>
 				<p>@{data.username}</p>

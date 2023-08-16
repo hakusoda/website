@@ -39,7 +39,7 @@
 <div class="main">
 	<div class="card">
 		<div class="header">
-			<Avatar src={data.avatar_url} hover/>
+			<Avatar id={data.id} src={data.avatar_url} hover/>
 			<div class="name">
 				<h1>
 					{data.display_name}
@@ -138,7 +138,7 @@
 			<div class="members">
 				{#each data.members as item}
 					<a class="member" href={`/user/${item.username}`}>
-						<Avatar src={item.avatar_url} size="sm2" hover circle/>
+						<Avatar id={item.id} src={item.avatar_url} size="sm2" hover circle/>
 						<div class="name">
 							<h1>
 								{#if item.id === data.owner?.id}

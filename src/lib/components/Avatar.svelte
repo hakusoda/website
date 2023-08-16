@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { getDefaultAvatar } from '$lib/util';
+	export let id: string = '0';
 	export let src: string | null = null;
 	export let size: 'xxxs' | 'xxs' | 'xs' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let hover = false;
@@ -6,21 +8,18 @@
 	export let background = '';
 	export let transparent = false;
 
-	import Question from '../icons/Question.svelte';
 	$: style = `background: ${background};`;
-	$: className = `avatar ${size}${circle ? ' circle' : ''}${transparent ? ' transparent' : ''}${hover ? ' hover' : ''}`;
+	$: className = `avatar ${size}${circle && src ? ' circle' : ''}${transparent ? ' transparent' : ''}${hover ? ' hover' : ''}`;
+
+	$: image = src || getDefaultAvatar(id);
 </script>
 
-{#if src}
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class={className} {style} on:click>
-		<img {src} alt="avatar"/>
-		<slot/>
-	</div>
-{:else}
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class={className} {style} on:click><Question size={32}/></div>
-{/if}
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div class={className} {style} on:click>
+	<img src={image} alt="avatar"/>
+	<slot/>
+</div>
 
 <style lang="scss">
 	.avatar {

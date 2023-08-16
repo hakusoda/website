@@ -1,5 +1,14 @@
 import { UserNotificationType } from '$lib/enums';
 import type { UserNotification } from '../types';
+export function getDefaultAvatar(id: string) {
+	let hash = 0;
+	for (let i = 0; i < id.length; i++)
+		hash = id.charCodeAt(i) + ((hash << 5) - hash);
+	hash = Math.abs(hash);
+
+	return `/img/avatar/default_${Math.floor(hash % 6) + 1}.svg`;
+}
+
 export function createDiscordRedirectUri(origin: string) {
 	return `${origin}/roblox/verify/platform/discord`;
 }

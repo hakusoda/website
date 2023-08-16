@@ -16,7 +16,7 @@
 			<div class="members">
 				{#each data.members as item}
 					<div class="item">
-						<Avatar src={item.user.avatar_url} size="sm" circle/>
+						<Avatar id={item.user.id} src={item.user.avatar_url} size="sm" circle/>
 						<div class="details">
 							<a href={`/user/${item.user.username}`}>
 								{item.user.name || item.user.username}
@@ -41,7 +41,7 @@
 			<div class="members">
 				{#each data.invites as item}
 					<div class="item">
-						<Avatar src={item.user.avatar_url} size="sm" circle/>
+						<Avatar id={item.user.id} src={item.user.avatar_url} size="sm" circle/>
 						<div class="details">
 							<a href={`/user/${item.user.username}`}>
 								{item.user.name || item.user.username}
