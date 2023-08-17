@@ -11,6 +11,7 @@
 	import Check from '../icons/Check.svelte';
 	export let name: string;
 	export let image: string | null = null;
+	export let circle = true;
 	export let result: ArrayBuffer | null;
 	export let resultUri: string | null;
 
@@ -57,7 +58,7 @@
 
 <div class="avatar-file">
 	{#if image}
-		<Avatar src={image} size="sm" circle/>
+		<Avatar src={image} size="sm" {circle}/>
 	{/if}
 	<Button on:click={() => input.click()}>
 		{$t('action.choose_file')}
@@ -69,12 +70,12 @@
 {#if image2}
 	<div class="avatar-cropper">
 		<div class="avatar-cropper-modal">
-			<div class="cropper">
+			<div class="cropper" class:circle>
 				<img src={image2} alt="" bind:this={img} on:load={createCropper}/>
 			</div>
 			<div class="controls">
 				<div class="preview">
-					<div class="avatar" style={`--i: url("${image2}"); --z: ${zoom * 100}%; --x: ${crop.x}px; --y: ${crop.y}px;`}/>
+					<div class="avatar" class:circle style={`--i: url("${image2}"); --z: ${zoom * 100}%; --x: ${crop.x}px; --y: ${crop.y}px;`}/>
 					<h1>{name}</h1>
 				</div>
 				<div class="buttons">
@@ -159,8 +160,10 @@
 				:global(.cropper-wrap-box) {
 					overflow: hidden;
 				}
-				:global(.cropper-view-box), :global(.cropper-face) {
-					border-radius: 50%;
+				&.circle {
+					:global(.cropper-view-box), :global(.cropper-face) {
+						border-radius: 50%;
+					}
 				}
 			}
 			.controls {
@@ -168,6 +171,7 @@
 				margin-left: 16px;
 				flex-direction: column;
 				.preview {
+					margin: 32px 0 0;
 					display: flex;
 					align-items: center;
 					.avatar {
@@ -175,9 +179,12 @@
 						height: 128px;
 						background: var(--i);
 						box-shadow: 0 8px 16px 2px #00000040;
-						border-radius: 50%;
+						border-radius: 8px;
 						background-size: var(--z);
 						background-position: var(--x) var(--y);
+						&.circle {
+							border-radius: 50%;
+						}
 					}
 					h1 {
 						margin: 0 32px 0 32px;

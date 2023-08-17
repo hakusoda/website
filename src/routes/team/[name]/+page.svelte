@@ -265,8 +265,12 @@
 				align-items: end;
 				a {
 					gap: 8px;
+					color: var(--color-link);
 					display: flex;
 					align-items: center;
+					:global(svg) {
+						color: var(--color-primary);
+					}
 				}
 				.buttons {
 					gap: 8px;
