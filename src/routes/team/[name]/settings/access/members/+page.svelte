@@ -5,9 +5,12 @@
 	import type { PageData } from './$types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import TeamSettingsMember from '$lib/components/TeamSettingsMember.svelte';
 	export let data: PageData;
 
 	let tab = 0;
+
+	$: myRole = data.members.find(member => member.user.id === data.user?.id)?.role;
 </script>
 
 <div class="main">
@@ -15,25 +18,19 @@
 		<Tabs.Item title={$t('team.settings.access.members.tab', [data.members.length])} value={0}>
 			<div class="members">
 				{#each data.members as item}
-					<div class="item">
-						<Avatar id={item.user.id} src={item.user.avatar_url} size="sm" circle/>
-						<div class="details">
-							<a href={`/user/${item.user.username}`}>
-								{item.user.name || item.user.username}
-								<p>@{item.user.username}</p>
-							</a>
-							<p>
-								{#if item.role}
-									{item.role.name} •
-								{/if}{$t('profile.joined', [item.joined_at])}{#if item.inviter}
-									, {$t('team_invite.author2')}
-									<a href={`/user/${item.inviter.username}`}>
-										{item.inviter.name || item.inviter.username}
-									</a>
-								{/if}
-							</p>
-						</div>
-					</div>
+					<TeamSettingsMember
+						id={item.user.id}
+						role={item.role}
+						name={item.user.name}
+						roles={data.roles}
+						owner={data.owner_id}
+						avatar={item.user.avatar_url}
+						teamId={data.id}
+						inviter={item.inviter}
+						joinedAt={item.joined_at}
+						username={item.user.username}
+						{myRole}
+					/>
 				{/each}
 			</div>
 		</Tabs.Item>
@@ -73,31 +70,6 @@
 			gap: 8px;
 			display: flex;
 			flex-direction: column;
-			.item {
-				display: flex;
-				padding: 12px 16px;
-				background: var(--background-secondary);
-				align-items: center;
-				border-radius: 16px;
-				.details {
-					margin-left: 16px;
-					& > a {
-						gap: 8px;
-						margin: 0;
-						display: flex;
-						line-height: 1;
-						font-weight: 500;
-						align-items: center;
-						p { margin: 0; }
-					}
-					p {
-						color: var(--color-secondary);
-						margin: 4px 0 0;
-						font-size: .9em;
-						font-weight: 400;
-					}
-				}
-			}
 		}
 		.tip {
 			color: var(--color-secondary);

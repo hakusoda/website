@@ -9,8 +9,10 @@ export const load = (async ({ params: { name } }) => {
 	const response = await supabase.from('teams').select<string, {
 		members: {
 			role: {
+				id: string
 				name: string
 				position: number
+				permissions: number
 			}
 			user: PartialUser
 			inviter: PartialUser | null
@@ -21,7 +23,7 @@ export const load = (async ({ params: { name } }) => {
 			author: PartialUser | null
 			created_at: string
 		}[]
-	}>('members:team_members ( role:team_roles ( name, position ), user:users!team_members_user_id_fkey ( id, name, username, avatar_url ), inviter:users!team_members_inviter_id_fkey ( name, username ), joined_at ), invites:team_invites( user:users!team_invites_user_id_fkey ( id, name, username, avatar_url ), author:users!team_invites_author_id_fkey ( name, username ), created_at )').eq(isUUID(name) ? 'id' : 'name', name).limit(1).single();
+	}>('members:team_members ( role:team_roles ( id, name, position, permissions ), user:users!team_members_user_id_fkey ( id, name, username, avatar_url ), inviter:users!team_members_inviter_id_fkey ( name, username ), joined_at ), invites:team_invites( user:users!team_invites_user_id_fkey ( id, name, username, avatar_url ), author:users!team_invites_author_id_fkey ( name, username ), created_at )').eq(isUUID(name) ? 'id' : 'name', name).limit(1).single();
 	if (response.error) {
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.ExternalRequestError);

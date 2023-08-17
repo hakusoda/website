@@ -20,6 +20,7 @@ export default {
 		'action.duplicate': 'Duplicate',
 		'action.try_again': 'Try Again',
 		'action.leave_team': 'Leave Team',
+		'action.change_role': 'Change Role',
 		'action.invite_team': 'Invite to Team',
 		'action.acknowledge': 'Acknowledge',
 		'action.get_support': 'Get Support',
@@ -32,6 +33,7 @@ export default {
 
 		'label.none': 'None',
 		'label.disabled': 'Disabled',
+		'label.team_roles': 'Team Roles',
 		'label.roblox_link_id': 'Link ID: {0}',
 		'label.search.members': 'Search Members',
 		'label.roblox_link_deleted': 'This Roblox Link was recently deleted, and can no longer be viewed.',

@@ -1,6 +1,6 @@
-import type { User, RobloxUser, ApiResponse, PartialRobloxUser, UpdateTeamPayload, CreateTeamResponse, UpdateProfilePayload, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
-export const API_BASE = 'https://api.voxelified.com/v1';
-//export const API_BASE = 'http://localhost:3000/v1';
+import type { User, RobloxUser, ApiResponse, PartialRobloxUser, UpdateTeamPayload, CreateTeamResponse, UpdateProfilePayload, UpdateTeamMemberPayload, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
+//export const API_BASE = 'https://api.voxelified.com/v1';
+export const API_BASE = 'http://localhost:3000/v1';
 
 export function getUser(userId: string) {
 	return request<User>(`user/${userId}`).then(response => response.success ? response.data : null);
@@ -120,6 +120,12 @@ export function acceptTeamInvite(token: string, teamId: string, inviteId: string
 
 export function rejectTeamInvite(token: string, teamId: string, inviteId: string) {
 	return request(`team/${teamId}/invite/${inviteId}`, 'DELETE', null, {
+		authorization: `Bearer ${token}`
+	});
+}
+
+export function updateTeamMember(token: string, teamId: string, userId: string, payload: UpdateTeamMemberPayload) {
+	return request(`team/${teamId}/member/${userId}`, 'PATCH', payload, {
 		authorization: `Bearer ${token}`
 	});
 }

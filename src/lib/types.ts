@@ -286,8 +286,14 @@ export interface CreateTeamResponse {
 }
 
 export interface UpdateTeamPayload {
+	bio?: string | null
 	name?: string
+	website_url?: string | null
 	display_name?: string
+}
+
+export interface UpdateTeamMemberPayload {
+	role_id: string | null
 }
 
 export interface UpdateProfilePayload {
