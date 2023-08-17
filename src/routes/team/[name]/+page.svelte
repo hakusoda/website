@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Tabs, Button, DropdownMenu } from '@voxelified/voxeliface';
+	import { Tabs, Button, Select, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
 	import { hasBit } from '$lib/util';
@@ -8,8 +8,8 @@
 	import { TeamFlag, TeamRolePermission } from '$lib/enums';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Markdown from '$lib/components/Markdown.svelte';
 	import TeamInvite from '$lib/modals/TeamInvite.svelte';
-	import Description from '$lib/components/Description.svelte';
 
 	import Star from '$lib/icons/Star.svelte';
 	import Link from '$lib/icons/Link.svelte';
@@ -26,6 +26,9 @@
 
 	let tab = 0;
 	let dropdownTrigger: () => void;
+
+	let memberSort = 0;
+	let memberFilter = '';
 
 	const leave = async () => {
 		const response = await leaveTeam(data.session!.access_token, data.id);
@@ -59,7 +62,7 @@
 			{#if data.website_url}
 				<a href={data.website_url}>
 					<Link/>
-					{data.website_url.replace(/^https?:\/\//g, '').replace(/\#.*$/g, '')}
+					{data.website_url.replace(/^https?:\/\//g, '').replace(/\#.*$/g, '').replace(/^www\./, '').replace(/^(.*?\/.*?\/).*?(\/.+)/, (_, a, b) => `${a}...${b}`)}
 				</a>
 			{/if}
 			<div class="buttons">
@@ -73,7 +76,7 @@
 						<ThreeDotsVertical/>
 					</Button>
 					<p>{data.display_name} (@{data.name})</p>
-					{#if data.user && data.user.id !== data.owner?.id}
+					{#if data.user && data.user.id !== data.owner?.id && data.members.some(member => member.id === data.user?.id)}
 						<button type="button" on:click={leave}>
 							<BoxArrowRight/>{$t('action.leave_team')}
 						</button>
@@ -87,11 +90,11 @@
 		</div>
 		{#if data.bio}
 			<div class="separator"/>
-			<Description value={data.bio}/>
+			<Markdown source={data.bio}/>
 		{/if}
 		{#if data.affiliations.length || data.parent_affiliations.length}
 			<div class="separator"/>
-			<div class="counter">
+			<div class="detail">
 				<People/>
 				<p>{$t('team.affiliations')}</p>
 			</div>
@@ -105,7 +108,7 @@
 			</div>
 		{/if}
 		<div class="separator"/>
-		<div class="counter">
+		<div class="detail">
 			<Person/>
 			<p>
 				{$t(`team.owner.${!!data.owner}`)}
@@ -116,7 +119,7 @@
 				{/if}
 			</p>
 		</div>
-		<div class="counter">
+		<div class="detail">
 			<Sunrise/>
 			<p>
 				{$t(`team.created.${!!data.creator}`, [data.created_at])}
@@ -128,15 +131,28 @@
 			</p>
 		</div>
 		<div class="separator"/>
-		<div class="counter">
+		<div class="detail">
 			<Star/>
 			<p>{$t('team.id', [data.id])}</p>
 		</div>
 	</div>
 	<Tabs.Root bind:value={tab}>
 		<Tabs.Item title={$t('team.members', [data.members.length])} value={0}>
+			<div class="members-options">
+				<TextInput bind:value={memberFilter} placeholder={$t('label.search.members')}/>
+				
+				<p>{$t('sort_by')}</p>
+				<Select.Root bind:value={memberSort}>
+					<Select.Item value={0}>
+						{$t('sort_by.name')}
+					</Select.Item>
+					<Select.Item value={1}>
+						{$t('sort_by.join_date')}
+					</Select.Item>
+				</Select.Root>
+			</div>
 			<div class="members">
-				{#each data.members as item}
+				{#each data.members.filter(item => item.name?.toLowerCase().includes(memberFilter.toLowerCase()) || item.username.toLowerCase().includes(memberFilter.toLowerCase())).sort((a, b) => memberSort ? Date.parse(b.joined_at) - Date.parse(a.joined_at) : 0) as item}
 					<a class="member" href={`/user/${item.username}`}>
 						<Avatar id={item.id} src={item.avatar_url} size="sm2" hover circle/>
 						<div class="name">
@@ -264,8 +280,8 @@
 				margin: 16px 0;
 				background: var(--border-secondary);
 			}
-			.counter {
-				gap: 6px;
+			.detail {
+				gap: 8px;
 				width: fit-content;
 				display: flex;
 				position: relative;
@@ -291,6 +307,16 @@
 		}
 		:global(.tabs-container) {
 			flex: 1 1 40%;
+		}
+		.members-options {
+			margin: 0 0 16px;
+			display: flex;
+			align-items: center;
+			p {
+				color: var(--color-secondary);
+				margin: 0 16px 0 auto;
+				font-size: .9em;
+			}
 		}
 		.members {
 			gap: 16px 32px;

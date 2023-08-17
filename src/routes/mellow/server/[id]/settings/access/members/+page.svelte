@@ -70,18 +70,18 @@
 
 	<div class="fade"/>
 	<div class="search">
-		<TextInput bind:value={query} placeholder={$t('mellow.server.settings.access.members.search')}/>
+		<TextInput bind:value={query} placeholder={$t('label.search.members')}/>
 
-		<p class="sort">{$t('mellow.server.settings.access.members.sort')}</p>
+		<p class="sort">{$t('sort_by')}</p>
 		<Select.Root bind:value={sortBy}>
 			<Select.Item value={0}>
-				{$t('mellow.server.settings.access.members.sort.type.0')}
+				{$t('sort_by.name')}
 			</Select.Item>
 			<Select.Item value={1}>
-				{$t('mellow.server.settings.access.members.sort.type.1')}
+				{$t('sort_by.join_date')}
 			</Select.Item>
 			<Select.Item value={2}>
-				{$t('mellow.server.settings.access.members.sort.type.2')}
+				{$t('sort_by.sync_status')}
 			</Select.Item>
 		</Select.Root>
 	</div>

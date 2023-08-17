@@ -33,8 +33,14 @@ export default {
 		'label.none': 'None',
 		'label.disabled': 'Disabled',
 		'label.roblox_link_id': 'Link ID: {0}',
+		'label.search.members': 'Search Members',
 		'label.roblox_link_deleted': 'This Roblox Link was recently deleted, and can no longer be viewed.',
 		'label.originally_created_by': 'Originally created by',
+
+		'sort_by': 'Sort by',
+		'sort_by.name': 'Name',
+		'sort_by.join_date': 'Join Date',
+		'sort_by.sync_status': 'Sync Status',
 
 		'home': 'Home',
 		'home.landing': 'under construction...',
@@ -182,11 +188,6 @@ export default {
 		'mellow.server.settings.access.members.summary': 'This is a list of all members in the connected Discord Server, along with their syncing information.',
 		'mellow.server.settings.access.members.item.syncable.false': 'Not connected to a Roblox Account',
 		'mellow.server.settings.access.members.item.syncable.true': 'Syncing as',
-		'mellow.server.settings.access.members.search': 'Search Members',
-		'mellow.server.settings.access.members.sort': 'Sort by',
-		'mellow.server.settings.access.members.sort.type.0': 'Name',
-		'mellow.server.settings.access.members.sort.type.1': 'Join Date',
-		'mellow.server.settings.access.members.sort.type.2': 'Sync Status',
 
 		'mellow.server.settings.logging': 'Logging',
 		'mellow.server.settings.logging.channel': 'Logging Channel',

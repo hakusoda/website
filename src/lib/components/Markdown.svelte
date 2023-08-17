@@ -5,8 +5,9 @@
 	import MarkdownLink from './MarkdownLink.svelte';
 	import MarkdownImage from './MarkdownImage.svelte';
 	export let source: string;
+	export let inline = false;
 </script>
 
 <div class="markdown">
-	<Markdown {source} renderers={{ link: MarkdownLink, image: MarkdownImage }}/>
+	<Markdown {source} isInline={inline} renderers={{ link: MarkdownLink, image: MarkdownImage }}/>
 </div>
