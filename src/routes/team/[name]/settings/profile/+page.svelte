@@ -33,7 +33,7 @@
 		saving = !(error = null);
 		
 		const response = await updateTeam(data.session!.access_token, data.id, {
-			bio: bio === data.bio ? undefined : bio,
+			bio: bio === data.bio ? undefined : bio || null,
 			name: name === data.name ? undefined : name,
 			website_url: websiteUrl === data.website_url ? undefined : websiteUrl || null,
 			display_name: displayName === data.display_name ? undefined : displayName
@@ -96,7 +96,7 @@
 	/>
 
 	<UnsavedChanges
-		show={bio !== data.bio || name !== data.name || displayName !== data.display_name || websiteUrl !== (data.website_url ?? '') || !!newAvatar}
+		show={bio !== (data.bio ?? '') || name !== data.name || displayName !== data.display_name || websiteUrl !== (data.website_url ?? '') || !!newAvatar}
 		error={error ? $t(`request_error.${error.error}`) : ''}
 		{save}
 		{reset}
