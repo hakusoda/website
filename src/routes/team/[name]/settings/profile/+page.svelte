@@ -9,8 +9,10 @@
 	import { updateTeam, uploadTeamAvatar } from '$lib/api';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Markdown from '$lib/components/Markdown.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
+	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
 
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	export let data: PageData;
@@ -23,6 +25,8 @@
 	let websiteUrl = data.website_url ?? '';
 	let displayName = data.display_name;
 	$: name = name.slice(0, 20).toLowerCase().replace(/ /g, '_').replace(/\W/g, '');
+	
+	let bioEdit = true;
 
 	let newAvatar: Uint8Array | null = null;
 	let newAvatarUri: string | null = null;
@@ -80,8 +84,21 @@
 		</div>
 	</div>
 
-	<p class="input-label">{$t('profile.bio')}</p>
-	<TextInput bind:value={bio} multiline placeholder={$t('profile.bio.empty.team')}/>
+	<SegmentedControl title={$t('profile.bio')} bind:value={bioEdit}>
+		<svelte:fragment slot="true">
+			{$t('action.edit')}
+		</svelte:fragment>
+		<svelte:fragment slot="false">
+			{$t('action.preview')}
+		</svelte:fragment>
+	</SegmentedControl>
+	{#if bioEdit}
+		<TextInput bind:value={bio} multiline placeholder={$t('profile.bio.empty.team')}/>
+	{:else}
+		<div class="bio-preview">
+			<Markdown source={bio}/>
+		</div>
+	{/if}
 
 	<p class="input-label">{$t('team.settings.profile.website_url')}</p>
 	<TextInput bind:value={websiteUrl} placeholder="https://example.com"/>
@@ -145,12 +162,18 @@
 		}
 		.input-row {
 			gap: 16px;
+			margin: 0 0 32px;
 			display: flex;
 		}
 		.input-label {
 			color: var(--color-secondary);
 			margin: 32px 0 8px;
 			font-size: .9em;
+		}
+		.bio-preview {
+			padding: 20px 24px;
+			background: var(--background-secondary);
+			border-radius: 16px;
 		}
 		:global(.text-input) {
 			width: 100%;

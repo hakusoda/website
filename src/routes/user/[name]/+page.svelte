@@ -13,6 +13,7 @@
 	import Markdown from '$lib/components/Markdown.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
+	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
 
 	import X from '$lib/icons/X.svelte';
 	import Star from '$lib/icons/Star.svelte';
@@ -30,6 +31,7 @@
 	export let data: PageData;
 
 	let saving = false;
+	let bioEdit = true;
 	let editing = false;
 	let editBio = data.bio || '';
 	let editName = data.name || data.username;
@@ -182,8 +184,19 @@
 			<p class="field-label">{$t('profile.name')}</p>
 			<TextInput bind:value={editName} placeholder={data.username}/>
 
-			<p class="field-label">{$t('profile.bio')}</p>
-			<TextInput bind:value={editBio} multiline placeholder={$t('profile.bio.empty')}/>
+			<SegmentedControl title={$t('profile.bio')} bind:value={bioEdit}>
+				<svelte:fragment slot="true">
+					{$t('action.edit')}
+				</svelte:fragment>
+				<svelte:fragment slot="false">
+					{$t('action.preview')}
+				</svelte:fragment>
+			</SegmentedControl>
+			{#if bioEdit}
+				<TextInput bind:value={editBio} multiline placeholder={$t('profile.bio.empty')}/>
+			{:else}
+				<Markdown source={editBio}/>
+			{/if}
 
 			<p class="field-label">{$t('profile.avatar')}</p>
 			<AvatarFile name={data.name ?? data.username} image={data.avatar_url} bind:result={newAvatar} bind:resultUri={newAvatarUri}/>
@@ -326,6 +339,9 @@
 				&:first-of-type {
 					margin-top: 16px;
 				}
+			}
+			:global(.segmented-control) {
+				margin: 32px 0 8px;
 			}
 			:global(.text-input) {
 				width: 100%;

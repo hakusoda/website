@@ -16,6 +16,7 @@ export default {
 		'action.manage': 'Manage',
 		'action.copy_id': 'Copy ID',
 		'action.go_home': 'Go Home',
+		'action.preview': 'Preview',
 		'action.continue': 'Continue',
 		'action.duplicate': 'Duplicate',
 		'action.try_again': 'Try Again',
