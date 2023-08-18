@@ -1,6 +1,6 @@
 import type { User, RobloxUser, ApiResponse, PartialRobloxUser, UpdateTeamPayload, CreateTeamResponse, UpdateProfilePayload, UpdateTeamRolePayload, UpdateTeamMemberPayload, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
-//export const API_BASE = 'https://api.voxelified.com/v1';
-export const API_BASE = 'http://localhost:3000/v1';
+export const API_BASE = 'https://api.voxelified.com/v1';
+//export const API_BASE = 'http://localhost:3000/v1';
 
 export function getUser(userId: string) {
 	return request<User>(`user/${userId}`).then(response => response.success ? response.data : null);
