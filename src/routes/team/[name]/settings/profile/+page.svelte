@@ -18,9 +18,9 @@
 	let error: RequestError | null = null;
 	let saving = false;
 
-	let bio = data.bio;
+	let bio = data.bio ?? '';
 	let name = data.name;
-	let websiteUrl = data.website_url;
+	let websiteUrl = data.website_url ?? '';
 	let displayName = data.display_name;
 	$: name = name.slice(0, 20).toLowerCase().replace(/ /g, '_').replace(/\W/g, '');
 
@@ -48,7 +48,7 @@
 
 		saving = !(error = response);
 	};
-	const reset = () => (bio = data.bio, name = data.name, websiteUrl = data.website_url, displayName = data.display_name, newAvatar = null, newAvatarUri = null, error = null);
+	const reset = () => (bio = data.bio ?? '', name = data.name, websiteUrl = data.website_url ?? '', displayName = data.display_name, newAvatar = null, newAvatarUri = null, error = null);
 </script>
 
 <div class="main">
