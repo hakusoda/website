@@ -172,6 +172,7 @@
 				display: flex;
 				padding: 16px 20px;
 				background: var(--background-secondary);
+				align-items: center;
 				border-radius: 16px;
 				.name {
 					margin-left: 16px;
