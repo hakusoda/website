@@ -153,7 +153,7 @@
 			</div>
 			{#if data.bio}
 				<div class="separator"/>
-				<Markdown source={data.bio.replace(/https:\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g, url => `[${url.substring(8)}](${url})`)}/>
+				<Markdown source={data.bio}/>
 			{/if}
 			<div class="separator"/>
 			<div class="detail">
