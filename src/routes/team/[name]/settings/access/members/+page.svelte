@@ -37,24 +37,16 @@
 		<Tabs.Item title={$t('team.settings.access.members.invites', [data.invites.length])} value={1}>
 			<div class="members">
 				{#each data.invites as item}
-					<div class="item">
-						<Avatar id={item.user.id} src={item.user.avatar_url} size="sm" circle/>
-						<div class="details">
-							<a href={`/user/${item.user.username}`}>
-								{item.user.name || item.user.username}
-								<p>@{item.user.username}</p>
-							</a>
-							{#if item.author}
-								<p>
-									{$t('team_invite.author')}
-									<a href={`/user/${item.author.username}`}>
-										{item.author.name || item.author.username}
-									</a>
-									{$t('time_ago', [item.created_at])}
-								</p>
-							{/if}
-						</div>
-					</div>
+					<TeamSettingsMember
+						id={item.user.id}
+						name={item.user.name}
+						teamId={data.id}
+						avatar={item.user.avatar_url}
+						inviter={item.author}
+						isInvite
+						joinedAt={item.created_at}
+						username={item.user.username}
+					/>
 				{/each}
 			</div>
 		</Tabs.Item>

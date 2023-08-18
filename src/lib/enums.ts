@@ -80,7 +80,12 @@ export enum TeamAuditLogType {
 	CreateProject,
 	UpdateProject,
 	UpdateProjectAvatar,
-	UpdateProjectBanner
+	UpdateProjectBanner,
+	CreateRole,
+	UpdateRole,
+	DeleteRole,
+	UpdateMember,
+	InviteUser
 }
 
 export enum ProjectFlag {

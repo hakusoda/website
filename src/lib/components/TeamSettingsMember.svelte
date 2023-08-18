@@ -25,6 +25,7 @@
 		username: string
 		avatar_url: string
 	} | null = null
+	export let isInvite = false;
 	export let username: string;
 	export let joinedAt: string;
 
@@ -68,11 +69,14 @@
 		<p>
 			{#if role}
 				{role.name} •
-			{/if}{$t('profile.joined', [joinedAt])}{#if inviter}
-				, {$t('team_invite.author2')}
+			{/if}{isInvite ? '' : $t('profile.joined', [joinedAt])}{#if inviter}
+				{#if !isInvite}, {/if}{$t(isInvite ? 'team_invite.author' : 'team_invite.author2')}
 				<a href={`/user/${inviter.username}`}>
 					{inviter.name || inviter.username}
 				</a>
+				{#if isInvite}
+					{$t('time_ago', [joinedAt])}
+				{/if}
 			{/if}
 		</p>
 	</div>
