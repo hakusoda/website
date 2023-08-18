@@ -296,6 +296,12 @@ export interface UpdateTeamMemberPayload {
 	role_id: string | null
 }
 
+export interface UpdateTeamRolePayload {
+	name?: string
+	position?: number
+	permissions?: number
+}
+
 export interface UpdateProfilePayload {
 	bio?: string | null
 	name?: string | null

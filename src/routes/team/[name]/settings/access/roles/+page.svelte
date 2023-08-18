@@ -1,35 +1,158 @@
 <script lang="ts">
-	import { t } from '$lib/localisation';
-	import type { PageData } from './$types';
+	import { Button, TextInput } from '@voxelified/voxeliface';
 
+	import { t } from '$lib/localisation';
+	import { hasBit } from '$lib/util';
+	import type { PageData } from './$types';
+	import { updateTeamRole } from '$lib/api';
+	import type { RequestError } from '$lib/types';
+	import { TeamRolePermission } from '$lib/enums';
+
+	import Radio from '$lib/components/Radio.svelte';
+	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
+
+	import ArrowLeft from '$lib/icons/ArrowLeft.svelte';
+	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
+	import ArrowRightShort from '$lib/icons/ArrowRightShort.svelte';
 	export let data: PageData;
+
+	let error: RequestError | null = null;
+	let saving = false;
+	let editing: typeof data['roles'][number] | null = null;
+	let editingName = '';
+	let editingPermissions = 0;
+	$: editingName = editingName.substring(0, 20);
+	$: editingHasAdmin = hasBit(editingPermissions, TeamRolePermission.Administrator);
+
+	const save = async () => {
+		saving = !(error = null);
+
+		const response = await updateTeamRole(data.session!.access_token, data.id, editing!.id, {
+			name: editingName === editing!.name ? undefined : editingName
+		});
+		if (!response.success)
+			return saving = !(error = response);
+
+		editing!.name = editingName, editing!.permissions = editingPermissions;
+		saving = !!(editing = null);
+	};
+	const reset = () => (editingName = editing!.name, editingPermissions = editing!.permissions);
 </script>
 
 <div class="team-roles">
-	<h1>{$t('team.settings.access.roles')}</h1>
-	<p class="summary">{$t('team.settings.access.roles.summary')}</p>
-	<div class="items">
-		{#each data.roles as item}
-			<div class="item">
-				<PeopleFill size={32}/>
-				<div class="name">
-					<h1>{item.name}</h1>
-					<p>
-						{$t(`team.created.${!!item.creator}`, [item.created_at])}
-						{#if item.creator}
-							<a href={`/user/${item.creator.username}`}>
-								{item.creator.name || `@${item.creator.username}`}
-							</a>
-						{/if}
-					</p>
+	{#if !editing}
+		<h1>{$t('team.settings.access.roles')}</h1>
+		<p class="summary">{$t('team.settings.access.roles.summary')}</p>
+
+		<div class="items">
+			{#each data.roles as item}
+				<div class="item">
+					<PeopleFill size={32}/>
+					<div class="name">
+						<h1>{item.name}</h1>
+						<p>
+							{$t(`team.created.${!!item.creator}`, [item.created_at])}
+							{#if item.creator}
+								<a href={`/user/${item.creator.username}`}>
+									{item.creator.name || `@${item.creator.username}`}
+								</a>
+							{/if}
+						</p>
+					</div>
+					{#if data.user?.id === data.owner_id || hasBit(data.members.find(member => member.id === data.user?.id)?.role.permissions ?? 0, TeamRolePermission.ManageRoles)}
+						<div class="buttons">
+							<Button on:click={() => (editing = item, reset())}>
+								<PencilFill/>{$t('action.edit')}
+							</Button>
+						</div>
+					{/if}
 				</div>
+			{/each}
+		</div>
+	{:else}
+		<h1>
+			{$t('team.settings.access.roles')}
+			<ArrowRightShort size={40}/>
+			<p>{editing.name}</p>
+		</h1>
+		<button type="button" class="return" on:click={() => editing = null}>
+			<ArrowLeft/>{$t('team.settings.access.roles.return')}
+		</button>
+
+		<p class="input-label">{$t('mellow_link_editor.name')}</p>
+		<TextInput bind:value={editingName}/>
+
+		<p class="input-label">{$t('label.permissions')}</p>
+		<div class="permissions">
+			<!-- TODO: not do this... -->
+			<div class="item">
+				<Radio
+					value={hasBit(editingPermissions, TeamRolePermission.InviteUsers)}
+					disabled={editingHasAdmin}
+					onChange={() => editingPermissions ^= TeamRolePermission.InviteUsers}
+				/>
+				<p>{$t('team_role_permission.2')}</p>
 			</div>
-		{/each}
-	</div>
+			<div class="item">
+				<Radio
+					value={hasBit(editingPermissions, TeamRolePermission.ManageMembers)}
+					disabled={editingHasAdmin}
+					onChange={() => editingPermissions ^= TeamRolePermission.ManageMembers}
+				/>
+				<p>{$t('team_role_permission.4')}</p>
+			</div>
+			<div class="item">
+				<Radio
+					value={hasBit(editingPermissions, TeamRolePermission.ManageRoles)}
+					disabled={editingHasAdmin}
+					onChange={() => editingPermissions ^= TeamRolePermission.ManageRoles}
+				/>
+				<p>{$t('team_role_permission.8')}</p>
+			</div>
+			<div class="item">
+				<Radio
+					value={hasBit(editingPermissions, TeamRolePermission.ManageTeam)}
+					disabled={editingHasAdmin}
+					onChange={() => editingPermissions ^= TeamRolePermission.ManageTeam}
+				/>
+				<p>{$t('team_role_permission.1')}</p>
+			</div>
+			<div class="item admin">
+				<Radio
+					value={hasBit(editingPermissions, TeamRolePermission.Administrator)}
+					onChange={() => editingPermissions ^= TeamRolePermission.Administrator}
+				/>
+				<p>{$t('team_role_permission.16')}</p>
+			</div>
+		</div>
+
+		<UnsavedChanges
+			show={editingName !== editing.name || editingPermissions !== editing.permissions}
+			error={error ? $t(`request_error.${error.error}`) : ''}
+			{save}
+			{reset}
+			{saving}
+		/>
+	{/if}
 </div>
 
 <style lang="scss">
+	h1 {
+		display: flex;
+		line-height: normal;
+		:global(svg) {
+			color: var(--color-secondary);
+			margin: 0 12px;
+			animation: appear .5s;
+		}
+		p {
+			margin: 0;
+			opacity: 0;
+			animation: appear .5s .25s forwards;
+			line-height: normal;
+		}
+	}
 	.team-roles {
 		width: 100%;
 		margin: 32px 64px;
@@ -63,7 +186,58 @@
 						font-size: .8em;
 					}
 				}
+				.buttons {
+					gap: 16px;
+					margin: 0 0 0 auto;
+					display: flex;
+				}
 			}
+		}
+	}
+	.return {
+		gap: 8px;
+		color: var(--color-secondary);
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		display: flex;
+		font-size: .9em;
+		background: none;
+		align-items: center;
+		font-family: var(--font-primary);
+		&:hover {
+			color: var(--color-primary);
+		}
+	}
+	.input-label {
+		color: var(--color-secondary);
+		margin: 32px 0 8px;
+		font-size: .9em;
+	}
+	.permissions {
+		gap: 8px;
+		display: flex;
+		flex-direction: column;
+		.item {
+			display: flex;
+			align-items: center;
+			p {
+				margin: 0 0 0 16px;
+				font-size: .9em;
+			}
+			&.admin {
+				margin-top: 24px;
+			}
+		}
+	}
+	@keyframes appear {
+		0% {
+			opacity: 0;
+			transform: translateX(-16px);
+		}
+		100% {
+			opacity: 1;
+			transform: none;
 		}
 	}
 </style>

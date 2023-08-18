@@ -2,9 +2,11 @@
 	import X from '$lib/icons/X.svelte';
 	import Check from '$lib/icons/Check.svelte';
 	export let value: boolean;
+	export let disabled = false;
+	export let onChange: ((newValue: boolean) => void) | null = null;
 </script>
 
-<button type="button" class="focusable" class:value on:click={() => value = !value}>
+<button type="button" class="focusable" class:value {disabled} on:click={() => (value = !value, onChange?.(value))}>
 	{#if value}
 		<Check/>
 	{:else}
@@ -32,13 +34,17 @@
 			box-shadow: none;
 			background: var(--button-background);
 		}
-		&:hover {
+		&:not(:disabled):hover {
 			color: var(--button-color);
 			box-shadow: inset 0 0 0 1px var(--button-background);
 			&.value {
 				background: none;
 				box-shadow: inset 0 0 0 1px var(--button-background);
 			}
+		}
+		&:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
 		}
 	}
 </style>

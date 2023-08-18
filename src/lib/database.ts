@@ -1,7 +1,8 @@
 import supabase from './supabase';
 import { isUUID, hasBit } from './util';
+import { TeamRolePermission } from './enums';
 import type { User, RobloxLink, DatabaseTeam, UserNotification } from './types';
-import type { RobloxLinkType, TeamAuditLogType, TeamRolePermission, MellowServerAuditLogType } from './enums';
+import type { RobloxLinkType, TeamAuditLogType, MellowServerAuditLogType } from './enums';
 export function getUserRobloxLinks(userId: string, linkType?: RobloxLinkType) {
 	const filter = supabase.from('roblox_links').select<string, RobloxLink>('*').eq('owner', userId);
 	if (linkType !== undefined)
@@ -108,6 +109,8 @@ export async function hasTeamPermissions(teamId: string, userId: string, permiss
 	if (!response.data.role)
 		return false;
 
+	if (hasBit(response.data.role.permissions, TeamRolePermission.Administrator))
+		return true;
 	for (const bit of permissions)
 		if (!hasBit(response.data.role.permissions, bit))
 			return false;

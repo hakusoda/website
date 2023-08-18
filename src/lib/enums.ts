@@ -13,7 +13,9 @@ export enum TeamRolePermission {
 	None,
 	ManageTeam = 1 << 0,
 	InviteUsers = 1 << 1,
-	ManageMembers = 1 << 2
+	ManageMembers = 1 << 2,
+	ManageRoles = 1 << 3,
+	Administrator = 1 << 4
 }
 
 export enum RobloxLinkType {

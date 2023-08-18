@@ -35,6 +35,7 @@ export default {
 		'label.none': 'None',
 		'label.disabled': 'Disabled',
 		'label.team_roles': 'Team Roles',
+		'label.permissions': 'Permissions',
 		'label.roblox_link_id': 'Link ID: {0}',
 		'label.search.members': 'Search Members',
 		'label.roblox_link_deleted': 'This Roblox Link was recently deleted, and can no longer be viewed.',
@@ -93,6 +94,7 @@ export default {
 		'team.settings.access.members.invites.tip': 'You can invite people to the team by going to their profile, and tapping on the options menu.',
 		'team.settings.access.roles': 'Roles',
 		'team.settings.access.roles.summary': 'Use roles to group your team members and assign permissions.',
+		'team.settings.access.roles.return': 'Return to Roles',
 		'team.settings.archive': 'Archive',
 		'team.settings.archive.audit_log': 'Audit Log',
 
@@ -115,6 +117,12 @@ export default {
 		'project.id': 'Project ID: {0}',
 
 		'team_role.unknown': 'No Role',
+
+		'team_role_permission.1': 'Manage Team',
+		'team_role_permission.2': 'Invite Users',
+		'team_role_permission.4': 'Manage Members',
+		'team_role_permission.8': 'Manage Roles',
+		'team_role_permission.16': 'All Permissions (Dangerous!)',
 
 		'user_role.2': 'Staff',
 		'user_role.4': 'Tester',
@@ -351,6 +359,7 @@ export default {
 		'request_error.cannot_leave_team': 'You cannot leave this team as its current owner.',
 		'request_error.invalid_id': 'An identifier associated with this request was deemed invalid, please file a bug report.',
 		'request_error.username_taken': 'That username has already been taken by another user.',
+		'request_error.no_permission_target_role': 'You do not have permission to manage this role.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 
