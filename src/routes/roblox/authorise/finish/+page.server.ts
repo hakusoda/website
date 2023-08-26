@@ -60,9 +60,9 @@ export const load = (async ({ url, parent }) => {
 
 	const response4 = await supabase.from('roblox_links').insert({
 		type: RobloxLinkType.User,
-		owner: session.user.id,
 		flags: RobloxLinkFlag.None,
 		public: false,
+		owner_id: session.user.id,
 		target_id: response3.data.sub
 	}).select('id');
 	if (response4.error) {
@@ -89,7 +89,7 @@ export const actions = {
 		const data = await request.text();
 		const response4 = await supabase.from('roblox_links').update({
 			flags: RobloxLinkFlag.Verified
-		}).eq('id', data).eq('owner', session.user.id);
+		}).eq('id', data).eq('owner_id', session.user.id);
 		if (response4.error) {
 			console.error(response4.error);
 			throw error(500, 'something went wrong...');
