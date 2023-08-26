@@ -5,18 +5,23 @@
 	import { hasBit } from '$lib/util';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
-	import type { RequestError } from '$lib/types';
+	import type { RequestError, ApiRequestError } from '$lib/types';
 	import { TeamFlag, UserFlags, RequestErrorType } from '$lib/enums';
-	import { uploadAvatar, updateProfile, createTeamInvite } from '$lib/api';
+	import { uploadAvatar, updateProfile, createUserPost, createTeamInvite, uploadPostAttachments } from '$lib/api';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
+	import RequestErrorUI from '$lib/components/RequestError.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
 
 	import X from '$lib/icons/X.svelte';
+	import Chat from '$lib/icons/Chat.svelte';
 	import Star from '$lib/icons/Star.svelte';
+	import Plus from '$lib/icons/Plus.svelte';
+	import Trash from '$lib/icons/Trash.svelte';
+	import Heart from '$lib/icons/Heart.svelte';
 	import Burger from '$lib/icons/Burger.svelte';
 	import Person from '$lib/icons/Person.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
@@ -87,6 +92,30 @@
 			burgering = false;
 	};
 
+	let creatingPost = false;
+	let createPostError: ApiRequestError | null = null;
+	let createPostContent = '';
+	let createPostAttachments: [string, ArrayBuffer, string][] = [];
+	
+	const createPost = async () => {
+		creatingPost = !(createPostError = null);
+
+		const attachments = createPostAttachments.length ? await uploadPostAttachments(createPostAttachments.map(item => [item[1], item[2]])) : [];
+		const response = await createUserPost(data.session!.access_token, data.user!.id, {
+			content: createPostContent,
+			attachments
+		});
+
+		creatingPost = false;
+		if (!response.success)
+			return createPostError = response;
+
+		const zero: [{ count: number }] = [{ count: 0 }];
+		data.posts = [{ ...response.data, likes: zero, comments: zero }, ...data.posts];
+		createPostContent = '';
+		createPostAttachments = [];
+	};
+
 	let dropdownTrigger: () => void;
 
 	const inviteToTeam = async (teamId: string) => {
@@ -97,6 +126,15 @@
 			alert($t(`request_error.${result.error as 0}`));
 	};
 </script>
+
+<svelte:window on:paste={async event => {
+	if (createPostAttachments.length < 2) {
+		const files = event.clipboardData?.files;
+		if (files)
+			for (const file of Array.from(files))
+				createPostAttachments = [...createPostAttachments, [URL.createObjectURL(file), await file.arrayBuffer(), file.type]];
+	}
+}}/>
 
 <div class="main">
 	<div class="card">
@@ -203,15 +241,66 @@
 
 			<div class="edit-buttons">
 				<Button on:click={() => editing = false} disabled={saving}>
-					<X/>
-					{$t('action.cancel')}
+					<X/>{$t('action.cancel')}
 				</Button>
 			</div>
 		{/if}
 	</div>
-	{#if data.teams.length}
-		<Tabs.Root value={0}>
-			<Tabs.Item title={$t('profile.teams', [data.teams.length])} value={0}>
+	<Tabs.Root value={0}>
+		<Tabs.Item title={$t('profile.posts', [data.posts.length])} value={0}>
+			<div class="posts">
+				{#if data.session && data.id === data.session.user.id}
+					<div class="create">
+						<TextInput bind:value={createPostContent} multiline placeholder={$t('profile.posts.create.placeholder')}/>
+						<Button on:click={createPost} disabled={creatingPost}>
+							<Plus/>{$t('profile.posts.create')}
+						</Button>
+					</div>
+					<div class="create-attachments">
+						{#each createPostAttachments as image}
+							<div>
+								<img src={image[0]} alt=""/>
+								<button type="button" on:click={() => createPostAttachments = createPostAttachments.filter(item => item !== image)}>
+									<Trash/>
+								</button>
+							</div>
+						{/each}
+					</div>
+					<RequestErrorUI data={createPostError} background="var(--background-primary)"/>
+				{/if}
+				{#each data.posts as item}
+					<a class="item" href={`/user/${data.username}/post/${item.id}`}>
+						<div class="header">
+							<Avatar id={data.id} src={data.avatar_url} size="xs" circle/>
+							<p class="author">
+								<a href={`/user/${data.username}`}>
+									{data.name ?? `@${data.username}`}
+								</a>
+								{$t('profile_post.posted', [item.created_at])}
+							</p>
+						</div>
+						<Markdown source={item.content}/>
+						{#if item.attachments.length}
+							<div class="attachments">
+								{#each item.attachments as attachment}
+									<img src={attachment.url} alt=""/>
+								{/each}
+							</div>
+						{/if}
+						<div class="details">
+							<p>
+								<Chat/>{$t('number', [item.comments[0].count])}
+							</p>
+							<p>
+								<Heart/>{$t('number', [item.likes[0].count])}
+							</p>
+						</div>
+					</a>
+				{/each}
+			</div>
+		</Tabs.Item>
+		{#if data.teams.length}
+			<Tabs.Item title={$t('profile.teams', [data.teams.length])} value={1}>
 				<div class="teams">
 					{#each data.teams as item}
 						<a href={`/team/${item.name}`}>
@@ -251,8 +340,8 @@
 					{/each}
 				</div>
 			</Tabs.Item>
-		</Tabs.Root>
-	{/if}
+		{/if}
+	</Tabs.Root>
 </div>
 
 <UnsavedChanges
@@ -388,6 +477,101 @@
 		}
 		:global(.tabs-container) {
 			flex: 1 1 40%;
+		}
+		.posts {
+			gap: 16px;
+			display: flex;
+			flex-direction: column;
+			.create {
+				gap: 16px;
+				display: flex;
+				:global(.text-input) {
+					width: 100%;
+				}
+			}
+			.create-attachments {
+				gap: 16px;
+				display: flex;
+				div {
+					width: 128px;
+					height: 128px;
+					position: relative;
+					img {
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+						border-radius: 8px;
+					}
+					button {
+						top: 8px;
+						right: 8px;
+						color: var(--color-primary);
+						border: none;
+						cursor: pointer;
+						opacity: 0;
+						padding: 6px;
+						display: flex;
+						position: absolute;
+						background: var(--background-tertiary);
+						border-radius: 4px;
+						&:hover {
+							background: #914343;
+						}
+					}
+					&:hover button {
+						opacity: 1
+					}
+				}
+			}
+			.item {
+				padding: 16px;
+				background: var(--background-secondary);
+				border-radius: 16px;
+				text-decoration: none;
+				.header {
+					margin: 0 0 12px;
+					display: flex;
+					align-items: center;
+					.author {
+						color: var(--color-secondary);
+						margin: 0;
+						font-size: .95em;
+						margin-left: 12px;
+					}
+				}
+				.attachments {
+					gap: 16px;
+					width: 100%;
+					margin: 24px 0 0;
+					display: flex;
+					overflow: hidden;
+					img {
+						flex: 1 0 0;
+						width: 0;
+						border-radius: 8px;
+					}
+				}
+				.details {
+					gap: 16px;
+					margin: 24px 0 0;
+					display: flex;
+					p {
+						gap: 8px;
+						color: var(--color-secondary);
+						margin: 0;
+						cursor: pointer;
+						display: flex;
+						font-size: .9em;
+						align-items: center;
+						&:hover {
+							color: var(--color-primary);
+						}
+					}
+				}
+				&:hover {
+					box-shadow: inset 0 0 0 1px var(--border-secondary);
+				}
+			}
 		}
 		.teams {
 			gap: 16px;

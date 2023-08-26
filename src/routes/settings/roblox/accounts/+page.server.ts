@@ -55,7 +55,7 @@ export const actions = {
 		if (!isUUID(id))
 			return requestFail(400, RequestErrorType.InvalidBody);
 
-		const response = await supabase.from('roblox_links').delete().eq('id', id).eq('owner', session.user.id);
+		const response = await supabase.from('roblox_links').delete().eq('id', id).eq('owner_id', session.user.id);
 		if (response.error) {
 			console.error(response.error);
 			return requestFail(500, RequestErrorType.DatabaseUpdate);
@@ -93,7 +93,7 @@ export const actions = {
 
 		const response = await supabase.from('roblox_links').update({
 			public: value === 'true'
-		}).eq('id', id).eq('owner', session.user.id);
+		}).eq('id', id).eq('owner_id', session.user.id);
 		if (response.error) {
 			console.error(response.error);
 			return requestFail(500, RequestErrorType.DatabaseUpdate);

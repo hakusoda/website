@@ -121,7 +121,8 @@ export enum RequestErrorType {
 	ExternalRequestError,
 	NotFound,
 	NoPermission,
-	NameTooShort
+	NameTooShort,
+	FetchError
 }
 
 // https://discord.com/developers/docs/resources/channel#channel-object-channel-types

@@ -49,7 +49,7 @@
 	});
 	const finish = () => {
 		const canvas = cropper!.getCroppedCanvas();
-		canvas.toBlob(blob => blob?.arrayBuffer().then(b => result = b), 'image/png');
+		canvas.toBlob(blob => blob?.arrayBuffer().then(b => result = b), 'image/webp');
 		
 		resultUri = canvas.toDataURL();
 		image2 = null;

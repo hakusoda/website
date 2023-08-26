@@ -335,3 +335,18 @@ export interface CreateMellowServerRobloxLinkResponse {
 	}[]
 	requirements_type: MellowBindRequirementsType
 }
+
+export interface CreateUserPostPayload {
+	content: string
+	attachments?: {
+		url: string
+	}[]
+}
+export interface CreateUserPostResponse {
+	id: string
+	content: string
+	created_at: string
+	attachments: {
+		url: string
+	}[]
+}

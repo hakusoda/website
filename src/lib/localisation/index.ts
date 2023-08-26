@@ -11,11 +11,15 @@ const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 		const diff = Date.now() - date.getTime();
 		const year = Math.floor(diff / 31536000000);
 		if (year > 0)
-			return trans(ta(5, year), [year]);
+			return trans(ta(6, year), [year]);
 
 		const month = Math.floor(diff / 2628000000);
 		if (month > 0)
-			return trans(ta(4, month), [month]);
+			return trans(ta(5, month), [month]);
+
+		const week = Math.floor(diff / 604800000);
+		if (week > 0)
+			return trans(ta(4, week), [week]);
 
 		const day = Math.floor(diff / 86400000);
 		if (day > 0) {
@@ -33,7 +37,7 @@ const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 			return trans(ta(1, minute), [minute]);
 
 		const second = Math.floor(diff / 1000);
-		if (!second)
+		if (second < 2)
 			return trans('time_ago.0_1');
 		return trans(ta(0, second), [second]);
 	},

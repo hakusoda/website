@@ -4,10 +4,14 @@ import { TeamRolePermission } from './enums';
 import type { User, RobloxLink, DatabaseTeam, UserNotification } from './types';
 import type { RobloxLinkType, TeamAuditLogType, MellowServerAuditLogType } from './enums';
 export function getUserRobloxLinks(userId: string, linkType?: RobloxLinkType) {
-	const filter = supabase.from('roblox_links').select<string, RobloxLink>('*').eq('owner', userId);
+	const builder = supabase.from('roblox_links')
+		.select<string, RobloxLink>('*')
+		.eq('owner_id', userId);
+
 	if (linkType !== undefined)
-		filter.eq('type', linkType);
-	return filter.then(response => {
+		builder.eq('type', linkType);
+
+	return builder.then(response => {
 		if (response.error)
 			return [];
 		return response.data;
