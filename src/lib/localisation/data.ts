@@ -156,8 +156,14 @@ export default {
 
 		'login.github' : 'Continue with GitHub',
 		'login.discord': 'Continue with Discord',
+		'login.signup': 'Create an account',
 
-		'signup': 'Create an Account',
+		'signin.social': 'Sign in with',
+		'signin.manual': 'Or use a security key',
+		'signin.manual.name': 'Enter your username',
+
+		'signup.social': 'Sign up with',
+		'signup.manual': 'Or create an account yourself',
 
 		'create_profile': 'Set-up your profile',
 		'create_profile.username': 'Enter username',
