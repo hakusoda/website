@@ -6,6 +6,7 @@ export default {
 		'action.reset': 'Reset',
 		'action.retry': 'Retry',
 		'action.leave': 'Leave',
+		'action.later': 'Later',
 		'action.accept': 'Accept',
 		'action.cancel': 'Cancel',
 		'action.delete': 'Delete',
@@ -154,16 +155,14 @@ export default {
 		'user_action.settings': 'Settings',
 		'user_action.other.logout': 'Sign out',
 
-		'login.github' : 'Continue with GitHub',
-		'login.discord': 'Continue with Discord',
-		'login.signup': 'Create an account',
-
 		'signin.social': 'Sign in with',
 		'signin.manual': 'Or use a security key',
 		'signin.manual.name': 'Enter your username',
+		'signin.signup': 'Create an account',
 
 		'signup.social': 'Sign up with',
 		'signup.manual': 'Or create an account yourself',
+		'signup.signin': 'Already have an account?',
 
 		'create_profile': 'Set-up your profile',
 		'create_profile.username': 'Enter username',
@@ -375,6 +374,7 @@ export default {
 		'request_error.9': 'You do not have permission to complete this action.',
 		'request_error.10': 'The name you provide must be at-least 3 characters long.',
 		'request_error.11': 'Please refresh the page, restart your browser, or check your internet connection and try again.',
+		'request_error.12': 'This feature is currently unavailable, please try again later...',
 		'request_error.unauthorised': 'You don\'t have permission to access this resource.',
 		'request_error.invalid_body': 'There were issues with your request, please change your input and try again.',
 		'request_error.database_error': 'An unexpected error occurred while accessing our database, please try again in a few minutes.',
@@ -439,6 +439,10 @@ export default {
 		'modal.team_invite.welcome.summary': 'You are now a member of {0}, woo-hoo!',
 		'modal.unsaved_changes': 'You have unsaved changes!',
 		'modal.unsaved_changes.saving': 'Saving...',
-		'modal.unsaved_changes.error': 'Failed to save changes.'
+		'modal.unsaved_changes.error': 'Failed to save changes.',
+		'modal.setup_profile': 'Create your profile',
+		'modal.setup_profile.summary': 'Last step! It\'s time to set-up your public profile...',
+		'modal.setup_profile.welcome': 'Welcome to Voxelified!',
+		'modal.setup_profile.welcome.summary': 'You are now a fellow member of our little community, neat!'
 	}
 };

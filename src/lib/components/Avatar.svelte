@@ -9,7 +9,7 @@
 	export let transparent = false;
 
 	$: style = `background: ${background};`;
-	$: className = `avatar ${size}${circle && src ? ' circle' : ''}${transparent ? ' transparent' : ''}${hover ? ' hover' : ''}`;
+	$: className = `avatar ${size}${circle && (src && !src.startsWith('/img/avatar/')) ? ' circle' : ''}${transparent ? ' transparent' : ''}${hover ? ' hover' : ''}`;
 
 	$: image = src || getDefaultAvatar(id);
 </script>

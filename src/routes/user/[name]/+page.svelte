@@ -14,8 +14,10 @@
 	import Markdown from '$lib/components/Markdown.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
-	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
+
+	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
+	import SetupUserProfile from '$lib/modals/SetupUserProfile.svelte';
 
 	import X from '$lib/icons/X.svelte';
 	import Chat from '$lib/icons/Chat.svelte';
@@ -352,12 +354,16 @@
 </div>
 
 <UnsavedChanges
-	show={data.user?.id === data.id && (editName !== data.name || editBio !== data.bio || !!newAvatar)}
+	show={data.user?.id === data.id && (editName !== (data.name ?? data.username) || editBio !== (data.bio ?? '') || !!newAvatar)}
 	error={saveError ? $t(`request_error.${saveError.error}`) : ''}
 	{save}
 	{reset}
 	{saving}
 />
+
+{#if !data.is_edited}
+	<SetupUserProfile/>
+{/if}
 
 <svelte:head>
 	<title>{data.name ?? data.username}</title>

@@ -43,6 +43,7 @@ export const load = (async ({ params: { name }, parent }) => {
 			type: UserNotificationType
 		}[]
 		username: string
+		is_edited: boolean
 		avatar_url: string
 		created_at: string
 		team_invites: {
@@ -51,7 +52,7 @@ export const load = (async ({ params: { name }, parent }) => {
 		roblox_links: {
 			target_id: number
 		}[]
-	}>('id, bio, name, flags, username, avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( role:team_roles ( name ), team:teams ( id, name, flags, owner:users!teams_owner_id_fkey ( name, username ), avatar_url, display_name, members:team_members ( count ) ) ), team_invites!team_invites_user_id_fkey ( team_id ), roblox_links!roblox_links_owner_id_fkey ( target_id ), burger:user_notifications!user_notifications_user_id_fkey ( type ), posts:profile_posts ( id, content, created_at, likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( count ), attachments:profile_post_attachments ( url ) )').eq(isUUID(name) ? 'id' : 'username', name).eq('roblox_links.public', true).gte('roblox_links.flags', 2).eq('user_notifications.target_user_id', session?.user.id ?? EMPTY_UUID).eq('user_notifications.type', UserNotificationType.SOMETHING).is('profile_posts.parent_post_id', null).order('created_at', { ascending: false, foreignTable: 'profile_posts' }).limit(1).maybeSingle();
+	}>('id, bio, name, flags, username, is_edited, avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( role:team_roles ( name ), team:teams ( id, name, flags, owner:users!teams_owner_id_fkey ( name, username ), avatar_url, display_name, members:team_members ( count ) ) ), team_invites!team_invites_user_id_fkey ( team_id ), roblox_links!roblox_links_owner_id_fkey ( target_id ), burger:user_notifications!user_notifications_user_id_fkey ( type ), posts:profile_posts ( id, content, created_at, likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( count ), attachments:profile_post_attachments ( url ) )').eq(isUUID(name) ? 'id' : 'username', name).eq('roblox_links.public', true).gte('roblox_links.flags', 2).eq('user_notifications.target_user_id', session?.user.id ?? EMPTY_UUID).eq('user_notifications.type', UserNotificationType.SOMETHING).is('profile_posts.parent_post_id', null).order('created_at', { ascending: false, foreignTable: 'profile_posts' }).limit(1).maybeSingle();
 	if (response.error) {
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.ExternalRequestError);

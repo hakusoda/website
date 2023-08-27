@@ -160,7 +160,7 @@
 				</button>
 			</DropdownMenu.Root>
 		{:else if !data.session}
-			<a href="/signin" class="nav-link signin">
+			<a href="/sign-in" class="nav-link signin">
 				<BoxArrowInRight/>{$t('action.sign_in')}
 			</a>
 		{/if}
