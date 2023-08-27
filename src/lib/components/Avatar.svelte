@@ -89,6 +89,9 @@
 			width: 96px;
 			height: 96px;
 			border-radius: 8px;
+			&.hover {
+				filter: drop-shadow(0 8px 8px #00000040);
+			}
 		}
 		&.lg {
 			width: 128px;

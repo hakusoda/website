@@ -15,6 +15,7 @@ export default {
 		'action.finish': 'Finish',
 		'action.manage': 'Manage',
 		'action.copy_id': 'Copy ID',
+		'action.sign_in': 'Sign in',
 		'action.go_home': 'Go Home',
 		'action.preview': 'Preview',
 		'action.continue': 'Continue',
@@ -29,7 +30,6 @@ export default {
 		'action.edit_profile': 'Edit Profile',
 		'action.view_profile': 'View Profile',
 		'action.save_changes': 'Save Changes',
-		'action.create_account': 'Create Account',
 		'action.view_roblox_link': 'View Roblox Link',
 
 		'label.none': 'None',
