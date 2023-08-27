@@ -1927,6 +1927,11 @@ svelte-markdown@^0.3.0:
     "@types/marked" "^4.0.1"
     marked "^4.0.10"
 
+svelte-media-queries@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/svelte-media-queries/-/svelte-media-queries-1.5.4.tgz#ad78aed88eaea062ae38c7990738487022d14c11"
+  integrity sha512-+qH3lDk3DhAC3Gsuw05P30+LMjp9gmF/4+fsnVHLYYsx8fM56f4ZJ0SZjm+lp+PSLot5N3uQXYDTvPcYGGC40Q==
+
 svelte-preprocess@^5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-5.0.4.tgz#2123898e079a074f7f4ef1799e10e037f5bcc55b"

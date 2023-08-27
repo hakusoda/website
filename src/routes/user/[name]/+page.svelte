@@ -1,10 +1,11 @@
 <script lang="ts">
+	import MediaQuery from 'svelte-media-queries';
 	import { Tabs, Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { hasBit } from '$lib/util';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
+	import { hasBit, getDefaultAvatar } from '$lib/util';
 	import type { RequestError, ApiRequestError } from '$lib/types';
 	import { TeamFlag, UserFlags, RequestErrorType } from '$lib/enums';
 	import { uploadAvatar, updateProfile, createUserPost, createTeamInvite, uploadPostAttachments } from '$lib/api';
@@ -34,6 +35,8 @@
 	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
 	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
 	export let data: PageData;
+
+	$: avatar = data.avatar_url || getDefaultAvatar(data.id);
 
 	let saving = false;
 	let bioEdit = true;
@@ -137,114 +140,118 @@
 }}/>
 
 <div class="main">
-	<div class="card">
-		<div class="header">
-			<Avatar id={data.id} src={newAvatarUri ?? data.avatar_url} hover circle/>
-			<div class="name">
-				<h1>{editName || data.username}</h1>
-				<p>@{data.username}</p>
-			</div>
-		</div>
-		{#if !editing}
-			<div class="buttons">
-				<div class="roles">
-					{#each Object.values(UserFlags) as flag}
-						{#if typeof flag === 'number' && flag && (data.flags & flag) === flag}
-							<p class="role"><StarFill/>{$t(`user_role.${flag}`)}</p>
-						{/if}
-					{/each}
+	<div class="card-container">
+		<div class="card">
+			<div class="header">
+				<MediaQuery query="(min-width: 512px)" let:matches>
+					<Avatar src={newAvatarUri ?? avatar} size={matches ? 'lg' : 'md'} hover circle/>
+				</MediaQuery>
+				<div class="name">
+					<h1>{editName || data.username}</h1>
+					<p>@{data.username}</p>
 				</div>
-				{#if data.id === data.user?.id}
-					<Button on:click={() => editing = true}>
-						<PencilFill/>{$t('action.edit_profile')}
-					</Button>
-				{:else if data.session}
-					<Button on:click={burger} disabled={burgering || data.burger.length} title={$t(`profile.burger.${!!data.burger.length}`)}>
-						<Burger/>
-					</Button>
-				{/if}
-				<DropdownMenu.Root bind:trigger={dropdownTrigger}>
-					<Button slot="trigger" on:click={dropdownTrigger}>
-						<ThreeDotsVertical/>
-					</Button>
-					<p>{data.name || data.username} (@{data.username})</p>
-					{#if data.session && data.id !== data.session.user.id}
-						<DropdownMenu.Sub>
-							<svelte:fragment slot="trigger">
-								<EnvelopePlusFill/>{$t('action.invite_team')}
-							</svelte:fragment>
-
-							<p>{$t('profile.invite')}</p>
-							{#each data.my_teams as item}
-								<button type="button" on:click={() => inviteToTeam(item.id)}>
-									<Avatar src={item.avatar_url} size="xxs" transparent/>
-									{item.display_name}
-								</button>
-							{/each}
-						</DropdownMenu.Sub>
-						<div class="separator"/>
+			</div>
+			{#if !editing}
+				<div class="buttons">
+					<div class="roles">
+						{#each Object.values(UserFlags) as flag}
+							{#if typeof flag === 'number' && flag && (data.flags & flag) === flag}
+								<p class="role"><StarFill/>{$t(`user_role.${flag}`)}</p>
+							{/if}
+						{/each}
+					</div>
+					{#if data.id === data.user?.id}
+						<Button on:click={() => editing = true}>
+							<PencilFill/>{$t('action.edit_profile')}
+						</Button>
+					{:else if data.session}
+						<Button on:click={burger} disabled={burgering || data.burger.length} title={$t(`profile.burger.${!!data.burger.length}`)}>
+							<Burger/>
+						</Button>
 					{/if}
-					<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
-						<ClipboardPlusFill/>{$t('action.copy_id')}
-					</button>
-				</DropdownMenu.Root>
-			</div>
-			{#if data.bio}
-				<div class="separator"/>
-				<Markdown source={data.bio}/>
-			{/if}
-			<div class="separator"/>
-			<div class="detail">
-				<Sunrise/>
-				<p>{$t('profile.joined', [data.created_at])}</p>
-			</div>
-			{#if data.roblox_links.length}
+					<DropdownMenu.Root bind:trigger={dropdownTrigger}>
+						<Button slot="trigger" on:click={dropdownTrigger}>
+							<ThreeDotsVertical/>
+						</Button>
+						<p>{data.name || data.username} (@{data.username})</p>
+						{#if data.session && data.id !== data.session.user.id}
+							<DropdownMenu.Sub>
+								<svelte:fragment slot="trigger">
+									<EnvelopePlusFill/>{$t('action.invite_team')}
+								</svelte:fragment>
+	
+								<p>{$t('profile.invite')}</p>
+								{#each data.my_teams as item}
+									<button type="button" on:click={() => inviteToTeam(item.id)}>
+										<Avatar src={item.avatar_url} size="xxs" transparent/>
+										{item.display_name}
+									</button>
+								{/each}
+							</DropdownMenu.Sub>
+							<div class="separator"/>
+						{/if}
+						<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
+							<ClipboardPlusFill/>{$t('action.copy_id')}
+						</button>
+					</DropdownMenu.Root>
+				</div>
+				{#if data.bio}
+					<div class="separator"/>
+					<Markdown source={data.bio}/>
+				{/if}
 				<div class="separator"/>
 				<div class="detail">
-					<Person/>
-					<p>{$t('profile.roblox')}</p>
+					<Sunrise/>
+					<p>{$t('profile.joined', [data.created_at])}</p>
 				</div>
-				<div class="roblox">
-					{#each data.roblox_users as item}
-						<a href={`https://roblox.com/users/${item.id}/profile`} target="_blank">
-							<Avatar src={item.icon.imageUrl} size="xxs" circle/>
-							{item.displayName}
-						</a>
-					{/each}
+				{#if data.roblox_links.length}
+					<div class="separator"/>
+					<div class="detail">
+						<Person/>
+						<p>{$t('profile.roblox')}</p>
+					</div>
+					<div class="roblox">
+						{#each data.roblox_users as item}
+							<a href={`https://roblox.com/users/${item.id}/profile`} target="_blank">
+								<Avatar src={item.icon.imageUrl} size="xxs" circle/>
+								{item.displayName}
+							</a>
+						{/each}
+					</div>
+				{/if}
+				<div class="separator"/>
+				<div class="detail">
+					<Star/>
+					<p>{$t('profile.id', [data.id])}</p>
 				</div>
-			{/if}
-			<div class="separator"/>
-			<div class="detail">
-				<Star/>
-				<p>{$t('profile.id', [data.id])}</p>
-			</div>
-		{:else}
-			<p class="field-label">{$t('profile.name')}</p>
-			<TextInput bind:value={editName} placeholder={data.username}/>
-
-			<SegmentedControl title={$t('profile.bio')} bind:value={bioEdit}>
-				<svelte:fragment slot="true">
-					{$t('action.edit')}
-				</svelte:fragment>
-				<svelte:fragment slot="false">
-					{$t('action.preview')}
-				</svelte:fragment>
-			</SegmentedControl>
-			{#if bioEdit}
-				<TextInput bind:value={editBio} multiline placeholder={$t('profile.bio.empty')}/>
 			{:else}
-				<Markdown source={editBio}/>
+				<p class="field-label">{$t('profile.name')}</p>
+				<TextInput bind:value={editName} placeholder={data.username}/>
+	
+				<SegmentedControl title={$t('profile.bio')} bind:value={bioEdit}>
+					<svelte:fragment slot="true">
+						{$t('action.edit')}
+					</svelte:fragment>
+					<svelte:fragment slot="false">
+						{$t('action.preview')}
+					</svelte:fragment>
+				</SegmentedControl>
+				{#if bioEdit}
+					<TextInput bind:value={editBio} multiline placeholder={$t('profile.bio.empty')}/>
+				{:else}
+					<Markdown source={editBio}/>
+				{/if}
+	
+				<p class="field-label">{$t('profile.avatar')}</p>
+				<AvatarFile name={data.name ?? data.username} image={avatar} bind:result={newAvatar} bind:resultUri={newAvatarUri}/>
+	
+				<div class="edit-buttons">
+					<Button on:click={() => editing = false} disabled={saving}>
+						<X/>{$t('action.cancel')}
+					</Button>
+				</div>
 			{/if}
-
-			<p class="field-label">{$t('profile.avatar')}</p>
-			<AvatarFile name={data.name ?? data.username} image={data.avatar_url} bind:result={newAvatar} bind:resultUri={newAvatarUri}/>
-
-			<div class="edit-buttons">
-				<Button on:click={() => editing = false} disabled={saving}>
-					<X/>{$t('action.cancel')}
-				</Button>
-			</div>
-		{/if}
+		</div>
 	</div>
 	<Tabs.Root value={0}>
 		<Tabs.Item title={$t('profile.posts', [data.posts.length])} value={0}>
@@ -271,7 +278,7 @@
 				{#each data.posts as item}
 					<a class="item" href={`/user/${data.username}/post/${item.id}`}>
 						<div class="header">
-							<Avatar id={data.id} src={data.avatar_url} size="xs" circle/>
+							<Avatar src={avatar} size="xs" circle/>
 							<p class="author">
 								<a href={`/user/${data.username}`}>
 									{data.name ?? `@${data.username}`}
@@ -317,24 +324,24 @@
 								</div>
 							</div>
 							<div class="details">
-								<p>
+								<div>
 									<PersonFill size={14}/>
-									{item.role?.name ?? $t('team_role.unknown')}
-								</p>
-								<p>
+									<p>{item.role?.name ?? $t('team_role.unknown')}</p>
+								</div>
+								<div>
 									<StarFill size={14}/>
 									{#if item.owner}
 										<a href={`/user/${item.owner.username}`}>
 											{item.owner.name || item.owner.username}
 										</a>
 									{:else}
-										{$t('team.owner.none')}
+										<p>{$t('team.owner.none')}</p>
 									{/if}
-								</p>
-								<p>
+								</div>
+								<div>
 									<PeopleFill size={14}/>
-									{$t('members', [item.members[0].count])}
-								</p>
+									<p>{$t('members', [item.members[0].count])}</p>
+								</div>
 							</div>
 						</a>
 					{/each}
@@ -356,7 +363,7 @@
 	<title>{data.name ?? data.username}</title>
 	<meta content={`${data.name ?? data.username} (@${data.username})`} property="og:title">
 	<meta content={data.bio} property="og:description">
-	<meta content={data.avatar_url} property="og:image">
+	<meta content={avatar} property="og:image">
 	<meta name="og:type" content="profile">
 	<meta property="profile:username" content={data.username}>
 </svelte:head>
@@ -364,119 +371,145 @@
 <style lang="scss">
 	.main {
 		gap: 32px;
-		margin: 128px 32px 16px;
+		margin: 128px 32px;
 		display: flex;
 		flex-wrap: wrap;
-		.card {
-			width: 416px;
-			height: fit-content;
-			padding: 24px;
+		@media (max-width: 512px) {
+			margin: 120px 0;
+		}
+		.card-container {
+			width: 480px;
+			display: flex;
 			position: relative;
-			min-width: 416px;
-			background: var(--background-secondary);
-			padding-top: 32px;
-			border-radius: 16px;
-			.header {
-				gap: 32px;
-				top: -96px;
+			min-width: 480px;
+			margin-left: auto;
+			.card {
+				height: fit-content;
 				display: flex;
-				position: absolute;
-				align-items: center;
-				.name {
-					margin-bottom: 16px;
-					h1 {
-						width: max-content;
-						margin: 0;
-						font-size: 2.5em;
-					}
-					p {
-						color: var(--color-secondary);
-						margin: 4px 0 0;
-					}
-				}
-			}
-			.buttons {
-				gap: 8px;
-				display: flex;
-				justify-content: end;
-				.roles {
-					gap: 16px;
-					height: auto;
+				padding: 24px;
+				overflow: hidden;
+				background: var(--background-secondary);
+				padding-top: 32px;
+				border-radius: 16px;
+				flex-direction: column;
+				.header {
+					gap: 32px;
+					top: -96px;
 					display: flex;
-					margin-top: 24px;
-					align-items: end;
-					margin-right: auto;
-					.role {
-						gap: 8px;
-						color: hsl(260 80% 80%);
-						margin: 0;
-						display: flex;
-						font-weight: 500;
-						align-items: center;
+					position: absolute;
+					align-items: center;
+					.name {
+						margin-bottom: 16px;
+						h1 {
+							width: max-content;
+							margin: 0;
+							font-size: 2.5em;
+						}
+						p {
+							color: var(--color-secondary);
+							margin: 4px 0 0;
+						}
+					}
+					@media (max-width: 512px) {
+						top: -80px;
 					}
 				}
-			}
-			.edit-buttons {
-				gap: 16px;
-				display: flex;
-				margin-top: 16px;
-			}
-			.field-label {
-				color: var(--color-secondary);
-				margin: 24px 0 8px;
-				font-size: .9em;
-				&:first-of-type {
+				.buttons {
+					gap: 8px;
+					display: flex;
+					align-items: end;
+					justify-content: end;
+					.roles {
+						gap: 16px;
+						height: auto;
+						display: flex;
+						margin-top: 24px;
+						align-items: end;
+						margin-right: auto;
+						.role {
+							gap: 8px;
+							color: hsl(260 80% 80%);
+							margin: 0;
+							display: flex;
+							font-weight: 500;
+							align-items: center;
+						}
+					}
+				}
+				.edit-buttons {
+					gap: 16px;
+					display: flex;
 					margin-top: 16px;
 				}
-			}
-			:global(.segmented-control) {
-				margin: 32px 0 8px;
-			}
-			:global(.text-input) {
-				width: 100%;
-			}
-			:global(.text-input[contenteditable]) {
-				height: 128px;
-				overflow: auto;
-				max-height: 128px;
-			}
-			& > .separator {
-				width: 100%;
-				height: 1px;
-				margin: 16px 0;
-				background: var(--border-secondary);
-			}
-			.detail {
-				gap: 8px;
-				width: fit-content;
-				display: flex;
-				position: relative;
-				align-items: end;
-				margin-bottom: 12px;
-				p {
-					color: var(--color-tertiary);
-					margin: 0;
-					white-space: nowrap;
+				.field-label {
+					color: var(--color-secondary);
+					margin: 24px 0 8px;
+					font-size: .9em;
+					&:first-of-type {
+						margin-top: 16px;
+					}
+				}
+				:global(.segmented-control) {
+					margin: 32px 0 8px;
+				}
+				:global(.text-input) {
+					width: 100%;
+				}
+				:global(.text-input[contenteditable]) {
+					height: 128px;
+					overflow: auto;
+					max-height: 128px;
+				}
+				& > .separator {
+					width: 100%;
+					height: 1px;
+					margin: 16px 0;
+					background: var(--border-secondary);
+				}
+				.detail {
+					gap: 8px;
+					display: flex;
+					align-items: end;
+					&:not(:last-child) {
+						margin-bottom: 12px;
+					}
+					p {
+						color: var(--color-tertiary);
+						margin: 0;
+						overflow: hidden;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+					}
+				}
+				.roblox {
+					gap: 8px;
+					display: flex;
+					a {
+						gap: 8px;
+						width: fit-content;
+						margin: 0;
+						display: flex;
+						padding: 4px 12px 4px 4px;
+						font-size: .9em;
+						background: var(--background-tertiary);
+						align-items: center;
+						border-radius: 24px;
+					}
 				}
 			}
-			.roblox {
-				gap: 8px;
-				display: flex;
-				a {
-					gap: 8px;
-					width: fit-content;
-					margin: 0;
-					display: flex;
-					padding: 4px 12px 4px 4px;
-					font-size: .9em;
-					background: var(--background-tertiary);
-					align-items: center;
-					border-radius: 24px;
+			@media (max-width: 512px) {
+				width: 100%;
+				min-width: unset;
+				.card {
+					padding-top: 8px;
+					border-radius: 0;
 				}
 			}
 		}
 		:global(.tabs-container) {
 			flex: 1 1 40%;
+			max-width: 640px;
+			margin-right: auto;
 		}
 		.posts {
 			gap: 16px;
@@ -571,6 +604,9 @@
 				&:hover {
 					box-shadow: inset 0 0 0 1px var(--border-secondary);
 				}
+				@media (max-width: 512px) {
+					border-radius: 0;
+				}
 			}
 		}
 		.teams {
@@ -621,16 +657,31 @@
 					height: fit-content;
 					margin: 16px 0 0;
 					display: flex;
-					p {
+					div {
 						gap: 6px;
 						color: var(--color-secondary);
-						margin: 0;
+						height: fit-content;
 						display: flex;
 						padding: 4px 8px;
+						overflow: hidden;
 						font-size: .75em;
 						box-shadow: 0 0 0 1px var(--border-secondary);
+						white-space: nowrap;
 						align-items: center;
 						border-radius: 16px;
+						p {
+							margin: 0;
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
+						a {
+							padding: 0;
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
+						:global(svg) {
+							min-width: 14px;
+						}
 					}
 				}
 				&:hover {
@@ -641,11 +692,6 @@
 	}
 	@media (max-width: 512px) {
 		.main {
-			margin: 128px 0 16px;
-			.card {
-				width: 100%;
-				border-radius: 0;
-			}
 			:global(.tabs-container .buttons) {
 				border-radius: 0 !important;
 			}

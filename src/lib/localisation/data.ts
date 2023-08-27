@@ -15,6 +15,7 @@ export default {
 		'action.finish': 'Finish',
 		'action.manage': 'Manage',
 		'action.copy_id': 'Copy ID',
+		'action.sign_in': 'Sign in',
 		'action.go_home': 'Go Home',
 		'action.preview': 'Preview',
 		'action.continue': 'Continue',
@@ -29,7 +30,6 @@ export default {
 		'action.edit_profile': 'Edit Profile',
 		'action.view_profile': 'View Profile',
 		'action.save_changes': 'Save Changes',
-		'action.create_account': 'Create Account',
 		'action.view_roblox_link': 'View Roblox Link',
 
 		'label.none': 'None',
@@ -156,8 +156,14 @@ export default {
 
 		'login.github' : 'Continue with GitHub',
 		'login.discord': 'Continue with Discord',
+		'login.signup': 'Create an account',
 
-		'signup': 'Create an Account',
+		'signin.social': 'Sign in with',
+		'signin.manual': 'Or use a security key',
+		'signin.manual.name': 'Enter your username',
+
+		'signup.social': 'Sign up with',
+		'signup.manual': 'Or create an account yourself',
 
 		'create_profile': 'Set-up your profile',
 		'create_profile.username': 'Enter username',

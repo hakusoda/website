@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '@voxelified/voxeliface/styles.scss';
 	import { inject } from '@vercel/analytics';
+	import MediaQuery from 'svelte-media-queries';
 	import { DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation'; 
@@ -25,7 +26,9 @@
 	import CaretDown from '$lib/icons/CaretDown.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
+	import Voxelified from '$lib/icons/Voxelified.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
+	import BoxArrowInRight from '$lib/icons/BoxArrowInRight.svelte';
 	import VoxelifiedBanner from '$lib/icons/VoxelifiedBanner.svelte';
 	$: [themeName, themeColour] = $theme.split('_');
 	const themeHues: Record<string, number> = {
@@ -68,7 +71,15 @@
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
 	<header>
-		<a href="/" class="logo"><VoxelifiedBanner/></a>
+		<a href="/" class="logo">
+			<MediaQuery query="(min-width: 512px)" let:matches>
+				{#if matches}
+					<VoxelifiedBanner/>
+				{:else}
+					<Voxelified size={40}/>
+				{/if}
+			</MediaQuery>
+		</a>
 		<a href="/" class="nav-link">{$t('home')}</a>
 		{#if data.session && data.user}
 			<DropdownMenu.Root bind:trigger={notificationsTrigger}>
@@ -149,7 +160,9 @@
 				</button>
 			</DropdownMenu.Root>
 		{:else if !data.session}
-			<a href="/login" class="nav-link signup">{$t('action.create_account')}</a>
+			<a href="/signin" class="nav-link signin">
+				<BoxArrowInRight/>{$t('action.sign_in')}
+			</a>
 		{/if}
 	</header>
 	<main class="app-content">
@@ -213,9 +226,12 @@
 
 	header {
 		display: flex;
-		padding: 8px 2rem;
+		padding: 8px 32px;
     	background: var(--background-header);
 		align-items: center;
+		@media (max-width: 512px) {
+			padding: 8px 16px;
+		}
 		:global(.container:first-of-type) {
 			margin: 0 32px 0 auto;
 		}
@@ -229,8 +245,21 @@
 		margin: auto 12px;
 		font-size: .95em;
 		text-decoration: none;
-		&.signup {
+		&.signin {
+			gap: 10px;
+			color: var(--color-tertiary);
+			display: flex;
+			padding: 6px 10px;
+			font-size: .9em;
+			transition: color .25s, background .25s;
+			box-shadow: 0 0 0 1px var(--border-secondary);
 			margin-left: auto;
+			align-items: center;
+			border-radius: 8px;
+			&:hover {
+				color: var(--color-primary);
+				background: var(--background-secondary);
+			}
 		}
 	}
 	.notifications {
@@ -355,6 +384,7 @@
 		color: var(--color-secondary);
 		display: flex;
 		padding: 40px 64px;
+		flex-wrap: wrap;
 		margin-top: auto;
 		background: var(--background-header);
 		.header {

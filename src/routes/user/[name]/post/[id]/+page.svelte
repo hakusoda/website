@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import { createChildPost } from '$lib/api';
-	import type { ApiRequestError, CreateUserPostPayload } from '$lib/types';
+	import type { ApiRequestError } from '$lib/types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
@@ -101,6 +101,16 @@
 		</div>
 	{/if}
 </div>
+
+<svelte:head>
+	<meta name="og:description" content={data.content}>
+	<link type="application/json+oembed" href={`${$page.url.origin}/user/${$page.params.name}/post/${$page.params.id}/oembed.json`}/>
+	{#each data.attachments as item}
+		<meta name="og:image" content={item.url}/>
+		<meta name="twitter:image" content={item.url}/>
+		<meta name="twitter:card" content="summary_large_image">
+	{/each}
+</svelte:head>
 
 <style lang="scss">
 	.main {
