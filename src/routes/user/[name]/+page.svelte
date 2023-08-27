@@ -3,9 +3,9 @@
 	import { Tabs, Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { hasBit } from '$lib/util';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
+	import { hasBit, getDefaultAvatar } from '$lib/util';
 	import type { RequestError, ApiRequestError } from '$lib/types';
 	import { TeamFlag, UserFlags, RequestErrorType } from '$lib/enums';
 	import { uploadAvatar, updateProfile, createUserPost, createTeamInvite, uploadPostAttachments } from '$lib/api';
@@ -35,6 +35,8 @@
 	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
 	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
 	export let data: PageData;
+
+	$: avatar = data.avatar_url || getDefaultAvatar(data.id);
 
 	let saving = false;
 	let bioEdit = true;
@@ -142,7 +144,7 @@
 		<div class="card">
 			<div class="header">
 				<MediaQuery query="(min-width: 512px)" let:matches>
-					<Avatar id={data.id} src={newAvatarUri ?? data.avatar_url} size={matches ? 'lg' : 'md'} hover circle/>
+					<Avatar src={newAvatarUri ?? avatar} size={matches ? 'lg' : 'md'} hover circle/>
 				</MediaQuery>
 				<div class="name">
 					<h1>{editName || data.username}</h1>
@@ -241,7 +243,7 @@
 				{/if}
 	
 				<p class="field-label">{$t('profile.avatar')}</p>
-				<AvatarFile name={data.name ?? data.username} image={data.avatar_url} bind:result={newAvatar} bind:resultUri={newAvatarUri}/>
+				<AvatarFile name={data.name ?? data.username} image={avatar} bind:result={newAvatar} bind:resultUri={newAvatarUri}/>
 	
 				<div class="edit-buttons">
 					<Button on:click={() => editing = false} disabled={saving}>
@@ -276,7 +278,7 @@
 				{#each data.posts as item}
 					<a class="item" href={`/user/${data.username}/post/${item.id}`}>
 						<div class="header">
-							<Avatar id={data.id} src={data.avatar_url} size="xs" circle/>
+							<Avatar src={avatar} size="xs" circle/>
 							<p class="author">
 								<a href={`/user/${data.username}`}>
 									{data.name ?? `@${data.username}`}
@@ -361,7 +363,7 @@
 	<title>{data.name ?? data.username}</title>
 	<meta content={`${data.name ?? data.username} (@${data.username})`} property="og:title">
 	<meta content={data.bio} property="og:description">
-	<meta content={data.avatar_url} property="og:image">
+	<meta content={avatar} property="og:image">
 	<meta name="og:type" content="profile">
 	<meta property="profile:username" content={data.username}>
 </svelte:head>
