@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Button, Select, TextInput, DropdownMenu } from '@voxelified/voxeliface';
+	import { Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
@@ -8,14 +8,18 @@
 	import { mellowLinkViewMode } from '$lib/settings';
 	import type { RobloxGroupRole } from '$lib/types';
 	import { deleteMellowServerRobloxLink } from '$lib/api';
-	import { MellowLinkImportType, MellowLinkListViewMode } from '$lib/enums';
+	import { MellowBindType, MellowLinkImportType, MellowLinkListViewMode } from '$lib/enums';
 
 	import Modal from '$lib/components/Modal.svelte';
 	import GroupSelect from '$lib/components/GroupSelect.svelte';
 	import MellowLinkEditor from '$lib/components/MellowLinkEditor.svelte';
 
+	import X from '$lib/icons/X.svelte';
 	import Plus from '$lib/icons/Plus.svelte';
+	import Check from '$lib/icons/Check.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
+	import Sunrise from '$lib/icons/Sunrise.svelte';
+	import Question from '$lib/icons/Question.svelte';
 	import PencilFill from '$lib/icons/PencilFill.svelte';
 	export let data: PageData;
 
@@ -63,12 +67,43 @@
 	<div class="binds" bind:this={linksContainer}>
 		{#each data.binds.filter(item => item.name.toLowerCase().includes(bindFilter)) as item, index}
 			<div class="item" class:compact class:highlighted={highlighted === item.id} bind:this={linkItems[index]}>
-				<div class="name">
+				<div class="info">
 					<h1>{item.name}</h1>
-					{#if !compact}
-						<p>{$t('mellow_bind.creator')} <a href={`/user/${item.creator.username}`}>{item.creator.name ?? item.creator.username}</a> {$t('time_ago', [item.created_at])}{#if item.last_edit}{$t('mellow_bind.edited')} <a href={`/user/${item.last_edit.author.username}`}>{item.last_edit.author.name ?? item.last_edit.author.username}</a> {$t('time_ago', [item.last_edit.created_at])}{/if}</p>
-					{/if}
-					<p>{$t(`mellow_bind.explanation.${item.type}`, [item.target_ids])} {$t(`mellow_bind.explanation.end.${item.requirements_type}`, [item.requirements.length])}</p>
+					<div class="details">
+						<p>
+							<Sunrise/>
+							{$t('time_ago', [item.created_at])}
+							{#if item.creator}
+								{$t('label.by')}
+								<a href={`/user/${item.creator.username}`}>
+									{item.creator.name ?? `@${item.creator.username}`}
+								</a>
+							{/if}
+						</p>
+						{#if item.last_edit}
+							<p>
+								<PencilFill/>
+								<a href={`/user/${item.last_edit.author.username}`}>
+									{item.last_edit.author.name ?? `@${item.last_edit.author.username}`}
+								</a>
+								{$t('time_ago', [item.last_edit.created_at])}
+							</p>
+						{/if}
+						<p>
+							{#if item.type === MellowBindType.DiscordRoles}
+								<Plus/>
+							{:else if item.type === MellowBindType.BanDiscord || item.type === MellowBindType.KickDiscord}
+								<X/>
+							{:else}
+								<Question/>
+							{/if}
+							{$t(`mellow_bind.type.${item.type}.full`)}
+						</p>
+						<p>
+							<Check/>
+							{$t('mellow_bind.requirements', [item.requirements.length])}
+						</p>
+					</div>
 				</div>
 				<div class="buttons">
 					<Button on:click={() => target = item}>
@@ -100,7 +135,7 @@
 			{/each}
 		</DropdownMenu.Root>
 		<TextInput bind:value={bindFilter} placeholder={$t('action.search')}/>
-		<Select.Root bind:value={$mellowLinkViewMode}>
+		<!--<Select.Root bind:value={$mellowLinkViewMode}>
 			{#each Object.values(MellowLinkListViewMode) as item}
 				{#if typeof item === 'number'}
 					<Select.Item value={item}>
@@ -108,7 +143,7 @@
 					</Select.Item>
 				{/if}
 			{/each}
-		</Select.Root>
+		</Select.Root>-->
 	</div>
 </div>
 
@@ -143,36 +178,37 @@
 			flex-direction: column;
 			.item {
 				display: flex;
-				padding: 16px 16px 16px 24px;
+				padding: 16px 16px 16px 20px;
 				background: var(--background-secondary);
 				align-items: center;
 				border-radius: 16px;
-				.name {
+				.info {
 					h1 {
 						margin: 0 0 6px;
-						font-size: 1em;
+						font-size: .9em;
 						font-weight: 500;
 					}
-					p {
-						color: var(--color-secondary);
-						margin: 4px 0 0;
-						font-size: .75em;
+					.details {
+						gap: 8px;
+						margin: 8px 0 0;
+						display: flex;
+						p {
+							gap: 6px;
+							color: var(--color-secondary);
+							margin: 0;
+							display: flex;
+							padding: 4px 8px;
+							font-size: .75em;
+							box-shadow: 0 0 0 1px var(--border-secondary);
+							align-items: center;
+							border-radius: 16px;
+						}
 					}
 				}
 				.buttons {
 					gap: 16px;
 					display: flex;
 					margin-left: auto;
-				}
-				&.compact {
-					padding: 8px 16px;
-					border-radius: 8px;
-					.name {
-						font-size: .9em;
-						h1 {
-							margin-bottom: 4px;
-						}
-					}
 				}
 				&.highlighted {
 					animation: 1s infinite alternate basic-focus;

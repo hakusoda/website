@@ -168,6 +168,20 @@ export interface PartialRobloxGroup {
 	hasVerifiedBadge: boolean
 }
 
+export interface RobloxGetGroupsResponse {
+	data: {
+		id: number
+		name: string
+		owner: {
+			id: number
+			type: 'User'
+		}
+		created: string
+		description: number
+		hasVerifiedBadge: boolean
+	}[]
+}
+
 export interface RobloxLookupGroupsResponse {
 	data: PartialRobloxGroup[]
 }
@@ -195,13 +209,13 @@ export interface RobloxGroupRolesResponse {
 
 export interface MellowLink {
 	name: string
+	data: string[]
 	type: MellowBindType
 	creator: {
 		name: string | null
 		username: string
 	}
 	created_at: string
-	target_ids: string[]
 	requirements: {
 		id: string
 		data: string[]
@@ -310,8 +324,8 @@ export interface UpdateProfilePayload {
 
 export interface CreateMellowServerRobloxLinkPayload {
 	name: string
+	data: string[]
 	type: MellowBindType
-	target_ids: string[]
 	requirements: {
 		data: string[]
 		type: MellowBindRequirementType

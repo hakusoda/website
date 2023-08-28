@@ -33,7 +33,9 @@ export enum Platform {
 }
 
 export enum MellowBindType {
-	DiscordRoles
+	DiscordRoles,
+	BanDiscord,
+	KickDiscord
 }
 export enum MellowBindRequirementType {
 	HasVerifiedUserLink,

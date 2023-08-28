@@ -14,6 +14,7 @@ export const load = (async ({ params: { id } }) => {
 	const response = await supabase.from('mellow_binds').select<string, {
 		id: string
 		name: string
+		data: string[]
 		type: MellowBindType
 		edits: {
 			type: MellowServerAuditLogType
@@ -28,14 +29,13 @@ export const load = (async ({ params: { id } }) => {
 			username: string
 		}
 		created_at: string
-		target_ids: string[]
 		requirements: {
 			id: string
 			data: string[]
 			type: MellowBindRequirementType
 		}[]
 		requirements_type: MellowBindRequirementsType
-	}>('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data ), edits:mellow_server_audit_logs ( type, author:users ( name, username ), created_at )').eq('server_id', id).order('created_at');
+	}>('id, name, type, data, creator:users ( name, username ), created_at, requirements_type, requirements:mellow_bind_requirements ( id, type, data ), edits:mellow_server_audit_logs ( type, author:users ( name, username ), created_at )').eq('server_id', id).order('created_at');
 	if (response.error)
 		console.error(response.error);
 
@@ -100,7 +100,7 @@ export const actions = {
 			return fail(500, { error: RequestErrorType.ExternalRequestError } satisfies RequestError);
 		}
 
-		const response1 = await supabase.from('mellow_binds').select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type, requirements:mellow_bind_requirements ( id, type, data )').eq('id', data.target).eq('server_id', id).single();
+		const response1 = await supabase.from('mellow_binds').select('id, name, type, data, creator:users ( name, username ), created_at, requirements_type, requirements:mellow_bind_requirements ( id, type, data )').eq('id', data.target).eq('server_id', id).single();
 		if (response1.error) {
 			console.error(response1.error);
 			return fail(500, { error: RequestErrorType.ExternalRequestError } satisfies RequestError);
@@ -111,9 +111,9 @@ export const actions = {
 			const response2 = await supabase.from('mellow_binds').update({
 				name: data.name,
 				type: data.type,
-				target_ids: data.data,
+				data: data.data,
 				requirements_type: data.requirementsType
-			}).eq('id', data.target).eq('server_id', id).select('id, name, type, creator:users ( name, username ), created_at, target_ids, requirements_type').single();
+			}).eq('id', data.target).eq('server_id', id).select('id, name, type, data, creator:users ( name, username ), created_at, requirements_type').single();
 			if (response2.error) {
 				console.error(response2.error);
 				return fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
@@ -151,7 +151,7 @@ export const actions = {
 		await createMellowServerAuditLog(MellowServerAuditLogType.UpdateRobloxLink, session!.user.id, id, {
 			name: [response1.data.name, data.name],
 			type: [response1.data.type, data.type],
-			target_ids: data.data?.length,
+			data: [response1.data.data, data.data],
 			requirements: data.requirements?.length,
 			requirements_type: [response1.data.requirements_type, data.requirementsType]
 		}, data.target);

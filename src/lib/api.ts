@@ -3,9 +3,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { page } from '$app/stores';
 import { RequestErrorType } from './enums';
-import type { User, RobloxUser, ApiResponse, PartialRobloxUser, UpdateTeamPayload, CreateTeamResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, CreateUserPostResponse, UpdateTeamMemberPayload, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
-export const API_BASE = 'https://api.voxelified.com/v1';
-//export const API_BASE = 'http://localhost:5174/v1';
+import type { User, RobloxUser, ApiResponse, PartialRobloxUser, UpdateTeamPayload, CreateTeamResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, CreateUserPostResponse, UpdateTeamMemberPayload, RobloxGetGroupsResponse, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
+//export const API_BASE = 'https://api.voxelified.com/v1';
+export const API_BASE = 'http://localhost:5174/v1';
 
 export function getUser(userId: string) {
 	return request<User>(`user/${userId}`).then(response => response.success ? response.data : null);
@@ -30,6 +30,11 @@ export function getRobloxAvatars(userIds: (string | number)[], size: '48x48' | '
 		return Promise.resolve([]);
 	return request<{ data: { state: string, targetId: number, imageUrl: string }[] }>(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userIds.join(',')}&format=Png&size=${size}`)
 		.then(response => response.success ? response.data.data : [])
+}
+
+export function getRobloxGroups(ids: (string | number)[]) {
+	return request<RobloxGetGroupsResponse>(`https://groups.roblox.com/v2/groups?groupIds=${ids.join(',')}`)
+		.then(response => response.success ? response.data.data : []);
 }
 
 export function lookupRobloxGroups(query: string) {

@@ -28,7 +28,7 @@
 
 	let name = '';
 	let type = MellowBindType.DiscordRoles;
-	let targets: string[] = [];
+	let actionData: string[] = [];
 	let requirements: [MellowBindRequirementType, string[]][] = [];
 	let requirementsType = MellowBindRequirementsType.MeetAll;
 
@@ -44,7 +44,7 @@
 	$: hasVerifiedType = requirements.some(i => i[0] === MellowBindRequirementType.HasVerifiedUserLink) ? MellowBindRequirementType.HasRobloxGroupRole : MellowBindRequirementType.HasVerifiedUserLink;
 
 	$: if (target && !editing) {
-		name = target.name, type = target.type, targets = target.target_ids;
+		name = target.name, type = target.type, actionData = target.data;
 		requirements = target.requirements.map(item => [item.type, item.data]), requirementsType = target.requirements_type;
 		editing = true;
 		trigger();
@@ -66,7 +66,7 @@
 	const save = async () => {
 		saving = !(saveError = null);
 		if (target) {
-			const newName = name || 'Unnamed Link';
+			const newName = name || 'Unnamed Action';
 			const newRequirements = requirements.map(item => ({
 				type: item[0],
 				data: item[1]
@@ -75,7 +75,7 @@
 				body: JSON.stringify({
 					type: type === target.type ? undefined : type,
 					name: newName === target.name ? undefined : newName,
-					data: JSON.stringify(targets) === JSON.stringify(target.target_ids) ? undefined : targets,
+					data: JSON.stringify(actionData) === JSON.stringify(target.data) ? undefined : actionData,
 					target: target.id,
 					requirements: JSON.stringify(newRequirements) === JSON.stringify(target.requirements.map(item => ({ type: item.type, data: item.data }))) ? undefined : newRequirements,
 					requirementsType: requirementsType === target.requirements_type ? undefined : requirementsType
@@ -95,8 +95,8 @@
 		} else {
 			const response = await createMellowServerRobloxLink(data.session!.access_token, serverId, {
 				type,
-				name: name || 'Unnamed Link',
-				target_ids: targets,
+				data: actionData,
+				name: name || 'Unnamed Action',
 				requirements: requirements.map(item => ({
 					type: item[0],
 					data: item[1]
@@ -117,7 +117,7 @@
 	};
 	const addRequirement = (type: any) => requirements = [...requirements, [type, []]];
 	const resetAdd = () => {
-		targets = [], name = '', requirements = [];
+		actionData = [], name = '', requirements = [];
 		type = MellowBindType.DiscordRoles, requirementsType = MellowBindRequirementsType.MeetAll;
 		target = null;
 		editing = false;
@@ -130,64 +130,37 @@
 <Modal bind:trigger>
 	<h1>{$t(`mellow_link_editor.header.${!!target}`)}</h1>
 
-	<div class="fields">
-		<div class="field">
-			<p class="modal-label">{$t('mellow_link_editor.name')}</p>
-			<TextInput bind:value={name} placeholder="Unnamed Link"/>
-		</div>
+	<div class="field">
+		<p class="modal-label">{$t('mellow_link_editor.name')}</p>
+		<TextInput bind:value={name} placeholder="Unnamed Action"/>
+	</div>
 
-		<div class="field">
-			<p class="modal-label">{$t('mellow_link_editor.type')}</p>
-			<Select.Root bind:value={type}>
-				<p>{$t('mellow_link_editor.type.category')}</p>
-				{#each Object.values(MellowBindType) as item}
+	<p class="modal-label">{$t('mellow_link_editor.requirements')}</p>
+	<div class="requirements">
+		<div class="fields">
+			<Select.Root bind:value={requirementsType}>
+				{#each Object.values(MellowBindRequirementsType) as item}
 					{#if typeof item === 'number'}
 						<Select.Item value={item}>
-							{$t(`mellow_bind.type.${item}`)}
+							{$t(`mellow_bind.requirements_type.${item}`)}
 						</Select.Item>
 					{/if}
 				{/each}
 			</Select.Root>
-		</div>
-	</div>
-
-	{#if type === MellowBindType.DiscordRoles}
-		<p class="modal-label">{$t('mellow_link_editor.discord_roles')}</p>
-		<div class="roles">
-			{#each targets as item}
-				<button class="item focusable" type="button" title={$t('action.remove')} on:click={() => targets = targets.filter(i => i !== item)}>
-					{data.roles.find(role => role.id === item)?.name}
-				</button>
-			{/each}
-			<DropdownMenu.Root bind:trigger={roleTrigger}>
-				<button class="item" slot="trigger" on:click={roleTrigger}>
-					<Plus/>
-				</button>
-				<p>{$t('mellow_link_editor.discord_roles.category')}</p>
-				{#each data.roles.filter(role => !targets.includes(role.id)) as item}
-					<button type="button" on:click={() => targets = [...targets, item.id]}>
-						{item.name}
-					</button>
+			<DropdownMenu.Root bind:trigger={requirementTrigger}>
+				<Button slot="trigger" on:click={requirementTrigger}>
+					<Plus/>{$t('action.create_new')}
+				</Button>
+				<p>{$t('mellow_link_editor.requirements')}</p>
+				{#each Object.values(MellowBindRequirementType) as type}
+					{#if typeof type === 'number' && (type || !hasVerifiedType)}
+						<button type="button" on:click={() => addRequirement(type)}>
+							{$t(`mellow_bind.requirement.${type}`)}
+						</button>
+					{/if}
 				{/each}
-				<p>{$t('mellow_link_editor.discord_roles.options')}</p>
-				<button type="button" on:click={() => targets = data.roles.map(role => role.id)}>
-					{$t('mellow_link_editor.discord_roles.add_all')}
-				</button>
 			</DropdownMenu.Root>
 		</div>
-	{/if}
-
-	<p class="modal-label">{$t('mellow_link_editor.requirements')}</p>
-	<div class="requirements">
-		<Select.Root bind:value={requirementsType}>
-			{#each Object.values(MellowBindRequirementsType) as item}
-				{#if typeof item === 'number'}
-					<Select.Item value={item}>
-						{$t(`mellow_bind.requirements_type.${item}`)}
-					</Select.Item>
-				{/if}
-			{/each}
-		</Select.Root>
 		{#each requirements as item, index}
 			<div class="item" class:highlighted={index === requirements.length - 1} bind:this={itemRefs[index]}>
 				<div class="rfields">
@@ -229,10 +202,7 @@
 							</div>
 						</div>
 					{:else if item[0] === MellowBindRequirementType.InRobloxGroup}
-						<div class="field">
-							<p class="label">{$t('mellow_link_editor.requirement.group')}</p>
-							<GroupSelect bind:value={item[1][0]}/>
-						</div>
+						<GroupSelect bind:value={item[1][0]}/>
 					{:else if item[0] === MellowBindRequirementType.MeetsOtherLink}
 						<Select.Root bind:value={item[1][0]} placeholder={$t('mellow_link_editor.requirement.link.placeholder')}>
 							{#each data.binds.filter(bind => bind.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowBindRequirementType.MeetsOtherLink && r[1][0] === bind.id)) as bind}
@@ -254,22 +224,58 @@
 			</div>
 		{/each}
 	</div>
-	<DropdownMenu.Root bind:trigger={requirementTrigger}>
-		<Button slot="trigger" on:click={requirementTrigger}>
-			<Plus/>{$t('mellow_link_editor.requirements.add')}
-		</Button>
-		<p>{$t('mellow_link_editor.requirements')}</p>
-		{#each Object.values(MellowBindRequirementType) as type}
-			{#if typeof type === 'number' && (type || !hasVerifiedType)}
-				<button type="button" on:click={() => addRequirement(type)}>
-					{$t(`mellow_bind.requirement.${type}`)}
-				</button>
-			{/if}
-		{/each}
-	</DropdownMenu.Root>
+
+	<div class="fields">
+		<div class="field">
+			<p class="modal-label">{$t('mellow_link_editor.type')}</p>
+			<Select.Root bind:value={type}>
+				<p>{$t('mellow_link_editor.type.category')}</p>
+				{#each Object.values(MellowBindType) as item}
+					{#if typeof item === 'number'}
+						<Select.Item value={item}>
+							{$t(`mellow_bind.type.${item}`)}
+						</Select.Item>
+					{/if}
+				{/each}
+			</Select.Root>
+		</div>
+	
+		{#if type === MellowBindType.DiscordRoles}
+			<div class="field">
+				<p class="modal-label">{$t('mellow_link_editor.discord_roles')}</p>
+				<div class="roles">
+					{#each actionData as item}
+						<button class="item focusable" type="button" title={$t('action.remove')} on:click={() => actionData = actionData.filter(i => i !== item)}>
+							{data?.roles.find(role => role.id === item)?.name}
+						</button>
+					{/each}
+					<DropdownMenu.Root bind:trigger={roleTrigger}>
+						<button class="item" slot="trigger" on:click={roleTrigger}>
+							<Plus/>
+						</button>
+						<p>{$t('mellow_link_editor.discord_roles.category')}</p>
+						{#each data?.roles.filter(role => !actionData.includes(role.id)) as item}
+							<button type="button" on:click={() => actionData = [...actionData, item.id]}>
+								{item.name}
+							</button>
+						{/each}
+						<p>{$t('mellow_link_editor.discord_roles.options')}</p>
+						<button type="button" on:click={() => actionData = data.roles.map(role => role.id)}>
+							{$t('mellow_link_editor.discord_roles.add_all')}
+						</button>
+					</DropdownMenu.Root>
+				</div>
+			</div>
+		{:else if type === MellowBindType.BanDiscord || type === MellowBindType.KickDiscord}
+			<div class="field">
+				<p class="modal-label">{$t('label.audit_reason')}</p>
+				<TextInput bind:value={actionData[0]} placeholder={$t('label.reason')}/>
+			</div>
+		{/if}
+	</div>
 
 	<RequestErrorUI data={saveError}/>
-	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [targets])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
+	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [actionData])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
 	<div class="modal-buttons">
 		<Button on:click={save} disabled={saving}>
 			<Check/>{$t(target ? 'action.save_changes' : 'mellow_link_editor.finish')}
@@ -287,7 +293,7 @@
 		gap: 8px;
 		flex: 0 1 auto;
 		display: flex;
-		margin-bottom: 8px;
+		margin-bottom: 16px;
 		flex-direction: column;
 		.item {
 			gap: 24px;
@@ -335,8 +341,11 @@
 	.fields {
 		gap: 16px;
 		display: flex;
-		.field p {
-			margin-top: 0;
+		.field {
+			margin: 16px 0 0;
+			p {
+				margin-top: 0;
+			}
 		}
 	}
 
