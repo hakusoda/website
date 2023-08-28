@@ -14,6 +14,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
+	import ProfilePost from '$lib/components/ProfilePost.svelte';
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
 
@@ -21,11 +22,9 @@
 	import SetupUserProfile from '$lib/modals/SetupUserProfile.svelte';
 
 	import X from '$lib/icons/X.svelte';
-	import Chat from '$lib/icons/Chat.svelte';
 	import Star from '$lib/icons/Star.svelte';
 	import Plus from '$lib/icons/Plus.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
-	import Heart from '$lib/icons/Heart.svelte';
 	import Burger from '$lib/icons/Burger.svelte';
 	import Person from '$lib/icons/Person.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
@@ -278,33 +277,15 @@
 					<RequestErrorUI data={createPostError} background="var(--background-primary)"/>
 				{/if}
 				{#each data.posts as item}
-					<a class="item" href={`/user/${data.username}/post/${item.id}`}>
-						<div class="header">
-							<Avatar src={avatar} size="xs" circle/>
-							<p class="author">
-								<a href={`/user/${data.username}`}>
-									{data.name ?? `@${data.username}`}
-								</a>
-								{$t('profile_post.posted', [item.created_at])}
-							</p>
-						</div>
-						<Markdown source={item.content}/>
-						{#if item.attachments.length}
-							<div class="attachments">
-								{#each item.attachments as attachment}
-									<img src={attachment.url} alt=""/>
-								{/each}
-							</div>
-						{/if}
-						<div class="details">
-							<p>
-								<Chat/>{$t('number', [item.comments[0].count])}
-							</p>
-							<p>
-								<Heart/>{$t('number', [item.likes[0].count])}
-							</p>
-						</div>
-					</a>
+					<ProfilePost
+						id={item.id}
+						user={data.user}
+						likes={item.likes[0].count}
+						content={item.content}
+						comments={item.comments[0].count}
+						created_at={item.created_at}
+						attachments={item.attachments}
+					/>
 				{/each}
 			</div>
 		</Tabs.Item>
@@ -560,58 +541,6 @@
 					&:hover button {
 						opacity: 1
 					}
-				}
-			}
-			.item {
-				padding: 16px;
-				background: var(--background-secondary);
-				border-radius: 16px;
-				text-decoration: none;
-				.header {
-					margin: 0 0 12px;
-					display: flex;
-					align-items: center;
-					.author {
-						color: var(--color-secondary);
-						margin: 0;
-						font-size: .95em;
-						margin-left: 12px;
-					}
-				}
-				.attachments {
-					gap: 16px;
-					width: 100%;
-					margin: 24px 0 0;
-					display: flex;
-					overflow: hidden;
-					img {
-						flex: 1 0 0;
-						width: 0;
-						border-radius: 8px;
-					}
-				}
-				.details {
-					gap: 16px;
-					margin: 24px 0 0;
-					display: flex;
-					p {
-						gap: 8px;
-						color: var(--color-secondary);
-						margin: 0;
-						cursor: pointer;
-						display: flex;
-						font-size: .9em;
-						align-items: center;
-						&:hover {
-							color: var(--color-primary);
-						}
-					}
-				}
-				&:hover {
-					box-shadow: inset 0 0 0 1px var(--border-secondary);
-				}
-				@media (max-width: 512px) {
-					border-radius: 0;
 				}
 			}
 		}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Button, TextInput } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
@@ -9,6 +10,7 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
+	import ProfilePost from '$lib/components/ProfilePost.svelte';
 	import RequestError from '$lib/components/RequestError.svelte';
 
 	import Chat from '$lib/icons/Chat.svelte';
@@ -40,19 +42,55 @@
 		}, ...data.comments];
 		replyContent = '';
 	};
+
+	let content: HTMLDivElement;
+	onMount(() => {
+		if (data.parent)
+			content.scrollIntoView({ block: 'center' });
+	});
 </script>
 
 <div class="main">
-	<div class="content">
-		<Avatar id={data.author.id} src={data.author.avatar_url} size="sm2" hover circle/>
+	{#if data.parent}
+		<ProfilePost
+			id={data.parent.id}
+			user={data.parent.author}
+			likes={data.parent.likes[0].count}
+			content={data.parent.content}
+			comments={data.parent.comments[0].count}
+			created_at={data.parent.created_at}
+			attachments={data.parent.attachments}
+		/>
+	{/if}
+	<div class="content" bind:this={content}>
+		<Avatar id={data.author.id} src={data.author.avatar_url} size="sm2" circle/>
 		<div>
 			<h1>
-				<a href={`/user/${data.author.username}`}>{data.author.name ?? `@${data.author.username}`}</a>
-				{$t('profile_post.posted', [data.created_at])}
+				<a href={`/user/${data.author.username}`}>
+					{data.author.name ?? `@${data.author.username}`}
+				</a>
+				{#if data.parent}
+					{$t('profile_post.replied2')}
+					<a href={`/user/${data.parent.author.username}`}>
+						{data.parent.author.name ?? `@${data.parent.author.username}`}
+					</a>
+					{$t('time_ago', [data.created_at])}
+				{:else}
+					{$t('profile_post.posted', [data.created_at])}
+				{/if}
 			</h1>
 			<Markdown source={data.content}/>
 		</div>
 	</div>
+	{#if data.attachments.length}
+		<div class="attachments">
+			{#each data.attachments as attachment}
+				<div class="item">
+					<img src={attachment.url} alt=""/>
+				</div>
+			{/each}
+		</div>
+	{/if}
 
 	<div class="details">
 		<p>
@@ -77,26 +115,15 @@
 		<h1>{$t('profile_post.comments')}</h1>
 		<div class="comments">
 			{#each data.comments as item}
-				<a class="item" href={`/user/${data.author.username}/post/${item.id}`}>
-					<div class="header">
-						<Avatar id={item.author.id} src={item.author.avatar_url} size="xs" circle/>
-						<p class="author">
-							<a href={`/user/${item.author.username}`}>
-								{item.author.name ?? `@${item.author.username}`}
-							</a>
-							{$t('profile_post.replied', [item.created_at])}
-						</p>
-					</div>
-					<Markdown source={item.content}/>
-					<div class="details">
-						<p>
-							<Chat/>{$t('number', [item.comments[0].count])}
-						</p>
-						<p>
-							<Heart/>{$t('number', [item.likes[0].count])}
-						</p>
-					</div>
-				</a>
+				<ProfilePost
+					id={item.id}
+					user={item.author}
+					likes={item.likes[0].count}
+					content={item.content}
+					comments={item.comments[0].count}
+					created_at={item.created_at}
+					attachments={item.attachments}
+				/>
 			{/each}
 		</div>
 	{/if}
@@ -114,20 +141,61 @@
 
 <style lang="scss">
 	.main {
-		margin: 48px 64px 64px;
+		width: 640px;
+		margin: 48px auto 128px;
+		display: flex;
+		padding: 0 64px;
+		max-width: 640px;
+		flex-direction: column;
 		.content {
-			gap: 24px;
+			gap: 20px;
 			display: flex;
+			padding: 16px 24px 32px;
+			background: var(--background-secondary);
+			border-radius: 16px;
+			&:not(:first-child) {
+				margin: 16px 0 0;
+			}
 			h1 {
 				color: var(--color-secondary);
-				margin: 20px 0 24px;
-				font-size: 1.25em;
+				margin: 20px 0 16px;
+				font-size: 1.1em;
 				font-weight: 500;
+			}
+		}
+		.attachments {
+			gap: 16px;
+			width: 100%;
+			margin: 16px 0 0;
+			display: flex;
+			.item {
+				flex: 1 0 0;
+				width: 0;
+				position: relative;
+				overflow: hidden;
+				box-shadow: 0 8px 16px 0 #00000040;
+				border-radius: 16px;
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+				&:after {
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					content: '';
+					display: block;
+					position: absolute;
+					box-shadow: inset 0 0 0 1px #ffffff40;
+					border-radius: inherit;
+				}
 			}
 		}
 		.details {
 			gap: 16px;
-			margin: 48px 0 0;
+			margin: 32px 0 0;
 			display: flex;
 			p {
 				gap: 8px;
@@ -157,42 +225,18 @@
 			gap: 16px;
 			display: flex;
 			flex-direction: column;
-			.item {
-				padding: 16px;
-				background: var(--background-secondary);
-				border-radius: 16px;
-				text-decoration: none;
-				.header {
-					margin: 0 0 12px;
-					display: flex;
-					align-items: center;
-					.author {
-						color: var(--color-secondary);
-						margin: 0;
-						font-size: .95em;
-						margin-left: 12px;
-					}
-				}
-				.details {
-					gap: 16px;
-					margin: 24px 0 0;
-					display: flex;
-					p {
-						gap: 8px;
-						color: var(--color-secondary);
-						margin: 0;
-						cursor: pointer;
-						display: flex;
-						font-size: .9em;
-						align-items: center;
-						&:hover {
-							color: var(--color-primary);
-						}
-					}
-				}
-				&:hover {
-					box-shadow: inset 0 0 0 1px var(--border-secondary);
-				}
+		}
+		@media (max-width: 512px) {
+			width: 100%;
+			padding: 0;
+			.content {
+				margin: 0 24px;
+			}
+			.details, .reply {
+				margin: 48px 24px 0;
+			}
+			h1 {
+				margin: 64px 16px 16px;
 			}
 		}
 	}

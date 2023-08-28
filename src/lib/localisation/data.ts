@@ -52,6 +52,7 @@ export default {
 
 		'profile_post.posted': 'posted {0|time_ago}',
 		'profile_post.replied': 'replied {0|time_ago}',
+		'profile_post.replied2': 'replied to',
 		'profile_post.comments': 'Replies',
 		'profile_post.comments.count': '{0|number} Replies',
 		'profile_post.likes.count': '{0|number} Likes',
