@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { page } from '$app/stores';
 import { RequestErrorType } from './enums';
 import type { User, RobloxUser, ApiResponse, PartialRobloxUser, UpdateTeamPayload, CreateTeamResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, CreateUserPostResponse, UpdateTeamMemberPayload, RobloxGetGroupsResponse, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
-//export const API_BASE = 'https://api.voxelified.com/v1';
-export const API_BASE = 'http://localhost:5174/v1';
+export const API_BASE = 'https://api.voxelified.com/v1';
+//export const API_BASE = 'http://localhost:5174/v1';
 
 export function getUser(userId: string) {
 	return request<User>(`user/${userId}`).then(response => response.success ? response.data : null);
