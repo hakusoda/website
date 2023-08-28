@@ -5,6 +5,7 @@
 	import { hasBit } from '$lib/util';
 	import { leaveTeam } from '$lib/api';
 	import type { PageData } from './$types';
+	import { invalidateAll } from '$app/navigation';
 	import { TeamFlag, TeamRolePermission } from '$lib/enums';
 
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -33,7 +34,7 @@
 	const leave = async () => {
 		const response = await leaveTeam(data.session!.access_token, data.id);
 		if (response.success)
-			location.reload();
+			invalidateAll();
 		else
 			alert($t(`request_error.${response.error as 0}`))
 	};

@@ -9,7 +9,6 @@
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
-	import ShieldLockFill from '$lib/icons/ShieldLockFill.svelte';
 	export let data: LayoutData;
 </script>
 
@@ -18,7 +17,7 @@
 		<div class="user">
 			<Avatar src={data.user?.avatar_url} size="sm" circle transparent/>
 			<div class="name">
-				<h1>{data.user?.name}</h1>
+				<h1>{data.user?.name ?? data.user?.username}</h1>
 				<p>@{data.user?.username}</p>
 			</div>
 		</div>

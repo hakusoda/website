@@ -1,27 +1,30 @@
 import { z } from 'zod';
-import { fail, error } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
-import type { RequestError } from '$lib/types';
 import { verifyServerMembership } from '$lib/util/server';
 import { getDiscordServerChannels } from '$lib/discord';
+import { requestFail, requestError } from '$lib/util/server';
 import { createMellowServerAuditLog } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
 import { RequestErrorType, MellowServerLogType, MellowServerAuditLogType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
-	const response = await supabase.from('mellow_servers').select<string, {
-		logging_types: number
-		logging_channel_id: string | null
-	}>('logging_types, logging_channel_id').eq('id', id).limit(1).single();
+	const response = await supabase.from('mellow_servers')
+		.select<string, {
+			logging_types: number
+			logging_channel_id: string | null
+		}>('logging_types, logging_channel_id')
+		.eq('id', id)
+		.limit(1)
+		.single();
 	if (response.error) {
 		console.error(response.error);
-		throw error(500, JSON.stringify({ error: RequestErrorType.ExternalRequestError } satisfies RequestError));
+		throw requestError(500, RequestErrorType.ExternalRequestError);
 	}
 
 	return {
 		...response.data,
-		channels: await getDiscordServerChannels(id)
+		channels: getDiscordServerChannels(id)
 	};
 }) satisfies PageServerLoad;
 
@@ -41,17 +44,14 @@ export const actions = {
 		const response = EDIT_SCHEMA.safeParse(body);
 		if (!response.success) {
 			console.error(response.error);
-			return fail(400, {
-				error: RequestErrorType.InvalidBody,
-				issues: response.error.issues
-			} satisfies RequestError);
+			return requestFail(400, RequestErrorType.InvalidBody, response.error.issues);
 		}
 
 		const { data } = response;
 		const old = await supabase.from('mellow_servers').select('logging_types, logging_channel_id').eq('id', id).single();
 		if (old.error) {
 			console.error(old.error);
-			return fail(500, { error: RequestErrorType.ExternalRequestError } satisfies RequestError);
+			return requestFail(500, RequestErrorType.ExternalRequestError);
 		}
 
 		if (data.types !== undefined || data.channel !== undefined) {
@@ -61,7 +61,7 @@ export const actions = {
 			}).eq('id', id);
 			if (response2.error) {
 				console.error(response2.error);
-				return fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
+				return requestFail(500, RequestErrorType.DatabaseUpdate);
 			}
 
 			const oldChannelId = old.data.logging_channel_id;

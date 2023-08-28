@@ -1,15 +1,16 @@
 <script lang="ts">
-	import { Button, TextInput } from '@voxelified/voxeliface';
+	import { TextInput } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
+	import { invalidateAll } from '$app/navigation';
 	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
 
 	import Radio from '$lib/components/Radio.svelte';
+	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 
-	import Check from '$lib/icons/Check.svelte';
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 	export let data: PageData;
 
@@ -29,13 +30,15 @@
             method: 'POST'
         });
 		const result = deserialize(await response.text());
-		if (result.type === 'success') {
-			location.reload();
-		} else if (result.type === 'failure')
-			saving = !(error = result.data as any);
+		if (result.type === 'success')
+			await invalidateAll();
+		else if (result.type === 'failure')
+			error = result.data as any;
 		else if (result.type === 'error')
-			saving = !(error = { error: RequestErrorType.Offline });
+			error = { error: RequestErrorType.Offline };
+		saving = false;
 	};
+	const reset = () => (defaultNickname = data.default_nickname, syncUnknownUsers = data.sync_unknown_users, allowForcedSyncing = data.allow_forced_syncing);
 
 	$: nickLength = defaultNickname.includes('{name}') ? defaultNickname.length + 14 : defaultNickname.length;
 </script>
@@ -61,12 +64,15 @@
 	</div>
 
 	<RequestErrorUI data={error} background="var(--background-primary)"/>
-	<div class="buttons">
-		<Button on:click={save} disabled={saving || (defaultNickname === data.default_nickname && syncUnknownUsers === data.sync_unknown_users && allowForcedSyncing === data.allow_forced_syncing)}>
-			<Check/>{$t('action.save_changes')}
-		</Button>
-	</div>
 </div>
+
+<UnsavedChanges
+	show={defaultNickname !== data.default_nickname || syncUnknownUsers !== data.sync_unknown_users || allowForcedSyncing !== data.allow_forced_syncing}
+	error={error ? $t(`request_error.${error.error}`) : ''}
+	{save}
+	{reset}
+	{saving}
+/>
 
 <style lang="scss">
 	.main {
@@ -90,9 +96,6 @@
 		}
 		:global(.text-input) {
 			min-width: 256px;
-		}
-		.buttons {
-			margin-top: 24px;
 		}
 		.radio-input {
 			display: flex;

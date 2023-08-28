@@ -5,6 +5,7 @@
 	import { t } from '$lib/localisation';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
+	import { invalidateAll } from '$app/navigation';
 	import { hasBit, getDefaultAvatar } from '$lib/util';
 	import type { RequestError, ApiRequestError } from '$lib/types';
 	import { TeamFlag, UserFlags, RequestErrorType } from '$lib/enums';
@@ -66,7 +67,7 @@
 				if (newAvatar)
 					uploadAvatar2();
 				else
-					location.reload();
+					invalidateAll();
 			} else
 				saving = !(saveError = response);
 		} else if (newAvatar)
@@ -78,7 +79,7 @@
 	let newAvatarUri: string | null = null;
 	const uploadAvatar2 = () => uploadAvatar(data.session!.access_token!, data.id, newAvatar!).then(response => {
 		if (response.success)
-			location.reload();
+			invalidateAll();
 		else
 			saving = !(saveError = response);
 	});
@@ -92,9 +93,8 @@
 		});
 		const result = deserialize(await response.text());
 		if (result.type === 'success')
-			location.reload();
-		else if (result.type === 'failure')
-			burgering = false;
+			await invalidateAll();
+		burgering = false;
 	};
 
 	let creatingPost = false;
@@ -126,7 +126,7 @@
 	const inviteToTeam = async (teamId: string) => {
 		const result = await createTeamInvite(data.session!.access_token, teamId, data.id);
 		if (result.success)
-			location.reload();
+			invalidateAll();
 		else
 			alert($t(`request_error.${result.error as 0}`));
 	};

@@ -1,15 +1,16 @@
 <script lang="ts">
-	import { Select, Button } from '@voxelified/voxeliface';
+	import { Select } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
 	import { hasBit } from '$lib/util';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
+	import { invalidateAll } from '$app/navigation';
 	import type { RequestError } from '$lib/types';
 	import { RequestErrorType, DiscordChannelType, MellowServerLogType } from '$lib/enums';
 
-	import Check from '$lib/icons/Check.svelte';
 	import Radio from '$lib/components/Radio.svelte';
+	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 	export let data: PageData;
 
@@ -27,12 +28,14 @@
         });
 		const result = deserialize(await response.text());
 		if (result.type === 'success') {
-			location.reload();
+			await invalidateAll();
 		} else if (result.type === 'failure')
-			saving = !(error = result.data as any);
+			error = result.data as any;
 		else if (result.type === 'error')
-			saving = !(error = { error: RequestErrorType.Offline });
+			error = { error: RequestErrorType.Offline };
+		saving = false;
 	};
+	const reset = () => (types = data.logging_types, channel = data.logging_channel_id);
 
 	let channel = data.logging_channel_id;
 
@@ -82,12 +85,15 @@
 	</div>
 
 	<RequestErrorUI data={error} background="var(--background-primary)"/>
-	<div class="buttons">
-		<Button on:click={save} disabled={saving || (types === data.logging_types && channel === data.logging_channel_id)}>
-			<Check/>{$t('action.save_changes')}
-		</Button>
-	</div>
 </div>
+
+<UnsavedChanges
+	show={types !== data.logging_types || channel !== data.logging_channel_id}
+	error={error ? $t(`request_error.${error.error}`) : ''}
+	{save}
+	{reset}
+	{saving}
+/>
 
 <style lang="scss">
 	.main {
@@ -110,9 +116,6 @@
 					margin-left: 16px;
 				}
 			}
-		}
-		.buttons {
-			margin-top: 24px;
 		}
 	}
 </style>
