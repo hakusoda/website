@@ -230,7 +230,17 @@
 			width: 100%;
 			padding: 0;
 			.content {
-				margin: 0 24px;
+				border-radius: 0;
+			}
+			.attachments {
+				gap: 0;
+				margin: 0;
+				.item {
+					border-radius: 0;
+					&:after {
+						display: none;
+					}
+				}
 			}
 			.details, .reply {
 				margin: 48px 24px 0;

@@ -26,16 +26,5 @@
 			height: 100%;
 			object-fit: cover;
 		}
-		&:after {
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			content: '';
-			display: block;
-			position: absolute;
-			box-shadow: inset 0 0 0 1px #ffffff40;
-			border-radius: inherit;
-		}
 	}
 </style>

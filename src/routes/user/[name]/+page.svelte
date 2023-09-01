@@ -279,7 +279,7 @@
 				{#each data.posts as item}
 					<ProfilePost
 						id={item.id}
-						user={data.user}
+						user={data}
 						likes={item.likes[0].count}
 						content={item.content}
 						comments={item.comments[0].count}
