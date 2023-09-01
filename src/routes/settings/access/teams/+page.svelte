@@ -94,6 +94,7 @@
 				width: calc(30% - 16px);
 				display: flex;
 				padding: 16px;
+				overflow: hidden;
 				background: var(--background-secondary);
 				border-radius: 16px;
 				flex-direction: column;
@@ -131,6 +132,7 @@
 				.details {
 					gap: 8px;
 					margin: 8px 0 0;
+					height: fit-content;
 					display: flex;
 					p {
 						gap: 6px;
@@ -138,10 +140,15 @@
 						margin: 0;
 						display: flex;
 						padding: 4px 8px;
+						overflow: hidden;
 						font-size: .75em;
 						box-shadow: 0 0 0 1px var(--border-secondary);
+						white-space: nowrap;
 						align-items: center;
 						border-radius: 16px;
+						:global(svg) {
+							min-width: 14px;
+						}
 					}
 				}
 				.buttons {
