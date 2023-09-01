@@ -40,6 +40,7 @@ export default {
 		'label.disabled': 'Disabled',
 		'label.team_roles': 'Team Roles',
 		'label.permissions': 'Permissions',
+		'label.user_reason': 'User-facing Reason',
 		'label.audit_reason': 'Reason for Audit Log',
 		'label.roblox_link_id': 'Link ID: {0}',
 		'label.search.members': 'Search Members',

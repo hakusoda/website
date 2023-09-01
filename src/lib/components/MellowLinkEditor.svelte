@@ -267,12 +267,20 @@
 				</div>
 			</div>
 		{:else if type === MellowBindType.BanDiscord || type === MellowBindType.KickDiscord}
-			<div class="field">
+			<div class="field audit-reason">
 				<p class="modal-label">{$t('label.audit_reason')}</p>
 				<TextInput bind:value={actionData[0]} placeholder={$t('label.reason')}/>
 			</div>
 		{/if}
 	</div>
+	{#if type === MellowBindType.BanDiscord || type === MellowBindType.KickDiscord}
+		<div class="fields">
+			<div class="field audit-reason">
+				<p class="modal-label">{$t('label.user_reason')}</p>
+				<TextInput bind:value={actionData[1]} placeholder={$t('label.reason')}/>
+			</div>
+		</div>
+	{/if}
 
 	<RequestErrorUI data={saveError}/>
 	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [actionData])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
@@ -347,6 +355,9 @@
 				margin-top: 0;
 			}
 		}
+	}
+	.audit-reason, .audit-reason :global(.text-input) {
+		width: 100%;
 	}
 
 	.roles {
