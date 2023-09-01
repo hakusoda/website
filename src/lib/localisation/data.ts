@@ -398,6 +398,7 @@ export default {
 		'request_error.invalid_id': 'An identifier associated with this request was deemed invalid, please file a bug report.',
 		'request_error.username_taken': 'That username has already been taken by another user.',
 		'request_error.no_permission_target_role': 'You do not have permission to manage this role.',
+		'request_error.not_found': 'The requested resource could not be found.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 
