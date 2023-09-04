@@ -109,7 +109,7 @@
 					<Button on:click={() => target = item}>
 						<PencilFill/>{$t('action.edit')}
 					</Button>
-					<Button on:click={() => deleteLink(item.id)}>
+					<Button colour="secondary" circle on:click={() => deleteLink(item.id)}>
 						<Trash/>
 					</Button>
 				</div>
@@ -122,7 +122,7 @@
 			<Plus/>{$t('mellow.server.settings.roblox.binds.create')}
 		</Button>
 		<DropdownMenu.Root bind:trigger={importTrigger}>
-			<Button slot="trigger" on:click={importTrigger} title="coming soon!!!" disabled>
+			<Button slot="trigger" colour="secondary" on:click={importTrigger} title="coming soon!!!" disabled>
 				<Plus/>{$t('mellow.server.settings.roblox.binds.import')}
 			</Button>
 			<p>{$t('mellow.server.settings.roblox.binds.import.category')}</p>
@@ -181,7 +181,7 @@
 				padding: 16px 16px 16px 20px;
 				background: var(--background-secondary);
 				align-items: center;
-				border-radius: 16px;
+				border-radius: 24px;
 				.info {
 					h1 {
 						margin: 0 0 6px;

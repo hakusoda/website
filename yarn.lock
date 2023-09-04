@@ -649,9 +649,12 @@
   dependencies:
     svelte "^3.59.1"
 
-"@voxelified/voxeliface@link:../voxeliface":
-  version "0.0.0"
-  uid ""
+"@voxelified/voxeliface@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@voxelified/voxeliface/-/voxeliface-2.0.0.tgz#0dd4b9f9fa64fe9899c50b36384a6aaa67b412c2"
+  integrity sha512-Zwfp9AZ5IKZjVJL4eBGZcuHKGpkcr7gct+V/Ocw6YaCh4P0xK8CFwV6W6+lVDAVxWXIn2YfjZuStGBR3N5ARQQ==
+  dependencies:
+    svelte "^4.2.0"
 
 abbrev@1:
   version "1.1.1"
