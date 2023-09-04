@@ -35,7 +35,7 @@
 <div class="main">
 	<h1>{$t('roblox.verification.finish')}</h1>
 	<a class="user" href={`https://www.roblox.com/users/${data.user?.id}/profile`} target="_blank">
-		<Avatar src={data.icon.imageUrl} size="md"/>
+		<Avatar src={data.icon.imageUrl} size="md" circle/>
 		<div class="name">
 			<h1>{data.user?.displayName}</h1>
 			<p>@{data.user?.name}</p>
@@ -47,7 +47,7 @@
 		<Button on:click={submit} disabled={finishing}>
 			<Check/>{$t('roblox.verification.finish.yes')}
 		</Button>
-		<Button href="/roblox/authorise" disabled={finishing}>
+		<Button href="/roblox/authorise" colour="secondary" disabled={finishing}>
 			<X/>{$t('roblox.verification.finish.no')}
 		</Button>
 	</div>
@@ -55,17 +55,20 @@
 
 <style lang="scss">
 	.main {
-		margin: 64px auto;
 		display: flex;
+		min-height: calc(100svh - 58px);
 		align-items: center;
 		flex-direction: column;
+		h1 {
+			margin-top: 96px;
+		}
 		.user {
 			display: flex;
 			margin-top: 32px;
 			align-items: center;
 			text-decoration: none;
 			.name {
-				margin-left: 24px;
+				margin-left: 32px;
 				h1 {
 					margin: 0 0 4px;
 					font-size: 2.25em;

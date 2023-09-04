@@ -23,7 +23,6 @@
 	import Eye from '$lib/icons/Eye.svelte';
 	import Bell from '$lib/icons/Bell.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
-	import CaretDown from '$lib/icons/CaretDown.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import Voxelified from '$lib/icons/Voxelified.svelte';
@@ -138,10 +137,8 @@
 				{/if}
 			</DropdownMenu.Root>
 			<DropdownMenu.Root bind:trigger={userMenuTrigger}>
-				<button class="user focusable" type="button" slot="trigger" on:click={userMenuTrigger}>
-					<Avatar id={data.user.id} src={data.user.avatar_url} size="xs" circle/>
-					<p class="name">{data.user.name ?? data.user.username}</p>
-					<CaretDown/>
+				<button class="user" type="button" slot="trigger" on:click={userMenuTrigger}>
+					<Avatar id={data.user.id} src={data.user.avatar_url} size="xs40" circle/>
 				</button>
 				<p>{data.user.name ?? data.user.username}</p>
 				<a href={`/user/${data.user.username}`}>
@@ -174,13 +171,13 @@
 				</p>
 				<p class="oss">
 					{$t('footer.oss')}
-					<a href="https://github.com/Excalware">{$t('footer.oss.link')}</a>.
+					<a href="https://github.com/voxelified">{$t('footer.oss.link')}</a>.
 				</p>
 			</div>
 			<div class="links">
 				<p>{$t('footer.resources')}</p>
 				<a href="https://status.voxelified.com" target="_blank">Status</a>
-				<a href="https://github.com/Excalware" target="_blank">GitHub</a>
+				<a href="https://github.com/voxelified" target="_blank">GitHub</a>
 			</div>
 			<div class="links">
 				<p>{$t('footer.community')}</p>
@@ -202,32 +199,27 @@
 	.app {
 		height: 100vh;
 		display: flex;
+		overflow: auto;
 		min-height: 100vh;
 		background: var(--background-primary);
 		flex-direction: column;
 		.app-content {
 			height: 100%;
 			display: flex;
-			overflow: auto;
 			flex-direction: column;
 		}
 
 		--color-link: hsl(330 90% 80%);
 		--color-verified: color-mix(in srgb, var(--button-background) 75%, #fff);
-		--button-color: hsl(330 100% 98%);
-		--button-color-active: hsl(330 100% 88%);
-		--button-background: hsl(330 50% 60%);
-		--button-background-hover: hsl(330 50% 55%);
-		--button-background-active: hsl(330 50% 50%);
 	}
 	:global(body) {
 		overflow: hidden auto;
 	}
 
 	header {
+		z-index: 100;
 		display: flex;
 		padding: 8px 32px;
-    	background: var(--background-header);
 		align-items: center;
 		@media (max-width: 512px) {
 			padding: 8px 16px;
@@ -238,40 +230,43 @@
 	}
 	.logo {
 		display: flex;
-		margin-right: 12px;
+		margin-right: 24px;
 	}
 	.nav-link {
 		color: var(--color-primary);
-		margin: auto 12px;
-		font-size: .95em;
+		margin: auto 16px;
+		font-size: 14px;
+		font-weight: 500;
 		text-decoration: none;
 		&.signin {
 			gap: 10px;
-			color: var(--color-tertiary);
+			color: #fff;
 			display: flex;
-			padding: 6px 10px;
-			font-size: .9em;
-			transition: color .25s, background .25s;
-			box-shadow: 0 0 0 1px var(--border-secondary);
+			padding: 8px 16px;
+			font-size: .8em;
+			box-shadow: inset 0 0 0 1px #fff;
+			transition: box-shadow .5s, background .5s;
 			margin-left: auto;
 			align-items: center;
-			border-radius: 8px;
+			border-radius: 16px;
 			&:hover {
-				color: var(--color-primary);
-				background: var(--background-secondary);
+				background: #ffffff0d;
+				box-shadow: inset 0 0 0 1px #ffffff80;
 			}
 		}
 	}
 	.notifications {
 		gap: 8px;
 		color: var(--color-secondary);
+		height: 32px;
 		border: none;
 		cursor: pointer;
-		padding: 8px;
 		display: flex;
+		padding: 0 12px;
 		background: none;
+		align-items: center;
 		font-family: var(--font-primary);
-		border-radius: 8px;
+		border-radius: 16px;
 		&:hover {
 			color: var(--color-primary);
 		}
@@ -289,7 +284,7 @@
 		height: 64px;
 		padding: 0 16px 0 8px;
 		position: relative;
-		transition: .25s opacity, .25s box-shadow, .25s background;
+		transition: .5s opacity, .5s box-shadow, .5s background;
 		:global(.avatar):not(:first-child) {
 			top: 36px;
 			left: 36px;
@@ -301,11 +296,12 @@
 				color: var(--color-secondary);
 				margin: 0;
 				padding: 0;
+				font-size: 12px;
 				line-height: unset;
 			}
 			h1 {
 				margin: 4px 0 2px;
-				font-size: 1.2em;
+				font-size: 14px;
 				font-weight: 400;
 				white-space: nowrap;
 			}
@@ -319,7 +315,7 @@
 			border-radius: 50%;
 		}
 		&:hover {
-			background: var(--background-secondary);
+			background: var(--background-tertiary);
 		}
 		&:not(:has(.unread)) {
 			opacity: 0.5;
@@ -333,35 +329,15 @@
 		font-size: 1.1em;
 		white-space: pre;
 	}
-	.mark-read {
-		padding: 0 12px;
-		margin-top: 8px;
-		box-shadow: var(--button-shadow);
-		background: var(--background-secondary);
-		&:disabled {
-			cursor: not-allowed;
-			filter: grayscale(50%);
-			opacity: 50%;
-		}
-	}
 	.user {
-		color: var(--color-secondary);
 		border: none;
 		cursor: pointer;
-		padding: 4px 8px;
 		display: flex;
 		background: none;
-		text-align: start;
-		align-items: center;
-		font-family: var(--font-primary);
-		border-radius: 8px;
 		.name {
 			margin: 0 24px 0 16px;
 			font-size: 1.1em;
 			font-weight: 600;
-		}
-		&:hover {
-			background: #ffffff40;
 		}
 	}
 	@media (max-width: 512px) {
@@ -386,7 +362,7 @@
 		padding: 40px 64px;
 		flex-wrap: wrap;
 		margin-top: auto;
-		background: var(--background-header);
+		border-top: 1px solid var(--border-primary);
 		.header {
 			.name {
 				gap: 8px;

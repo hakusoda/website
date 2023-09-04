@@ -4,6 +4,7 @@
 	import type { LayoutData } from './$types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import SideNavigation from '$lib/layouts/SideNavigation.svelte';
 	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
 
 	import Newspaper from '$lib/icons/Newspaper.svelte';
@@ -14,8 +15,8 @@
 	$: base = `/team/${$page.params.name}/settings`;
 </script>
 
-<div class="main">
-	<div class="nav">
+<SideNavigation>
+	<svelte:fragment slot="nav">
 		<div class="team">
 			<Avatar src={data.avatar_url} size="sm" transparent/>
 			<div class="name">
@@ -40,42 +41,26 @@
 		<SettingsNavItem id="team.settings.archive.audit_log" path={`${base}/archive/audit-log`}>
 			<Newspaper/>
 		</SettingsNavItem>
-	</div>
+	</svelte:fragment>
 	<slot/>
-</div>
+</SideNavigation>
 
 <style lang="scss">
-	.main {
+	.team {
+		margin: 16px;
 		display: flex;
-		min-height: 100%;
-		.team {
-			margin: 16px;
-			display: flex;
-			align-items: center;
-			.name {
-				margin-left: 16px;
-				h1 {
-					margin: 0;
-					font-size: 1em;
-					font-weight: 500;
-				}
-				p {
-					color: var(--color-secondary);
-					margin: 4px 0 0;
-					font-size: .9em;
-				}
+		align-items: center;
+		.name {
+			margin-left: 16px;
+			h1 {
+				margin: 0;
+				font-size: 1em;
+				font-weight: 500;
 			}
-		}
-		.nav {
-			width: 25%;
-			margin: 16px 0 16px 16px;
-			display: flex;
-			min-width: 25%;
-			flex-direction: column;
 			p {
 				color: var(--color-secondary);
-				margin: 32px 16px 8px;
-				font-size: .8em;
+				margin: 4px 0 0;
+				font-size: .9em;
 			}
 		}
 	}

@@ -20,11 +20,15 @@
 		position: relative;
 		overflow: hidden;
 		background: none;
+		transition: filter .5s;
 		border-radius: 8px;
 		img {
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
+		}
+		&:hover {
+			filter: brightness(1.25);
 		}
 	}
 </style>

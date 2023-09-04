@@ -39,7 +39,7 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 32px 128px 32px 64px;
+		margin: 0 64px 32px;
 		.help {
 			color: var(--color-secondary);
 			font-size: .9em;

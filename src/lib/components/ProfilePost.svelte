@@ -58,8 +58,10 @@
 <style lang="scss">
 	.profile-post {
 		padding: 16px;
+		transition: box-shadow .5s;
 		background: var(--background-secondary);
-		border-radius: 16px;
+		box-shadow: inset 0 0 0 1px var(--border-primary);
+		border-radius: 20px;
 		text-decoration: none;
 		.header {
 			margin: 0 0 12px;

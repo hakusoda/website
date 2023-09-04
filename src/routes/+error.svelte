@@ -34,7 +34,7 @@
 		<Button on:click={() => location.reload()}>
 			<ArrowClockwise/>{$t('action.retry')}
 		</Button>
-		<Button href="https://discord.com/invite/rs3r4dQu9P" target="_blank">
+		<Button href="https://discord.com/invite/rs3r4dQu9P" colour="secondary" target="_blank">
 			<Discord/>{$t('action.get_support')}
 		</Button>
 	</div>
@@ -50,8 +50,13 @@
 			font-size: 3em;
 			margin-bottom: 0;
 		}
+		p {
+			color: var(--color-secondary);
+		}
 		.buttons {
-			margin-top: 16px;
+			gap: 16px;
+			display: flex;
+			margin-top: 32px;
 		}
 	}
 </style>

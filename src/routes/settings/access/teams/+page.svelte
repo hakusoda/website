@@ -76,7 +76,7 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		padding: 32px 64px 32px 64px;
+		padding: 0 64px 32px 64px;
 		overflow: auto;
 		.summary {
 			color: var(--color-secondary);
@@ -95,7 +95,9 @@
 				display: flex;
 				padding: 16px;
 				overflow: hidden;
+				transition: box-shadow .5s;
 				background: var(--background-secondary);
+				box-shadow: inset 0 0 0 1px var(--border-primary);
 				border-radius: 16px;
 				flex-direction: column;
 				text-decoration: none;

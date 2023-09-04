@@ -91,7 +91,7 @@
 	.main {
 		width: 100%;
 		display: flex;
-		padding: 32px 64px 32px 64px;
+		padding: 0 64px 32px;
 		position: relative;
 		flex-direction: column;
 		.summary {
@@ -110,9 +110,11 @@
 			.item {
 				display: flex;
 				padding: 8px;
+				transition: box-shadow .5s;
 				background: var(--background-secondary);
+				box-shadow: inset 0 0 0 1px var(--border-primary);
 				align-items: center;
-				border-radius: 16px;
+				border-radius: 32px;
 				text-decoration: none;
 				.name {
 					margin-left: 16px;
@@ -135,7 +137,7 @@
 		.fade {
 			left: 0;
 			width: 100%;
-			bottom: 96px;
+			bottom: 88px;
 			height: 32px;
 			position: absolute;
 			background: linear-gradient(to bottom, transparent, var(--background-primary));
@@ -143,7 +145,7 @@
 		.search {
 			margin: auto 0 0;
 			display: flex;
-			padding: 32px 0 0;
+			padding: 16px 0 0;
 			align-items: center;
 			.sort {
 				color: var(--color-secondary);

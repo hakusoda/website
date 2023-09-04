@@ -58,7 +58,7 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		padding: 32px 128px 32px 64px;
+		padding: 0 64px 32px;
 		overflow: auto;
 		.add {
 			color: var(--color-secondary);
@@ -79,14 +79,17 @@
 				flex-direction: column;
 				text-decoration: none;
 				.name {
-					display: flex;
+					width: 100%;
 					margin-top: 16px;
-					align-items: center;
+					text-align: center;
+					white-space: nowrap;
 					flex-direction: column;
 					h1 {
 						margin: 0;
+						overflow: hidden;
 						font-size: 1.25em;
 						font-weight: 600;
+						text-overflow: ellipsis;
 					}
 					p {
 						color: var(--color-secondary);
@@ -95,7 +98,6 @@
 					}
 				}
 				&.unknown {
-					color: var(--color-tertiary);
 					background: none;
 					box-shadow: 0 0 0 1px var(--border-primary);
 				}

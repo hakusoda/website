@@ -2,7 +2,7 @@
 	import { getDefaultAvatar } from '$lib/util';
 	export let id: string = '0';
 	export let src: string | null = null;
-	export let size: 'xxxs' | 'xxs' | 'xs' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
+	export let size: 'xxxs' | 'xxs' | 'xs' | 'xs40' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let hover = false;
 	export let circle = false;
 	export let background = '';
@@ -55,6 +55,18 @@
 		&.xs {
 			width: 32px;
 			height: 32px;
+			border-radius: 4px;
+			:global(svg) {
+				width: 16px;
+				height: 16px;
+			}
+			&.hover {
+				filter: drop-shadow(0 2px 4px #000000);
+			}
+		}
+		&.xs40 {
+			width: 40px;
+			height: 40px;
 			border-radius: 4px;
 			:global(svg) {
 				width: 16px;

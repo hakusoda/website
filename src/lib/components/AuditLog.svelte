@@ -14,7 +14,8 @@
 </script>
 
 <div class="audit-log">
-	<svelte:element this={openable ? 'button' : 'div'} type="button" class="header focusable" on:click>
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<svelte:element this={openable ? 'button' : 'div'} type="button" class="header" on:click>
 		<Avatar src={avatar} size="sm" circle/>
 		<div class="details">
 			<h1><a href={`/user/${author}`}>{authorName ?? `@${author}`}</a> {text}</h1>
@@ -33,8 +34,10 @@
 
 <style lang="scss">
 	.audit-log {
+		transition: box-shadow .5s;
 		background: var(--background-secondary);
-		border-radius: 16px;
+		box-shadow: inset 0 0 0 1px var(--border-primary);
+		border-radius: 20px;
 		.header {
 			width: 100%;
 			border: none;
@@ -49,7 +52,7 @@
 			.details {
 				margin-left: 16px;
 				h1 {
-					color: var(--color-tertiary);
+					color: var(--color-secondary);
 					margin: 0;
 					font-size: 1em;
 					font-weight: 500;
@@ -72,10 +75,10 @@
 			gap: 8px;
 			display: flex;
 			padding: 16px;
-			border-top: 1px solid var(--border-secondary);
+			border-top: 1px solid var(--border-primary);
 			flex-direction: column;
 			:global(p) {
-				color: var(--color-tertiary);
+				color: var(--color-secondary);
 				margin: 0;
 				font-size: .9em;
 			}

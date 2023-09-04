@@ -53,7 +53,8 @@ export default {
 		'sort_by.sync_status': 'Sync Status',
 
 		'home': 'Home',
-		'home.landing': 'under construction...',
+		'home.landing': 'a hit new website under construction...',
+		'home.landing.sub': 'one day, there will be something of interest on this page!',
 
 		'profile_post.posted': 'posted {0|time_ago}',
 		'profile_post.replied': 'replied {0|time_ago}',

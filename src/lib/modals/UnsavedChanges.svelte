@@ -31,19 +31,21 @@
 			<h1>{$t(saving ? 'modal.unsaved_changes.saving' : 'modal.unsaved_changes')}</h1>
 		{/if}
 	</div>
-	<Button on:click={save} disabled={!show || saving}>
-		{#if saving}
-			<Hourglass/>
-		{:else}
-			<PencilFill/>
+	<div class="buttons">
+		<Button on:click={save} disabled={!show || saving}>
+			{#if saving}
+				<Hourglass/>
+			{:else}
+				<PencilFill/>
+			{/if}
+			{$t(error ? 'action.try_again' : 'action.save_changes')}
+		</Button>
+		{#if reset}
+			<Button colour="secondary" on:click={reset} disabled={!show || saving}>
+				<ArrowClockwise/>{$t('action.reset')}
+			</Button>
 		{/if}
-		{$t(error ? 'action.try_again' : 'action.save_changes')}
-	</Button>
-	{#if reset}
-		<button class="reset focusable" type="button" on:click={reset} disabled={!show || saving}>
-			<ArrowClockwise/>{$t('action.reset')}
-		</button>
-	{/if}
+	</div>
 </div>
 
 <style lang="scss">
@@ -52,14 +54,14 @@
 		width: 75vw;
 		bottom: 32px;
 		display: flex;
-		padding: 16px 24px;
+		padding: 16px 16px 16px 32px;
 		position: fixed;
-		transform: translate(-50%, calc(100% + 64px));
+		transform: translate(-50%, calc(100% + 32px));
 		transition: transform .35s, background .5s, box-shadow .5s;
 		box-shadow: 0 8px 16px 0 #00000040, inset 0 0 0 1px var(--border-secondary);
 		background: var(--background-secondary);
 		align-items: center;
-		border-radius: 16px;
+		border-radius: 36px;
 		.details {
 			margin: 0 auto 0 16px;
 			h1 {
@@ -74,29 +76,9 @@
 				transition: color .5s;
 			}
 		}
-		.reset {
-			gap: 8px;
-			color: var(--color-primary);
-			height: 32px;
-			border: none;
-			cursor: pointer;
+		.buttons {
+			gap: 16px;
 			display: flex;
-			padding: 0 16px;
-			font-size: 12px;
-			background: none;
-			box-shadow: inset 0 0 0 1px var(--color-secondary);
-			font-weight: 450;
-			margin-left: 16px;
-			align-items: center;
-			font-family: var(--font-primary);
-			border-radius: 4px;
-			&:disabled {
-				cursor: not-allowed;
-				opacity: 0.5;
-			}
-			&:not(:disabled):hover {
-				box-shadow: inset 0 0 0 1px var(--color-primary);
-			}
 		}
 		&.show {
 			transform: translateX(-50%);

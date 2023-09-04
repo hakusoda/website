@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
-
-	import MellowAd from '$lib/components/MellowAd.svelte';
 </script>
 
 <div class="landing">
-	<img src="/landing.gif" alt="Landing Banner" width="688" height="311.5">
-	<p>{$t('home.landing')}</p>
+	<h1>{$t('home.landing')}</h1>
+	<p>{$t('home.landing.sub')}</p>
 
-	<MellowAd/>
+	<a href="https://miku.voxelified.com" target="_blank">
+		<img src="https://miku.voxelified.com/miku.gif" alt="Landing Banner">
+	</a>
 </div>
 
 <svelte:head>
@@ -18,20 +18,26 @@
 
 <style lang="scss">
 	.landing {
-		height: 100%;
-		padding: 32px 64px;
 		display: flex;
+		min-height: calc(100svh - 58px);
 		align-items: center;
 		flex-direction: column;
 		justify-content: center;
-		img {
-			height: auto;
-			max-width: 100%;
-			border-radius: 16px;
+		h1 {
+			margin: 0 0 24px;
+			font-size: 2.5em;
+			font-weight: 750;
 		}
 		p {
-			color: var(--color-tertiary);
-			margin-top: 16px;
+			color: var(--color-secondary);
+			margin: 0 0 40px;
+		}
+		img {
+			width: 256px;
+			height: auto;
+			margin: 0 0 64px;
+			max-width: 50vw;
+			border-radius: 16px;
 		}
 	}
 </style>

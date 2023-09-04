@@ -21,7 +21,7 @@ export const GET = (async ({ params, locals: { getSession } }) => {
 			}[]
 			primary_roblox_link_id: string | null
 		}
-	}>('sub, user:users ( links:roblox_links!roblox_links_owner_fkey ( id, target_id ), primary_roblox_link_id )').in('sub', members.map(member => member.user.id));
+	}>('sub, user:users ( links:roblox_links!roblox_links_owner_id_fkey ( id, target_id ), primary_roblox_link_id )').in('sub', members.map(member => member.user.id));
 	if (response.error) {
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.ExternalRequestError);

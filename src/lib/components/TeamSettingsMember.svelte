@@ -81,7 +81,7 @@
 		</p>
 	</div>
 	<DropdownMenu.Root bind:trigger>
-		<Button slot="trigger" on:click={trigger} disabled={changingRole}>
+		<Button slot="trigger" circle on:click={trigger} disabled={changingRole}>
 			<ThreeDotsVertical/>
 		</Button>
 		<p>{name || username} (@{username})</p>
@@ -119,7 +119,7 @@
 		padding: 12px 16px;
 		background: var(--background-secondary);
 		align-items: center;
-		border-radius: 16px;
+		border-radius: 20px;
 		.details {
 			margin: 0 auto 0 16px;
 			& > a {

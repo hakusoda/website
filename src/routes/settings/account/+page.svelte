@@ -65,13 +65,13 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 32px 256px 32px 64px;
+		margin: 0 64px 32px;
 		.profile {
 			padding: 16px;
 			position: relative;
 			margin-top: 64px;
 			background: var(--background-secondary);
-			border-radius: 16px;
+			border-radius: 36px;
 			.header {
 				display: flex;
 				padding: 0 0 0 128px;
@@ -97,7 +97,7 @@
 			}
 			.details {
 				color: var(--color-secondary);
-				margin: 24px 0 0;
+				margin: 32px 8px 4px;
 				font-size: .9em;
 			}
 		}

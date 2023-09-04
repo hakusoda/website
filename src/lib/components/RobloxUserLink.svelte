@@ -103,10 +103,11 @@
 		flex-wrap: wrap;
 		background: none;
 		text-align: start;
-		box-shadow: 0 0 0 1px var(--border-primary);
+		transition: box-shadow .5s;
+		box-shadow: inset 0 0 0 1px var(--border-primary);
 		align-items: center;
 		font-family: var(--font-primary);
-		border-radius: 8px;
+		border-radius: 20px;
 		text-decoration: none;
 		.name {
 			.nickname {
@@ -133,7 +134,6 @@
 			}
 		}
 		.button {
-			color: var(--color-tertiary);
 			margin: 0 8px 0 auto;
 		}
 		&[disabled] {
@@ -141,8 +141,10 @@
 			opacity: 0.5;
 		}
 		&.active {
-			box-shadow: none;
 			background: var(--background-secondary);
+		}
+		&:hover {
+			box-shadow: inset 0 0 0 1px var(--border-secondary);
 		}
 	}
 </style>

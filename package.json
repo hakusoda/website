@@ -29,7 +29,7 @@
 		"@types/uuid": "^9.0.2",
 		"@vercel/analytics": "^1.0.1",
 		"@voxelified/svelte-localisation": "^1.0.0",
-		"@voxelified/voxeliface": "^1.6.0",
+		"@voxelified/voxeliface": "link:../voxeliface",
 		"cropperjs": "^1.5.13",
 		"svelte-markdown": "^0.3.0",
 		"svelte-media-queries": "^1.5.4",

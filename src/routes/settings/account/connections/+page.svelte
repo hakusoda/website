@@ -66,7 +66,7 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 32px 128px 32px 64px;
+		margin: 0 128px 32px 64px;
 		.summary {
 			color: var(--color-secondary);
 			font-size: .9em;

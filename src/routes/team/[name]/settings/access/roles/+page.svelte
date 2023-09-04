@@ -149,13 +149,13 @@
 		p {
 			margin: 0;
 			opacity: 0;
-			animation: appear .5s .25s forwards;
+			animation: appear .5s .1s forwards;
 			line-height: normal;
 		}
 	}
 	.team-roles {
 		width: 100%;
-		margin: 32px 64px;
+		margin: 0 64px 32px;
 		:global(.text-input) {
 			width: 512px;
 		}
@@ -170,10 +170,10 @@
 			flex-direction: column;
 			.item {
 				display: flex;
-				padding: 16px 20px;
+				padding: 16px 20px 16px 28px;
 				background: var(--background-secondary);
 				align-items: center;
-				border-radius: 16px;
+				border-radius: 36px;
 				.name {
 					margin-left: 16px;
 					h1 {

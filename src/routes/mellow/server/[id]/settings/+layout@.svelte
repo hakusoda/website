@@ -4,6 +4,7 @@
 	import type { LayoutData } from './$types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import SideNavigation from '$lib/layouts/SideNavigation.svelte';
 	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
 
 	import Link from '$lib/icons/Link.svelte';
@@ -17,8 +18,8 @@
 	$: base = `/mellow/server/${$page.params.id}/settings`;
 </script>
 
-<div class="main">
-	<div class="nav">
+<SideNavigation>
+	<svelte:fragment slot="nav">
 		<div class="server">
 			<Avatar src={data.avatar_url} size="sm" transparent/>
 			<h1>{data.name}</h1>
@@ -52,36 +53,19 @@
 		<SettingsNavItem id="mellow.server.settings.return" path="/settings/mellow/servers" footer>
 			<ArrowLeft/>
 		</SettingsNavItem>
-	</div>
+	</svelte:fragment>
 	<slot/>
-</div>
+</SideNavigation>
 
 <style lang="scss">
-	.main {
+	.server {
+		margin: 16px;
 		display: flex;
-		min-height: 100%;
-		.server {
-			margin: 16px;
-			display: flex;
-			align-items: center;
-			h1 {
-				margin: 0 0 0 16px;
-				font-size: 1em;
-				font-weight: 500;
-			}
-		}
-
-		.nav {
-			width: 25%;
-			margin: 16px 0 16px 16px;
-			display: flex;
-			min-width: 25%;
-			flex-direction: column;
-			p {
-				color: var(--color-secondary);
-				margin: 32px 16px 8px;
-				font-size: .8em;
-			}
+		align-items: center;
+		h1 {
+			margin: 0 0 0 16px;
+			font-size: 1em;
+			font-weight: 500;
 		}
 	}
 </style>

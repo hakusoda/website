@@ -166,12 +166,12 @@
 							<PencilFill/>{$t('action.edit_profile')}
 						</Button>
 					{:else if data.session}
-						<Button on:click={burger} disabled={burgering || data.burger.length} title={$t(`profile.burger.${!!data.burger.length}`)}>
+						<Button circle on:click={burger} disabled={burgering || data.burger.length} title={$t(`profile.burger.${!!data.burger.length}`)}>
 							<Burger/>
 						</Button>
 					{/if}
 					<DropdownMenu.Root bind:trigger={dropdownTrigger}>
-						<Button slot="trigger" on:click={dropdownTrigger}>
+						<Button slot="trigger" circle on:click={dropdownTrigger}>
 							<ThreeDotsVertical/>
 						</Button>
 						<p>{data.name || data.username} (@{data.username})</p>
@@ -247,7 +247,7 @@
 				<AvatarFile name={data.name ?? data.username} image={avatar} bind:result={newAvatar} bind:resultUri={newAvatarUri}/>
 	
 				<div class="edit-buttons">
-					<Button on:click={() => editing = false} disabled={saving}>
+					<Button colour="secondary" on:click={() => editing = false} disabled={saving}>
 						<X/>{$t('action.cancel')}
 					</Button>
 				</div>
@@ -377,7 +377,7 @@
 				overflow: hidden;
 				background: var(--background-secondary);
 				padding-top: 32px;
-				border-radius: 16px;
+				border-radius: 20px;
 				flex-direction: column;
 				.header {
 					gap: 32px;
@@ -461,7 +461,7 @@
 						margin-bottom: 12px;
 					}
 					p {
-						color: var(--color-tertiary);
+						color: var(--color-secondary);
 						margin: 0;
 						overflow: hidden;
 						white-space: nowrap;
@@ -513,14 +513,14 @@
 				gap: 16px;
 				display: flex;
 				div {
-					width: 128px;
-					height: 128px;
+					width: 96px;
+					height: 96px;
 					position: relative;
 					img {
 						width: 100%;
 						height: 100%;
 						object-fit: cover;
-						border-radius: 8px;
+						border-radius: 20px;
 					}
 					button {
 						top: 8px;
@@ -553,7 +553,9 @@
 				display: flex;
 				padding: 16px;
 				overflow: hidden;
+				transition: box-shadow .5s;
 				background: var(--background-secondary);
+				box-shadow: inset 0 0 0 1px var(--border-primary);
 				border-radius: 16px;
 				flex-direction: column;
 				text-decoration: none;

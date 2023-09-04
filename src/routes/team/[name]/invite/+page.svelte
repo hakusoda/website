@@ -20,7 +20,7 @@
 		<Button href={teamUrl}>
 			<Check/>{$t('team.invite.done')}
 		</Button>
-		<Button href={teamUrl}>
+		<Button href={teamUrl} colour="secondary">
 			<X/>{$t('team.invite.skip')}
 		</Button>
 	</div>

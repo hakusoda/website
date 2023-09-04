@@ -73,7 +73,7 @@
 					</Button>
 				{/if}
 				<DropdownMenu.Root bind:trigger={dropdownTrigger}>
-					<Button slot="trigger" on:click={dropdownTrigger}>
+					<Button slot="trigger" circle on:click={dropdownTrigger}>
 						<ThreeDotsVertical/>
 					</Button>
 					<p>{data.display_name} (@{data.name})</p>
@@ -232,7 +232,7 @@
 			min-width: 416px;
 			background: var(--background-secondary);
 			padding-top: 32px;
-			border-radius: 16px;
+			border-radius: 20px;
 			.header {
 				gap: 32px;
 				top: -96px;
@@ -265,12 +265,15 @@
 				display: flex;
 				align-items: end;
 				a {
-					gap: 8px;
 					color: var(--color-link);
-					display: flex;
-					align-items: center;
+					margin: 0 16px 0 0;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 					:global(svg) {
 						color: var(--color-primary);
+						margin: 0 8px 0 0;
+						min-width: 16px;
 					}
 				}
 				.buttons {
@@ -293,7 +296,7 @@
 				align-items: end;
 				margin-bottom: 12px;
 				p {
-					color: var(--color-tertiary);
+					color: var(--color-secondary);
 					margin: 0;
 					white-space: nowrap;
 				}
