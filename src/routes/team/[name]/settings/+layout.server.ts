@@ -8,7 +8,7 @@ import { RequestErrorType, TeamRolePermission } from '$lib/enums';
 export const load = (async ({ params: { name }, parent }) => {
 	const { session } = await parent();
 	if (!session)
-		throw redirect(302, '/login');
+		throw redirect(302, '/sign-in');
 
 	const response = await supabase.from('teams').select<string, {
 		id: string

@@ -35,9 +35,9 @@
 		padding: 24px 32px;
 		margin-top: 64px;
 		box-shadow: inset 0 0 0 1px #ffffff40;
-		background: 100% url('/img/mellow-banner.svg');
+		background: 100% center url('/img/mellow-banner.svg');
 		align-items: center;
-		border-radius: 16px;
+		border-radius: 20px;
 		.details {
 			h2 {
 				margin: 0;

@@ -11,7 +11,7 @@ export const config = { regions: ['iad1'], runtime: 'edge' };
 export const load = (async ({ params: { name }, parent }) => {
 	const { session } = await parent();
 	if (!session)
-		throw redirect(302, '/login');
+		throw redirect(302, '/sign-in');
 
 	const response = await supabase.from('teams').select('id, display_name').eq(isUUID(name) ? 'id' : 'name', name).limit(1).single();
 	if (response.error) {

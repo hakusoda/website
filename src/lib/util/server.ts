@@ -7,7 +7,7 @@ import { RequestErrorType } from '$lib/enums';
 import type { RequestError } from '$lib/types';
 export async function verifyServerMembership(session: Session | null, serverId: string) {
 	if (!session)
-		throw redirect(302, '/login');
+		throw redirect(302, '/sign-in');
 
 	const response = await supabase.from('mellow_server_members').select('id').eq('user_id', session.user.id).eq('server_id', serverId).limit(1).maybeSingle();
 	if (response.error) {

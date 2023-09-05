@@ -31,9 +31,9 @@
 	<Button href="/roblox/authorise"><Link/>{$t('settings.roblox.accounts.add')}</Button>
 	{#if data.mellow}
 		<p class="mellow">{$t('settings.roblox.accounts.mellow')}</p>
+	{:else}
+		<MellowAd/>
 	{/if}
-
-	<MellowAd/>
 </div>
 
 <style lang="scss">
@@ -53,13 +53,13 @@
 		}
 		.mellow {
 			color: #fff;
-			padding: 12px 16px;
+			padding: 16px 24px;
 			animation: .5s infinite alternate basic-focus;
 			margin-top: 32px;
-			background: #5865F2;
+			background: 100% center url('/img/mellow-banner.svg');
 			font-weight: 500;
 			line-height: 1.25;
-			border-radius: 8px;
+			border-radius: 20px;
 		}
 	}
 </style>

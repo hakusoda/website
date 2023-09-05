@@ -12,16 +12,16 @@ export const load = (async ({ parent }) => {
 	const user = (await parent()).user!;
 	const links = getUserRobloxLinks(user.id, RobloxLinkType.User);
 	const users = links.then(links => getRobloxUsers(links.map(link => link.target_id)));
-	if (user.mellow_pending) {
+
+	let mellow = user.mellow_pending;
+	if (mellow) {
 		const response = await fetch('https://mellow.voxelified.com/signup-finished', {
 			body: `${user.id}:${user.connections.find(i => i.type === UserConnectionType.Discord)?.sub}`,
 			method: 'POST',
 			headers: { 'x-api-key': MELLOW_KEY }
 		});
-		if (response.status !== 200) {
-			console.error(await response.text());
-			throw requestError(500, RequestErrorType.ExternalRequestError);
-		}
+		if (response.status !== 200)
+			console.error(await response.text().catch(() => ''));
 
 		await supabase.from('users').update({
 			mellow_pending: false
@@ -40,7 +40,7 @@ export const load = (async ({ parent }) => {
 		links,
 		users,
 		icons: users.then(users => getRobloxAvatars(users.map(user => user.id))),
-		mellow: user.mellow_pending,
+		mellow,
 		primaryId: response.data.primary_roblox_link_id
 	};
 }) satisfies PageServerLoad;

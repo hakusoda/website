@@ -83,7 +83,7 @@
 				{$t('action.continue')}
 			</Button>
 			<form method="dialog">
-				<Button disabled={finishing}>
+				<Button colour="secondary" disabled={finishing}>
 					<X/>{$t('action.later')}
 				</Button>
 			</form>

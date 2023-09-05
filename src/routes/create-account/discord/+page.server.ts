@@ -64,10 +64,11 @@ export const load = (async ({ url, locals: { supabase: supabase2 }, parent }) =>
 	}
 
 	const username = user.username.replace(/\W/g, '');
-	const response4 = await supabase.from('users').insert({
+	const response4 = await supabase.from('users').upsert({
 		id: response3.data.user.id,
 		name: user.global_name,
 		username,
+		is_edited: true,
 		avatar_url,
 		mellow_pending: true
 	});
