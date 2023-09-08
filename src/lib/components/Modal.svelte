@@ -21,15 +21,15 @@
 		color: var(--color-primary);
 		border: none;
 		outline: none;
-		padding: 16px 24px;
+		padding: 32px; 
 		overflow: auto;
-		min-width: 40%;
+		min-width: 45%;
 		font-size: initial;
 		animation: .5s show;
 		max-height: 80%;
 		background: var(--background-secondary);
 		font-weight: initial;
-		border-radius: 16px;
+		border-radius: 52px;
 		flex-direction: column;
 		:global(h1:first-child) {
 			margin-top: 12px;

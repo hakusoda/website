@@ -187,14 +187,21 @@ export function uploadPostAttachments(images: [ArrayBuffer, string][]) {
 	return Promise.all(images.map(image => uploadPostAttachment(image)));
 }
 
-export function createMellowServerRobloxLink(token: string, serverId: string, payload: CreateMellowServerRobloxLinkPayload) {
+export function createMellowServerProfileSyncAction(token: string, serverId: string, payload: CreateMellowServerRobloxLinkPayload) {
 	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link`, 'POST', payload, {
 		authorization: `Bearer ${token}`,
 		'content-type': 'application/json'
 	});
 }
 
-export function deleteMellowServerRobloxLink(token: string, serverId: string, linkId: string) {
+export function updateMellowServerProfileSyncAction(token: string, serverId: string, linkId: string, payload: Partial<CreateMellowServerRobloxLinkPayload>) {
+	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link/${linkId}`, 'PATCH', payload, {
+		authorization: `Bearer ${token}`,
+		'content-type': 'application/json'
+	});
+}
+
+export function deleteMellowServerProfileSyncAction(token: string, serverId: string, linkId: string) {
 	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link/${linkId}`, 'DELETE', null, {
 		authorization: `Bearer ${token}`,
 		'content-type': 'application/json'

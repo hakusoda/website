@@ -37,7 +37,7 @@
 		transition: box-shadow .5s;
 		background: var(--background-secondary);
 		box-shadow: inset 0 0 0 1px var(--border-primary);
-		border-radius: 20px;
+		border-radius: 32px;
 		.header {
 			width: 100%;
 			border: none;
@@ -95,6 +95,9 @@
 				color: var(--color-secondary);
 				font-size: .75em;
 			}
+		}
+		&:has(.header:is(button):hover) {
+			box-shadow: inset 0 0 0 1px var(--border-secondary);
 		}
 	}
 </style>

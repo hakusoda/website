@@ -44,23 +44,23 @@
 </script>
 
 <div class="main">
-	<p class="input-label">{$t('mellow.server.settings.roblox.global.nickname')}</p>
-	<p class="summary">{$t('mellow.server.settings.roblox.global.nickname.summary')}</p>
+	<p class="input-label">{$t('mellow.server.settings.syncing.settings.nickname')}</p>
+	<p class="summary">{$t('mellow.server.settings.syncing.settings.nickname.summary')}</p>
 	
 	<p class="indicator">{nickLength}/32</p>
 	{#if nickLength > 32 && defaultNickname.length < 33}
-		<p class="indicator">{$t('mellow.server.settings.roblox.global.nickname.long')}</p>
+		<p class="indicator">{$t('mellow.server.settings.syncing.settings.nickname.long')}</p>
 	{/if}
-	<TextInput bind:value={defaultNickname} placeholder={$t('mellow.server.settings.roblox.global.nickname.placeholder')}/>
+	<TextInput bind:value={defaultNickname} placeholder={$t('mellow.server.settings.syncing.settings.nickname.placeholder')}/>
 
-	<p class="input-label">{$t('mellow.server.settings.roblox.global.other')}</p>
+	<p class="input-label">{$t('mellow.server.settings.syncing.settings.other')}</p>
 	<div class="radio-input">
 		<Radio bind:value={allowForcedSyncing}/>
-		<p>{$t('mellow.server.settings.roblox.global.allow_forced_syncing')}</p>
+		<p>{$t('mellow.server.settings.syncing.settings.allow_forced_syncing')}</p>
 	</div>
 	<div class="radio-input">
 		<Radio bind:value={syncUnknownUsers}/>
-		<p>{$t('mellow.server.settings.roblox.global.sync_unknown_users')}</p>
+		<p>{$t('mellow.server.settings.syncing.settings.sync_unknown_users')}</p>
 	</div>
 
 	<RequestErrorUI data={error} background="var(--background-primary)"/>
@@ -76,12 +76,7 @@
 
 <style lang="scss">
 	.main {
-		margin: 32px 0 32px 64px;
-		.input-label {
-			color: var(--color-secondary);
-			margin: 32px 0 8px;
-			font-size: .9em;
-		}
+		margin: 0 0 32px 64px;
 		.summary {
 			color: var(--color-tertiary);
 			margin: 0 0 16px;
@@ -95,7 +90,7 @@
 			font-size: .75em;
 		}
 		:global(.text-input) {
-			min-width: 256px;
+			width: 384px;
 		}
 		.radio-input {
 			display: flex;

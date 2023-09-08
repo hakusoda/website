@@ -4,7 +4,7 @@ import supabase from '$lib/supabase';
 import { RequestErrorType } from '$lib/enums';
 import type { RequestError } from '$lib/types';
 import type { PageServerLoad } from './$types';
-import type { MellowBindType, MellowServerAuditLogType, MellowBindRequirementsType } from '$lib/enums';
+import type { MellowProfileSyncActionType, MellowServerAuditLogType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
 
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
@@ -36,10 +36,10 @@ interface MellowServerAuditLogBase {
 interface MellowServerAuditLogCreateRobloxLink extends MellowServerAuditLogBase {
 	data: {
 		name: string
-		type: MellowBindType
-		targets: number
+		type: MellowProfileSyncActionType
+		data: string[]
 		requirements: number
-		requirements_type: number
+		requirements_type: MellowProfileSyncActionRequirementsType
 	}
 	type: MellowServerAuditLogType.CreateRobloxLink
 }
@@ -63,10 +63,10 @@ interface MellowServerAuditLogDeleteRobloxLink extends MellowServerAuditLogBase 
 interface MellowServerAuditLogUpdateRobloxLink extends MellowServerAuditLogBase {
 	data: {
 		name: [string, string | undefined]
-		type: [MellowBindType, MellowBindType | undefined]
-		target_ids?: number
-		requirements?: number
-		requirements_type: [MellowBindRequirementsType, MellowBindRequirementsType | undefined]
+		data: [string[], string[] | undefined]
+		type: [MellowProfileSyncActionType, MellowProfileSyncActionType | undefined]
+		requirements?: [unknown[], unknown[] | undefined]
+		requirements_type: [MellowProfileSyncActionRequirementsType, MellowProfileSyncActionRequirementsType | undefined]
 	}
 	type: MellowServerAuditLogType.UpdateRobloxLink
 }

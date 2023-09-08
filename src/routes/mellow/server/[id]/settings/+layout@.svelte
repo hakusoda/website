@@ -8,11 +8,12 @@
 	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
 
 	import Link from '$lib/icons/Link.svelte';
+	import Webhook from '$lib/icons/Webhook.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
 	import ArrowLeft from '$lib/icons/ArrowLeft.svelte';
 	import Newspaper from '$lib/icons/Newspaper.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import DiamondFill from '$lib/icons/DiamondFill.svelte';
+	import HouseDoorFill from '$lib/icons/HouseDoorFill.svelte';
 	export let data: LayoutData;
 
 	$: base = `/mellow/server/${$page.params.id}/settings`;
@@ -25,11 +26,8 @@
 			<h1>{data.name}</h1>
 		</div>
 
-		<SettingsNavItem id="mellow.server.settings.commands.custom" path={`${base}/commands/custom`}>
-			<DiamondFill/>
-		</SettingsNavItem>
-		<SettingsNavItem id="mellow.server.settings.logging" path={`${base}/logging`}>
-			<Newspaper/>
+		<SettingsNavItem id="mellow.server.settings.home" path={base}>
+			<HouseDoorFill/>
 		</SettingsNavItem>
 
 		<p>{$t('mellow.server.settings.access')}</p>
@@ -37,16 +35,24 @@
 			<PersonFill/>
 		</SettingsNavItem>
 
-		<p>{$t('mellow.server.settings.roblox')}</p>
-		<SettingsNavItem id="mellow.server.settings.roblox.global" path={`${base}/roblox/global`}>
-			<GearFill/>
+		<p>{$t('mellow.server.settings.automation')}</p>
+		<SettingsNavItem id="mellow.server.settings.automation.webhooks" path={`${base}/automation/webhooks`}>
+			<Webhook/>
 		</SettingsNavItem>
-		<SettingsNavItem id="mellow.server.settings.roblox.binds" path={`${base}/roblox/binds`}>
+
+		<p>{$t('mellow.server.settings.syncing')}</p>
+		<SettingsNavItem id="mellow.server.settings.syncing.actions" path={`${base}/syncing/actions`}>
 			<Link/>
+		</SettingsNavItem>
+		<SettingsNavItem id="mellow.server.settings.syncing.settings" path={`${base}/syncing/settings`}>
+			<GearFill/>
 		</SettingsNavItem>
 
 		<p>{$t('team.settings.archive')}</p>
 		<SettingsNavItem id="mellow.server.settings.audit_log" path={`${base}/archive/audit-log`}>
+			<Newspaper/>
+		</SettingsNavItem>
+		<SettingsNavItem id="mellow.server.settings.logging" path={`${base}/logging`}>
 			<Newspaper/>
 		</SettingsNavItem>
 

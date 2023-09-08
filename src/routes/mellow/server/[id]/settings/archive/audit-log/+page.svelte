@@ -31,7 +31,7 @@
 			on:click={OPENABLE.includes(item.type) ? () => open = open.includes(item.id) ? open.filter(i => i !== item.id) : [...open, item.id] : null}
 		>
 			{#if item.type === MellowServerAuditLogType.UpdateRobloxGlobalSettings}
-				{#if item.data.default_nickname[1]}
+				{#if item.data.default_nickname?.[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.2.default_nickname')}
 						value={item.data.default_nickname}
@@ -50,40 +50,43 @@
 					/>
 				{/if}
 			{:else if item.type === MellowServerAuditLogType.CreateRobloxLink}
-				<p>{$t(`mellow_bind.bound.${item.data.type}`, [item.data.targets])}, {$t('mellow_bind.requirements.with', [item.data.requirements])}</p>
+				<p>{$t(`mellow_bind.explanation.${item.data.type}`, [item.data.data?.length])}{$t(`mellow_bind.explanation.end.${item.data.requirements_type}`, [item.data.requirements])}</p>
 			{:else if item.type === MellowServerAuditLogType.UpdateRobloxLink}
-				{#if item.data.name[1]}
+				{#if item.data.name?.[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.4.name')}
 						value={item.data.name}
 					/>
 				{/if}
-				{#if item.data.type[1]}
+				{#if item.data.type?.[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.4.type')}
 						value={[$t(`mellow_bind.type.${item.data.type[0]}`), $t(`mellow_bind.type.${item.data.type[1]}`)]}
 					/>
 				{/if}
-				{#if item.data.requirements_type[1]}
+				{#if item.data.requirements_type?.[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.4.requirements_type')}
 						value={[$t(`mellow_bind.requirements_type.${item.data.requirements_type[0]}`), $t(`mellow_bind.requirements_type.${item.data.requirements_type[1]}`)]}
 					/>
 				{/if}
-				{#if item.data.target_ids}
-					<p>{$t('mellow_server_audit_log.type.4.target_ids', [item])}</p>
+				{#if item.data.data?.[1]}
+					<AuditLogChange
+						name={$t('mellow_server_audit_log.type.4.data')}
+						value={[item.data.data[0].map((i, j) => `[${j}]: ${i}`).join('\n\n'), item.data.data[1]?.map((i, j) => `[${j}]: ${i}`).join('\n\n')]}
+					/>
 				{/if}
-				{#if item.data.requirements}
+				<!--{#if item.data.requirements[1]}
 					<p>{$t('mellow_server_audit_log.type.4.requirements', [item])}</p>
-				{/if}
+				{/if}-->
 			{:else if item.type === MellowServerAuditLogType.UpdateLogging}
-				{#if item.data.types[1] !== undefined}
+				{#if item.data.types?.[1] !== undefined}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.5.types')}
 						diff={[mapLogTypes(item.data.types[0], item.data.types[1]), mapLogTypes(item.data.types[1], item.data.types[0])]}
 					/>
 				{/if}
-				{#if item.data.channel[1] !== undefined}
+				{#if item.data.channel?.[1] !== undefined}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.5.channel')}
 						value={item.data.channel}
@@ -92,7 +95,7 @@
 			{/if}
 			{#if item.target_link_id || item.type === MellowServerAuditLogType.CreateRobloxLink || item.type === MellowServerAuditLogType.UpdateRobloxLink}
 				{#if item.target_link_id}
-					<a href={`/mellow/server/${$page.params.id}/settings/roblox/binds?highlight=${item.target_link_id}`}>
+					<a href={`/mellow/server/${$page.params.id}/settings/syncing/actions?highlight=${item.target_link_id}`}>
 						{$t('action.view_roblox_link')}<BoxArrowUpRight size={12}/>
 					</a>
 					<p class="footer">{$t('label.roblox_link_id', [item.target_link_id])}</p>

@@ -8,14 +8,14 @@ import { verifyServerMembership } from '$lib/util/server';
 import { createMellowServerAuditLog } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
 import { lookupRobloxGroups, getRobloxGroupRoles, getRobloxGroupAvatars } from '$lib/api';
-import { MellowBindType, RequestErrorType, MellowServerAuditLogType, MellowBindRequirementType, MellowBindRequirementsType } from '$lib/enums';
+import { MellowProfileSyncActionType, RequestErrorType, MellowServerAuditLogType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
 	const response = await supabase.from('mellow_binds').select<string, {
 		id: string
 		name: string
 		data: string[]
-		type: MellowBindType
+		type: MellowProfileSyncActionType
 		edits: {
 			type: MellowServerAuditLogType
 			author: {
@@ -27,14 +27,14 @@ export const load = (async ({ params: { id } }) => {
 		creator: {
 			name: string | null
 			username: string
-		}
+		} | null
 		created_at: string
 		requirements: {
 			id: string
 			data: string[]
-			type: MellowBindRequirementType
+			type: MellowProfileSyncActionRequirementType
 		}[]
-		requirements_type: MellowBindRequirementsType
+		requirements_type: MellowProfileSyncActionRequirementsType
 	}>('id, name, type, data, creator:users ( name, username ), created_at, requirements_type, requirements:mellow_bind_requirements ( id, type, data ), edits:mellow_server_audit_logs ( type, author:users ( name, username ), created_at )').eq('server_id', id).order('created_at');
 	if (response.error)
 		console.error(response.error);
@@ -67,14 +67,14 @@ export const load = (async ({ params: { id } }) => {
 
 const UPDATE_SCHEMA =  z.object({
 	name: z.string().max(50).optional(),
-	data: z.array(z.string().max(100)).min(1).max(100).optional(),
-	type: z.nativeEnum(MellowBindType).optional(),
+	data: z.array(z.string().max(256)).min(1).max(50).optional(),
+	type: z.nativeEnum(MellowProfileSyncActionType).optional(),
 	target: z.string(),
 	requirements: z.array(z.object({
 		data: z.array(z.string().max(100)).max(5),
-		type: z.nativeEnum(MellowBindRequirementType)
+		type: z.nativeEnum(MellowProfileSyncActionRequirementType)
 	})).optional(),
-	requirementsType: z.nativeEnum(MellowBindRequirementsType).optional()
+	requirementsType: z.nativeEnum(MellowProfileSyncActionRequirementsType).optional()
 });
 
 export const actions = {

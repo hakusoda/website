@@ -47,12 +47,13 @@
 		margin-top: -2px;
 		.old, .new {
 			margin: 0;
-			height: 20px;
-			display: flex;
-			padding: 0 8px;
+			padding: 4px 8px;
+			overflow: hidden;
+			white-space: pre-line;
 			align-items: center;
 			font-family: monospace;
 			border-radius: 4px;
+			text-overflow: ellipsis;
 		}
 		.old {
 			color: #ffdcd7 !important;

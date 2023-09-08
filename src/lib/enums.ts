@@ -32,20 +32,23 @@ export enum Platform {
 	Discord
 }
 
-export enum MellowBindType {
+export enum MellowProfileSyncActionType {
 	DiscordRoles,
 	BanDiscord,
-	KickDiscord
+	KickDiscord,
+	CancelSync
 }
-export enum MellowBindRequirementType {
-	HasVerifiedUserLink,
-	HasRobloxGroupRole,
-	HasRobloxGroupRankInRange,
-	InRobloxGroup,
-	IsFriendsWith,
-	MeetsOtherLink
+export enum MellowProfileSyncActionRequirementType {
+	RobloxHasVerifiedAccount,
+	RobloxHasGroupRole,
+	RobloxHasGroupRankInRange,
+	RobloxInGroup,
+	RobloxIsFriendsWith,
+	MeetOtherAction,
+	VoxelifiedInTeam,
+	SteamInGroup
 }
-export enum MellowBindRequirementsType {
+export enum MellowProfileSyncActionRequirementsType {
 	MeetAll,
 	MeetOne
 }
@@ -72,6 +75,11 @@ export enum MellowServerLogType {
 	None,
 	AuditLog = 1 << 0,
 	ServerProfileSync = 1 << 1
+}
+
+export enum MellowWebhookEventType {
+	None,
+	RobloxServerProfileSync = 1 << 0
 }
 
 export enum TeamAuditLogType {

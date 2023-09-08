@@ -17,8 +17,9 @@ export const GET = (async ({ url, locals: { getSession } }) => {
 
 	const icons = await getRobloxGroupAvatars(groups.map(group => group.id));
 	return new Response(JSON.stringify(groups.map(group => ({
-		id: group.id,
+		id: group.id.toString(),
+		type: 'roblox',
 		name: group.name,
-		icon: icons.find(i => i.targetId === group.id)?.imageUrl
+		avatar_url: icons.find(i => i.targetId === group.id)?.imageUrl
 	}))));
 }) satisfies RequestHandler;

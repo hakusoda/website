@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Button, Select, TextInput, DropdownMenu } from '@voxelified/voxeliface';
+	import { Button, Select, TextInput, NumberInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '../localisation';
-	import { deserialize } from '$app/forms';
-	import type { PageData } from '../../routes/mellow/server/[id]/settings/roblox/binds/$types';
-	import { createMellowServerRobloxLink } from '$lib/api';
+	import type { PageData } from '../../routes/mellow/server/[id]/settings/syncing/actions/$types';
 	import type { RequestError, RobloxGroupRole } from '../types';
-	import { MellowBindType, RequestErrorType, MellowBindRequirementType, MellowBindRequirementsType } from '../enums';
+	import { MAPPED_MELLOW_SYNC_ACTION_ICONS, MAPPED_MELLOW_SYNC_REQUIREMENTS } from '$lib/constants';
+	import { createMellowServerProfileSyncAction, updateMellowServerProfileSyncAction } from '$lib/api';
+	import { MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '../enums';
 
 	import Modal from './Modal.svelte';
 	import Loader from './Loader.svelte';
@@ -16,7 +16,9 @@
 	import X from '../icons/X.svelte';
 	import Plus from '../icons/Plus.svelte';
 	import Check from '../icons/Check.svelte';
+	import GridFill from '../icons/GridFill.svelte';
 	import Clipboard from '../icons/Clipboard.svelte';
+	import UIChecksGrid from '../icons/UIChecksGrid.svelte';
 	export let data: PageData;
 	export let target: PageData['binds'][number] | null = null;
 	export let onSave: () => void;
@@ -27,10 +29,10 @@
 	let requirementTrigger: () => void;
 
 	let name = '';
-	let type = MellowBindType.DiscordRoles;
+	let type = MellowProfileSyncActionType.DiscordRoles;
 	let actionData: string[] = [];
-	let requirements: [MellowBindRequirementType, string[]][] = [];
-	let requirementsType = MellowBindRequirementsType.MeetAll;
+	let requirements: [MellowProfileSyncActionRequirementType, string[]][] = [];
+	let requirementsType = MellowProfileSyncActionRequirementsType.MeetAll;
 
 	let saving = false;
 	let editing = false;
@@ -41,16 +43,14 @@
 	$: if (roleSearchId && !groupRoles[roleSearchId])
 		getGroupRoles(roleSearchId.toString());
 
-	$: hasVerifiedType = requirements.some(i => i[0] === MellowBindRequirementType.HasVerifiedUserLink) ? MellowBindRequirementType.HasRobloxGroupRole : MellowBindRequirementType.HasVerifiedUserLink;
-
 	$: if (target && !editing) {
-		name = target.name, type = target.type, actionData = target.data;
+		name = target.name, type = target.type, actionData = [...target.data];
 		requirements = target.requirements.map(item => [item.type, item.data]), requirementsType = target.requirements_type;
 		editing = true;
 		trigger();
 
 		for (const [type, data] of requirements)
-			if (type === MellowBindRequirementType.HasRobloxGroupRole || type === MellowBindRequirementType.HasRobloxGroupRankInRange || type === MellowBindRequirementType.InRobloxGroup)
+			if (type === MellowProfileSyncActionRequirementType.RobloxHasGroupRole || type === MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange || type === MellowProfileSyncActionRequirementType.RobloxInGroup)
 				getGroupRoles(data[0]);
 	}
 
@@ -71,29 +71,22 @@
 				type: item[0],
 				data: item[1]
 			}));
-			const response = await fetch('?/update', {
-				body: JSON.stringify({
-					type: type === target.type ? undefined : type,
-					name: newName === target.name ? undefined : newName,
-					data: JSON.stringify(actionData) === JSON.stringify(target.data) ? undefined : actionData,
-					target: target.id,
-					requirements: JSON.stringify(newRequirements) === JSON.stringify(target.requirements.map(item => ({ type: item.type, data: item.data }))) ? undefined : newRequirements,
-					requirementsType: requirementsType === target.requirements_type ? undefined : requirementsType
-				}),
-				method: 'POST'
+			const response = await updateMellowServerProfileSyncAction(data.session!.access_token, serverId, target.id, {
+				type: type === target.type ? undefined : type,
+				name: newName === target.name ? undefined : newName,
+				data: JSON.stringify(actionData) === JSON.stringify(target.data) ? undefined : actionData,
+				requirements: JSON.stringify(newRequirements) === JSON.stringify(target.requirements.map(item => ({ type: item.type, data: item.data }))) ? undefined : newRequirements,
+				requirements_type: requirementsType === target.requirements_type ? undefined : requirementsType
 			});
-			const result = deserialize(await response.text());
-			if (result.type === 'success') {
-				data.binds = data.binds.map(item => item.id === target!.id ? result.data as any : item);
+			if (response.success) {
+				data.binds = data.binds.map(item => item.id === target!.id ? response.data as any : item);
 				saving = false;
 				trigger();
 				resetAdd();
-			} else if (result.type === 'failure')
-				saving = !(saveError = result.data as any);
-			else if (result.type === 'error')
-				saving = !(saveError = { error: RequestErrorType.Offline });
+			} else
+				return saving = !(saveError = response);
 		} else {
-			const response = await createMellowServerRobloxLink(data.session!.access_token, serverId, {
+			const response = await createMellowServerProfileSyncAction(data.session!.access_token, serverId, {
 				type,
 				data: actionData,
 				name: name || 'Unnamed Action',
@@ -110,7 +103,7 @@
 				resetAdd();
 				setTimeout(onSave, 100);
 			} else
-				saving = !(saveError = response);
+				return saving = !(saveError = response);
 		}
 		target = null;
 		editing = false;
@@ -118,7 +111,7 @@
 	const addRequirement = (type: any) => requirements = [...requirements, [type, []]];
 	const resetAdd = () => {
 		actionData = [], name = '', requirements = [];
-		type = MellowBindType.DiscordRoles, requirementsType = MellowBindRequirementsType.MeetAll;
+		type = MellowProfileSyncActionType.DiscordRoles, requirementsType = MellowProfileSyncActionRequirementsType.MeetAll;
 		target = null;
 		editing = false;
 	};
@@ -136,81 +129,94 @@
 	</div>
 
 	<p class="modal-label">{$t('mellow_link_editor.requirements')}</p>
-	<div class="requirements">
-		<div class="fields">
-			<Select.Root bind:value={requirementsType}>
-				{#each Object.values(MellowBindRequirementsType) as item}
-					{#if typeof item === 'number'}
-						<Select.Item value={item}>
-							{$t(`mellow_bind.requirements_type.${item}`)}
-						</Select.Item>
-					{/if}
-				{/each}
-			</Select.Root>
-			<DropdownMenu.Root bind:trigger={requirementTrigger}>
-				<Button slot="trigger" on:click={requirementTrigger}>
-					<Plus/>{$t('action.create_new')}
-				</Button>
-				<p>{$t('mellow_link_editor.requirements')}</p>
-				{#each Object.values(MellowBindRequirementType) as type}
-					{#if typeof type === 'number' && (type || !hasVerifiedType)}
+	<div class="fields">
+		<Select.Root bind:value={requirementsType}>
+			{#each Object.values(MellowProfileSyncActionRequirementsType) as item}
+				{#if typeof item === 'number'}
+					<Select.Item value={item}>
+						{#if item}
+							<UIChecksGrid/>
+						{:else}
+							<GridFill/>
+						{/if}
+						{$t(`mellow_bind.requirements_type.${item}`)}
+					</Select.Item>
+				{/if}
+			{/each}
+		</Select.Root>
+		<DropdownMenu.Root bind:trigger={requirementTrigger}>
+			<Button slot="trigger" on:click={requirementTrigger}>
+				<Plus/>{$t('action.create_new')}
+			</Button>
+			<p>{$t('mellow_link_editor.requirements.platforms')}</p>
+			{#each MAPPED_MELLOW_SYNC_REQUIREMENTS.entries() as [id, [items, icon]]}
+				{#if id === MAPPED_MELLOW_SYNC_REQUIREMENTS.length - 1}
+					<p>{$t('mellow_link_editor.requirements.other')}</p>
+					<!-- is there any way to re-use the same code below? -->
+					{#each items as [type, icon]}
 						<button type="button" on:click={() => addRequirement(type)}>
+							<svelte:component this={icon}/>
 							{$t(`mellow_bind.requirement.${type}`)}
 						</button>
-					{/if}
-				{/each}
-			</DropdownMenu.Root>
-		</div>
+					{/each}
+				{:else}
+					<DropdownMenu.Sub>
+						<svelte:fragment slot="trigger">
+							<svelte:component this={icon}/>{$t(`mellow_link_editor.requirements.platforms.${id}`)}
+						</svelte:fragment>
+						<p>{$t(`mellow_link_editor.requirements.platforms.${id}`)} {$t('label.requirements')}</p>
+						{#each items as [type, icon]}
+							<button type="button" on:click={() => addRequirement(type)}>
+								<svelte:component this={icon}/>
+								{$t(`mellow_bind.requirement.${type}`)}
+							</button>
+						{/each}
+					</DropdownMenu.Sub>
+				{/if}
+			{/each}
+		</DropdownMenu.Root>
+	</div>
+	<div class="requirements">
 		{#each requirements as item, index}
 			<div class="item" class:highlighted={index === requirements.length - 1} bind:this={itemRefs[index]}>
 				<div class="rfields">
-					<p class="title">{$t(`mellow_bind.requirement.${item[0]}`)}</p>
-					{#if item[0] === MellowBindRequirementType.HasRobloxGroupRole}
+					<p class="title">
+						<svelte:component this={MAPPED_MELLOW_SYNC_REQUIREMENTS.find(i => i[0].some(j => j[0] === item[0]))[1]}/>
+						{$t(`mellow_bind.requirement.${item[0]}`)}
+					</p>
+					{#if item[0] === MellowProfileSyncActionRequirementType.RobloxHasGroupRole}
 						<div class="fields">
-							<div class="field">
-								<p class="label">{$t('mellow_link_editor.requirement.group')}</p>
-								<GroupSelect bind:value={item[1][0]} onChange={value => roleSearchId = value}/>
-							</div>
+							<GroupSelect source="roblox" bind:value={item[1][0]} onChange={value => roleSearchId = value}/>
 							{#if groupRoles[item[1][0]]}
-								<div class="field">
-									<p class="label">{$t('mellow_link_editor.requirement.group_role')}</p>
-									<Select.Root bind:value={item[1][1]} placeholder={$t('mellow_link_editor.requirement.group_role.placeholder')}>
-										{#each groupRoles[item[1][0]] as role}
-											<Select.Item value={role.id.toString()}>
-												{role.name}
-											</Select.Item>
-										{/each}
-									</Select.Root>
-								</div>
+								<Select.Root bind:value={item[1][1]} placeholder={$t('mellow_link_editor.requirement.group_role.placeholder')}>
+									{#each groupRoles[item[1][0]] as role}
+										<Select.Item value={role.id.toString()}>
+											{role.name}
+										</Select.Item>
+									{/each}
+								</Select.Root>
 							{:else if item[1][0]}
 								<Loader/>
 							{/if}
 						</div>
-					{:else if item[0] === MellowBindRequirementType.HasRobloxGroupRankInRange}
+					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange}
 						<div class="fields">
-							<div class="field">
-								<p class="label">{$t('mellow_link_editor.requirement.group')}</p>
-								<GroupSelect bind:value={item[1][0]}/>
-							</div>
-							<div class="field">
-								<p class="label">{$t('mellow_link_editor.requirement.rank_from')}</p>
-								<TextInput bind:value={item[1][1]} placeholder="Rank"/>
-							</div>
-							<div class="field">
-								<p class="label">{$t('mellow_link_editor.requirement.rank_to')}</p>
-								<TextInput bind:value={item[1][2]} placeholder="Rank"/>
-							</div>
+							<GroupSelect source="roblox" bind:value={item[1][0]}/>
+							<NumberInput min={0} max={255} bind:value={item[1][1]}/>
+							<NumberInput min={0} max={255} bind:value={item[1][2]}/>
 						</div>
-					{:else if item[0] === MellowBindRequirementType.InRobloxGroup}
-						<GroupSelect bind:value={item[1][0]}/>
-					{:else if item[0] === MellowBindRequirementType.MeetsOtherLink}
+					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxInGroup}
+						<GroupSelect source="roblox" bind:value={item[1][0]}/>
+					{:else if item[0] === MellowProfileSyncActionRequirementType.MeetOtherAction}
 						<Select.Root bind:value={item[1][0]} placeholder={$t('mellow_link_editor.requirement.link.placeholder')}>
-							{#each data.binds.filter(bind => bind.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowBindRequirementType.MeetsOtherLink && r[1][0] === bind.id)) as bind}
+							{#each data.binds.filter(bind => bind.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowProfileSyncActionRequirementType.MeetsOtherLink && r[1][0] === bind.id)) as bind}
 								<Select.Item value={bind.id}>
 									{bind.name}
 								</Select.Item>
 							{/each}
 						</Select.Root>
+					{:else if item[0] === MellowProfileSyncActionRequirementType.VoxelifiedInTeam}
+						<GroupSelect source="self" bind:value={item[1][0]}/>
 					{/if}
 				</div>
 				<div class="buttons">
@@ -230,9 +236,10 @@
 			<p class="modal-label">{$t('mellow_link_editor.type')}</p>
 			<Select.Root bind:value={type}>
 				<p>{$t('mellow_link_editor.type.category')}</p>
-				{#each Object.values(MellowBindType) as item}
+				{#each Object.values(MellowProfileSyncActionType) as item}
 					{#if typeof item === 'number'}
 						<Select.Item value={item}>
+							<svelte:component this={MAPPED_MELLOW_SYNC_ACTION_ICONS[item]}/>
 							{$t(`mellow_bind.type.${item}`)}
 						</Select.Item>
 					{/if}
@@ -240,7 +247,7 @@
 			</Select.Root>
 		</div>
 	
-		{#if type === MellowBindType.DiscordRoles}
+		{#if type === MellowProfileSyncActionType.DiscordRoles}
 			<div class="field">
 				<p class="modal-label">{$t('mellow_link_editor.discord_roles')}</p>
 				<div class="roles">
@@ -250,15 +257,17 @@
 						</button>
 					{/each}
 					<DropdownMenu.Root bind:trigger={roleTrigger}>
-						<button class="item" slot="trigger" on:click={roleTrigger}>
+						<Button slot="trigger" circle on:click={roleTrigger}>
 							<Plus/>
-						</button>
+						</Button>
 						<p>{$t('mellow_link_editor.discord_roles.category')}</p>
 						{#each data?.roles.filter(role => !actionData.includes(role.id)) as item}
 							<button type="button" on:click={() => actionData = [...actionData, item.id]}>
 								{item.name}
 							</button>
 						{/each}
+						
+						<br/>
 						<p>{$t('mellow_link_editor.discord_roles.options')}</p>
 						<button type="button" on:click={() => actionData = data.roles.map(role => role.id)}>
 							{$t('mellow_link_editor.discord_roles.add_all')}
@@ -266,14 +275,19 @@
 					</DropdownMenu.Root>
 				</div>
 			</div>
-		{:else if type === MellowBindType.BanDiscord || type === MellowBindType.KickDiscord}
+		{:else if type === MellowProfileSyncActionType.BanDiscord || type === MellowProfileSyncActionType.KickDiscord}
 			<div class="field audit-reason">
 				<p class="modal-label">{$t('label.audit_reason')}</p>
 				<TextInput bind:value={actionData[0]} placeholder={$t('label.reason')}/>
 			</div>
+		{:else if type === MellowProfileSyncActionType.CancelSync}
+			<div class="field audit-reason">
+				<p class="modal-label">{$t('label.user_reason')}</p>
+				<TextInput bind:value={actionData[0]} placeholder={$t('label.reason')}/>
+			</div>
 		{/if}
 	</div>
-	{#if type === MellowBindType.BanDiscord || type === MellowBindType.KickDiscord}
+	{#if type === MellowProfileSyncActionType.BanDiscord || type === MellowProfileSyncActionType.KickDiscord}
 		<div class="fields">
 			<div class="field audit-reason">
 				<p class="modal-label">{$t('label.user_reason')}</p>
@@ -283,13 +297,13 @@
 	{/if}
 
 	<RequestErrorUI data={saveError}/>
-	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [actionData])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
+	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [actionData.length])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
 	<div class="modal-buttons">
 		<Button on:click={save} disabled={saving}>
 			<Check/>{$t(target ? 'action.save_changes' : 'mellow_link_editor.finish')}
 		</Button>
 		<form method="dialog">
-			<Button on:click={resetAdd} disabled={saving}>
+			<Button colour="secondary" on:click={resetAdd} disabled={saving}>
 				<X/>{$t('action.cancel')}
 			</Button>
 		</form>
@@ -297,44 +311,52 @@
 </Modal>
 
 <style lang="scss">
+	h1 {
+		margin: 8px 0 24px;
+	}
 	.requirements {
 		gap: 8px;
-		flex: 0 1 auto;
+		margin: 8px 0 0;
 		display: flex;
+		flex-wrap: wrap;
 		margin-bottom: 16px;
-		flex-direction: column;
 		.item {
-			gap: 24px;
+			flex: 1 1 30%;
+			width: 0;
 			display: flex;
-			padding: 12px 16px;
-			background: var(--background-primary);
-			border-radius: 8px;
+			padding: 16px;
+			position: relative;
+			background: #00000040;
+			border-radius: 20px;
 			.title {
-				margin: auto 0;
+				gap: 16px;
+				margin: 0 0 0 4px;
+				display: flex;
 				font-size: .9em;
+				font-weight: 500;
+				white-space: nowrap;
+				align-items: center;
 			}
 			.rfields {
 				gap: 16px;
 				display: flex;
 				flex-direction: column;
-				.field .label {
-					color: var(--color-secondary);
-					margin: 0 0 6px;
-					font-size: .9em;
-				}
 			}
 			.buttons {
+				top: 16px;
 				gap: 16px;
-				margin: 0 0 0 auto;
+				right: 16px;
 				display: flex;
+				position: absolute;
 				button {
-					color: var(--color-tertiary);
+					color: var(--color-secondary);
 					border: none;
 					cursor: pointer;
 					height: fit-content;
 					padding: 0;
 					display: flex;
 					background: none;
+					transition: color .5s;
 					&:hover {
 						color: var(--color-primary);
 					}
@@ -361,30 +383,34 @@
 	}
 
 	.roles {
-		gap: 4px;
+		gap: 8px 16px;
 		flex: 0 1 auto;
 		display: flex;
 		flex-wrap: wrap;
 		max-width: 512px;
 		.item {
-			color: var(--color-tertiary);
-			height: 28px;
+			color: #fff;
+			height: 40px;
 			border: none;
 			cursor: pointer;
 			display: flex;
-			padding: 0 12px;
-			font-size: .8em;
-			background: var(--background-primary);
+			padding: 0 24px;
+			font-size: 14px;
+			background: none;
+			transition: background .5s, box-shadow .5s;
+			box-shadow: inset 0 0 0 1px #fff;
+			font-weight: 500;
 			align-items: center;
 			font-family: var(--font-primary);
-			border-radius: 16px;
+			border-radius: 20px;
 			&:hover {
-				box-shadow: inset 0 0 0 1px var(--border-secondary);
+				background: #ffffff0d;
+				box-shadow: inset 0 0 0 1px #ffffff80;
 			}
 		}
-		:global(.content) {
+		:global(.menu-content) {
 			overflow: auto;
-			max-height: 192px;
+			max-height: 256px;
 		}
 	}
 
@@ -398,7 +424,7 @@
 	}
 	.explanation {
 		color: var(--color-secondary);
-		margin: 32px 0 8px;
+		margin: 48px 0 12px;
 		font-size: .9em;
 	}
 	.modal-buttons {

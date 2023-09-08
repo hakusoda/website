@@ -1,5 +1,5 @@
 import type { ZodIssue } from 'zod';
-import type { MellowBindType, RequestErrorType, RobloxLinkType, RobloxLinkFlag, DiscordChannelType, UserNotificationType, UserNotificationState, MellowBindRequirementType, MellowBindRequirementsType } from './enums';
+import type { MellowProfileSyncActionType, RequestErrorType, RobloxLinkType, RobloxLinkFlag, DiscordChannelType, UserNotificationType, UserNotificationState, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -210,7 +210,7 @@ export interface RobloxGroupRolesResponse {
 export interface MellowLink {
 	name: string
 	data: string[]
-	type: MellowBindType
+	type: MellowProfileSyncActionType
 	creator: {
 		name: string | null
 		username: string
@@ -219,9 +219,9 @@ export interface MellowLink {
 	requirements: {
 		id: string
 		data: string[]
-		type: MellowBindRequirementType
+		type: MellowProfileSyncActionRequirementType
 	}[]
-	requirements_type: MellowBindRequirementsType
+	requirements_type: MellowProfileSyncActionRequirementsType
 }
 
 export interface DiscordRole {
@@ -325,12 +325,12 @@ export interface UpdateProfilePayload {
 export interface CreateMellowServerRobloxLinkPayload {
 	name: string
 	data: string[]
-	type: MellowBindType
+	type: MellowProfileSyncActionType
 	requirements: {
 		data: string[]
-		type: MellowBindRequirementType
+		type: MellowProfileSyncActionRequirementType
 	}[]
-	requirements_type: MellowBindRequirementsType
+	requirements_type: MellowProfileSyncActionRequirementsType
 }
 
 export interface CreateMellowServerRobloxLinkResponse {
@@ -345,9 +345,9 @@ export interface CreateMellowServerRobloxLinkResponse {
 	requirements: {
 		id: string
 		data: string[]
-		type: MellowBindRequirementType
+		type: MellowProfileSyncActionRequirementType
 	}[]
-	requirements_type: MellowBindRequirementsType
+	requirements_type: MellowProfileSyncActionRequirementsType
 }
 
 export interface CreateUserPostPayload {
@@ -363,4 +363,12 @@ export interface CreateUserPostResponse {
 	attachments: {
 		url: string
 	}[]
+}
+
+export interface GroupSelectItem {
+	id: string
+	name: string
+	icon?: string
+	type?: 'self' | 'steam' | 'roblox'
+	avatar_url: string
 }

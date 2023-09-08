@@ -2,7 +2,7 @@
 	import { TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '../localisation';
-	import type { PartialRobloxGroup } from '../types';
+	import type { GroupSelectItem } from '../types';
 
 	import Avatar from './Avatar.svelte';
 	import Loader from './Loader.svelte';
@@ -12,14 +12,16 @@
 	import ArrowLeft from '../icons/ArrowLeft.svelte';
 	import ChevronDown from '../icons/ChevronDown.svelte';
 	export let value: string | null = null;
+	export let source: 'self' | 'steam' | 'roblox';
 	export let onChange: ((newValue: string) => void) | null = null;
 
-	$: cached = (JSON.parse(localStorage.getItem('recent-bind-groups') || '[]') || []) as (PartialRobloxGroup & { icon: string })[];
+	$: storageName = `recent-${source === 'roblox' ? 'bind' : source}-groups`;
+	$: cached = (JSON.parse(localStorage.getItem(storageName) || '[]') || []) as GroupSelectItem[];
 
 	let state = 0;
 	let query = '';
 	let trigger: () => void;
-	let results: (PartialRobloxGroup & { icon: string })[] = [];
+	let results: GroupSelectItem[] = [];
 	let searching = false;
 
 	$: if (query) {
@@ -27,7 +29,7 @@
 		searching = true;
 		setTimeout(async () => {
 			if (query === body) {
-				results = await fetch(`/api/roblox/group-lookup?query=${encodeURIComponent(body)}`)
+				results = await fetch(`/api/${source === 'self' ? 'team' : 'roblox/group'}-lookup?query=${encodeURIComponent(body)}`)
 					.then(response => response.json());
 				searching = false;
 			}
@@ -35,17 +37,17 @@
 	} else
 		results = [];
 
-	$: cachedValue = cached.find(group => group.id.toString() === value);
+	$: cachedValue = cached.find(group => group.id === value);
 </script>
 
 <div class="group-select-container" style="display: contents">
 	<DropdownMenu.Root bind:trigger>
-		<button class="group-select" slot="trigger" on:click={trigger}>
+		<button class="group-select" slot="trigger" on:click={trigger} class:select={!value}>
 			{#if value}
-				<Avatar src={cachedValue?.icon} size="xxxs"/>
+				<Avatar id={value} src={cachedValue?.avatar_url ?? cachedValue?.icon} size="xxxs"/>
 				{cachedValue?.name ?? value}
 			{:else}
-				{$t('group_select')}
+				{$t(source === 'self' ? 'group_select.team' : 'group_select')}
 			{/if}
 			<ChevronDown/>
 		</button>
@@ -64,29 +66,28 @@
 					value = item.id.toString();
 					onChange?.(value);
 					if (!cached.some(group => group.id === item.id))
-						localStorage.setItem('recent-bind-groups', JSON.stringify(cached = [...cached, item]));
+						localStorage.setItem(storageName, JSON.stringify(cached = [...cached, item]));
 				}}>
-					<Avatar src={item.icon} size="xxxs"/>
+					<Avatar src={item.avatar_url ?? item.icon} size="xxxs"/>
 					{item.name}
 				</button>
 			{/each}
+			<br/>
 			<button type="button" on:click|stopPropagation={() => (state--, query = '')}>
 				<ArrowLeft/>{$t('group_select.back')}
 			</button>
 		{:else}
 			<p>{$t('group_select.recent')}</p>
 			{#each cached as item}
-				<button type="button" on:click={() => {
-					value = item.id.toString();
-					onChange?.(value);
-				}}>
-					<Avatar src={item.icon} size="xxxs"/>
+				<button type="button" on:click={() => (value = item.id.toString(), onChange?.(value))}>
+					<Avatar src={item.avatar_url ?? item.icon} size="xxxs"/>
 					{item.name}
-					{#if item.id.toString() === value}
+					{#if item.id === value}
 						<Check/>
 					{/if}
 				</button>
 			{/each}
+			<br/>
 			<button type="button" on:click|stopPropagation={() => state++}>
 				<Search/>
 				{$t('group_select.search')}
@@ -97,34 +98,37 @@
 
 <style lang="scss">
 	.group-select {
-		gap: 8px;
+		gap: 16px;
 		width: fit-content;
 		color: var(--color-primary);
-		height: 32px;
+		height: 40px;
 		border: none;
-		padding: 0 16px;
+		cursor: pointer;
+		padding: 0 24px;
 		display: inline-flex;
-		font-size: .75em;
+		overflow: hidden;
+		font-size: 14px;
 		min-width: 192px;
-		background: none;
-		transition: box-shadow 0.25s;
-		box-shadow: 0 0 0 1px var(--border-primary);
+		transition: box-shadow 0.5s;
+		background: var(--background-secondary);
+		box-shadow: inset 0 0 0 1px var(--border-primary);
+		font-weight: 500;
 		align-items: center;
+		white-space: nowrap;
 		font-family: var(--font-primary);
-		border-radius: 4px;
+		border-radius: 20px;
 		justify-content: space-between;
 		&:hover {
-			box-shadow: 0 0 0 1px var(--border-secondary);
+			box-shadow: inset 0 0 0 1px var(--border-secondary);
 		}
 		:global(svg) {
 			margin-left: auto;
 		}
+		&.select {
+			color: var(--color-secondary);
+		}
 	}
 	:global(.group-select-container .text-input) {
-		// there is currently a bug with voxeliface,
-		// where the ROOT of menus have a font size of .75em, instead of the children.
-		width: 100%;
-		font-size: 1em !important;
 		&:not(:last-child) {
 			margin-bottom: 8px;
 		}
