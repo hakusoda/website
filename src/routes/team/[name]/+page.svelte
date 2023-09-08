@@ -63,7 +63,7 @@
 			{#if data.website_url}
 				<a href={data.website_url}>
 					<Link/>
-					{data.website_url.replace(/^https?:\/\//g, '').replace(/\#.*$/g, '').replace(/^www\./, '').replace(/^(.*?\/.*?\/).*?(\/.+)/, (_, a, b) => `${a}...${b}`)}
+					{data.website_url.replace(/^https?:\/\//g, '').replace(/\#.*$|\/$/g, '').replace(/^www\./, '').replace(/^(.*?\/.*?\/).*?(\/.+)/, (_, a, b) => `${a}...${b}`)}
 				</a>
 			{/if}
 			<div class="buttons">
