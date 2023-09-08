@@ -25,7 +25,7 @@
 	const reply = async () => {
 		replying = !(replyError = null);
 
-		const response = await createChildPost(data.session!.access_token, $page.params.id, {
+		const response = await createChildPost($page.params.id, {
 			content: replyContent
 		});
 

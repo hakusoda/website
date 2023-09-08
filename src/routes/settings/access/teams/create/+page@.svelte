@@ -3,8 +3,6 @@
 
 	import { t } from '$lib/localisation';
 	import { goto } from '$app/navigation';
-	import type { PageData } from './$types';
-	import { RequestErrorType } from '$lib/enums';
 	import type { ApiRequestError } from '$lib/types';
 	import { createTeam, uploadTeamAvatar } from '$lib/api';
 
@@ -15,7 +13,6 @@
 	import X from '$lib/icons/X.svelte';
 	import Check from '$lib/icons/Check.svelte';
 	import Hourglass from '$lib/icons/Hourglass.svelte';
-	export let data: PageData;
 
 	let error: ApiRequestError | null = null;
 	let avatar: ArrayBuffer | null = null;
@@ -27,12 +24,11 @@
 	const create = async () => {
 		creating = !(error = null);
 
-		const { access_token } = data.session!;
-		const response = await createTeam(access_token, displayName || 'My Team');
+		const response = await createTeam(displayName || 'My Team');
 		if (response.success) {
 			const team = response.data;
 			if (avatar)
-				await uploadTeamAvatar(access_token, team.id, avatar);
+				await uploadTeamAvatar(team.id, avatar);
 			return goto(`/team/${team.name}/invite`);
 		}
 		

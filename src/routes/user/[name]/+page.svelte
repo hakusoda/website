@@ -58,7 +58,7 @@
 		saving = !(saveError = null);
 
 		if (editChanged) {
-			const response = await updateProfile(data.session!.access_token, {
+			const response = await updateProfile({
 				bio: editBio === data.bio ? undefined : editBio.length ? editBio : null,
 				name: editName === (data.name || data.username) ? undefined : editName.length ? editName : null
 			});
@@ -76,7 +76,7 @@
 
 	let newAvatar: ArrayBuffer | null = null;
 	let newAvatarUri: string | null = null;
-	const uploadAvatar2 = () => uploadAvatar(data.session!.access_token!, data.id, newAvatar!).then(response => {
+	const uploadAvatar2 = () => uploadAvatar(data.id, newAvatar!).then(response => {
 		if (response.success)
 			invalidateAll();
 		else
@@ -105,7 +105,7 @@
 		creatingPost = !(createPostError = null);
 
 		const attachments = createPostAttachments.length ? await uploadPostAttachments(createPostAttachments.map(item => [item[1], item[2]])) : [];
-		const response = await createUserPost(data.session!.access_token, data.user!.id, {
+		const response = await createUserPost(data.user!.id, {
 			content: createPostContent,
 			attachments
 		});
@@ -123,7 +123,7 @@
 	let dropdownTrigger: () => void;
 
 	const inviteToTeam = async (teamId: string) => {
-		const result = await createTeamInvite(data.session!.access_token, teamId, data.id);
+		const result = await createTeamInvite(teamId, data.id);
 		if (result.success)
 			invalidateAll();
 		else

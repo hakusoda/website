@@ -36,7 +36,7 @@
 			return error = { error: RequestErrorType.NameTooShort } satisfies RequestError;
 		saving = !(error = null);
 		
-		const response = await updateTeam(data.session!.access_token, data.id, {
+		const response = await updateTeam(data.id, {
 			bio: bio === data.bio ? undefined : bio || null,
 			name: name === data.name ? undefined : name,
 			website_url: websiteUrl === data.website_url ? undefined : websiteUrl || null,
@@ -44,7 +44,7 @@
 		});
 		if (response.success) {
 			if (newAvatar)
-				await uploadTeamAvatar(data.session!.access_token, data.id, newAvatar);
+				await uploadTeamAvatar(data.id, newAvatar);
 			return goto(`/team/${name}/settings/profile`, {
 				invalidateAll: true
 			}).then(() => (saving = false, newAvatar = null, newAvatarUri = null));

@@ -32,7 +32,7 @@
 	let importTrigger: () => void;
 
 	const deleteLink = async (id: string) => {
-		const response = await deleteMellowServerProfileSyncAction(data.session!.access_token, $page.params.id, id);
+		const response = await deleteMellowServerProfileSyncAction($page.params.id, id);
 		if (response.success)
 			data.binds = data.binds.filter(bind => bind.id !== id);
 		else

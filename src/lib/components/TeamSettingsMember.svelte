@@ -47,7 +47,7 @@
 	const changeRole = async (targetRole: PartialRole | null) => {
 		changingRole = true;
 		
-		const response = await updateTeamMember((await $page.data.session)!.access_token, teamId, id, {
+		const response = await updateTeamMember(teamId, id, {
 			role_id: targetRole ? targetRole.id : null
 		});
 		if (response.success)

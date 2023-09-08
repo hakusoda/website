@@ -71,7 +71,7 @@
 				type: item[0],
 				data: item[1]
 			}));
-			const response = await updateMellowServerProfileSyncAction(data.session!.access_token, serverId, target.id, {
+			const response = await updateMellowServerProfileSyncAction(serverId, target.id, {
 				type: type === target.type ? undefined : type,
 				name: newName === target.name ? undefined : newName,
 				data: JSON.stringify(actionData) === JSON.stringify(target.data) ? undefined : actionData,
@@ -86,7 +86,7 @@
 			} else
 				return saving = !(saveError = response);
 		} else {
-			const response = await createMellowServerProfileSyncAction(data.session!.access_token, serverId, {
+			const response = await createMellowServerProfileSyncAction(serverId, {
 				type,
 				data: actionData,
 				name: name || 'Unnamed Action',

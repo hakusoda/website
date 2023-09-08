@@ -29,9 +29,8 @@
 	const finish = async () => {
 		finishing = !(error = null);
 		
-		const token = (await $page.data.session)!.access_token;
 		if (name) {
-			const response = await updateProfile(token, {
+			const response = await updateProfile({
 				name,
 				username: name.toLowerCase().replace(/ /g, '_').replace(/\W/g, '')
 			});
@@ -40,7 +39,7 @@
 		}
 
 		if (newAvatar) {
-			const response = await uploadAvatar(token, user.id, newAvatar);
+			const response = await uploadAvatar(user.id, newAvatar);
 			if (!response.success)
 				return finishing = !(error = response.error);
 		}

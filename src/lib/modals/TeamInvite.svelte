@@ -2,8 +2,6 @@
 	import { Button } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import { page } from '$app/stores';
-	import { RequestErrorType } from '$lib/enums';
 	import type { TeamInvite, ApiRequestError } from '$lib/types';
 	import { acceptTeamInvite, rejectTeamInvite } from '$lib/api';
 
@@ -28,14 +26,14 @@
 	const accept = async () => {
 		accepting = !(error = null);
 		
-		const response = await acceptTeamInvite((await $page.data.session)!.access_token, id, data.id);
+		const response = await acceptTeamInvite(id, data.id);
 		if (response.success)
 			state++;
 		else
 			accepting = !(error = response.error);
 	};
 	const reject = async () =>
-		await rejectTeamInvite((await $page.data.session)!.access_token, id, data.id);
+		await rejectTeamInvite(id, data.id);
 </script>
 
 <Modal autoOpen>

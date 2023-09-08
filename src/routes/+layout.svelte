@@ -95,7 +95,7 @@
 							<a href={getUserNotificationUrl(item)} class="notification" on:click={() => {
 								item.state = UserNotificationState.Read;
 								if (data.session) // https://github.com/sveltejs/svelte/issues/6778
-									markNotificationAsRead(data.session.access_token, data.session.user.id, item.id);
+									markNotificationAsRead(data.session.user.id, item.id);
 							}}>
 								<Avatar src={item.target_team?.avatar_url ?? item.target_user?.avatar_url} size="sm"/>
 								{#if item.target_user && item.target_team}
@@ -119,7 +119,7 @@
 					<button type="button" class="mark-read" disabled={clearingNotifications} on:click|stopPropagation={() => {
 						clearingNotifications = true;
 						if (data.session) // https://github.com/sveltejs/svelte/issues/6778
-							markAllNotificationsAsRead(data.session.access_token, data.session.user.id).then(() => location.reload())
+							markAllNotificationsAsRead(data.session.user.id).then(() => location.reload())
 					}}>
 						{#if clearingNotifications}<Loader size={16}/>{:else}<Eye/>{/if}
 						{$t('notifications.read_all')}
@@ -127,7 +127,7 @@
 					<button type="button" class="mark-read" disabled={clearingNotifications} on:click|stopPropagation={() => {
 						clearingNotifications = true;
 						if (data.session) // https://github.com/sveltejs/svelte/issues/6778
-							clearAllNotifications(data.session.access_token, data.session.user.id).then(() => location.reload())
+							clearAllNotifications(data.session.user.id).then(() => location.reload())
 					}}>
 						{#if clearingNotifications}<Loader size={16}/>{:else}<X/>{/if}
 						{$t('notifications.clear')}

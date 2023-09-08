@@ -32,7 +32,7 @@
 	let memberFilter = '';
 
 	const leave = async () => {
-		const response = await leaveTeam(data.session!.access_token, data.id);
+		const response = await leaveTeam(data.id);
 		if (response.success)
 			invalidateAll();
 		else

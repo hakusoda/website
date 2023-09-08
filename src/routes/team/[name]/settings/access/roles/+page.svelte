@@ -28,7 +28,7 @@
 	const save = async () => {
 		saving = !(error = null);
 
-		const response = await updateTeamRole(data.session!.access_token, data.id, editing!.id, {
+		const response = await updateTeamRole(data.id, editing!.id, {
 			name: editingName === editing!.name ? undefined : editingName
 		});
 		if (!response.success)

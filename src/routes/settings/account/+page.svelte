@@ -4,6 +4,7 @@
 	import { t } from '$lib/localisation';
 	import { updateProfile } from '$lib/api';
 	import type { PageData } from './$types';
+	import { invalidateAll } from '$app/navigation';
 	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
 
@@ -23,9 +24,9 @@
 			return error = { error: RequestErrorType.NameTooShort };
 		saving = !(error = null);
 
-		const response = await updateProfile(data.session!.access_token, { username });
+		const response = await updateProfile({ username });
 		if (response.success)
-			return location.reload();
+			return invalidateAll().then(() => saving = false);
 
 		saving = !(error = response);
 	};
