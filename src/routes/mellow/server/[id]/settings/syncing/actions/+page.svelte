@@ -207,8 +207,9 @@
 							gap: 6px;
 							color: var(--color-secondary);
 							margin: 0;
+							height: 24px;
 							display: flex;
-							padding: 4px 10px;
+							padding: 0 10px;
 							font-size: .75em;
 							box-shadow: 0 0 0 1px var(--border-secondary);
 							align-items: center;
