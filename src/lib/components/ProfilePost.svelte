@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { t } from '../localisation';
+	import { likePost, unlikePost } from '$lib/api';
 
 	import Avatar from './Avatar.svelte';
 	import Markdown from './Markdown.svelte';
@@ -7,6 +8,7 @@
 
 	import Chat from '../icons/Chat.svelte';
 	import Heart from '../icons/Heart.svelte';
+	import HeartFill from '../icons/HeartFill.svelte';
 	export let id: string;
 	export let user: {
 		id: string
@@ -21,10 +23,24 @@
 		display_name: string
 	} | null = null;
 	export let likes = 0;
+	export let liked = false;
 	export let content: string;
 	export let comments = 0;
 	export let created_at: string;
 	export let attachments: { url: string }[] = [];
+
+	const like = async () => {
+		const initialCount = likes, initialState = liked;
+		if (!liked)
+			likes += 1;
+		liked = !liked;
+
+		const response = await (liked ? likePost(id) : unlikePost(id));
+		if (!response.success) {
+			alert($t(`request_error.${response.error as 0}`));
+			likes = initialCount, liked = initialState;
+		}
+	};
 </script>
 
 <a class="profile-post" href={user ? `/user/${user.username}/post/${id}` : ``}>
@@ -46,12 +62,17 @@
 		</div>
 	{/if}
 	<div class="details">
-		<p>
+		<button type="button">
 			<Chat/>{$t('number', [comments])}
-		</p>
-		<p>
-			<Heart/>{$t('number', [likes])}
-		</p>
+		</button>
+		<button type="button" class="like" title={$t(`profile_post.like.${liked}`)} class:liked on:click|preventDefault={like}>
+			{#if liked}
+				<HeartFill/>
+			{:else}
+				<Heart/>
+			{/if}
+			{$t('number', [likes])}
+		</button>
 	</div>
 </a>
 
@@ -85,14 +106,21 @@
 			gap: 16px;
 			margin: 24px 0 0;
 			display: flex;
-			p {
+			button {
 				gap: 8px;
 				color: var(--color-secondary);
 				margin: 0;
+				border: none;
 				cursor: pointer;
+				padding: 0;
 				display: flex;
 				font-size: .9em;
+				background: none;
 				align-items: center;
+				font-family: var(--font-primary);
+				&.liked, &.like:hover {
+					color: var(--button-background);
+				}
 				&:hover {
 					color: var(--color-primary);
 				}

@@ -37,21 +37,22 @@
 <style lang="scss">
 	.container {
 		gap: 8px;
-		border: 1px solid var(--border-secondary);
+		border: 2px solid var(--border-secondary);
 		display: flex;
-		padding: 16px;
+		padding: 16px 24px;
 		position: relative;
 		margin-top: 24px;
-		border-radius: 8px;
+		border-radius: 20px;
 		flex-direction: column;
 		.title {
 			top: -10px;
-			left: 6px;
+			left: 18px;
 			color: var(--color-secondary);
 			padding: 4px 6px;
 			position: absolute;
-			font-size: .75em;
+			font-size: 12px;
 			background: var(--bg);
+			font-weight: 500;
 		}
 		&.message {
 			border-color: #ff767680;

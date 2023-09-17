@@ -1,6 +1,6 @@
 import { MELLOW_TOKEN } from '$env/static/private';
 
-import { request } from './api';
+import { request } from './util';
 import type { DiscordRole, DiscordMember, DiscordChannel } from './types';
 export function getDiscordServerRoles(serverId: string) {
 	return request<DiscordRole[]>(`https://discord.com/api/v10/guilds/${serverId}/roles`, 'GET', null, {

@@ -1,4 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
+import type { PostgrestSingleResponse } from '@supabase/supabase-js';
+
+import { requestError } from './util/server';
+import { RequestErrorType } from './enums';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { SUPABASE_SERVICE_ROLE } from '$env/static/private';
 export default createClient(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
@@ -7,3 +11,10 @@ export default createClient(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
 		autoRefreshToken: false
 	}
 });
+
+export function handleResponse(response: PostgrestSingleResponse<any>) {
+	if (response.error) {
+		console.error(response.error);
+		throw requestError(500, RequestErrorType.DatabaseUpdate);
+	}
+}

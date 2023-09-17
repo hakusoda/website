@@ -15,7 +15,7 @@ export const load = (async ({ url, parent }) => {
 			members: [{ count: number }]
 			avatar_url: string
 		}
-	}>('server:mellow_servers ( id, name, avatar_url, members:mellow_server_members ( count ) )').eq('user_id', session!.user.id);
+	}>('server:mellow_servers ( id, name, avatar_url, members:mellow_server_members ( count ) )').eq('user_id', session!.sub);
 	if (response.error) {
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.ExternalRequestError);
@@ -46,7 +46,7 @@ export const load = (async ({ url, parent }) => {
 		}).then(response => response.json());
 		const response3 = await supabase.from('mellow_user_servers').upsert({
 			data: response2,
-			user_id: session.user.id
+			user_id: session.sub
 		}, { onConflict: 'user_id' });
 		if (response3.error) {
 			console.error(response3.error);
@@ -55,7 +55,7 @@ export const load = (async ({ url, parent }) => {
 
 		allServers = response2;
 	} else if (session) {
-		const response = await supabase.from('mellow_user_servers').select('data').eq('user_id', session.user.id).limit(1).maybeSingle();
+		const response = await supabase.from('mellow_user_servers').select('data').eq('user_id', session.sub).limit(1).maybeSingle();
 		if (response.error) {
 			console.error(response.error);
 			throw requestError(500, RequestErrorType.ExternalRequestError);

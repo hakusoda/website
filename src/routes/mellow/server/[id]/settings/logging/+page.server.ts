@@ -1,11 +1,10 @@
 import { z } from 'zod';
 
 import supabase from '$lib/supabase';
-import { verifyServerMembership } from '$lib/util/server';
 import { getDiscordServerChannels } from '$lib/discord';
-import { requestFail, requestError } from '$lib/util/server';
 import { createMellowServerAuditLog } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
+import { requestFail, requestError, verifyServerMembership } from '$lib/util/server';
 import { RequestErrorType, MellowServerLogType, MellowServerAuditLogType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
@@ -36,8 +35,9 @@ const EDIT_SCHEMA = z.object({
 
 const filtUndf = (item: any) => item !== undefined;
 export const actions = {
-	edit: async ({ locals: { getSession }, params: { id }, request }) => {
-		const session = (await getSession())!;
+	edit: async ({ locals: { session }, params: { id }, request }) => {
+		if (!session)
+			throw requestError(401, RequestErrorType.Unauthenticated);
 		await verifyServerMembership(session, id);
 
 		const body = await request.json();
@@ -65,7 +65,7 @@ export const actions = {
 			}
 
 			const oldChannelId = old.data.logging_channel_id;
-			await createMellowServerAuditLog(MellowServerAuditLogType.UpdateLogging, session.user.id, id, {
+			await createMellowServerAuditLog(MellowServerAuditLogType.UpdateLogging, session.sub, id, {
 				types: [old.data.logging_types, data.types].filter(filtUndf),
 				channel: [oldChannelId ? 'NOT IMPLEMENTED' : null, data.channel_name].filter(filtUndf),
 				channel_id: [oldChannelId, data.channel].filter(filtUndf)

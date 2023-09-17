@@ -9,6 +9,7 @@
 	import { theme } from '$lib/settings';
 	import { webVitals } from '$lib/vitals';
 	import { dev, browser } from '$app/environment';
+	import { invalidateAll } from '$app/navigation';
 	import type { LayoutData } from './$types';
 	import { UserNotificationState } from '$lib/enums';
 	import { getUserNotificationUrl } from '$lib/util';
@@ -55,14 +56,13 @@
 			analyticsId
 		});
 
-	const signout = () => data.supabase.auth.signOut().then(async () => {
-		await (window as any).cookieStore?.getAll?.().then(async (cookies: any[]) => {
-			for (const item of cookies)
-				if (item.name.includes('auth-token'))
-					await (window as any).cookieStore.delete(item.name);
-		}).catch(console.error);
-		location.href = '/';
-	});
+	const signout = () => {
+		document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=None; domain=.voxelified.com; path=/; Secure';
+
+		// incase that doesn't work...
+		(window as any).cookieStore?.delete?.({ path: '/', name: 'auth-token' });
+		invalidateAll();
+	};
 
 	$: unreadNotifications = data.notifications.filter(item => item.state === UserNotificationState.Unread);
 	let clearingNotifications = false;
@@ -95,7 +95,7 @@
 							<a href={getUserNotificationUrl(item)} class="notification" on:click={() => {
 								item.state = UserNotificationState.Read;
 								if (data.session) // https://github.com/sveltejs/svelte/issues/6778
-									markNotificationAsRead(data.session.user.id, item.id);
+									markNotificationAsRead(data.session.sub, item.id);
 							}}>
 								<Avatar src={item.target_team?.avatar_url ?? item.target_user?.avatar_url} size="sm"/>
 								{#if item.target_user && item.target_team}
@@ -119,7 +119,7 @@
 					<button type="button" class="mark-read" disabled={clearingNotifications} on:click|stopPropagation={() => {
 						clearingNotifications = true;
 						if (data.session) // https://github.com/sveltejs/svelte/issues/6778
-							markAllNotificationsAsRead(data.session.user.id).then(() => location.reload())
+							markAllNotificationsAsRead(data.session.sub).then(() => location.reload())
 					}}>
 						{#if clearingNotifications}<Loader size={16}/>{:else}<Eye/>{/if}
 						{$t('notifications.read_all')}
@@ -127,7 +127,7 @@
 					<button type="button" class="mark-read" disabled={clearingNotifications} on:click|stopPropagation={() => {
 						clearingNotifications = true;
 						if (data.session) // https://github.com/sveltejs/svelte/issues/6778
-							clearAllNotifications(data.session.user.id).then(() => location.reload())
+							clearAllNotifications(data.session.sub).then(() => location.reload())
 					}}>
 						{#if clearingNotifications}<Loader size={16}/>{:else}<X/>{/if}
 						{$t('notifications.clear')}
@@ -184,10 +184,9 @@
 				<a href="https://discord.com/invite/rs3r4dQu9P" target="_blank">Discord</a>
 			</div>
 		</footer>
+		<PageLoader/>
 	</main>
 </div>
-
-<PageLoader/>
 
 <svelte:head>
 	<meta property="og:type" content="website">

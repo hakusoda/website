@@ -1,13 +1,15 @@
 import supabase from '$lib/supabase';
+import { EMPTY_UUID } from '$lib/constants';
 import { requestError } from '$lib/util/server';
 import { RequestErrorType } from '$lib/enums';
 import type { PageServerLoad } from './$types';
 
 export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ url, params: { id } }) => {
+export const load = (async ({ locals: { session }, params: { id } }) => {
 	const response = await supabase.from('profile_posts')
 		.select<string, {
 			likes: [{ count: number }]
+			liked: [{ count: number }]
 			author: {
 				id: string
 				name: string | null
@@ -18,6 +20,7 @@ export const load = (async ({ url, params: { id } }) => {
 			comments: {
 				id: string
 				likes: [{ count: number }]
+				liked: [{ count: number }]
 				author: {
 					id: string
 					name: string | null
@@ -32,8 +35,10 @@ export const load = (async ({ url, params: { id } }) => {
 			created_at: string
 			attachments: { url: string }[]
 			parent_post_id: string | null
-		}>('author:users ( id, name, username, avatar_url ), content, created_at, parent_post_id, attachments:profile_post_attachments ( url ), likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( id, author:users ( id, name, username, avatar_url ), content, created_at, likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( count ), attachments:profile_post_attachments ( url ) ) )')
+		}>('author:users ( id, name, username, avatar_url ), content, created_at, parent_post_id, attachments:profile_post_attachments ( url ), likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), liked:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( id, author:users ( id, name, username, avatar_url ), content, created_at, likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), liked:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( count ), attachments:profile_post_attachments ( url ) ) )')
 		.eq('id', id)
+		.eq('liked.user_id', session?.sub ?? EMPTY_UUID)
+		.eq('comments.liked.user_id', session?.sub ?? EMPTY_UUID)
 		.limit(1)
 		.maybeSingle();
 	if (response.error) {
@@ -49,6 +54,7 @@ export const load = (async ({ url, params: { id } }) => {
 			.select<string, {
 				id: string
 				likes: [{ count: number }]
+				liked: [{ count: number }]
 				author: {
 					id: string
 					name: string | null
@@ -59,8 +65,9 @@ export const load = (async ({ url, params: { id } }) => {
 				comments: [{ count: number }]
 				created_at: string
 				attachments: { url: string }[]
-			}>('id, author:users ( id, name, username, avatar_url ), content, created_at, likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( count ), attachments:profile_post_attachments ( url ) )')
+			}>('id, author:users ( id, name, username, avatar_url ), content, created_at, likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), liked:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( count ), attachments:profile_post_attachments ( url ) )')
 			.eq('id', response.data.parent_post_id)
+			.eq('liked.user_id', session?.sub ?? EMPTY_UUID)
 			.limit(1)
 			.single();
 		if (response2.error) {

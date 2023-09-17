@@ -9,7 +9,7 @@
 	import { hasBit, getDefaultAvatar } from '$lib/util';
 	import type { RequestError, ApiRequestError } from '$lib/types';
 	import { TeamFlag, UserFlags, RequestErrorType } from '$lib/enums';
-	import { uploadAvatar, updateProfile, createUserPost, createTeamInvite, uploadPostAttachments } from '$lib/api';
+	import { followUser, unfollowUser, uploadAvatar, updateProfile, createUserPost, createTeamInvite, uploadPostAttachments } from '$lib/api';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
@@ -26,12 +26,15 @@
 	import Plus from '$lib/icons/Plus.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
 	import Burger from '$lib/icons/Burger.svelte';
+	import People from '$lib/icons/People.svelte';
 	import Person from '$lib/icons/Person.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	import StarFill from '$lib/icons/StarFill.svelte';
 	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
+	import PersonPlus from '$lib/icons/PersonPlus.svelte';
+	import PersonDash from '$lib/icons/PersonDash.svelte';
 	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
 	import EnvelopePlusFill from '$lib/icons/EnvelopePlusFill.svelte';
 	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
@@ -115,7 +118,7 @@
 			return createPostError = response;
 
 		const zero: [{ count: number }] = [{ count: 0 }];
-		data.posts = [{ ...response.data, likes: zero, comments: zero }, ...data.posts];
+		data.posts = [{ ...response.data, likes: zero, liked: zero, comments: zero }, ...data.posts];
 		createPostContent = '';
 		createPostAttachments = [];
 	};
@@ -123,12 +126,19 @@
 	let dropdownTrigger: () => void;
 
 	const inviteToTeam = async (teamId: string) => {
-		const result = await createTeamInvite(teamId, data.id);
-		if (result.success)
-			invalidateAll();
-		else
-			alert($t(`request_error.${result.error as 0}`));
+		const response = await createTeamInvite(teamId, data.id);
+		if (!response.success)
+			alert($t(`request_error.${response.error as 0}`));
+		invalidateAll();
 	};
+
+	const follow = async () => {
+		const response = await (isFollowing ? unfollowUser(data.id) : followUser(data.id));
+		if (!response.success)
+			alert($t(`request_error.${response.error as 0}`));
+		data.following[0].count = isFollowing ? 0 : 1;
+	};
+	$: isFollowing = !!data.following[0].count;
 </script>
 
 <svelte:window on:paste={async event => {
@@ -175,7 +185,14 @@
 							<ThreeDotsVertical/>
 						</Button>
 						<p>{data.name || data.username} (@{data.username})</p>
-						{#if data.session && data.id !== data.session.user.id}
+						{#if data.session && data.id !== data.session.sub}
+							<button type="button" on:click={follow}>
+								{#if isFollowing}
+									<PersonDash/>{$t('action.unfollow')}
+								{:else}
+									<PersonPlus/>{$t('action.follow')}
+								{/if}
+							</button>
 							<DropdownMenu.Sub>
 								<svelte:fragment slot="trigger">
 									<EnvelopePlusFill/>{$t('action.invite_team')}
@@ -201,6 +218,10 @@
 					<Markdown source={data.bio}/>
 				{/if}
 				<div class="separator"/>
+				<div class="detail">
+					<People/>
+					<p>{$t('profile.followers', [data.followers[0].count])}</p>
+				</div>
 				<div class="detail">
 					<Sunrise/>
 					<p>{$t('profile.joined', [data.created_at])}</p>
@@ -257,7 +278,7 @@
 	<Tabs.Root value={0}>
 		<Tabs.Item title={$t('profile.posts', [data.posts.length])} value={0}>
 			<div class="posts">
-				{#if data.session && data.id === data.session.user.id}
+				{#if data.session && data.id === data.session.sub}
 					<div class="create">
 						<TextInput bind:value={createPostContent} multiline placeholder={$t('profile.posts.create.placeholder')}/>
 						<Button on:click={createPost} disabled={creatingPost}>
@@ -281,6 +302,7 @@
 						id={item.id}
 						user={data}
 						likes={item.likes[0].count}
+						liked={!!item.liked[0].count}
 						content={item.content}
 						comments={item.comments[0].count}
 						created_at={item.created_at}
@@ -342,7 +364,7 @@
 	{saving}
 />
 
-{#if !data.is_edited}
+{#if !data.is_edited && data.user?.id === data.id}
 	<SetupUserProfile/>
 {/if}
 

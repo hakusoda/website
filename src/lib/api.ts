@@ -2,56 +2,11 @@ import { get } from 'svelte/store';
 import { v4 as uuidv4 } from 'uuid';
 
 import { page } from '$app/stores';
-import { RequestErrorType } from './enums';
-import type { User, RobloxUser, ApiResponse, PartialRobloxUser, UpdateTeamPayload, CreateTeamResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, CreateUserPostResponse, UpdateTeamMemberPayload, RobloxGetGroupsResponse, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
-export const API_BASE = 'https://api.voxelified.com/v1';
-//export const API_BASE = 'http://localhost:5174/v1';
+import { request } from './util';
+import type { User, UpdateTeamPayload, CreateTeamResponse, VerifySignInPayload, VerifySignUpPayload, VerifySignUpResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, CreateUserPostResponse, VerifyNewDevicePayload, UpdateTeamMemberPayload, GetSignUpOptionsPayload, VerifyNewDeviceResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
 
 export function getUser(userId: string) {
 	return request<User>(`user/${userId}`).then(response => response.success ? response.data : null);
-}
-
-export function getRobloxUser(userId: string | number) {
-	return request<RobloxUser>(`https://users.roblox.com/v1/users/${userId}`)
-		.then(response => response.success ? response.data : null);
-}
-
-export function getRobloxUsers(userIds: (string | number)[]) {
-	if (!userIds.length)
-		return Promise.resolve([]);
-	return request<{ data: PartialRobloxUser[] }>(`https://users.roblox.com/v1/users`, 'POST', {
-		userIds,
-		excludeBannedUsers: false
-	}).then(response => response.success ? response.data.data : []);
-}
-
-export function getRobloxAvatars(userIds: (string | number)[], size: '48x48' | '150x150' = '48x48') {
-	if (!userIds.length)
-		return Promise.resolve([]);
-	return request<{ data: { state: string, targetId: number, imageUrl: string }[] }>(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userIds.join(',')}&format=Png&size=${size}`)
-		.then(response => response.success ? response.data.data : [])
-}
-
-export function getRobloxGroups(ids: (string | number)[]) {
-	return request<RobloxGetGroupsResponse>(`https://groups.roblox.com/v2/groups?groupIds=${ids.join(',')}`)
-		.then(response => response.success ? response.data.data : []);
-}
-
-export function lookupRobloxGroups(query: string) {
-	return request<RobloxLookupGroupsResponse>(`https://groups.roblox.com/v1/groups/search/lookup?groupName=${query}`)
-		.then(response => response.success ? response.data.data : []);
-}
-
-export function getRobloxGroupRoles(groupId: string | number) {
-	return request<RobloxGroupRolesResponse>(`https://groups.roblox.com/v1/groups/${groupId}/roles`)
-		.then(response => response.success ? response.data.roles : [])
-}
-
-export function getRobloxGroupAvatars(groupIds: (string | number)[], size: '150x150' | '420x420' = '150x150') {
-	if (!groupIds.length)
-		return Promise.resolve([]);
-	return request<RobloxThumbnailsResponse>(`https://thumbnails.roblox.com/v1/groups/icons?groupIds=${groupIds.join(',')}&format=Png&size=${size}`)
-		.then(response => response.success ? response.data.data : [])
 }
 
 export function createProfile(username: string) {
@@ -59,9 +14,7 @@ export function createProfile(username: string) {
 }
 
 export function updateProfile(payload: UpdateProfilePayload) {
-	return request(`user`, 'PATCH', payload, {
-		'content-type': 'application/json'
-	});
+	return request(`user`, 'PATCH', payload);
 }
 
 export function uploadAvatar(userId: string, newAvatar: ArrayBuffer) {
@@ -85,15 +38,11 @@ export function clearAllNotifications(userId: string) {
 export function createTeam(displayName: string) {
 	return request<CreateTeamResponse>('team', 'POST', {
 		display_name: displayName
-	}, {
-		'content-type': 'application/json'
 	});
 }
 
 export function updateTeam(teamId: string, payload: UpdateTeamPayload) {
-	return request(`team/${teamId}`, 'PATCH', payload, {
-		'content-type': 'application/json'
-	});
+	return request(`team/${teamId}`, 'PATCH', payload);
 }
 
 export function leaveTeam(teamId: string) {
@@ -119,27 +68,27 @@ export function rejectTeamInvite(teamId: string, inviteId: string) {
 }
 
 export function updateTeamMember(teamId: string, userId: string, payload: UpdateTeamMemberPayload) {
-	return request(`team/${teamId}/member/${userId}`, 'PATCH', payload, {
-		'content-type': 'application/json'
-	});
+	return request(`team/${teamId}/member/${userId}`, 'PATCH', payload);
 }
 
 export function updateTeamRole(teamId: string, roleId: string, payload: UpdateTeamRolePayload) {
-	return request(`team/${teamId}/role/${roleId}`, 'PATCH', payload, {
-		'content-type': 'application/json'
-	});
+	return request(`team/${teamId}/role/${roleId}`, 'PATCH', payload);
 }
 
 export function createUserPost(userId: string, payload: CreateUserPostPayload) {
-	return request<CreateUserPostResponse>(`user/${userId}/post`, 'POST', payload, {
-		'content-type': 'application/json'
-	});
+	return request<CreateUserPostResponse>(`user/${userId}/post`, 'POST', payload);
 }
 
 export function createChildPost(postId: string, payload: CreateUserPostPayload) {
-	return request<CreateUserPostResponse>(`posts/${postId}/reply`, 'POST', payload, {
-		'content-type': 'application/json'
-	});
+	return request<CreateUserPostResponse>(`post/${postId}/reply`, 'POST', payload);
+}
+
+export function likePost(postId: string) {
+	return request(`post/${postId}/like`, 'POST');
+}
+
+export function unlikePost(postId: string) {
+	return request(`post/${postId}/like`, 'DELETE');
 }
 
 export async function uploadPostAttachment([image, contentType]: [ArrayBuffer, string]) {
@@ -163,47 +112,61 @@ export function uploadPostAttachments(images: [ArrayBuffer, string][]) {
 }
 
 export function createMellowServerProfileSyncAction(serverId: string, payload: CreateMellowServerRobloxLinkPayload) {
-	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link`, 'POST', payload, {
-		'content-type': 'application/json'
-	});
+	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link`, 'POST', payload);
 }
 
 export function updateMellowServerProfileSyncAction(serverId: string, linkId: string, payload: Partial<CreateMellowServerRobloxLinkPayload>) {
-	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link/${linkId}`, 'PATCH', payload, {
-		'content-type': 'application/json'
-	});
+	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link/${linkId}`, 'PATCH', payload);
 }
 
 export function deleteMellowServerProfileSyncAction(serverId: string, linkId: string) {
-	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link/${linkId}`, 'DELETE', null, {
-		'content-type': 'application/json'
-	});
+	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link/${linkId}`, 'DELETE');
 }
 
-const UNKNOWN_ERROR = { error: RequestErrorType.Unknown, success: false }
-export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' = 'GET', body?: any, headers?: Record<string, string>): Promise<ApiResponse<T>> {
-	const isExternal = path.startsWith('http');
-	return fetch(isExternal ? path : `${API_BASE}/${path}`, {
-		body: body ? body instanceof URLSearchParams ? body.toString() : body instanceof ArrayBuffer ? body : JSON.stringify(body) : undefined,
-		method,
-		headers: {
-			...(!isExternal ? {
-				authorization: `Bearer ${(await get(page).data.session)?.access_token}`
-			} : {}),
-			...headers
-		}
-	}).then(response => response.json().then(data => {
-		if (data.error)
-			return { ...data, success: false };
-		else if (response.status < 200 || response.status > 399)
-			return UNKNOWN_ERROR;
-		return { data, error: null, success: true };
-	}).catch(() => {
-		if (response.status < 200 || response.status > 399)
-			return UNKNOWN_ERROR;
-		return { success: true };
-	})).catch(() => ({
-		error: navigator.onLine ? RequestErrorType.FetchError : RequestErrorType.Offline, 
-		success: false
-	}));
+export function getSignUpOptions(payload: GetSignUpOptionsPayload) {
+	return request<PublicKeyCredentialCreationOptions>('auth/sign-up/options', 'POST', payload);
+}
+
+export async function verifySignUp(payload: VerifySignUpPayload) {
+	return request<VerifySignUpResponse>('auth/sign-up/verify', 'POST', { ...payload, platform_version: await getPlatformVersion() });
+}
+
+export function getSignInOptions(payload: GetSignUpOptionsPayload) {
+	return request<PublicKeyCredentialRequestOptions>('auth/sign-in/options', 'POST', payload);
+}
+
+export async function verifySignIn(payload: VerifySignInPayload) {
+	return request<VerifySignUpResponse>('auth/sign-in/verify', 'POST', { ...payload, platform_version: await getPlatformVersion() });
+}
+
+export function getNewDeviceOptions() {
+	return request<PublicKeyCredentialCreationOptions>('auth/device/options');
+}
+
+export async function verifyNewDevice(payload: VerifyNewDevicePayload) {
+	return request<VerifyNewDeviceResponse>('auth/device/verify', 'POST', { ...payload, platform_version: await getPlatformVersion() });
+}
+
+export function removeSecurityDevice(deviceId: string) {
+	return request(`user/${get(page).data.session.sub}/security/device/${encodeURIComponent(deviceId)}`, 'DELETE');
+}
+
+export function removeUserConnection(connectionId: string) {
+	return request(`user/${get(page).data.session.sub}/connection/${connectionId}`, 'DELETE');
+}
+
+export function followUser(userId: string) {
+	return request(`user/${userId}/follow`, 'POST');
+}
+
+export function unfollowUser(userId: string) {
+	return request(`user/${userId}/follow`, 'DELETE');
+}
+
+function getPlatformVersion() {
+	const { userAgentData } = navigator;
+	if (userAgentData)
+		return userAgentData.getHighEntropyValues(['platformVersion'])
+			.then(data => data.platformVersion || '10.0.0');
+	return Promise.resolve('10.0.0');
 }

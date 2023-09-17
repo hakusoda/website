@@ -23,7 +23,7 @@ export const load = (async ({ parent }) => {
 			avatar_url: string
 			display_name: string
 		}
-	}>('team:teams ( name, flags, members:team_members ( count ), owner:users!teams_owner_id_fkey ( id, name, username ), avatar_url, display_name ), role:team_roles ( name, permissions )').eq('user_id', session!.user.id);
+	}>('team:teams ( name, flags, members:team_members ( count ), owner:users!teams_owner_id_fkey ( id, name, username ), avatar_url, display_name ), role:team_roles ( name, permissions )').eq('user_id', session!.sub);
 	if (response.error) {
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.ExternalRequestError);

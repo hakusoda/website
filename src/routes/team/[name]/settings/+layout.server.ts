@@ -45,7 +45,7 @@ export const load = (async ({ params: { name }, parent }) => {
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);
 
-	if (session.user.id !== response.data.owner_id && !response.data.members.some(member => member.id === session.user.id && hasBit(member.role.permissions, TeamRolePermission.ManageTeam)))
+	if (session.sub !== response.data.owner_id && !response.data.members.some(member => member.id === session.sub && hasBit(member.role.permissions, TeamRolePermission.ManageTeam)))
 		throw requestError(403, RequestErrorType.Unauthorised);
 	return response.data;
 }) satisfies LayoutServerLoad;

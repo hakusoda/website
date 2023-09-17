@@ -2,10 +2,10 @@ import { error } from '@sveltejs/kit';
 
 import { RequestErrorType } from '$lib/enums';
 import type { RequestError } from '$lib/types';
-import { getRobloxGroupRoles } from '$lib/api';
 import type { RequestHandler } from './$types';
-export const GET = (async ({ url, locals: { getSession } }) => {
-	if (!await getSession())
+import { getRobloxGroupRoles } from '$lib/roblox';
+export const GET = (async ({ url, locals: { session } }) => {
+	if (!session)
 		throw error(401);
 
 	const groupId = url.searchParams.get('id');

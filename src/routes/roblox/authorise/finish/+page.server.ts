@@ -2,11 +2,12 @@ import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 import supabase from '$lib/supabase';
+import { request } from '$lib/util';
 import { ROBLOX_SECRET } from '$env/static/private';
 import { PUBLIC_ROBLOX_ID } from '$env/static/public';
 import { getRobloxUserInfo } from '$lib/verification';
 import type { RequestError } from '$lib/types';
-import { request, getRobloxUser, getRobloxAvatars } from '$lib/api';
+import { getRobloxUser, getRobloxAvatars } from '$lib/roblox';
 import { RobloxLinkType, RobloxLinkFlag, RequestErrorType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ url, parent }) => {
@@ -30,13 +31,12 @@ export const load = (async ({ url, parent }) => {
 	if (!response.success) {
 		console.error(response);
 		throw redirect(302, '/roblox/authorise');
-		//throw error(500, (response as any).error_description);
 	}
 
-	const { scope, id_token, expires_in, token_type, access_token, refresh_token } = response.data;
-	const response2 = await supabase.from('roblox_oauth').insert({
+	const { /*scope, id_token, expires_in, */token_type, access_token/*, refresh_token*/ } = response.data;
+	/*const response2 = await supabase.from('roblox_oauth').insert({
 		scope,
-		user_id: session.user.id,
+		user_id: session.sub,
 		id_token,
 		token_type,
 		expires_at: Date.now() + expires_in * 1000,
@@ -48,7 +48,7 @@ export const load = (async ({ url, parent }) => {
 		throw error(500, JSON.stringify({
 			error: RequestErrorType.DatabaseUpdate
 		} satisfies RequestError));
-	}
+	}*/
 
 	const response3 = await getRobloxUserInfo(access_token, token_type);
 	if (!response3.success) {
@@ -62,7 +62,7 @@ export const load = (async ({ url, parent }) => {
 		type: RobloxLinkType.User,
 		flags: RobloxLinkFlag.None,
 		public: false,
-		owner_id: session.user.id,
+		owner_id: session.sub,
 		target_id: response3.data.sub
 	}).select('id');
 	if (response4.error) {
@@ -81,15 +81,14 @@ export const load = (async ({ url, parent }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	confirm: async ({ locals: { getSession }, request }) => {
-		const session = await getSession();
+	confirm: async ({ locals: { session }, request }) => {
 		if (!session)
 			throw error(401);
 
 		const data = await request.text();
 		const response4 = await supabase.from('roblox_links').update({
 			flags: RobloxLinkFlag.Verified
-		}).eq('id', data).eq('owner_id', session.user.id);
+		}).eq('id', data).eq('owner_id', session.sub);
 		if (response4.error) {
 			console.error(response4.error);
 			throw error(500, 'something went wrong...');

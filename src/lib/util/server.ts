@@ -1,15 +1,17 @@
-import type { Session } from '@supabase/supabase-js';
+import base64 from '@hexagon/base64';
+import { SignJWT } from 'jose';
 import type { ZodIssue } from 'zod';
 import { fail, error, redirect } from '@sveltejs/kit';
 
 import supabase from '../supabase';
+import { JWT_SECRET } from '$lib/constants/server';
 import { RequestErrorType } from '$lib/enums';
-import type { RequestError } from '$lib/types';
-export async function verifyServerMembership(session: Session | null, serverId: string) {
+import type { RequestError, UserSessionJWT } from '$lib/types';
+export async function verifyServerMembership(session: UserSessionJWT | null, serverId: string) {
 	if (!session)
 		throw redirect(302, '/sign-in');
 
-	const response = await supabase.from('mellow_server_members').select('id').eq('user_id', session.user.id).eq('server_id', serverId).limit(1).maybeSingle();
+	const response = await supabase.from('mellow_server_members').select('id').eq('user_id', session.sub).eq('server_id', serverId).limit(1).maybeSingle();
 	if (response.error) {
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.ExternalRequestError);
@@ -28,4 +30,31 @@ export function requestError(statusCode: number, type: RequestErrorType, issues?
 		error: type,
 		issues
 	} satisfies RequestError));
+}
+
+export async function createUserSession(sub: string): Promise<[string, UserSessionJWT]> {
+	const now = Date.now();
+	const iat = Math.floor(now / 1000);
+	const exp = iat + 3600;
+	const token = await new SignJWT({ sub })
+		.setProtectedHeader({ alg: 'HS256' })
+		.setIssuedAt()
+		.setExpirationTime('1h')
+		.sign(JWT_SECRET);
+	return [token, { exp, iat, sub }];
+}
+
+export async function createRefreshToken(user_id: string) {
+	const token = new Uint32Array(64);
+	crypto.getRandomValues(token);
+
+	const refresh_token = base64.fromArrayBuffer(token);
+	const response = await supabase.from('user_refresh_tokens')
+		.insert({ user_id, refresh_token });
+	if (response.error) {
+		console.error(error);
+		throw requestError(500, RequestErrorType.DatabaseUpdate);
+	}
+
+	return refresh_token;
 }

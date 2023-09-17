@@ -2,8 +2,8 @@ import supabase from '$lib/supabase';
 import { requestError } from '$lib/util/server';
 import { RequestErrorType } from '$lib/enums';
 import type { RequestHandler } from './$types';
-export const GET = (async ({ url, locals: { getSession } }) => {
-	if (!await getSession())
+export const GET = (async ({ url, locals: { session } }) => {
+	if (!session)
 		throw requestError(401, RequestErrorType.Unauthenticated);
 
 	const body = url.searchParams.get('query');

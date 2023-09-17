@@ -37,7 +37,7 @@
 	<h1>{$t('settings')}</h1>
 	<div class="profile">
 		<div class="header">
-			<Avatar src={data.avatar_url} size="md" circle/>
+			<Avatar id={data.session?.sub} src={data.avatar_url} size="md" circle/>
 			<div class="name">
 				<h1>{data.name ?? data.username}</h1>
 				<p>@{username}</p>

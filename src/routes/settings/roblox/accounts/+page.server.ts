@@ -4,7 +4,7 @@ import { MELLOW_KEY } from '$env/static/private';
 import { getUserRobloxLinks } from '$lib/database';
 import { requestFail, requestError } from '$lib/util/server';
 import type { Actions, PageServerLoad } from './$types';
-import { getRobloxUsers, getRobloxAvatars } from '$lib/api';
+import { getRobloxUsers, getRobloxAvatars } from '$lib/roblox';
 import { RobloxLinkType, RequestErrorType, UserConnectionType } from '$lib/enums';
 
 export const config = { regions: ['iad1'], runtime: 'edge' };
@@ -46,8 +46,7 @@ export const load = (async ({ parent }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-	unlink: async ({ locals: { getSession }, request }) => {
-		const session = await getSession();
+	unlink: async ({ locals: { session }, request }) => {
 		if (!session)
 			return requestFail(401, RequestErrorType.Unauthenticated);
 
@@ -55,7 +54,7 @@ export const actions = {
 		if (!isUUID(id))
 			return requestFail(400, RequestErrorType.InvalidBody);
 
-		const response = await supabase.from('roblox_links').delete().eq('id', id).eq('owner_id', session.user.id);
+		const response = await supabase.from('roblox_links').delete().eq('id', id).eq('owner_id', session.sub);
 		if (response.error) {
 			console.error(response.error);
 			return requestFail(500, RequestErrorType.DatabaseUpdate);
@@ -63,8 +62,7 @@ export const actions = {
 
 		return {};
 	},
-	setPrimary: async ({ locals: { getSession }, request }) => {
-		const session = await getSession();
+	setPrimary: async ({ locals: { session }, request }) => {
 		if (!session)
 			return requestFail(401, RequestErrorType.Unauthenticated);
 
@@ -74,7 +72,7 @@ export const actions = {
 
 		const response = await supabase.from('users').update({
 			primary_roblox_link_id: id
-		}).eq('id', session.user.id);
+		}).eq('id', session.sub);
 		if (response.error) {
 			console.error(response.error);
 			return requestFail(500, RequestErrorType.DatabaseUpdate);
@@ -82,8 +80,7 @@ export const actions = {
 
 		return {};
 	},
-	changeVisibility: async ({ locals: { getSession }, request }) => {
-		const session = await getSession();
+	changeVisibility: async ({ locals: { session }, request }) => {
 		if (!session)
 			return requestFail(401, RequestErrorType.Unauthenticated);
 
@@ -93,7 +90,7 @@ export const actions = {
 
 		const response = await supabase.from('roblox_links').update({
 			public: value === 'true'
-		}).eq('id', id).eq('owner_id', session.user.id);
+		}).eq('id', id).eq('owner_id', session.sub);
 		if (response.error) {
 			console.error(response.error);
 			return requestFail(500, RequestErrorType.DatabaseUpdate);

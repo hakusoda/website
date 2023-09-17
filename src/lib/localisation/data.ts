@@ -12,6 +12,7 @@ export default {
 		'action.delete': 'Delete',
 		'action.remove': 'Remove',
 		'action.reject': 'Reject',
+		'action.follow': 'Follow',
 		'action.search': 'Search',
 		'action.finish': 'Finish',
 		'action.manage': 'Manage',
@@ -19,6 +20,7 @@ export default {
 		'action.sign_in': 'Sign in',
 		'action.go_home': 'Go Home',
 		'action.preview': 'Preview',
+		'action.unfollow': 'Unfollow',
 		'action.continue': 'Continue',
 		'action.duplicate': 'Duplicate',
 		'action.try_again': 'Try Again',
@@ -63,6 +65,8 @@ export default {
 		'profile_post.replied2': 'replied to',
 		'profile_post.comments': 'Replies',
 		'profile_post.comments.count': '{0|number} Replies',
+		'profile_post.like.true': 'Unlike',
+		'profile_post.like.false': 'Like',
 		'profile_post.likes.count': '{0|number} Likes',
 
 		'profile.id': 'User ID: {0}',
@@ -84,6 +88,7 @@ export default {
 		'profile.teams': 'Teams ({0|number})',
 		'profile.teams.item.details': '{2} • {0} Member{0|s}',
 		'profile.invite': 'Teams you can invite this user to',
+		'profile.followers': '{0} Follower{0|s}',
 
 		'avatar_file.size': 'Image should be at least 256x256.',
 
@@ -171,6 +176,7 @@ export default {
 
 		'signup.social': 'Sign up with',
 		'signup.manual': 'Or create an account yourself',
+		'signup.manual.name': 'Enter a username',
 		'signup.signin': 'Already have an account?',
 
 		'create_profile': 'Set-up your profile',
@@ -180,7 +186,7 @@ export default {
 
 		'platform.0': 'Discord',
 
-		'roblox.verification.finish': 'Is this your Roblox account?',
+		'roblox.verification.finish': 'Is this your Roblox Account?',
 		'roblox.verification.finish.sub': 'Joined {0|time_ago} • Identifier: {1}',
 		'roblox.verification.finish.yes': 'Confirm & Proceed',
 		'roblox.verification.finish.no': 'Change Account',
@@ -189,11 +195,17 @@ export default {
 		'settings.account': 'Account',
 		'settings.account.username': 'Username',
 		'settings.account.connections': 'Connections',
-		'settings.account.connections.summary': 'These connections can be used by other connected services, such as mellow, to identify you from other platforms.',
-		'settings.account.connections.add': 'Add Another',
+		'settings.account.connections.summary': 'Connections can be used by other connected services, such as mellow, to identify you from other platforms.',
+		'settings.account.connections.add': 'Add New Connection',
 
 		'settings.access': 'Access',
-		'settings.access.security': 'Authentication',
+		'settings.access.security': 'Security',
+		'settings.access.security.devices': 'Security Keys',
+		'settings.access.security.devices.summary': 'Security Keys are your main method of log-in, remove any that you no longer use or don\'t recognise.',
+		'settings.access.security.device.registered': 'Registered on {0.user_os} using {0.user_platform}',
+		'settings.access.security.device.registered.origin': 'in {0}',
+		'settings.access.security.create': 'Add New Security Key',
+		'settings.access.security.create.name': 'Name Your Security Key',
 		'settings.access.teams': 'Teams',
 		'settings.access.teams.summary': 'This is a list of teams that you are currently a member of.',
 		'settings.access.teams.create': 'Create New Team',
@@ -203,7 +215,7 @@ export default {
 
 		'settings.roblox': 'Roblox Settings',
 		'settings.roblox.accounts': 'Linked Accounts',
-		'settings.roblox.accounts.help': 'Having troubles? Join our Discord Server & ask our staff members for assistance!',
+		'settings.roblox.accounts.help': 'Having trouble with linking? Join our Discord Server & ask our staff members for assistance!',
 		'settings.roblox.accounts.list': 'Linked Roblox Accounts',
 		'settings.roblox.accounts.add': 'Link Roblox Account',
 		'settings.roblox.accounts.mellow': 'It appears that you signed-up via mellow, you can now close this page, and return to Discord.',
@@ -340,8 +352,13 @@ export default {
 		'user_notification.type.5': 'Team Member Left',
 		'user_notification.type.5.summary': '{1} has left {0.target_team.display_name}',
 		'user_notification.type.5.footer': '',
+		'user_notification.type.6': 'Post Liked',
+		'user_notification.type.6.summary': '{1} liked one of your posts!',
+		'user_notification.type.6.footer': '',
 
 		'user_connection.type.0': 'Discord',
+		'user_connection.type.1': 'GitHub',
+		'user_connection.created': 'Connected {0|time_ago}',
 
 		'notifications': 'Notifications ({0} total, {1} unread)',
 		'notifications.empty': 'You\'re already up-to-date, nice!\n(～￣▽￣)～  no worries...',
@@ -420,6 +437,10 @@ export default {
 		'request_error.username_taken': 'That username has already been taken by another user.',
 		'request_error.no_permission_target_role': 'You do not have permission to manage this role.',
 		'request_error.not_found': 'The requested resource could not be found.',
+		'request_error.user_not_found': 'The requested user does not exist.',
+		'request_error.username_not_found': 'No account exists with that username, did you make a typo?',
+		'request_error.security_device_not_found': 'The requested security device does not exist.',
+		'request_error.user_connection_not_found': 'The requested user connection does not exist.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 

@@ -25,11 +25,11 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		height: 2px;
+		height: 4px;
 		position: fixed;
 		.progress {
 			height: 100%;
-			background: hsl(15, 90%, 50%);
+			background: var(--button-background);
 		}
 	}
 </style>

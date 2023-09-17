@@ -1,4 +1,4 @@
-import { request } from './api';
+import { request } from './util';
 import { DISCORD_SECRET } from '$env/static/private';
 import { PUBLIC_DISCORD_ID } from '$env/static/public';
 export function getRobloxUserInfo(token: string, tokenType: string) {

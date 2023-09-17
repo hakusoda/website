@@ -3,9 +3,9 @@ import { error } from '@sveltejs/kit';
 import { RequestErrorType } from '$lib/enums';
 import type { RequestError } from '$lib/types';
 import type { RequestHandler } from './$types';
-import { getRobloxGroups, lookupRobloxGroups, getRobloxGroupAvatars } from '$lib/api';
-export const GET = (async ({ url, locals: { getSession } }) => {
-	if (!await getSession())
+import { getRobloxGroups, lookupRobloxGroups, getRobloxGroupAvatars } from '$lib/roblox';
+export const GET = (async ({ url, locals: { session } }) => {
+	if (!session)
 		throw error(401);
 
 	const body = url.searchParams.get('query');

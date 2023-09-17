@@ -55,7 +55,7 @@
 					<p><PeopleFill size={14}/>{item.members[0].count}</p>
 				</div>
 				<div class="buttons">
-					{#if data.session?.user.id === item.owner?.id || (item.role && hasBit(item.role.permissions, TeamRolePermission.ManageTeam))}
+					{#if data.session?.sub === item.owner?.id || (item.role && hasBit(item.role.permissions, TeamRolePermission.ManageTeam))}
 						<a href={`/team/${item.name}/settings/profile`}>
 							<GearFill/>{$t('action.manage')}
 						</a>

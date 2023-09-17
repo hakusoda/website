@@ -19,7 +19,7 @@ export const load = (async ({ params: { name }, parent }) => {
 		throw requestError(500, RequestErrorType.ExternalRequestError);
 	}
 
-	if (!await hasTeamPermissions(response.data.id, session.user.id, [TeamRolePermission.InviteUsers]))
+	if (!await hasTeamPermissions(response.data.id, session.sub, [TeamRolePermission.InviteUsers]))
 		throw requestError(403, RequestErrorType.NoPermission);
 	return response.data;
 }) satisfies PageServerLoad;

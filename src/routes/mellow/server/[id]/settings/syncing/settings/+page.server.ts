@@ -3,9 +3,9 @@ import { fail, error } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import type { RequestError } from '$lib/types';
-import { verifyServerMembership } from '$lib/util/server';
 import { createMellowServerAuditLog } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
+import { requestError, verifyServerMembership } from '$lib/util/server';
 import { RequestErrorType, MellowServerAuditLogType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
@@ -32,8 +32,9 @@ const EDIT_SCHEMA = z.object({
 });
 
 export const actions = {
-	edit: async ({ locals: { getSession }, params: { id }, request }) => {
-		const session = (await getSession())!;
+	edit: async ({ locals: { session }, params: { id }, request }) => {
+		if (!session)
+			throw requestError(401, RequestErrorType.Unauthenticated);
 		await verifyServerMembership(session, id);
 
 		const body = await request.json();
@@ -63,7 +64,7 @@ export const actions = {
 			return fail(500, { error: RequestErrorType.DatabaseUpdate } satisfies RequestError);
 		}
 
-		await createMellowServerAuditLog(MellowServerAuditLogType.UpdateRobloxGlobalSettings, session.user.id, id, {
+		await createMellowServerAuditLog(MellowServerAuditLogType.UpdateRobloxGlobalSettings, session.sub, id, {
 			default_nickname: [response2.data.default_nickname, data.defaultNickname],
 			sync_unknown_users: [response2.data.sync_unknown_users, data.syncUnknownUsers],
 			allow_forced_syncing: [response2.data.allow_forced_syncing, data.allowForcedSyncing]

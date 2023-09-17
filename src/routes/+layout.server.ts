@@ -1,10 +1,10 @@
 import { redirect } from '@sveltejs/kit';
-import type { Session } from '@supabase/supabase-js';
 
 import { env } from '$env/dynamic/private';
 import supabase from '$lib/supabase';
 import { requestError } from '$lib/util/server';
 import { RequestErrorType } from '$lib/enums';
+import type { UserSessionJWT } from '$lib/types';
 import { getUserNotifications } from '$lib/database';
 import type { LayoutServerLoad } from './$types';
 import type { UserConnectionType } from '$lib/enums';
@@ -21,15 +21,14 @@ const cachedUsers: Record<string, {
 	mellow_pending: boolean
 } | null> = {};
 export const config = { runtime: 'edge' };
-export const load = (async ({ url, locals: { supabase, getSession } }) => {
-	const session = await getSession();
-	const user = session ? cachedUsers[session.user.id] ??= await getUser(session) : null;
-	if (session && !user) { // assuming the user's account has been deleted, we end their session.
-		await supabase.auth.signOut({ scope: 'global' });
-		throw redirect(302, url.href);
+export const load = (async ({ locals: { session }, cookies }) => {
+	const user = session ? cachedUsers[session.sub] ??= await getUser(session) : null;
+	if (session && !user) {
+		cookies.delete('auth-token', { path: '/', domain: '.voxelified.com' });
+		throw redirect(302, '/sign-in');
 	}
 
-	const notifications = session ? await getUserNotifications(session.user.id) : [];
+	const notifications = session ? await getUserNotifications(session.sub) : [];
 	return {
 		user,
 		session,
@@ -38,10 +37,10 @@ export const load = (async ({ url, locals: { supabase, getSession } }) => {
 	};
 }) satisfies LayoutServerLoad;
 
-async function getUser(session: Session) {
+async function getUser(session: UserSessionJWT) {
 	const response = await supabase.from('users')
 		.select('id, name, username, avatar_url, mellow_pending, connections:user_connections ( sub, type )')
-		.eq('id', session.user.id)
+		.eq('id', session.sub)
 		.limit(1)
 		.maybeSingle();
 	if (response.error) {

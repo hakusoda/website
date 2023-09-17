@@ -1,36 +1,35 @@
 <script lang="ts">
+	import { Button } from '@voxelified/voxeliface';
+
 	import { t } from '$lib/localisation';
-	import { page } from '$app/stores';
-	import { browser } from '$app/environment';
-	import { deserialize } from '$app/forms';
-	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
-	import { createUserConnectionsDiscordRedirectUrl } from '$lib/util';
+	import { removeUserConnection } from '$lib/api';
+	import { GITHUB_OAUTH_URL, DISCORD_OAUTH_URL } from '$lib/constants';
 
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
 	import X from '$lib/icons/X.svelte';
+	import GitHub from '$lib/icons/GitHub.svelte';
 	import Discord from '$lib/icons/Discord.svelte';
+	import GitHubText from '$lib/icons/GitHubText.svelte';
 	import DiscordText from '$lib/icons/DiscordText.svelte';
 
 	import type { PageData } from './$types';
 	import { UserConnectionType } from '$lib/enums';
 	export let data: PageData;
-
-	$: if (browser && $page.url.searchParams.get('code'))
-		history.replaceState({}, '', '/settings/account/connections');
-	$: discordUrl = `https://discord.com/api/oauth2/authorize?client_id=1068554282481229885&redirect_uri=${encodeURIComponent(createUserConnectionsDiscordRedirectUrl($page.url.origin))}&response_type=code&scope=identify`;
-
+	
 	let error: RequestError | null = null;
-	const remove = async (body: string) => {
-       	const response = await fetch('?/remove', { body, method: 'POST' });
-		const result = deserialize(await response.text());
-		if (result.type === 'success')
-			return location.reload();
-		else if (result.type === 'failure')
-			error = result.data as any;
-		else if (result.type === 'error')
-			error = { error: RequestErrorType.Offline } satisfies RequestError;
+	let removing: string[] = [];
+	const remove = async (id: string) => {
+		removing = [...removing, id];
+
+       	const response = await removeUserConnection(id);
+		if (response.success)
+			data.connections = data.connections.filter(item => item.id !== id);
+		else
+			error = response;
+
+		removing = removing.filter(item => item !== id);
     };
 </script>
 
@@ -42,23 +41,29 @@
 			<div class="item">
 				{#if item.type === UserConnectionType.Discord}
 					<Discord size={32}/>
+				{:else}
+					<GitHub size={32}/>
 				{/if}
 				<div class="details">
 					<h1>{item.name}</h1>
-					<p>{$t(`user_connection.type.${item.type}`)} • {item.sub}</p>
+					<p>{$t(`user_connection.type.${item.type}`)} • {item.sub} • {$t('user_connection.created', [item.created_at])}</p>
 				</div>
-				<button type="button" class="remove" title={$t('action.remove')} on:click={() => remove(item.id)}>
-					<X/>
-				</button>
+				<Button on:click={() => remove(item.id)} disabled={removing.includes(item.id)}>
+					<X/>{$t('action.remove')}
+				</Button>
 			</div>
 		{/each}
 	</div>
 	<RequestErrorUI data={error}/>
 
-	<h2>{$t('settings.account.connections.add')}</h2>
+	<p class="add">{$t('settings.account.connections.add')}</p>
 	<div class="connection-types">
-		<a href={discordUrl} class="item" style="--bg: #5865F2;">
+		<a href={DISCORD_OAUTH_URL} class="item" style="--bg: #5865F2;">
 			<DiscordText size={24}/>
+		</a>
+		<a href={GITHUB_OAUTH_URL} class="item" style="--bg: #333;">
+			<GitHub size={24}/>
+			<GitHubText size={24}/>
 		</a>
 	</div>
 </div>
@@ -66,60 +71,54 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 0 128px 32px 64px;
+		margin: 0 64px 32px;
 		.summary {
 			color: var(--color-secondary);
 			font-size: .9em;
-			line-height: 1.25;
-			white-space: pre-wrap;
+			margin-bottom: 32px;
 		}
 		.connections {
-			gap: 16px;
+			gap: 8px;
 			display: flex;
 			flex-direction: column;
 			.item {
 				display: flex;
-				padding: 16px 24px;
+				padding: 16px 20px 16px 28px;
 				background: var(--background-secondary);
 				align-items: center;
-				border-radius: 16px;
+				border-radius: 36px;
 				.details {
-					margin-left: 24px;
+					margin: 0 auto 0 24px;
 					h1 {
 						margin: 0;
-						font-size: 1.25em;
+						font-size: 1em;
+						font-weight: 500;
 					}
 					p {
 						color: var(--color-secondary);
 						margin: 4px 0 0;
-						font-size: .9em;
+						font-size: .8em;
 					}
-				}
-				.remove {
-					color: var(--color-primary);
-					border: none;
-					cursor: pointer;
-					padding: 0;
-					display: flex;
-					background: none;
-					margin-left: auto;
 				}
 			}
 		}
-		h2 {
-			margin-top: 64px;
+		.add {
+			margin: 64px 0 16px;
+			font-weight: 500;
 		}
 		.connection-types {
 			gap: 16px;
 			display: flex;
 			.item {
+				gap: 12px;
 				display: flex;
-				padding: 12px 16px;
+				padding: 14px 24px;
 				background: var(--bg);
 				transition: box-shadow .25s;
-				border-radius: 8px;
+				box-shadow: inset 0 0 0 1px var(--border-primary);
+				border-radius: 20px;
 				&:hover {
-					box-shadow: inset 0 0 0 1px #ffffff40, 0 0 8px 0 var(--bg);
+					box-shadow: inset 0 0 0 1px var(--border-secondary);
 				}
 			}
 		}

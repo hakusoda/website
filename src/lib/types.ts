@@ -28,6 +28,7 @@ export interface UserNotification {
 		avatar_url: string | null
 		display_name: string
 	} | null
+	target_profile_post_id: string | null
 }
 
 export interface Team {
@@ -297,6 +298,7 @@ export type ApiResponse<T> = ApiRequestError & {
 export interface CreateTeamResponse {
 	id: string
 	name: string
+	display_name: string
 }
 
 export interface UpdateTeamPayload {
@@ -365,10 +367,57 @@ export interface CreateUserPostResponse {
 	}[]
 }
 
+export interface GetSignUpOptionsPayload {
+	username: string
+}
+
+export interface VerifySignUpPayload {
+	username: string
+	challenge: string
+	transports: string[]
+	attestation: string
+}
+
+export interface VerifySignUpResponse {
+	jwt: string
+	user_id: string
+	refresh: string
+}
+
+export interface VerifySignInPayload {
+	id: string
+	username: string
+	authData: string
+	challenge: string
+	signature: string
+	clientData: string
+}
+
+export interface VerifyNewDevicePayload {
+	name: string
+	challenge: string
+	transports: string[]
+	attestation: string
+}
+
+export interface VerifyNewDeviceResponse {
+	id: string
+	name: string
+	user_os: string
+	user_country: string | null
+	user_platform: string
+}
+
 export interface GroupSelectItem {
 	id: string
 	name: string
 	icon?: string
 	type?: 'self' | 'steam' | 'roblox'
 	avatar_url: string
+}
+
+export interface UserSessionJWT {
+	sub: string
+	iat: number
+	exp: number
 }

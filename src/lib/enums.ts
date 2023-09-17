@@ -108,7 +108,8 @@ export enum UserNotificationType {
 	RobloxAccountRemoved,
 	SOMETHING,
 	TeamMemberJoined,
-	TeamMemberLeft
+	TeamMemberLeft,
+	UserPostLiked
 }
 
 export enum UserNotificationState {
@@ -117,7 +118,8 @@ export enum UserNotificationState {
 }
 
 export enum UserConnectionType {
-	Discord
+	Discord,
+	GitHub
 }
 
 export enum RequestErrorType {

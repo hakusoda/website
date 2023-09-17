@@ -37,6 +37,7 @@
 		data.comments = [{
 			...response.data,
 			likes: zero,
+			liked: zero,
 			author: data.user!,
 			comments: zero
 		}, ...data.comments];
@@ -56,6 +57,7 @@
 			id={data.parent.id}
 			user={data.parent.author}
 			likes={data.parent.likes[0].count}
+			liked={!!data.parent.liked[0].count}
 			content={data.parent.content}
 			comments={data.parent.comments[0].count}
 			created_at={data.parent.created_at}
@@ -119,6 +121,7 @@
 					id={item.id}
 					user={item.author}
 					likes={item.likes[0].count}
+					liked={!!item.liked[0].count}
 					content={item.content}
 					comments={item.comments[0].count}
 					created_at={item.created_at}

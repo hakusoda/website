@@ -1,4 +1,6 @@
 import type { Session, SupabaseClient } from '@supabase/supabase-js';
+
+import type { UserSessionJWT } from '$lib/types';
 export interface Database {
 	public: {
 		Views: {}
@@ -11,15 +13,11 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			supabase: SupabaseClient<Database>
-			getSession(): Promise<Session | null>
+			session: UserSessionJWT | null
 		}
-		interface PageData {
-			session: Promise<Session | null>
-			supabase?: SupabaseClient<Database>
-		}
+		// interface PageData {}
 		// interface Platform {}
 	}
 }
 
-export { };
+export {};
