@@ -424,7 +424,7 @@ export default {
 		'request_error.9': 'You do not have permission to complete this action.',
 		'request_error.10': 'The name you provide must be at-least 3 characters long.',
 		'request_error.11': 'Please refresh the page, restart your browser, or check your internet connection and try again.',
-		'request_error.12': 'This feature is currently unavailable, please try again later...',
+		'request_error.12': 'This feature has been temporarily disabled, please try again later...',
 		'request_error.unauthorised': 'You don\'t have permission to access this resource.',
 		'request_error.invalid_body': 'There were issues with your request, please change your input and try again.',
 		'request_error.database_error': 'An unexpected error occurred while accessing our database, please try again in a few minutes.',
@@ -441,6 +441,7 @@ export default {
 		'request_error.username_not_found': 'No account exists with that username, did you make a typo?',
 		'request_error.security_device_not_found': 'The requested security device does not exist.',
 		'request_error.user_connection_not_found': 'The requested user connection does not exist.',
+		'request_error.feature_disabled': 'This feature has been temporarily disabled, please try again later...',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 

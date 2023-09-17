@@ -1,11 +1,14 @@
 import base64 from '@hexagon/base64';
+import { get } from '@vercel/edge-config';
 import { SignJWT } from 'jose';
 import type { ZodIssue } from 'zod';
 import { fail, error, redirect } from '@sveltejs/kit';
 
 import supabase from '../supabase';
+import { hasBit } from '.';
 import { JWT_SECRET } from '$lib/constants/server';
 import { RequestErrorType } from '$lib/enums';
+import type { FeatureFlag } from '$lib/enums';
 import type { RequestError, UserSessionJWT } from '$lib/types';
 export async function verifyServerMembership(session: UserSessionJWT | null, serverId: string) {
 	if (!session)
@@ -57,4 +60,14 @@ export async function createRefreshToken(user_id: string) {
 	}
 
 	return refresh_token;
+}
+
+export function isFeatureEnabled(feature: FeatureFlag) {
+	return get<number>('feature_flags').then(value => value !== undefined ? hasBit(value, feature) : false);
+}
+
+export async function throwIfFeatureNotEnabled(feature: FeatureFlag) {
+	const enabled = await isFeatureEnabled(feature);
+	if (!enabled)
+		throw requestError(503, RequestErrorType.FeatureFlagDisabled);
 }

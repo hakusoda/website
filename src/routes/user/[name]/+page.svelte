@@ -118,7 +118,7 @@
 			return createPostError = response;
 
 		const zero: [{ count: number }] = [{ count: 0 }];
-		data.posts = [{ ...response.data, likes: zero, liked: zero, comments: zero }, ...data.posts];
+		data.posts = [{ ...response.data, likes: zero, liked: zero, comments: zero }, ...data.posts!];
 		createPostContent = '';
 		createPostAttachments = [];
 	};
@@ -276,39 +276,43 @@
 		</div>
 	</div>
 	<Tabs.Root value={0}>
-		<Tabs.Item title={$t('profile.posts', [data.posts.length])} value={0}>
+		<Tabs.Item title={$t('profile.posts', [data.posts?.length ?? 0])} value={0}>
 			<div class="posts">
-				{#if data.session && data.id === data.session.sub}
-					<div class="create">
-						<TextInput bind:value={createPostContent} multiline placeholder={$t('profile.posts.create.placeholder')}/>
-						<Button on:click={createPost} disabled={creatingPost}>
-							<Plus/>{$t('profile.posts.create')}
-						</Button>
-					</div>
-					<div class="create-attachments">
-						{#each createPostAttachments as image}
-							<div>
-								<img src={image[0]} alt=""/>
-								<button type="button" on:click={() => createPostAttachments = createPostAttachments.filter(item => item !== image)}>
-									<Trash/>
-								</button>
-							</div>
-						{/each}
-					</div>
-					<RequestErrorUI data={createPostError} background="var(--background-primary)"/>
+				{#if data.posts}
+					{#if data.session && data.id === data.session.sub}
+						<div class="create">
+							<TextInput bind:value={createPostContent} multiline placeholder={$t('profile.posts.create.placeholder')}/>
+							<Button on:click={createPost} disabled={creatingPost}>
+								<Plus/>{$t('profile.posts.create')}
+							</Button>
+						</div>
+						<div class="create-attachments">
+							{#each createPostAttachments as image}
+								<div>
+									<img src={image[0]} alt=""/>
+									<button type="button" on:click={() => createPostAttachments = createPostAttachments.filter(item => item !== image)}>
+										<Trash/>
+									</button>
+								</div>
+							{/each}
+						</div>
+						<RequestErrorUI data={createPostError} background="var(--background-primary)"/>
+					{/if}
+					{#each data.posts as item}
+						<ProfilePost
+							id={item.id}
+							user={data}
+							likes={item.likes[0].count}
+							liked={!!item.liked[0].count}
+							content={item.content}
+							comments={item.comments[0].count}
+							created_at={item.created_at}
+							attachments={item.attachments}
+						/>
+					{/each}
+				{:else}
+					<p class="disabled">{$t('request_error.12')}</p>
 				{/if}
-				{#each data.posts as item}
-					<ProfilePost
-						id={item.id}
-						user={data}
-						likes={item.likes[0].count}
-						liked={!!item.liked[0].count}
-						content={item.content}
-						comments={item.comments[0].count}
-						created_at={item.created_at}
-						attachments={item.attachments}
-					/>
-				{/each}
 			</div>
 		</Tabs.Item>
 		{#if data.teams.length}
@@ -564,6 +568,11 @@
 						opacity: 1
 					}
 				}
+			}
+			.disabled {
+				color: var(--color-secondary);
+				margin: 16px auto;
+				font-size: .9em;
 			}
 		}
 		.teams {

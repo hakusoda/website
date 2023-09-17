@@ -2,9 +2,14 @@ import { redirect } from '@sveltejs/kit';
 import type { Handle } from '@sveltejs/kit';
 import { errors, jwtVerify } from 'jose';
 
+import { dev } from '$app/environment';
 import supabase from '$lib/supabase';
 import { JWT_SECRET } from '$lib/constants/server';
+import { EDGE_CONFIG } from '$env/static/private';
 import { createUserSession, createRefreshToken } from '$lib/util/server';
+if (dev)
+	process.env.EDGE_CONFIG = EDGE_CONFIG;
+
 export const handle = (async ({ event, resolve }) => {
 	const cookie = event.cookies.get('auth-token');
 	if (cookie) {

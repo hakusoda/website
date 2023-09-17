@@ -3,9 +3,11 @@ import type { PageServerLoad } from './$types';
 
 import supabase, { handleResponse } from '$lib/supabase';
 import { getDiscordToken, getDiscordUser } from '$lib/verification';
-import { RequestErrorType, UserConnectionType } from '$lib/enums';
-import { requestError, createUserSession, createRefreshToken } from '$lib/util/server';
+import { FeatureFlag, RequestErrorType, UserConnectionType } from '$lib/enums';
+import { requestError, createUserSession, createRefreshToken, throwIfFeatureNotEnabled } from '$lib/util/server';
 export const load = (async ({ url, cookies }) => {
+	await throwIfFeatureNotEnabled(FeatureFlag.MellowSignUp);
+	
 	const code = url.searchParams.get('code');
 	if (!code)
 		throw requestError(400, RequestErrorType.InvalidBody);

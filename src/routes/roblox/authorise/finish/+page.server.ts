@@ -7,10 +7,12 @@ import { ROBLOX_SECRET } from '$env/static/private';
 import { PUBLIC_ROBLOX_ID } from '$env/static/public';
 import { getRobloxUserInfo } from '$lib/verification';
 import type { RequestError } from '$lib/types';
+import { throwIfFeatureNotEnabled } from '$lib/util/server';
 import { getRobloxUser, getRobloxAvatars } from '$lib/roblox';
-import { RobloxLinkType, RobloxLinkFlag, RequestErrorType } from '$lib/enums';
+import { FeatureFlag, RobloxLinkType, RobloxLinkFlag, RequestErrorType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ url, parent }) => {
+	await throwIfFeatureNotEnabled(FeatureFlag.RobloxAccountLinking);
 	const session = (await parent()).session!;
 
 	const code = url.searchParams.get('code');

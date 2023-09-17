@@ -11,7 +11,8 @@
 		"deploy": "vercel deploy --prod",
 		"deploy:preview": "vercel deploy",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync"
+		"prepare": "svelte-kit sync",
+		"pull-env": "vercel env pull .env.local"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "^3.0.3",
@@ -30,6 +31,7 @@
 		"@supabase/supabase-js": "^2.33.2",
 		"@types/uuid": "^9.0.3",
 		"@vercel/analytics": "^1.0.2",
+		"@vercel/edge-config": "^0.4.0",
 		"@voxelified/svelte-localisation": "^1.0.0",
 		"@voxelified/voxeliface": "^2.1.0",
 		"cropperjs": "^1.6.0",

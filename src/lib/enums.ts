@@ -9,6 +9,13 @@ export enum TeamFlag {
 	Verified = 1 << 0
 }
 
+export enum FeatureFlag {
+	None,
+	MellowSignUp = 1 << 0,
+	RobloxAccountLinking = 1 << 1,
+	ProfilePostViewing = 1 << 2
+}
+
 export enum TeamRolePermission {
 	None,
 	ManageTeam = 1 << 0,
@@ -135,7 +142,7 @@ export enum RequestErrorType {
 	NoPermission,
 	NameTooShort,
 	FetchError,
-	FeatureUnavailable
+	FeatureFlagDisabled
 }
 
 // https://discord.com/developers/docs/resources/channel#channel-object-channel-types

@@ -1,11 +1,13 @@
 import supabase from '$lib/supabase';
 import { EMPTY_UUID } from '$lib/constants';
-import { requestError } from '$lib/util/server';
-import { RequestErrorType } from '$lib/enums';
 import type { PageServerLoad } from './$types';
+import { FeatureFlag, RequestErrorType } from '$lib/enums';
+import { requestError, throwIfFeatureNotEnabled } from '$lib/util/server';
 
 export const config = { regions: ['iad1'], runtime: 'edge' };
 export const load = (async ({ locals: { session }, params: { id } }) => {
+	await throwIfFeatureNotEnabled(FeatureFlag.ProfilePostViewing);
+
 	const response = await supabase.from('profile_posts')
 		.select<string, {
 			likes: [{ count: number }]
