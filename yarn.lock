@@ -899,12 +899,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@voxelified/voxeliface@file:../voxeliface::locator=website%40workspace%3A.":
-  version: 2.2.1
-  resolution: "@voxelified/voxeliface@file:../voxeliface#../voxeliface::hash=2545fc&locator=website%40workspace%3A."
+"@voxelified/voxeliface@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@voxelified/voxeliface@npm:2.2.2"
   dependencies:
     svelte: "npm:^4.2.0"
-  checksum: 5e4c39e21e7fbafe6aa3f49eef6c1d4a9872e1f262813154f357838f361d85327eaa454de56f02eb021ac1df9a6b5c336e39932386f8ceb223e7bcea2181151c
+  checksum: dc059844f8074c0f17e38ef6ae434b6add46e7188162eae9b29df590fb124b99fc785b3917ea6d140e716237324c9f0ebf863ba72f4f2fce0c2105f37365b60e
   languageName: node
   linkType: hard
 
@@ -3712,7 +3712,7 @@ __metadata:
     "@vercel/analytics": "npm:^1.0.2"
     "@vercel/edge-config": "npm:^0.4.0"
     "@voxelified/svelte-localisation": "npm:^1.0.0"
-    "@voxelified/voxeliface": "file:../voxeliface"
+    "@voxelified/voxeliface": "npm:^2.2.2"
     cropperjs: "npm:^1.6.0"
     jose: "npm:^4.14.6"
     sass: "npm:^1.67.0"

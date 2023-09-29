@@ -5,15 +5,18 @@ import { UserConnectionType, MellowProfileSyncActionType, MellowProfileSyncActio
 
 import X from '../icons/X.svelte';
 import Link from '../icons/Link.svelte';
+import Shop from '../icons/Shop.svelte';
 import Steam from '../icons/Steam.svelte';
-import GitHub from '$lib/icons/GitHub.svelte';
-import Discord from '$lib/icons/Discord.svelte';
+import GitHub from '../icons/GitHub.svelte';
+import Discord from '../icons/Discord.svelte';
+import StarFill from '../icons/StarFill.svelte';
 import PersonFill from '../icons/PersonFill.svelte';
 import PeopleFill from '../icons/PeopleFill.svelte';
 import RobloxIcon from '../icons/RobloxIcon.svelte';
 import Voxelified from '../icons/Voxelified.svelte';
 import BoxArrowRight from '../icons/BoxArrowRight.svelte';
 import ArrowLeftRight from '../icons/ArrowLeftRight.svelte';
+import PatchCheckFill from '../icons/PatchCheckFill.svelte';
 import PersonBadgeFill from '../icons/PersonBadgeFill.svelte';
 export const THEMES = ['dark', 'light', 'color_purple'] as const;
 export const LOCALES = ['en-AU', 'ja-JP'] as const;
@@ -33,13 +36,21 @@ export const MAPPED_MELLOW_SYNC_ACTION_ICONS: Record<MellowProfileSyncActionType
 	[MellowProfileSyncActionType.CancelSync]: X
 };
 
-export const MAPPED_MELLOW_SYNC_REQUIREMENTS: [[MellowProfileSyncActionRequirementType, typeof SvelteComponent<any>][], typeof SvelteComponent<any>][] = [
+export const MAPPED_MELLOW_SYNC_REQUIREMENTS: [([MellowProfileSyncActionRequirementType, typeof SvelteComponent<any>] | 'separator')[], typeof SvelteComponent<any>][] = [
 	[[
 		[MellowProfileSyncActionRequirementType.RobloxHasVerifiedAccount, PersonFill],
+		'separator',
 		[MellowProfileSyncActionRequirementType.RobloxInGroup, PeopleFill],
 		[MellowProfileSyncActionRequirementType.RobloxHasGroupRole, PersonBadgeFill],
-		[MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange, ArrowLeftRight]
+		[MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange, ArrowLeftRight],
+		'separator',
+		[MellowProfileSyncActionRequirementType.RobloxHasAsset, Shop],
+		[MellowProfileSyncActionRequirementType.RobloxHasBadge, PatchCheckFill],
+		[MellowProfileSyncActionRequirementType.RobloxHasPass, StarFill]
 	], RobloxIcon],
+	[[
+		[MellowProfileSyncActionRequirementType.GitHubInOrganisation, PeopleFill]
+	], GitHub],
 	[[
 		[MellowProfileSyncActionRequirementType.SteamInGroup, PeopleFill]
 	], Steam],

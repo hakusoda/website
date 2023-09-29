@@ -56,7 +56,7 @@
 	$: {
 		const length = itemRefs.filter(item => item).length;
 		if (length > lastItemRefLength)
-			itemRefs.findLast(item => item)?.scrollIntoView({ block: 'center' });
+			itemRefs.findLast(item => item)?.scrollIntoView({ block: 'nearest' });
 		lastItemRefLength = length;
 	}
 
@@ -148,11 +148,15 @@
 				{#if id === MAPPED_MELLOW_SYNC_REQUIREMENTS.length - 1}
 					<p>{$t('mellow_link_editor.requirements.other')}</p>
 					<!-- is there any way to re-use the same code below? -->
-					{#each items as [type, icon]}
-						<button type="button" on:click={() => addRequirement(type)}>
-							<svelte:component this={icon}/>
-							{$t(`mellow_bind.requirement.${type}`)}
-						</button>
+					{#each items as item}
+						{#if item === 'separator'}
+							<div class="separator"/>
+						{:else}
+							<button type="button" on:click={() => addRequirement(item[0])}>
+								<svelte:component this={item[1]}/>
+								{$t(`mellow_bind.requirement.${item[0]}`)}
+							</button>
+						{/if}
 					{/each}
 				{:else}
 					<DropdownMenu.Sub>
@@ -160,11 +164,15 @@
 							<svelte:component this={icon}/>{$t(`mellow_link_editor.requirements.platforms.${id}`)}
 						</svelte:fragment>
 						<p>{$t(`mellow_link_editor.requirements.platforms.${id}`)} {$t('label.requirements')}</p>
-						{#each items as [type, icon]}
-							<button type="button" on:click={() => addRequirement(type)}>
-								<svelte:component this={icon}/>
-								{$t(`mellow_bind.requirement.${type}`)}
-							</button>
+						{#each items as item}
+							{#if item === 'separator'}
+								<div class="separator"/>
+							{:else}
+								<button type="button" on:click={() => addRequirement(item[0])}>
+									<svelte:component this={item[1]}/>
+									{$t(`mellow_bind.requirement.${item[0]}`)}
+								</button>
+							{/if}
 						{/each}
 					</DropdownMenu.Sub>
 				{/if}
@@ -212,6 +220,12 @@
 						</Select.Root>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.VoxelifiedInTeam}
 						<GroupSelect source="self" bind:value={item[1][0]}/>
+					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasAsset}
+						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.8.id')} bind:value={item[1][0]}/>
+					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasBadge}
+						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.9.id')} bind:value={item[1][0]}/>
+						{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasPass}
+						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.10.id')} bind:value={item[1][0]}/>
 					{/if}
 				</div>
 				<div class="buttons">
@@ -307,6 +321,7 @@
 	.mellow-sync-action-editor {
 		height: 100%;
 		display: flex;
+		overflow: auto;
 		flex-direction: column;
 		h1 {
 			margin-bottom: 32px;
@@ -323,8 +338,12 @@
 				display: flex;
 				padding: 16px;
 				position: relative;
-				background: #00000040;
+				box-shadow: inset 0 0 0 1px var(--border-primary);
+				background: center / 200px repeat var(--grain), #00000040;
 				border-radius: 20px;
+				
+				-webkit-backdrop-filter: blur(16px);
+				backdrop-filter: blur(16px);
 				.title {
 					gap: 16px;
 					margin: 0 0 0 4px;
