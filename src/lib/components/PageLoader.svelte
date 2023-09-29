@@ -26,6 +26,7 @@
 		left: 0;
 		right: 0;
 		height: 4px;
+		z-index: 1000;
 		position: fixed;
 		.progress {
 			height: 100%;

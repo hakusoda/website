@@ -10,9 +10,9 @@
 	import Avatar from './Avatar.svelte';
 
 	import X from '$lib/icons/X.svelte';
+	import ThreeDots from '../icons/ThreeDots.svelte';
 	import PeopleFill from '../icons/PeopleFill.svelte';
 	import ClipboardPlusFill from '../icons/ClipboardPlusFill.svelte';
-	import ThreeDotsVertical from '../icons/ThreeDotsVertical.svelte';
 	export let id: string;
 	export let name: string | null = null;
 	export let role: PartialRole | null = null;
@@ -60,30 +60,31 @@
 </script>
 
 <div class="team-settings-member">
-	<Avatar id={id} src={avatar} size="sm" circle/>
+	<Avatar {id} src={avatar} size="xs" circle/>
 	<div class="details">
-		<a href={`/user/${username}`}>
-			{name || username}
-			<p>@{username}</p>
-		</a>
+		<a href={`/user/${username}`}>{name || username}</a>
 		<p>
+			@{username}
 			{#if role}
-				{role.name} •
-			{/if}{isInvite ? '' : $t('profile.joined', [joinedAt])}{#if inviter}
-				{#if !isInvite}, {/if}{$t(isInvite ? 'team_invite.author' : 'team_invite.author2')}
-				<a href={`/user/${inviter.username}`}>
-					{inviter.name || inviter.username}
-				</a>
-				{#if isInvite}
-					{$t('time_ago', [joinedAt])}
-				{/if}
+				• {role.name}
 			{/if}
 		</p>
 	</div>
+	<p class="joined">
+		{isInvite ? '' : $t('profile.joined', [joinedAt])}{#if inviter}
+			{#if !isInvite}, {/if}{$t(isInvite ? 'team_invite.author' : 'team_invite.author2')}
+			<a href={`/user/${inviter.username}`}>
+				{inviter.name || inviter.username}
+			</a>
+			{#if isInvite}
+				{$t('time_ago', [joinedAt])}
+			{/if}
+		{/if}
+	</p>
 	<DropdownMenu.Root bind:trigger>
-		<Button slot="trigger" circle on:click={trigger} disabled={changingRole}>
-			<ThreeDotsVertical/>
-		</Button>
+		<button type="button" class="options" slot="trigger" on:click={trigger}>
+			<ThreeDots/>
+		</button>
 		<p>{name || username} (@{username})</p>
 		{#if filteredRoles.length && owner !== id && (owner === $page.data.user?.id || (myRole && hasBit(myRole.permissions, TeamRolePermission.ManageMembers)))}
 			<DropdownMenu.Sub>
@@ -115,28 +116,38 @@
 
 <style lang="scss">
 	.team-settings-member {
+		height: 64px;
 		display: flex;
-		padding: 12px 16px;
+		padding: 0 28px;
 		background: var(--background-secondary);
 		align-items: center;
-		border-radius: 20px;
+		border-radius: 32px;
 		.details {
-			margin: 0 auto 0 16px;
-			& > a {
+			margin: 0 auto 0 24px;
+			a {
 				gap: 8px;
 				margin: 0;
 				display: flex;
 				line-height: 1;
 				font-weight: 500;
-				align-items: center;
-				p { margin: 0; }
 			}
 			p {
 				color: var(--color-secondary);
 				margin: 4px 0 0;
-				font-size: .9em;
-				font-weight: 400;
+				font-size: .8em;
 			}
+		}
+		.joined {
+			color: var(--color-secondary);
+			margin: 0 24px;
+			font-size: .8em;
+		}
+		.options {
+			color: var(--color-primary);
+			border: none;
+			cursor: pointer;
+			padding: 0;
+			background: none;
 		}
 	}
 </style>

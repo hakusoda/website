@@ -22,33 +22,52 @@
 		border: none;
 		outline: none;
 		padding: 32px; 
-		overflow: auto;
-		min-width: 45%;
+		overflow: hidden auto;
+		min-width: 512px;
 		font-size: initial;
 		animation: .5s show;
-		max-height: 80%;
-		background: var(--background-secondary);
+		max-height: 90%;
+		box-sizing: border-box;
+		box-shadow: inset 0 0 0 1px #ffffff40;
+		background: center / 200px repeat var(--grain), #00000040;
 		font-weight: initial;
 		border-radius: 52px;
 		flex-direction: column;
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
 		:global(h1:first-child) {
 			margin-top: 12px;
 		}
 		&[open] {
 			display: flex;
 		}
+		&::slotted {
+			animation: .25s show;
+		}
 		&::backdrop {
-			animation: .5s show;
-			background: #00000040;
+			animation: 1s show-backdrop forwards;
+			background: #00000080;
 		}
 	}
 
 	@keyframes show {
 		0% {
 			opacity: 0;
+			transform: scale(0.9) translateY(32px);
 		}
 		100% {
 			opacity: 1;
+			transform: none;
+		}
+	}
+	@keyframes show-backdrop {
+		0% {
+			opacity: 0;
+			backdrop-filter: none;
+		}
+		100% {
+			opacity: 1;
+			backdrop-filter: blur(8px);
 		}
 	}
 </style>

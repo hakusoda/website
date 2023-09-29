@@ -142,7 +142,8 @@ export enum RequestErrorType {
 	NoPermission,
 	NameTooShort,
 	FetchError,
-	FeatureFlagDisabled
+	FeatureFlagDisabled,
+	InvalidQuery
 }
 
 // https://discord.com/developers/docs/resources/channel#channel-object-channel-types

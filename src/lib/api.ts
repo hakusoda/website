@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { page } from '$app/stores';
 import { request } from './util';
-import type { User, UpdateTeamPayload, CreateTeamResponse, VerifySignInPayload, VerifySignUpPayload, VerifySignUpResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, CreateUserPostResponse, VerifyNewDevicePayload, UpdateTeamMemberPayload, GetSignUpOptionsPayload, VerifyNewDeviceResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
+import type { User, UpdateTeamPayload, CreateTeamResponse, VerifySignInPayload, VerifySignUpPayload, VerifySignUpResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, VerifySudoModePayload, CreateUserPostResponse, VerifyNewDevicePayload, UpdateTeamMemberPayload, GetSignUpOptionsPayload, VerifyNewDeviceResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
 
 export function getUser(userId: string) {
 	return request<User>(`user/${userId}`).then(response => response.success ? response.data : null);
@@ -147,6 +147,14 @@ export async function verifyNewDevice(payload: VerifyNewDevicePayload) {
 	return request<VerifyNewDeviceResponse>('auth/device/verify', 'POST', { ...payload, platform_version: await getPlatformVersion() });
 }
 
+export function getSudoModeOptions() {
+	return request<PublicKeyCredentialRequestOptions>('auth/sudo/options');
+}
+
+export async function verifySudoMode(payload: VerifySudoModePayload) {
+	return request<VerifyNewDeviceResponse>('auth/sudo/verify', 'POST', payload);
+}
+
 export function removeSecurityDevice(deviceId: string) {
 	return request(`user/${get(page).data.session.sub}/security/device/${encodeURIComponent(deviceId)}`, 'DELETE');
 }
@@ -161,6 +169,14 @@ export function followUser(userId: string) {
 
 export function unfollowUser(userId: string) {
 	return request(`user/${userId}/follow`, 'DELETE');
+}
+
+export function authoriseApplication(application_id: string, redirect_uri: string) {
+	return request<{ redirect_uri: string }>('auth/authorisations', 'POST', {
+		scopes: [{ type: 'openid', operations: ['read'] }],
+		redirect_uri,
+		application_id
+	});
 }
 
 function getPlatformVersion() {

@@ -8,7 +8,7 @@ export const load = (async ({ parent }) => {
 	const { session } = await parent();
 	
 	const response = await supabase.from('user_devices')
-		.select('id, name, user_os, user_country, user_platform')
+		.select('id, name, user_os, last_used_at, user_country, user_platform')
 		.eq('user_id', session!.sub);
 	if (response.error) {
 		console.error(response.error);

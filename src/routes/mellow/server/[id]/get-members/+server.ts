@@ -5,8 +5,8 @@ import supabase from '$lib/supabase';
 import { RequestErrorType } from '$lib/enums';
 import { getDiscordServerMembers } from '$lib/discord';
 import { requestError, verifyServerMembership } from '$lib/util/server';
-export const GET = (async ({ params, locals: { session } }) => {
-	await verifyServerMembership(session, params.id);
+export const GET = (async ({ url, params, locals: { session } }) => {
+	await verifyServerMembership(session, params.id, url);
 
 	const members = await getDiscordServerMembers(params.id, 1000);
 	if (!members.length)

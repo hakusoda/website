@@ -7,10 +7,10 @@
 	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
 	import type { PageData } from './$types';
-	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
+	import { getUserConnectionUrl } from '$lib/util';
 	import { verifySignIn, getSignInOptions } from '$lib/api';
-	import { GITHUB_OAUTH_URL, DISCORD_OAUTH_URL } from '$lib/constants';
+	import { RequestErrorType, UserConnectionType } from '$lib/enums';
 
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
@@ -64,16 +64,17 @@
 		if (error)
 			signInError = { error: RequestErrorType.Unknown };
 	}
+	$: redirectUri = $page.url?.searchParams.get('redirect_uri');
 </script>
 
 {#if !data.session && !$page.url?.searchParams.get('code')}
 	<div class="auth-modal">
 		<h2>{$t('signin.social')}</h2>
 		<div class="social">
-			<a href={DISCORD_OAUTH_URL}>
+			<a href={getUserConnectionUrl(UserConnectionType.Discord, redirectUri)}>
 				<Discord size={24} coloured/>Discord
 			</a>
-			<a href={GITHUB_OAUTH_URL}>
+			<a href={getUserConnectionUrl(UserConnectionType.GitHub, redirectUri)}>
 				<GitHub size={24}/>GitHub
 			</a>
 		</div>

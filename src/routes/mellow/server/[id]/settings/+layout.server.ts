@@ -3,8 +3,8 @@ import { requestError } from '$lib/util/server';
 import { RequestErrorType } from '$lib/enums';
 import type { LayoutServerLoad } from './$types';
 import { verifyServerMembership } from '$lib/util/server';
-export const load = (async ({ params: { id }, parent }) => {
-	await verifyServerMembership((await parent()).session, id);
+export const load = (async ({ url, params: { id }, locals: { session } }) => {
+	await verifyServerMembership(session, id, url);
 
 	const response = await supabase.from('mellow_servers').select('name, avatar_url').eq('id', id).limit(1).maybeSingle();
 	if (response.error) {

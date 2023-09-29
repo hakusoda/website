@@ -38,6 +38,9 @@
 		saving = !!(editing = null);
 	};
 	const reset = () => (editingName = editing!.name, editingPermissions = editing!.permissions);
+
+	$: selfPermissions = data.members.find(member => member.id === data.session!.sub)?.role.permissions ?? 0;
+	$: canEdit = data.session!.sub === data.owner_id || hasBit(selfPermissions, TeamRolePermission.ManageRoles) || hasBit(selfPermissions, TeamRolePermission.Administrator);
 </script>
 
 <div class="team-roles">
@@ -60,7 +63,7 @@
 							{/if}
 						</p>
 					</div>
-					{#if data.user?.id === data.owner_id || hasBit(data.members.find(member => member.id === data.user?.id)?.role.permissions ?? 0, TeamRolePermission.ManageRoles)}
+					{#if canEdit}
 						<div class="buttons">
 							<Button on:click={() => (editing = item, reset())}>
 								<PencilFill/>{$t('action.edit')}

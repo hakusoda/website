@@ -404,8 +404,17 @@ export interface VerifyNewDeviceResponse {
 	id: string
 	name: string
 	user_os: string
+	last_used_at: string
 	user_country: string | null
 	user_platform: string
+}
+
+export interface VerifySudoModePayload {
+	id: string
+	authData: string
+	challenge: string
+	signature: string
+	clientData: string
 }
 
 export interface GroupSelectItem {

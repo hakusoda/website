@@ -45,10 +45,9 @@
 			font-size: .9em;
 		}
 		.users {
-			gap: 8px;
+			gap: 16px;
+			margin: 24px 0 16px;
 			display: flex;
-			margin-top: 24px;
-			margin-bottom: 32px;
 			flex-direction: column;
 		}
 		.mellow {

@@ -23,8 +23,8 @@
 	import UiChecksGrid from '$lib/icons/UIChecksGrid.svelte';
 	export let data: PageData;
 
+	let state = 0;
 	let target: PageData['binds'][number] | null = null;
-	let trigger: () => void;
 	let linksContainer: HTMLDivElement;
 
 	let importType: MellowLinkImportType | null = null;
@@ -64,96 +64,89 @@
 </script>
 
 <div class="main">
-	<h1>{$t('mellow.server.settings.syncing.actions.header')}</h1>
-	<h2>{$t('mellow.server.settings.syncing.actions.summary')}</h2>
-	<div class="items" bind:this={linksContainer}>
-		{#each data.binds.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item, index}
-			<div class="item" class:compact class:highlighted={highlighted === item.id} bind:this={linkItems[index]}>
-				<div class="info">
-					<h1>{item.name}</h1>
-					<div class="details">
-						<p>
-							<Sunrise/>
-							{$t('time_ago', [item.created_at])}
-							{#if item.creator}
-								{$t('label.by')}
-								<a href={`/user/${item.creator.username}`}>
-									{item.creator.name ?? `@${item.creator.username}`}
-								</a>
-							{/if}
-						</p>
-						{#if item.last_edit}
+	{#if state}
+		<MellowLinkEditor
+			onSave={() => linksContainer.scrollTo({ top: linksContainer.scrollHeight, behavior: 'smooth' })}
+			onCancel={() => state = 0}
+			serverId={$page.params.id}
+			bind:data
+			bind:target
+		/>
+	{:else}
+		<h1>{$t('mellow.server.settings.syncing.actions.header')}</h1>
+		<h2>{$t('mellow.server.settings.syncing.actions.summary')}</h2>
+		<div class="items" bind:this={linksContainer}>
+			{#each data.binds.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item, index}
+				<div class="item" class:compact class:highlighted={highlighted === item.id} bind:this={linkItems[index]}>
+					<div class="info">
+						<h1>{item.name}</h1>
+						<div class="details">
 							<p>
-								<PencilFill/>
-								<a href={`/user/${item.last_edit.author.username}`}>
-									{item.last_edit.author.name ?? `@${item.last_edit.author.username}`}
-								</a>
-								{$t('time_ago', [item.last_edit.created_at])}
+								<Sunrise/>
+								{$t('time_ago', [item.created_at])}
+								{#if item.creator}
+									{$t('label.by')}
+									<a href={`/user/${item.creator.username}`}>
+										{item.creator.name ?? `@${item.creator.username}`}
+									</a>
+								{/if}
 							</p>
-						{/if}
-						<p>
-							<svelte:component this={MAPPED_MELLOW_SYNC_ACTION_ICONS[item.type]}/>
-							{$t(`mellow_bind.type.${item.type}.full`)}
-						</p>
-						<p>
-							{#if item.requirements_type}
-								<UiChecksGrid/>
-							{:else}
-								<GridFill/>
+							{#if item.last_edit}
+								<p>
+									<PencilFill/>
+									<a href={`/user/${item.last_edit.author.username}`}>
+										{item.last_edit.author.name ?? `@${item.last_edit.author.username}`}
+									</a>
+									{$t('time_ago', [item.last_edit.created_at])}
+								</p>
 							{/if}
-							{$t('mellow_bind.requirements', [item.requirements.length])}
-						</p>
+							<p>
+								<svelte:component this={MAPPED_MELLOW_SYNC_ACTION_ICONS[item.type]}/>
+								{$t(`mellow_bind.type.${item.type}.full`)}
+							</p>
+							<p>
+								{#if item.requirements_type}
+									<UiChecksGrid/>
+								{:else}
+									<GridFill/>
+								{/if}
+								{$t('mellow_bind.requirements', [item.requirements.length])}
+							</p>
+						</div>
+					</div>
+					<div class="buttons">
+						<Button on:click={() => (target = item, state++)}>
+							<PencilFill/>{$t('action.edit')}
+						</Button>
+						<Button colour="secondary" circle on:click={() => deleteLink(item.id)}>
+							<Trash/>
+						</Button>
 					</div>
 				</div>
-				<div class="buttons">
-					<Button on:click={() => target = item}>
-						<PencilFill/>{$t('action.edit')}
-					</Button>
-					<Button colour="secondary" circle on:click={() => deleteLink(item.id)}>
-						<Trash/>
-					</Button>
-				</div>
-			</div>
-		{/each}
-	</div>
-	<div class="fade"/>
-	<div class="buttons">
-		<Button on:click={trigger}>
-			<Plus/>{$t('mellow.server.settings.syncing.actions.create')}
-		</Button>
-		<DropdownMenu.Root bind:trigger={importTrigger}>
-			<Button slot="trigger" colour="secondary" on:click={importTrigger} title="coming soon!!!" disabled>
-				<Plus/>{$t('mellow.server.settings.syncing.actions.import')}
+			{/each}
+		</div>
+		<div class="fade"/>
+		<div class="buttons">
+			<Button on:click={() => state++}>
+				<Plus/>{$t('mellow.server.settings.syncing.actions.create')}
 			</Button>
-			<p>{$t('mellow.server.settings.syncing.actions.import.category')}</p>
-			{#each Object.values(MellowLinkImportType) as type}
-				{#if typeof type === 'number'}
-					<button type="button" on:click={() => importType = +type}>
-						{$t(`mellow.server.settings.syncing.actions.import.type.${type}`)}
-					</button>
-				{/if}
-			{/each}
-		</DropdownMenu.Root>
-		<TextInput bind:value={itemFilter} placeholder={$t('action.search')}/>
-		<!--<Select.Root bind:value={$mellowLinkViewMode}>
-			{#each Object.values(MellowLinkListViewMode) as item}
-				{#if typeof item === 'number'}
-					<Select.Item value={item}>
-						{$t(`mellow_bind.view_mode.${item}`)}
-					</Select.Item>
-				{/if}
-			{/each}
-		</Select.Root>-->
-	</div>
+			<DropdownMenu.Root bind:trigger={importTrigger}>
+				<Button slot="trigger" colour="secondary" on:click={importTrigger} title="coming soon!!!" disabled>
+					<Plus/>{$t('mellow.server.settings.syncing.actions.import')}
+				</Button>
+				<p>{$t('mellow.server.settings.syncing.actions.import.category')}</p>
+				{#each Object.values(MellowLinkImportType) as type}
+					{#if typeof type === 'number'}
+						<button type="button" on:click={() => importType = +type}>
+							{$t(`mellow.server.settings.syncing.actions.import.type.${type}`)}
+						</button>
+					{/if}
+				{/each}
+			</DropdownMenu.Root>
+			<TextInput bind:value={itemFilter} placeholder={$t('action.search')}/>
+		</div>
+	{/if}
 </div>
-
-<MellowLinkEditor
-	onSave={() => linksContainer.scrollTo({ top: linksContainer.scrollHeight, behavior: 'smooth' })}
-	serverId={$page.params.id}
-	bind:data
-	bind:target
-	bind:trigger
-/>
 
 {#if importType === MellowLinkImportType.RobloxGroupRolesToDiscordRoles}
 	<Modal autoOpen>

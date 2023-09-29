@@ -16,11 +16,16 @@
 <div class="audit-log">
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<svelte:element this={openable ? 'button' : 'div'} type="button" class="header" on:click>
-		<Avatar src={avatar} size="sm" circle/>
+		<Avatar src={avatar} size="xs" circle/>
 		<div class="details">
-			<h1><a href={`/user/${author}`}>{authorName ?? `@${author}`}</a> {text}</h1>
-			<p>{$t('time_ago', [createdAt])}</p>
+			<h1>
+				<a href={`/user/${author}`}>
+					{authorName ?? `@${author}`}
+				</a>
+				{text}
+			</h1>
 		</div>
+		<p class="created">{$t('time_ago', [createdAt])}</p>
 		{#if openable}
 			<CaretDown/>
 		{/if}
@@ -34,28 +39,32 @@
 
 <style lang="scss">
 	.audit-log {
+		width: 100%;
 		transition: box-shadow .5s;
 		background: var(--background-secondary);
 		box-shadow: inset 0 0 0 1px var(--border-primary);
 		border-radius: 32px;
 		.header {
-			width: 100%;
+			width: -webkit-fill-available;
 			border: none;
-			padding: 8px;
+			height: 64px;
 			display: flex;
+			padding: 0 28px;
 			font-size: 1em;
 			background: none;
 			text-align: start;
 			align-items: center;
 			font-family: var(--font-primary);
-			border-radius: 16px;
 			.details {
-				margin-left: 16px;
+				margin: 0 auto 0 24px;
 				h1 {
 					color: var(--color-secondary);
 					margin: 0;
 					font-size: 1em;
-					font-weight: 500;
+					font-weight: 400;
+					a {
+						font-weight: 500;
+					}
 				}
 				p {
 					color: var(--color-secondary);
@@ -63,9 +72,13 @@
 					font-size: .8em;
 				}
 			}
+			.created {
+				color: var(--color-secondary);
+				margin: 0 24px;
+				font-size: .8em;
+			}
 			:global(svg) {
 				color: var(--color-primary);
-				margin: 0 16px 0 auto;
 			}
 			&:is(button) {
 				cursor: pointer;
@@ -74,7 +87,7 @@
 		& > .details {
 			gap: 8px;
 			display: flex;
-			padding: 16px;
+			padding: 16px 24px 24px;
 			border-top: 1px solid var(--border-primary);
 			flex-direction: column;
 			:global(p) {

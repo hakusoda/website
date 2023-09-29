@@ -32,10 +32,10 @@ const EDIT_SCHEMA = z.object({
 });
 
 export const actions = {
-	edit: async ({ locals: { session }, params: { id }, request }) => {
+	edit: async ({ url, locals: { session }, params: { id }, request }) => {
 		if (!session)
 			throw requestError(401, RequestErrorType.Unauthenticated);
-		await verifyServerMembership(session, id);
+		await verifyServerMembership(session, id, url);
 
 		const body = await request.json();
 		const response = EDIT_SCHEMA.safeParse(body);

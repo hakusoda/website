@@ -1,6 +1,7 @@
-import { API_BASE } from '$lib/constants';
+import { enableSudoMode } from '../store';
+import { API_BASE, USER_CONNECTION_METADATA } from '../constants';
 import type { ApiResponse, UserNotification } from '../types';
-import { RequestErrorType, UserNotificationType } from '$lib/enums';
+import { RequestErrorType, UserConnectionType, UserNotificationType } from '$lib/enums';
 export function getDefaultAvatar(id: string) {
 	let hash = 0;
 	for (let i = 0; i < id.length; i++)
@@ -41,16 +42,22 @@ export const hasBit = (bits: number, bit: number) => (bits & bit) === bit;
 
 const UNKNOWN_ERROR = { error: RequestErrorType.Unknown, success: false };
 export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' = 'GET', body?: any, headers?: Record<string, string>): Promise<ApiResponse<T>> {
-	const isExternal = path.startsWith('http');
-	return fetch(isExternal ? path : `${API_BASE}/${path}`, {
+	const url = path.startsWith('http') ? path : `${API_BASE}/${path}`;
+	return fetch(url, {
 		body: body ? body instanceof URLSearchParams ? body.toString() : body instanceof ArrayBuffer ? body : JSON.stringify(body) : undefined,
 		method,
 		headers,
 		credentials: 'include'
 	}).then(response => response.json().then(data => {
-		if (data.error)
+		if (data.error) {
+			if (response.status === 403 && data.error === 'not_in_sudo_mode')
+				return enableSudoMode().then(enabled => {
+					if (!enabled)
+						return { ...data, success: false };
+					return request(path, method, body, headers);
+				});
 			return { ...data, success: false };
-		else if (response.status < 200 || response.status > 399)
+		} else if (response.status < 200 || response.status > 399)
 			return UNKNOWN_ERROR;
 		return { data, error: null, success: true };
 	}).catch(() => {
@@ -61,4 +68,11 @@ export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'PO
 		error: navigator.onLine ? RequestErrorType.FetchError : RequestErrorType.Offline, 
 		success: false
 	}));
+}
+
+export function getUserConnectionUrl(type: UserConnectionType, redirectUri?: string | null) {
+	const metadata = USER_CONNECTION_METADATA[type];
+	//const redirect = encodeURIComponent(`${API_BASE}/auth/callback/${metadata.id}${redirectUri ? `?redirect_uri=${redirectUri}` : ''}`);
+	const redirect = encodeURIComponent(`${API_BASE}/auth/callback/${metadata.id}`);
+	return metadata.url.replace('$$', redirect);
 }

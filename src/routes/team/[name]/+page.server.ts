@@ -1,5 +1,3 @@
-import { error } from '@sveltejs/kit';
-
 import supabase from '$lib/supabase';
 import { getTeam } from '$lib/database';
 import { requestError } from '$lib/util/server';

@@ -8,7 +8,6 @@
 	import { createMellowServerProfileSyncAction, updateMellowServerProfileSyncAction } from '$lib/api';
 	import { MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '../enums';
 
-	import Modal from './Modal.svelte';
 	import Loader from './Loader.svelte';
 	import GroupSelect from './GroupSelect.svelte';
 	import RequestErrorUI from './RequestError.svelte';
@@ -22,8 +21,8 @@
 	export let data: PageData;
 	export let target: PageData['binds'][number] | null = null;
 	export let onSave: () => void;
-	export let trigger: () => void;
 	export let serverId: string;
+	export let onCancel: () => void;
 
 	let roleTrigger: () => void;
 	let requirementTrigger: () => void;
@@ -47,8 +46,6 @@
 		name = target.name, type = target.type, actionData = [...target.data];
 		requirements = target.requirements.map(item => [item.type, item.data]), requirementsType = target.requirements_type;
 		editing = true;
-		trigger();
-
 		for (const [type, data] of requirements)
 			if (type === MellowProfileSyncActionRequirementType.RobloxHasGroupRole || type === MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange || type === MellowProfileSyncActionRequirementType.RobloxInGroup)
 				getGroupRoles(data[0]);
@@ -81,7 +78,6 @@
 			if (response.success) {
 				data.binds = data.binds.map(item => item.id === target!.id ? response.data as any : item);
 				saving = false;
-				trigger();
 				resetAdd();
 			} else
 				return saving = !(saveError = response);
@@ -99,7 +95,6 @@
 			if (response.success) {
 				data.binds = [...data.binds, response.data as any];
 				saving = false;
-				trigger();
 				resetAdd();
 				setTimeout(onSave, 100);
 			} else
@@ -120,7 +115,7 @@
 		.then(data => groupRoles[id] = data.filter(role => role.rank).sort((a, b) => b.rank - a.rank));
 </script>
 
-<Modal bind:trigger>
+<div class="mellow-sync-action-editor">
 	<h1>{$t(`mellow_link_editor.header.${!!target}`)}</h1>
 
 	<div class="field">
@@ -130,7 +125,7 @@
 
 	<p class="modal-label">{$t('mellow_link_editor.requirements')}</p>
 	<div class="fields">
-		<Select.Root bind:value={requirementsType}>
+		<Select.Root placeholder="" bind:value={requirementsType}>
 			{#each Object.values(MellowProfileSyncActionRequirementsType) as item}
 				{#if typeof item === 'number'}
 					<Select.Item value={item}>
@@ -181,7 +176,7 @@
 			<div class="item" class:highlighted={index === requirements.length - 1} bind:this={itemRefs[index]}>
 				<div class="rfields">
 					<p class="title">
-						<svelte:component this={MAPPED_MELLOW_SYNC_REQUIREMENTS.find(i => i[0].some(j => j[0] === item[0]))[1]}/>
+						<svelte:component this={MAPPED_MELLOW_SYNC_REQUIREMENTS.find(i => i[0].some(j => j[0] === item[0]))?.[1]}/>
 						{$t(`mellow_bind.requirement.${item[0]}`)}
 					</p>
 					{#if item[0] === MellowProfileSyncActionRequirementType.RobloxHasGroupRole}
@@ -209,7 +204,7 @@
 						<GroupSelect source="roblox" bind:value={item[1][0]}/>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.MeetOtherAction}
 						<Select.Root bind:value={item[1][0]} placeholder={$t('mellow_link_editor.requirement.link.placeholder')}>
-							{#each data.binds.filter(bind => bind.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowProfileSyncActionRequirementType.MeetsOtherLink && r[1][0] === bind.id)) as bind}
+							{#each data.binds.filter(bind => bind.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowProfileSyncActionRequirementType.MeetOtherAction && r[1][0] === bind.id)) as bind}
 								<Select.Item value={bind.id}>
 									{bind.name}
 								</Select.Item>
@@ -234,7 +229,7 @@
 	<div class="fields">
 		<div class="field">
 			<p class="modal-label">{$t('mellow_link_editor.type')}</p>
-			<Select.Root bind:value={type}>
+			<Select.Root placeholder="" bind:value={type}>
 				<p>{$t('mellow_link_editor.type.category')}</p>
 				{#each Object.values(MellowProfileSyncActionType) as item}
 					{#if typeof item === 'number'}
@@ -302,133 +297,136 @@
 		<Button on:click={save} disabled={saving}>
 			<Check/>{$t(target ? 'action.save_changes' : 'mellow_link_editor.finish')}
 		</Button>
-		<form method="dialog">
-			<Button colour="secondary" on:click={resetAdd} disabled={saving}>
-				<X/>{$t('action.cancel')}
-			</Button>
-		</form>
+		<Button colour="secondary" on:click={() => (onCancel(), resetAdd())} disabled={saving}>
+			<X/>{$t('action.cancel')}
+		</Button>
 	</div>
-</Modal>
+</div>
 
 <style lang="scss">
-	h1 {
-		margin: 8px 0 24px;
-	}
-	.requirements {
-		gap: 8px;
-		margin: 8px 0 0;
+	.mellow-sync-action-editor {
+		height: 100%;
 		display: flex;
-		flex-wrap: wrap;
-		margin-bottom: 16px;
-		.item {
-			flex: 1 1 30%;
-			width: 0;
+		flex-direction: column;
+		h1 {
+			margin-bottom: 32px;
+		}
+		.requirements {
+			gap: 8px;
+			margin: 8px 0 0;
 			display: flex;
-			padding: 16px;
-			position: relative;
-			background: #00000040;
-			border-radius: 20px;
-			.title {
-				gap: 16px;
-				margin: 0 0 0 4px;
+			flex-wrap: wrap;
+			margin-bottom: 16px;
+			.item {
+				flex: 1 1 30%;
+				width: 0;
 				display: flex;
-				font-size: .9em;
-				font-weight: 500;
-				white-space: nowrap;
-				align-items: center;
-			}
-			.rfields {
-				gap: 16px;
-				display: flex;
-				flex-direction: column;
-			}
-			.buttons {
-				top: 16px;
-				gap: 16px;
-				right: 16px;
-				display: flex;
-				position: absolute;
-				button {
-					color: var(--color-secondary);
-					border: none;
-					cursor: pointer;
-					height: fit-content;
-					padding: 0;
+				padding: 16px;
+				position: relative;
+				background: #00000040;
+				border-radius: 20px;
+				.title {
+					gap: 16px;
+					margin: 0 0 0 4px;
 					display: flex;
-					background: none;
-					transition: color .5s;
-					&:hover {
-						color: var(--color-primary);
+					font-size: .9em;
+					font-weight: 500;
+					white-space: nowrap;
+					align-items: center;
+				}
+				.rfields {
+					gap: 16px;
+					display: flex;
+					flex-direction: column;
+				}
+				.buttons {
+					top: 16px;
+					gap: 16px;
+					right: 16px;
+					display: flex;
+					position: absolute;
+					button {
+						color: var(--color-secondary);
+						border: none;
+						cursor: pointer;
+						height: fit-content;
+						padding: 0;
+						display: flex;
+						background: none;
+						transition: color .5s;
+						&:hover {
+							color: var(--color-primary);
+						}
 					}
 				}
-			}
-			&.highlighted {
-				animation: 1s 5 alternate basic-focus;
-			}
-		}
-	}
-
-	.fields {
-		gap: 16px;
-		display: flex;
-		.field {
-			margin: 16px 0 0;
-			p {
-				margin-top: 0;
+				&.highlighted {
+					animation: 1s 5 alternate basic-focus;
+				}
 			}
 		}
-	}
-	.audit-reason, .audit-reason :global(.text-input) {
-		width: 100%;
-	}
 
-	.roles {
-		gap: 8px 16px;
-		flex: 0 1 auto;
-		display: flex;
-		flex-wrap: wrap;
-		max-width: 512px;
-		.item {
-			color: #fff;
-			height: 40px;
-			border: none;
-			cursor: pointer;
+		.fields {
+			gap: 16px;
 			display: flex;
-			padding: 0 24px;
-			font-size: 14px;
-			background: none;
-			transition: background .5s, box-shadow .5s;
-			box-shadow: inset 0 0 0 1px #fff;
-			font-weight: 500;
-			align-items: center;
-			font-family: var(--font-primary);
-			border-radius: 20px;
-			&:hover {
-				background: #ffffff0d;
-				box-shadow: inset 0 0 0 1px #ffffff80;
+			.field {
+				margin: 16px 0 0;
+				p {
+					margin-top: 0;
+				}
 			}
 		}
-		:global(.menu-content) {
-			overflow: auto;
-			max-height: 256px;
+		.audit-reason, .audit-reason :global(.text-input) {
+			width: 100%;
 		}
-	}
 
-	.modal-label {
-		color: var(--color-secondary);
-		margin: 0 0 6px;
-		font-size: .9em;
-		&:not(:first-child):not(:nth-child(2)) {
-			margin-top: 24px;
+		.roles {
+			gap: 8px 16px;
+			flex: 0 1 auto;
+			display: flex;
+			flex-wrap: wrap;
+			max-width: 512px;
+			.item {
+				color: #fff;
+				height: 40px;
+				border: none;
+				cursor: pointer;
+				display: flex;
+				padding: 0 24px;
+				font-size: 14px;
+				background: none;
+				transition: background .5s, box-shadow .5s;
+				box-shadow: inset 0 0 0 1px #fff;
+				font-weight: 500;
+				align-items: center;
+				font-family: var(--font-primary);
+				border-radius: 20px;
+				&:hover {
+					background: #ffffff0d;
+					box-shadow: inset 0 0 0 1px #ffffff80;
+				}
+			}
+			:global(.menu-content) {
+				overflow: auto;
+				max-height: 256px;
+			}
 		}
-	}
-	.explanation {
-		color: var(--color-secondary);
-		margin: 48px 0 12px;
-		font-size: .9em;
-	}
-	.modal-buttons {
-		gap: 16px;
-		display: flex;
+
+		.modal-label {
+			color: var(--color-secondary);
+			margin: 0 0 6px;
+			font-size: .9em;
+			&:not(:first-child):not(:nth-child(2)) {
+				margin-top: 24px;
+			}
+		}
+		.explanation {
+			color: var(--color-secondary);
+			margin: auto 0 12px;
+			font-size: .9em;
+		}
+		.modal-buttons {
+			gap: 16px;
+			display: flex;
+		}
 	}
 </style>

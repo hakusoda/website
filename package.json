@@ -26,14 +26,14 @@
 		"vite": "^4.4.9"
 	},
 	"dependencies": {
-		"@hexagon/base64": "^1.1.27",
+		"@hexagon/base64": "^1.1.28",
 		"@supabase/auth-helpers-sveltekit": "^0.10.2",
 		"@supabase/supabase-js": "^2.33.2",
 		"@types/uuid": "^9.0.3",
 		"@vercel/analytics": "^1.0.2",
 		"@vercel/edge-config": "^0.4.0",
 		"@voxelified/svelte-localisation": "^1.0.0",
-		"@voxelified/voxeliface": "^2.1.0",
+		"@voxelified/voxeliface": "file:../voxeliface",
 		"cropperjs": "^1.6.0",
 		"jose": "^4.14.6",
 		"svelte-markdown": "^0.4.0",

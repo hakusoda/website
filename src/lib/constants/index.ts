@@ -1,11 +1,13 @@
 import type { SvelteComponent } from 'svelte';
 
 import { PUBLIC_GITHUB_ID } from '$env/static/public';
-import { MellowProfileSyncActionType, MellowProfileSyncActionRequirementType } from '../enums';
+import { UserConnectionType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType } from '../enums';
 
 import X from '../icons/X.svelte';
 import Link from '../icons/Link.svelte';
 import Steam from '../icons/Steam.svelte';
+import GitHub from '$lib/icons/GitHub.svelte';
+import Discord from '$lib/icons/Discord.svelte';
 import PersonFill from '../icons/PersonFill.svelte';
 import PeopleFill from '../icons/PeopleFill.svelte';
 import RobloxIcon from '../icons/RobloxIcon.svelte';
@@ -49,6 +51,22 @@ export const MAPPED_MELLOW_SYNC_REQUIREMENTS: [[MellowProfileSyncActionRequireme
 	], Voxelified]
 ];
 
-const redirectURI = encodeURIComponent(`${API_BASE}/auth/callback/`);
-export const GITHUB_OAUTH_URL = `https://github.com/login/oauth/authorize?client_id=${PUBLIC_GITHUB_ID}&redirect_uri=${redirectURI}github`;
-export const DISCORD_OAUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=1068554282481229885&redirect_uri=${redirectURI}discord&response_type=code&scope=identify`;
+export const USER_CONNECTION_METADATA: Record<UserConnectionType, {
+	id: string
+	url: string
+	icon: typeof SvelteComponent<any>
+	colour: string
+}> = {
+	[UserConnectionType.Discord]: {
+		id: 'discord',
+		url: `https://discord.com/api/oauth2/authorize?client_id=1068554282481229885&redirect_uri=$$&response_type=code&scope=identify`,
+		icon: Discord,
+		colour: '#5865F2'
+	},
+	[UserConnectionType.GitHub]: {
+		id: 'github',
+		url: `https://github.com/login/oauth/authorize?client_id=${PUBLIC_GITHUB_ID}&redirect_uri=$$`,
+		icon: GitHub,
+		colour: '#333'
+	}
+};

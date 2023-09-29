@@ -9,11 +9,10 @@ export const load = (async ({ parent }) => {
 	const response = await supabase.from('user_connections').select<string, {
 		id: string
 		sub: string
-		name: string
 		type: UserConnectionType
 		metadata: any
 		created_at: string
-	}>('id, sub, name, type, metadata, created_at').eq('user_id', session!.sub);
+	}>('id, sub, type, metadata, created_at').eq('user_id', session!.sub);
 	if (response.error) { 
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.ExternalRequestError);

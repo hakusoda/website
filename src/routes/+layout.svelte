@@ -7,6 +7,7 @@
 	import { t } from '$lib/localisation'; 
 	import { page } from '$app/stores';
 	import { theme } from '$lib/settings';
+	import { sudoModal } from '$lib/store';
 	import { webVitals } from '$lib/vitals';
 	import { dev, browser } from '$app/environment';
 	import { invalidateAll } from '$app/navigation';
@@ -18,6 +19,7 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Loader from '$lib/components/Loader.svelte';
+	import EnableSudo from '$lib/modals/EnableSudo.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
 
 	import X from '$lib/icons/X.svelte';
@@ -185,6 +187,9 @@
 			</div>
 		</footer>
 		<PageLoader/>
+		{#if $sudoModal}
+			<EnableSudo/>
+		{/if}
 	</main>
 </div>
 
@@ -205,6 +210,8 @@
 		.app-content {
 			height: 100%;
 			display: flex;
+			background: center url(/img/background.svg);
+			padding-top: 48px;
 			flex-direction: column;
 		}
 
@@ -216,10 +223,15 @@
 	}
 
 	header {
+		width: -webkit-fill-available;
 		z-index: 100;
 		display: flex;
 		padding: 8px 32px;
+		position: absolute;
+		background: color-mix(in srgb, transparent, var(--background-primary) 75%);
 		align-items: center;
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 		@media (max-width: 512px) {
 			padding: 8px 16px;
 		}
@@ -361,6 +373,7 @@
 		padding: 40px 64px;
 		flex-wrap: wrap;
 		margin-top: auto;
+		background: var(--background-primary);
 		border-top: 1px solid var(--border-primary);
 		.header {
 			.name {
@@ -392,6 +405,6 @@
 	}
 
 	:global(.menu-content) {
-		width: max-content;
+		min-width: 256px;
 	}
 </style>

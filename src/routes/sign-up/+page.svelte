@@ -4,9 +4,10 @@
 
 	import { t } from '$lib/localisation';
 	import { invalidateAll } from '$app/navigation';
+	import { UserConnectionType } from '$lib/enums';
+	import { getUserConnectionUrl } from '$lib/util';
 	import type { ApiRequestError } from '$lib/types';
 	import { verifySignUp, getSignUpOptions } from '$lib/api';
-	import { GITHUB_OAUTH_URL, DISCORD_OAUTH_URL } from '$lib/constants';
 
 	import '$lib/styles/auth.scss';
 	import RequestError from '$lib/components/RequestError.svelte';
@@ -52,10 +53,10 @@
 <div class="auth-modal">
 	<h2>{$t('signup.social')}</h2>
 	<div class="social">
-		<a href={DISCORD_OAUTH_URL}>
+		<a href={getUserConnectionUrl(UserConnectionType.Discord)}>
 			<Discord size={24} coloured/>Discord
 		</a>
-		<a href={GITHUB_OAUTH_URL}>
+		<a href={getUserConnectionUrl(UserConnectionType.GitHub)}>
 			<GitHub size={24}/>GitHub
 		</a>
 	</div>

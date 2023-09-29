@@ -1,70 +1,49 @@
 <script lang="ts">
-	import { Button } from '@voxelified/voxeliface';
-
 	import { t } from '$lib/localisation';
-	import type { RequestError } from '$lib/types';
-	import { removeUserConnection } from '$lib/api';
-	import { GITHUB_OAUTH_URL, DISCORD_OAUTH_URL } from '$lib/constants';
+	import { UserConnectionType } from '$lib/enums';
+	import { getUserConnectionUrl } from '$lib/util';
+	import { USER_CONNECTION_METADATA } from '$lib/constants';
 
-	import RequestErrorUI from '$lib/components/RequestError.svelte';
+	import UserConnection from '$lib/components/UserConnection.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import GitHub from '$lib/icons/GitHub.svelte';
-	import Discord from '$lib/icons/Discord.svelte';
-	import GitHubText from '$lib/icons/GitHubText.svelte';
-	import DiscordText from '$lib/icons/DiscordText.svelte';
+	import ExclamationOctagonFill from '$lib/icons/ExclamationOctagonFill.svelte';
 
 	import type { PageData } from './$types';
-	import { UserConnectionType } from '$lib/enums';
 	export let data: PageData;
-	
-	let error: RequestError | null = null;
-	let removing: string[] = [];
-	const remove = async (id: string) => {
-		removing = [...removing, id];
 
-       	const response = await removeUserConnection(id);
-		if (response.success)
-			data.connections = data.connections.filter(item => item.id !== id);
-		else
-			error = response;
+	let exists: UserConnectionType | null = null;
+	const connect = (type: UserConnectionType) => {
+		if (data.connections.some(item => item.type === type))
+			return exists = type;
+		exists = null;
 
-		removing = removing.filter(item => item !== id);
-    };
+		location.href = getUserConnectionUrl(type);
+	};
 </script>
 
 <div class="main">
 	<h1>{$t('settings.account.connections')}</h1>
 	<p class="summary">{$t('settings.account.connections.summary')}</p>
-	<div class="connections">
-		{#each data.connections as item}
-			<div class="item">
-				{#if item.type === UserConnectionType.Discord}
-					<Discord size={32}/>
-				{:else}
-					<GitHub size={32}/>
-				{/if}
-				<div class="details">
-					<h1>{item.name}</h1>
-					<p>{$t(`user_connection.type.${item.type}`)} • {item.sub} • {$t('user_connection.created', [item.created_at])}</p>
-				</div>
-				<Button on:click={() => remove(item.id)} disabled={removing.includes(item.id)}>
-					<X/>{$t('action.remove')}
-				</Button>
-			</div>
-		{/each}
-	</div>
-	<RequestErrorUI data={error}/>
-
 	<p class="add">{$t('settings.account.connections.add')}</p>
 	<div class="connection-types">
-		<a href={DISCORD_OAUTH_URL} class="item" style="--bg: #5865F2;">
-			<DiscordText size={24}/>
-		</a>
-		<a href={GITHUB_OAUTH_URL} class="item" style="--bg: #333;">
-			<GitHub size={24}/>
-			<GitHubText size={24}/>
-		</a>
+		{#each Object.values(UserConnectionType) as item}
+			{#if typeof item === 'number'}
+				<button type="button" class="item focusable" style={`--bg: ${USER_CONNECTION_METADATA[item].colour};`} on:click={() => connect(typeof item === 'number' ? item : 0)}>
+					<svelte:component this={USER_CONNECTION_METADATA[item].icon}/>{$t(`user_connection.type.${item}`)}
+				</button>
+			{/if}
+		{/each}
+	</div>
+	{#if exists !== null}
+		<p class="exists">
+			<ExclamationOctagonFill/>{$t('settings.account.connections.add.exists', [$t(`user_connection.type.${exists}`)])}
+		</p>
+	{/if}
+
+	<div class="connections">
+		{#each data.connections as item}
+			<UserConnection {...item}/>
+		{/each}
 	</div>
 </div>
 
@@ -78,45 +57,45 @@
 			margin-bottom: 32px;
 		}
 		.connections {
-			gap: 8px;
+			gap: 16px;
+			margin: 32px 0 0;
 			display: flex;
 			flex-direction: column;
-			.item {
-				display: flex;
-				padding: 16px 20px 16px 28px;
-				background: var(--background-secondary);
-				align-items: center;
-				border-radius: 36px;
-				.details {
-					margin: 0 auto 0 24px;
-					h1 {
-						margin: 0;
-						font-size: 1em;
-						font-weight: 500;
-					}
-					p {
-						color: var(--color-secondary);
-						margin: 4px 0 0;
-						font-size: .8em;
-					}
-				}
-			}
 		}
 		.add {
-			margin: 64px 0 16px;
+			margin: 48px 0 12px;
 			font-weight: 500;
 		}
+		.exists {
+			gap: 12px;
+			color: hsl(0 60% 55%);
+			margin: 16px 0;
+			display: flex;
+			font-size: .9em;
+			align-items: center;
+		}
 		.connection-types {
-			gap: 16px;
+			gap: 12px;
+			margin: 0 0 16px;
 			display: flex;
 			.item {
-				gap: 12px;
+				gap: 8px;
+				color: var(--color-primary);
+				border: none;
+				height: 40px;
+				cursor: pointer;
 				display: flex;
-				padding: 14px 24px;
+				padding: 0 24px;
+				font-size: .9em;
 				background: var(--bg);
 				transition: box-shadow .25s;
 				box-shadow: inset 0 0 0 1px var(--border-primary);
+				font-weight: 500;
+				line-height: 100%;
+				align-items: center;
+				font-family: var(--font-primary);
 				border-radius: 20px;
+				text-decoration: none;
 				&:hover {
 					box-shadow: inset 0 0 0 1px var(--border-secondary);
 				}

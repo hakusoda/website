@@ -4,7 +4,6 @@
 	import { t } from '$lib/localisation';
 	import type { PageData } from './$types';
 
-	import Avatar from '$lib/components/Avatar.svelte';
 	import TeamSettingsMember from '$lib/components/TeamSettingsMember.svelte';
 	export let data: PageData;
 
@@ -59,7 +58,7 @@
 		width: 100%;
 		margin: 64px;
 		.members {
-			gap: 8px;
+			gap: 16px;
 			display: flex;
 			flex-direction: column;
 		}

@@ -3,19 +3,17 @@
 
 	import { t } from '../localisation';
 	import { page } from '$app/stores';
+	import { hasBit } from '$lib/util';
 	import { deserialize } from '$app/forms';
 	import { RobloxLinkFlag, RequestErrorType } from '../enums';
 	import type { RobloxLink, RequestError, PartialRobloxUser } from '../types';
 
 	import Avatar from './Avatar.svelte';
-	import RequestErrorUI from './RequestError.svelte';
-
-	import X from '../icons/X.svelte';
+	
 	import Eye from '../icons/Eye.svelte';
-	import Check from '../icons/Check.svelte';
 	import Trash from '../icons/Trash.svelte';
-	import CaretDown from '../icons/CaretDown.svelte';
-	import RobloxIcon from '../icons/RobloxIcon.svelte';
+	import ThreeDots from '$lib/icons/ThreeDots.svelte';
+	import BoxArrowUpRight from '$lib/icons/BoxArrowUpRight.svelte';
 	export let icon: string;
 	export let link: RobloxLink;
 	export let user: PartialRobloxUser;
@@ -41,78 +39,61 @@
 	$: isPrimary = link.id === $page.data.primaryId;
 </script>
 
-<DropdownMenu.Root bind:trigger>
-	<button slot="trigger" type="button" class="user-link" class:active={isPrimary} on:click={trigger} disabled={unlinking}>
-		<Avatar src={icon} size="sm" circle/>
-		<div class="name">
-			<p class="nickname">
-				{user.displayName}
-				{#if isPrimary}
-					<span class="primary">{$t('roblox_link.primary')}</span>
-				{/if}
-			</p>
-			<div class="flags">
-				{#if link.flags}
-					{#each Object.values(RobloxLinkFlag) as flag}
-						{#if typeof flag === 'number' && flag && (link.flags & flag) === flag}
-							<p class="flag"><Check/>{$t(`roblox_link.flag.${flag}`)}</p>
-						{/if}
-					{/each}
-				{:else}
-					<p class="flag"><X/>{$t(`roblox_link.flag.0`)}</p>
-				{/if}
-				<p class="flag"><Eye/>{$t(`roblox_link.visible.${link.public}`)}</p>
-			</div>
-		</div>
-		<div class="button">
-			<CaretDown/>
-		</div>
-		<RequestErrorUI data={error}/>
-	</button>
-	<p>{user.displayName} (@{user.name})</p>
-	<a href={`https://roblox.com/users/${user.id}/profile`} target="_blank">
-		<RobloxIcon/>{$t('roblox_link.view')}
-	</a>
-	<div class="separator"/>
-	{#if !isPrimary}
-		<button type="button" on:click={() => action('?/setPrimary')} disabled={isPrimary}>
-			{$t('roblox_link.make_primary')}
+<div class="user-link" class:active={isPrimary}>
+	<Avatar src={icon} size="xs" circle/>
+	<div class="details">
+		<h1>
+			{user.displayName}
+			{#if isPrimary}
+				<span class="primary">{$t('roblox_link.primary')}</span>
+			{/if}
+		</h1>
+		<p>
+			@{user.name}
+			{#if link.public}
+				• {$t('roblox_link.visible')}
+			{/if}
+		</p>
+	</div>
+	<div class="verified">
+		{$t(`roblox_link.verified.${hasBit(link.flags, RobloxLinkFlag.Verified)}`)}
+	</div>
+	<DropdownMenu.Root bind:trigger>
+		<button type="button" class="options" slot="trigger" on:click={trigger}>
+			<ThreeDots/>
 		</button>
-	{/if}
-	<button type="button" on:click={() => action('?/changeVisibility', `${link.id}:${!link.public}`)}>
-		<Eye/>{$t(`roblox_link.change_visibility.${link.public}`)}
-	</button>
-	<button type="button" on:click={() => action('?/unlink')}>
-		<Trash/>{$t('roblox_link.delete')}
-	</button>
-</DropdownMenu.Root>
+		<p>{user.displayName} (@{user.name})</p>
+		<a href={`https://roblox.com/users/${user.id}/profile`} target="_blank">
+			<BoxArrowUpRight/>{$t('roblox_link.view')}
+		</a>
+		<div class="separator"/>
+		{#if !isPrimary}
+			<button type="button" on:click={() => action('?/setPrimary')} disabled={isPrimary}>
+				{$t('roblox_link.make_primary')}
+			</button>
+		{/if}
+		<button type="button" on:click={() => action('?/changeVisibility', `${link.id}:${!link.public}`)}>
+			<Eye/>{$t(`roblox_link.change_visibility.${link.public}`)}
+		</button>
+		<button type="button" on:click={() => action('?/unlink')}>
+			<Trash/>{$t('roblox_link.delete')}
+		</button>
+	</DropdownMenu.Root>
+</div>
 
 <style lang="scss">
-	:global(.users .container) {
-		width: 100% !important;
-	}
 	.user-link {
-		gap: 16px;
-		width: 100%;
-		color: var(--color-primary);
-		border: none;
-		cursor: pointer;
+		height: 64px;
 		display: flex;
-		padding: 8px 16px 8px 8px;
-		font-size: 1em;
-		flex-wrap: wrap;
-		background: none;
-		text-align: start;
-		transition: box-shadow .5s;
-		box-shadow: inset 0 0 0 1px var(--border-primary);
+		padding: 0 28px;
+		background: var(--background-secondary);
 		align-items: center;
-		font-family: var(--font-primary);
-		border-radius: 20px;
-		text-decoration: none;
-		.name {
-			.nickname {
-				margin: 0 0 2px;
-				font-size: 1.1em;
+		border-radius: 32px;
+		.details {
+			margin: 0 auto 0 24px;
+			h1 {
+				margin: 0;
+				font-size: 1em;
 				font-weight: 500;
 				.primary {
 					color: hsl(330 65% 75%);
@@ -120,31 +101,23 @@
 					margin-left: 4px;
 				}
 			}
-			.flags {
-				gap: 16px;
-				display: flex;
-				.flag {
-					gap: 4px;
-					color: var(--color-secondary);
-					margin: 0;
-					display: flex;
-					font-size: .8em;
-					align-items: end;
-				}
+			p {
+				color: var(--color-secondary);
+				margin: 4px 0 0;
+				font-size: .8em;
 			}
 		}
-		.button {
-			margin: 0 8px 0 auto;
+		.verified {
+			color: var(--color-secondary);
+			margin: 0 24px;
+			font-size: .8em;
 		}
-		&[disabled] {
-			cursor: not-allowed;
-			opacity: 0.5;
-		}
-		&.active {
-			background: var(--background-secondary);
-		}
-		&:hover {
-			box-shadow: inset 0 0 0 1px var(--border-secondary);
+		.options {
+			color: var(--color-primary);
+			border: none;
+			cursor: pointer;
+			padding: 0;
+			background: none;
 		}
 	}
 </style>

@@ -29,5 +29,8 @@ node_modules/
 
 # sveltekit
 .svelte-kit/
+
+# SOMETHING
 .vercel
 .env*.local
+vite.config.*.timestamp*

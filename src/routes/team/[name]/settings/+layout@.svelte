@@ -7,6 +7,7 @@
 	import SideNavigation from '$lib/layouts/SideNavigation.svelte';
 	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
 
+	import GridFill from '$lib/icons/GridFill.svelte';
 	import Newspaper from '$lib/icons/Newspaper.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
@@ -40,6 +41,11 @@
 		<p>{$t('team.settings.archive')}</p>
 		<SettingsNavItem id="team.settings.archive.audit_log" path={`${base}/archive/audit-log`}>
 			<Newspaper/>
+		</SettingsNavItem>
+
+		<p>{$t('team.settings.developer')}</p>
+		<SettingsNavItem id="team.settings.developer.applications" path={`${base}/developer/applications`}>
+			<GridFill/>
 		</SettingsNavItem>
 	</svelte:fragment>
 	<slot/>

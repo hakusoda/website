@@ -10,14 +10,14 @@
 	.main {
 		width: 100%;
 		display: flex;
-		min-height: calc(100svh - 58px);
+		min-height: calc(100svh - 48px);
 		.nav {
 			width: 25%;
 			display: flex;
 			padding: 16px 0 16px 16px;
 			position: relative;
 			min-width: 25%;
-			background: #00000040;
+			background: hsl(0 0% 7%);
 			flex-direction: column;
 			& > :global(p) {
 				color: var(--color-primary);

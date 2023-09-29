@@ -1,8 +1,8 @@
 import base64 from '@hexagon/base64';
 import { get } from '@vercel/edge-config';
 import { SignJWT } from 'jose';
-import type { ZodIssue } from 'zod';
 import { fail, error, redirect } from '@sveltejs/kit';
+import type { ZodAny, ZodIssue, ZodSchema } from 'zod';
 
 import supabase from '../supabase';
 import { hasBit } from '.';
@@ -10,9 +10,9 @@ import { JWT_SECRET } from '$lib/constants/server';
 import { RequestErrorType } from '$lib/enums';
 import type { FeatureFlag } from '$lib/enums';
 import type { RequestError, UserSessionJWT } from '$lib/types';
-export async function verifyServerMembership(session: UserSessionJWT | null, serverId: string) {
+export async function verifyServerMembership(session: UserSessionJWT | null, serverId: string, url: URL) {
 	if (!session)
-		throw redirect(302, '/sign-in');
+		throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`);
 
 	const response = await supabase.from('mellow_server_members').select('id').eq('user_id', session.sub).eq('server_id', serverId).limit(1).maybeSingle();
 	if (response.error) {
@@ -70,4 +70,12 @@ export async function throwIfFeatureNotEnabled(feature: FeatureFlag) {
 	const enabled = await isFeatureEnabled(feature);
 	if (!enabled)
 		throw requestError(503, RequestErrorType.FeatureFlagDisabled);
+}
+
+export async function parseQuery<T extends ZodSchema = ZodAny>(request: Request, schema: T): Promise<T['_output']> {
+	const result = schema.safeParse(Object.fromEntries(new URL(request.url).searchParams.entries()));
+	if (!result.success)
+		throw requestError(400, RequestErrorType.InvalidQuery, result.error.issues);
+
+	return result.data;
 }
