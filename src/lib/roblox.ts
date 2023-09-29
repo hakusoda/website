@@ -1,9 +1,9 @@
 import { request } from './util';
-import { ROBLOX_OPEN_CLOUD_KEY } from '$env/static/private';
-import { OpenCloudClient, OpenCloudApiKey } from '../../../../../source/repos/roblox-open-cloud';
+//import { ROBLOX_OPEN_CLOUD_KEY } from '$env/static/private';
+//import { OpenCloudClient, OpenCloudApiKey } from '../../../../../source/repos/roblox-open-cloud';
 import type { RobloxUser, PartialRobloxUser, RobloxGetGroupsResponse, RobloxGroupRolesResponse, RobloxThumbnailsResponse, RobloxLookupGroupsResponse } from './types';
 
-const openCloud = new OpenCloudClient(new OpenCloudApiKey(ROBLOX_OPEN_CLOUD_KEY));
+//const openCloud = new OpenCloudClient(new OpenCloudApiKey(ROBLOX_OPEN_CLOUD_KEY));
 export function getRobloxUser(userId: string | number) {
 	return request<RobloxUser>(`https://users.roblox.com/v1/users/${userId}`)
 		.then(response => response.success ? response.data : null);
