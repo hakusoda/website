@@ -333,7 +333,7 @@
 			flex-wrap: wrap;
 			margin-bottom: 16px;
 			.item {
-				flex: 1 1 30%;
+				flex: 1 1 384px;
 				width: 0;
 				display: flex;
 				padding: 16px;
