@@ -79,6 +79,7 @@
 				data.binds = data.binds.map(item => item.id === target!.id ? response.data as any : item);
 				saving = false;
 				resetAdd();
+				onCancel();
 			} else
 				return saving = !(saveError = response);
 		} else {
@@ -96,6 +97,7 @@
 				data.binds = [...data.binds, response.data as any];
 				saving = false;
 				resetAdd();
+				onCancel();
 				setTimeout(onSave, 100);
 			} else
 				return saving = !(saveError = response);
