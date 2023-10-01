@@ -19,7 +19,7 @@
 		color: hsl(250 20% 90% / 80%);
 		display: flex;
 		padding: 8px 16px;
-		font-size: .9em;
+		font-size: 13px;
 		transition: color .1s;
 		align-items: center;
 		border-radius: 8px;

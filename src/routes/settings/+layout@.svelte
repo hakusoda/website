@@ -4,9 +4,10 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import SideNavigation from '$lib/layouts/SideNavigation.svelte';
-	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
+	import SideNavigationItem from '$lib/components/SideNavigationItem.svelte';
 
 	import Discord from '$lib/icons/Discord.svelte';
+	import GridFill from '$lib/icons/GridFill.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
@@ -24,30 +25,35 @@
 			</div>
 		</div>
 
-		<SettingsNavItem id="settings.account" path="/settings/account">
+		<SideNavigationItem id="settings.account" path="/settings/account">
 			<PersonFill/>
-		</SettingsNavItem>
-		<SettingsNavItem id="settings.account.connections" path="/settings/account/connections">
+		</SideNavigationItem>
+		<SideNavigationItem id="settings.account.connections" path="/settings/account/connections">
 			<PersonFill/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
 		<p>{$t('settings.access')}</p>
-		<SettingsNavItem id="settings.access.teams" path="/settings/access/teams">
+		<SideNavigationItem id="settings.access.teams" path="/settings/access/teams">
 			<PeopleFill/>
-		</SettingsNavItem>
-		<SettingsNavItem id="settings.access.security" path="/settings/access/security">
+		</SideNavigationItem>
+		<SideNavigationItem id="settings.access.security" path="/settings/access/security">
 			<ShieldLockFill/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 	
 		<p>{$t('settings.roblox')}</p>
-		<SettingsNavItem id="settings.roblox.accounts" path="/settings/roblox/accounts">
+		<SideNavigationItem id="settings.roblox.accounts" path="/settings/roblox/accounts">
 			<RobloxIcon/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
 		<p>{$t('settings.mellow')}</p>
-		<SettingsNavItem id="settings.mellow.servers" path="/settings/mellow/servers">
+		<SideNavigationItem id="settings.mellow.servers" path="/settings/mellow/servers">
 			<Discord/>
-		</SettingsNavItem>
+		</SideNavigationItem>
+
+		<p>{$t('settings.integrations')}</p>
+		<SideNavigationItem id="settings.integrations.applications" path="/settings/integrations/applications">
+			<GridFill/>
+		</SideNavigationItem>
 	</svelte:fragment>
 	<slot/>
 </SideNavigation>

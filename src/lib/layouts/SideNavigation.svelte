@@ -21,8 +21,8 @@
 			flex-direction: column;
 			& > :global(p) {
 				color: var(--color-primary);
-				margin: 32px 16px 8px;
-				font-size: 13px;
+				margin: 32px 16px 6px;
+				font-size: 12px;
 				font-weight: 500;
 			}
 			.lazy {

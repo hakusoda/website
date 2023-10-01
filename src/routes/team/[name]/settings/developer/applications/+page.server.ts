@@ -12,7 +12,7 @@ export const load = (async ({ params: { name } }) => {
 				created_at: string
 				avatar_url: string | null
 			}[]
-		}>('applications:oauth_applications ( id, name, summary, avatar_url, created_at )')
+		}>('applications ( id, name, summary, avatar_url, created_at )')
 		.eq(isUUID(name) ? 'id' : 'name', name)
 		.limit(1)
 		.single();

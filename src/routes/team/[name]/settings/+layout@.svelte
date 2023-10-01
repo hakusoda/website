@@ -5,7 +5,7 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import SideNavigation from '$lib/layouts/SideNavigation.svelte';
-	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
+	import SideNavigationItem from '$lib/components/SideNavigationItem.svelte';
 
 	import GridFill from '$lib/icons/GridFill.svelte';
 	import Newspaper from '$lib/icons/Newspaper.svelte';
@@ -26,27 +26,27 @@
 			</div>
 		</div>
 		
-		<SettingsNavItem id="team.settings.profile" path={`${base}/profile`}>
+		<SideNavigationItem id="team.settings.profile" path={`${base}/profile`}>
 			<PersonFill/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
 		<p>{$t('team.settings.access')}</p>
-		<SettingsNavItem id="team.settings.access.members" path={`${base}/access/members`}>
+		<SideNavigationItem id="team.settings.access.members" path={`${base}/access/members`}>
 			<PeopleFill/>
-		</SettingsNavItem>
-		<SettingsNavItem id="team.settings.access.roles" path={`${base}/access/roles`}>
+		</SideNavigationItem>
+		<SideNavigationItem id="team.settings.access.roles" path={`${base}/access/roles`}>
 			<PeopleFill/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
 		<p>{$t('team.settings.archive')}</p>
-		<SettingsNavItem id="team.settings.archive.audit_log" path={`${base}/archive/audit-log`}>
+		<SideNavigationItem id="team.settings.archive.audit_log" path={`${base}/archive/audit-log`}>
 			<Newspaper/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
 		<p>{$t('team.settings.developer')}</p>
-		<SettingsNavItem id="team.settings.developer.applications" path={`${base}/developer/applications`}>
+		<SideNavigationItem id="team.settings.developer.applications" path={`${base}/developer/applications`}>
 			<GridFill/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 	</svelte:fragment>
 	<slot/>
 </SideNavigation>

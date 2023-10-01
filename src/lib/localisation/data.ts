@@ -12,6 +12,7 @@ export default {
 		'action.delete': 'Delete',
 		'action.remove': 'Remove',
 		'action.reject': 'Reject',
+		'action.revoke': 'Revoke',
 		'action.follow': 'Follow',
 		'action.search': 'Search',
 		'action.finish': 'Finish',
@@ -233,6 +234,10 @@ export default {
 		'settings.mellow.servers.server.placeholder': 'Unknown status, check back later.',
 		'settings.mellow.servers.refresh': 'Refresh Discord Servers',
 
+		'settings.integrations': 'Integrations',
+		'settings.integrations.applications': 'Applications',
+		'settings.integrations.applications.summary': 'This is a list of applications that you have authorised to access certain aspects of your account.',
+
 		'mellow.server.settings.home': 'Home',
 
 		'mellow.server.settings.audit_log': 'Audit Log',
@@ -366,6 +371,8 @@ export default {
 		'user_connection.type.1': 'GitHub',
 		'user_connection.type.1.manage': 'Manage on github.com',
 		'user_connection.created': 'Connected {0|time_ago}',
+
+		'application.last_used': 'Last used {0|time_ago}',
 
 		'notifications': 'Notifications ({0} total, {1} unread)',
 		'notifications.empty': 'You\'re already up-to-date, nice!\n(～￣▽￣)～  no worries...',

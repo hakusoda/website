@@ -1,8 +1,6 @@
-import supabase from '$lib/supabase';
-import { requestError } from '$lib/util/server';
 import type { PageServerLoad } from './$types';
-import { RequestErrorType, UserConnectionType } from '$lib/enums';
-
+import type { UserConnectionType } from '$lib/enums';
+import supabase, { handleResponse } from '$lib/supabase';
 export const config = { regions: ['iad1'], runtime: 'edge' };
 export const load = (async ({ parent }) => {
 	const { session } = await parent();
@@ -13,10 +11,7 @@ export const load = (async ({ parent }) => {
 		metadata: any
 		created_at: string
 	}>('id, sub, type, metadata, created_at').eq('user_id', session!.sub);
-	if (response.error) { 
-		console.error(response.error);
-		throw requestError(500, RequestErrorType.ExternalRequestError);
-	}
+	handleResponse(response);
 
-	return { connections: response.data };
+	return { connections: response.data! };
 }) satisfies PageServerLoad;

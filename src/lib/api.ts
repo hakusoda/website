@@ -179,6 +179,10 @@ export function authoriseApplication(application_id: string, redirect_uri: strin
 	});
 }
 
+export function revokeApplication(authorisation_id: string) {
+	return request(`auth/authorisation/${authorisation_id}`, 'DELETE');
+}
+
 function getPlatformVersion() {
 	const { userAgentData } = navigator;
 	if (userAgentData)

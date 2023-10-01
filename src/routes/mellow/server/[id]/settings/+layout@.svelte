@@ -5,7 +5,7 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import SideNavigation from '$lib/layouts/SideNavigation.svelte';
-	import SettingsNavItem from '$lib/components/SettingsNavItem.svelte';
+	import SideNavigationItem from '$lib/components/SideNavigationItem.svelte';
 
 	import Link from '$lib/icons/Link.svelte';
 	import Webhook from '$lib/icons/Webhook.svelte';
@@ -26,39 +26,39 @@
 			<h1>{data.name}</h1>
 		</div>
 
-		<SettingsNavItem id="mellow.server.settings.home" path={base}>
+		<SideNavigationItem id="mellow.server.settings.home" path={base}>
 			<HouseDoorFill/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
 		<p>{$t('mellow.server.settings.access')}</p>
-		<SettingsNavItem id="mellow.server.settings.access.members" path={`${base}/access/members`}>
+		<SideNavigationItem id="mellow.server.settings.access.members" path={`${base}/access/members`}>
 			<PersonFill/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
 		<p>{$t('mellow.server.settings.automation')}</p>
-		<SettingsNavItem id="mellow.server.settings.automation.webhooks" path={`${base}/automation/webhooks`}>
+		<SideNavigationItem id="mellow.server.settings.automation.webhooks" path={`${base}/automation/webhooks`}>
 			<Webhook/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
 		<p>{$t('mellow.server.settings.syncing')}</p>
-		<SettingsNavItem id="mellow.server.settings.syncing.actions" path={`${base}/syncing/actions`}>
+		<SideNavigationItem id="mellow.server.settings.syncing.actions" path={`${base}/syncing/actions`}>
 			<Link/>
-		</SettingsNavItem>
-		<SettingsNavItem id="mellow.server.settings.syncing.settings" path={`${base}/syncing/settings`}>
+		</SideNavigationItem>
+		<SideNavigationItem id="mellow.server.settings.syncing.settings" path={`${base}/syncing/settings`}>
 			<GearFill/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
 		<p>{$t('team.settings.archive')}</p>
-		<SettingsNavItem id="mellow.server.settings.audit_log" path={`${base}/archive/audit-log`}>
+		<SideNavigationItem id="mellow.server.settings.audit_log" path={`${base}/archive/audit-log`}>
 			<Newspaper/>
-		</SettingsNavItem>
-		<SettingsNavItem id="mellow.server.settings.logging" path={`${base}/logging`}>
+		</SideNavigationItem>
+		<SideNavigationItem id="mellow.server.settings.logging" path={`${base}/logging`}>
 			<Newspaper/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 
-		<SettingsNavItem id="mellow.server.settings.return" path="/settings/mellow/servers" footer>
+		<SideNavigationItem id="mellow.server.settings.return" path="/settings/mellow/servers" footer>
 			<ArrowLeft/>
-		</SettingsNavItem>
+		</SideNavigationItem>
 	</svelte:fragment>
 	<slot/>
 </SideNavigation>

@@ -51,7 +51,7 @@
 		<a href={type ? `https://github.com/settings/connections/applications/${PUBLIC_GITHUB_ID}` : 'https://discord.com/settings/authorized-apps'} target="_blank">
 			<BoxArrowUpRight/>{$t(`user_connection.type.${type}.manage`)}
 		</a>
-		<button type="button" on:click={disconnect}>
+		<button type="button" on:click={disconnect} disabled={disconnecting}>
 			<X/>{$t('action.disconnect')} {$t(`user_connection.type.${type}`)}
 		</button>
 	</DropdownMenu.Root>

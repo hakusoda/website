@@ -81,3 +81,6 @@ export const USER_CONNECTION_METADATA: Record<UserConnectionType, {
 		colour: '#333'
 	}
 };
+
+export const APPLICATION_OAUTH_SCOPE_TYPES = ['openid'] as const;
+export const APPLICATION_OAUTH_SCOPE_OPERATIONS = ['read'] as const;
