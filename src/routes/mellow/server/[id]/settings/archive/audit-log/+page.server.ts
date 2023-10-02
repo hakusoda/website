@@ -2,9 +2,9 @@ import { error } from '@sveltejs/kit';
 
 import supabase from '$lib/supabase';
 import { RequestErrorType } from '$lib/enums';
-import type { RequestError } from '$lib/types';
 import type { PageServerLoad } from './$types';
-import type { MellowProfileSyncActionType, MellowServerAuditLogType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
+import type { RequestError, MellowProfileActionRequirement } from '$lib/types';
+import type { MellowServerAuditLogType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
 
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
@@ -65,7 +65,7 @@ interface MellowServerAuditLogUpdateRobloxLink extends MellowServerAuditLogBase 
 		name: [string, string | undefined]
 		data: [string[], string[] | undefined]
 		type: [MellowProfileSyncActionType, MellowProfileSyncActionType | undefined]
-		requirements?: [unknown[], unknown[] | undefined]
+		requirements?: [MellowProfileActionRequirement[], MellowProfileActionRequirement[] | undefined]
 		requirements_type: [MellowProfileSyncActionRequirementsType, MellowProfileSyncActionRequirementsType | undefined]
 	}
 	type: MellowServerAuditLogType.UpdateRobloxLink

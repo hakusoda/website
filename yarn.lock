@@ -899,12 +899,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@voxelified/voxeliface@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "@voxelified/voxeliface@npm:2.2.2"
+"@voxelified/voxeliface@npm:^2.2.3":
+  version: 2.2.3
+  resolution: "@voxelified/voxeliface@npm:2.2.3"
   dependencies:
-    svelte: "npm:^4.2.0"
-  checksum: dc059844f8074c0f17e38ef6ae434b6add46e7188162eae9b29df590fb124b99fc785b3917ea6d140e716237324c9f0ebf863ba72f4f2fce0c2105f37365b60e
+    svelte: "npm:^4.2.1"
+  checksum: d4e9123ee419129de9496f2323fa9df63a6a0a27562a58bf8ce29e9f83d68304af15a46798795c70ec9280874e51620fc9249540d70f2a416fdf1438436d22fc
   languageName: node
   linkType: hard
 
@@ -3348,6 +3348,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"svelte@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "svelte@npm:4.2.1"
+  dependencies:
+    "@ampproject/remapping": "npm:^2.2.1"
+    "@jridgewell/sourcemap-codec": "npm:^1.4.15"
+    "@jridgewell/trace-mapping": "npm:^0.3.18"
+    acorn: "npm:^8.9.0"
+    aria-query: "npm:^5.3.0"
+    axobject-query: "npm:^3.2.1"
+    code-red: "npm:^1.0.3"
+    css-tree: "npm:^2.3.1"
+    estree-walker: "npm:^3.0.3"
+    is-reference: "npm:^3.0.1"
+    locate-character: "npm:^3.0.0"
+    magic-string: "npm:^0.30.0"
+    periscopic: "npm:^3.1.0"
+  checksum: 5262dfceb99809a7ed01addc684351ac297dc2967b49dc99563af646c113c33a1535fe6ea5b9af4c6986880b6803ac0ca4fecb15a65bb18b641929c400d5dead
+  languageName: node
+  linkType: hard
+
 "tar@npm:^6.1.11, tar@npm:^6.1.2":
   version: 6.2.0
   resolution: "tar@npm:6.2.0"
@@ -3712,7 +3733,7 @@ __metadata:
     "@vercel/analytics": "npm:^1.0.2"
     "@vercel/edge-config": "npm:^0.4.0"
     "@voxelified/svelte-localisation": "npm:^1.0.0"
-    "@voxelified/voxeliface": "npm:^2.2.2"
+    "@voxelified/voxeliface": "npm:^2.2.3"
     cropperjs: "npm:^1.6.0"
     jose: "npm:^4.14.6"
     sass: "npm:^1.67.0"

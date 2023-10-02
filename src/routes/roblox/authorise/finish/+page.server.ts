@@ -35,13 +35,13 @@ export const load = (async ({ url, parent }) => {
 		throw redirect(302, '/roblox/authorise');
 	}
 
-	const { /*scope, id_token, expires_in, */token_type, access_token/*, refresh_token*/ } = response.data;
-	/*const response2 = await supabase.from('roblox_oauth').insert({
+	const { scope, id_token, expires_in, token_type, access_token, refresh_token } = response.data;
+	const response2 = await supabase.from('mellow_roblox_oauth_tokens').insert({
 		scope,
 		user_id: session.sub,
 		id_token,
 		token_type,
-		expires_at: Date.now() + expires_in * 1000,
+		expires_in,
 		access_token,
 		refresh_token
 	});
@@ -50,7 +50,7 @@ export const load = (async ({ url, parent }) => {
 		throw error(500, JSON.stringify({
 			error: RequestErrorType.DatabaseUpdate
 		} satisfies RequestError));
-	}*/
+	}
 
 	const response3 = await getRobloxUserInfo(access_token, token_type);
 	if (!response3.success) {

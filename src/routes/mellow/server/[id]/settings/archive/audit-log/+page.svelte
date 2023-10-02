@@ -14,6 +14,7 @@
 	let open: string[] = [];
 	const OPENABLE = [MellowServerAuditLogType.CreateRobloxLink, MellowServerAuditLogType.UpdateRobloxGlobalSettings, MellowServerAuditLogType.UpdateRobloxLink, MellowServerAuditLogType.UpdateLogging];
 
+	console.log(data.items.filter(i => i.type === MellowServerAuditLogType.UpdateRobloxLink).reverse().map(i => i.data));
 	const mapLogTypes = (old: number, now: number) =>
 		Object.values(MellowServerLogType).filter(i => typeof i === 'number' && i && hasBit(old, i) && !hasBit(now, i)).map(i => $t(`mellow_server_logging_type.${i as MellowServerLogType}`));
 </script>
@@ -62,6 +63,12 @@
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.4.type')}
 						value={[$t(`mellow_bind.type.${item.data.type[0]}`), $t(`mellow_bind.type.${item.data.type[1]}`)]}
+					/>
+				{/if}
+				{#if item.data.requirements?.[1]}
+					<AuditLogChange
+						name={$t('mellow_server_audit_log.type.4.requirements')}
+						diff={[item.data.requirements[0].map(i => $t(`mellow_bind.requirement.${i.type}`)), item.data.requirements[1].map(i => $t(`mellow_bind.requirement.${i.type}`))]}
 					/>
 				{/if}
 				{#if item.data.requirements_type?.[1]}

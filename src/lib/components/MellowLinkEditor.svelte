@@ -44,7 +44,7 @@
 
 	$: if (target && !editing) {
 		name = target.name, type = target.type, actionData = [...target.data];
-		requirements = target.requirements.map(item => [item.type, item.data]), requirementsType = target.requirements_type;
+		requirements = target.requirements.map(item => [item.type, [...item.data]]), requirementsType = target.requirements_type;
 		editing = true;
 		for (const [type, data] of requirements)
 			if (type === MellowProfileSyncActionRequirementType.RobloxHasGroupRole || type === MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange || type === MellowProfileSyncActionRequirementType.RobloxInGroup)
@@ -115,6 +115,7 @@
 	const getGroupRoles = (id: string) => fetch(`/api/roblox/group-roles?id=${id}`)
 		.then(response => response.json() as Promise<RobloxGroupRole[]>)
 		.then(data => groupRoles[id] = data.filter(role => role.rank).sort((a, b) => b.rank - a.rank));
+	$: console.log(requirements);
 </script>
 
 <div class="mellow-sync-action-editor">
@@ -207,8 +208,8 @@
 					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange}
 						<div class="fields">
 							<GroupSelect source="roblox" bind:value={item[1][0]}/>
-							<NumberInput min={0} max={255} bind:value={item[1][1]}/>
-							<NumberInput min={0} max={255} bind:value={item[1][2]}/>
+							<NumberInput min={0} max={255} bind:string={item[1][1]}/>
+							<NumberInput min={0} max={255} bind:string={item[1][2]}/>
 						</div>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxInGroup}
 						<GroupSelect source="roblox" bind:value={item[1][0]}/>
@@ -223,11 +224,11 @@
 					{:else if item[0] === MellowProfileSyncActionRequirementType.VoxelifiedInTeam}
 						<GroupSelect source="self" bind:value={item[1][0]}/>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasAsset}
-						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.8.id')} bind:value={item[1][0]}/>
+						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.8.id')} bind:string={item[1][0]}/>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasBadge}
-						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.9.id')} bind:value={item[1][0]}/>
-						{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasPass}
-						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.10.id')} bind:value={item[1][0]}/>
+						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.9.id')} bind:string={item[1][0]}/>
+					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasPass}
+						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.10.id')} bind:string={item[1][0]}/>
 					{/if}
 				</div>
 				<div class="buttons">
@@ -344,8 +345,8 @@
 				background: center / 200px repeat var(--grain), #00000040;
 				border-radius: 20px;
 				
-				-webkit-backdrop-filter: blur(16px);
-				backdrop-filter: blur(16px);
+				//-webkit-backdrop-filter: blur(16px);
+				//backdrop-filter: blur(16px);
 				.title {
 					gap: 16px;
 					margin: 0 0 0 4px;

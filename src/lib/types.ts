@@ -217,12 +217,14 @@ export interface MellowLink {
 		username: string
 	}
 	created_at: string
-	requirements: {
-		id: string
-		data: string[]
-		type: MellowProfileSyncActionRequirementType
-	}[]
+	requirements: MellowProfileActionRequirement[]
 	requirements_type: MellowProfileSyncActionRequirementsType
+}
+
+export interface MellowProfileActionRequirement {
+	id: string
+	data: string[]
+	type: MellowProfileSyncActionRequirementType
 }
 
 export interface DiscordRole {

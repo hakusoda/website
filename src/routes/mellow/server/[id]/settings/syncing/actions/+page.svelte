@@ -7,20 +7,15 @@
 	import type { PageData } from './$types';
 	import { mellowLinkViewMode } from '$lib/settings';
 	import type { RobloxGroupRole } from '$lib/types';
-	import { MAPPED_MELLOW_SYNC_ACTION_ICONS } from '$lib/constants';
 	import { deleteMellowServerProfileSyncAction } from '$lib/api';
 	import { MellowLinkImportType, MellowLinkListViewMode } from '$lib/enums';
 
 	import Modal from '$lib/components/Modal.svelte';
 	import GroupSelect from '$lib/components/GroupSelect.svelte';
 	import MellowLinkEditor from '$lib/components/MellowLinkEditor.svelte';
+	import MellowProfileAction from '$lib/components/MellowProfileAction.svelte';
 
 	import Plus from '$lib/icons/Plus.svelte';
-	import Trash from '$lib/icons/Trash.svelte';
-	import Sunrise from '$lib/icons/Sunrise.svelte';
-	import GridFill from '$lib/icons/GridFill.svelte';
-	import PencilFill from '$lib/icons/PencilFill.svelte';
-	import UiChecksGrid from '$lib/icons/UIChecksGrid.svelte';
 	export let data: PageData;
 
 	let state = 0;
@@ -77,52 +72,13 @@
 		<h2>{$t('mellow.server.settings.syncing.actions.summary')}</h2>
 		<div class="items" bind:this={linksContainer}>
 			{#each data.binds.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item, index}
-				<div class="item" class:compact class:highlighted={highlighted === item.id} bind:this={linkItems[index]}>
-					<div class="info">
-						<h1>{item.name}</h1>
-						<div class="details">
-							<p>
-								<Sunrise/>
-								{$t('time_ago', [item.created_at])}
-								{#if item.creator}
-									{$t('label.by')}
-									<a href={`/user/${item.creator.username}`}>
-										{item.creator.name ?? `@${item.creator.username}`}
-									</a>
-								{/if}
-							</p>
-							{#if item.last_edit}
-								<p>
-									<PencilFill/>
-									<a href={`/user/${item.last_edit.author.username}`}>
-										{item.last_edit.author.name ?? `@${item.last_edit.author.username}`}
-									</a>
-									{$t('time_ago', [item.last_edit.created_at])}
-								</p>
-							{/if}
-							<p>
-								<svelte:component this={MAPPED_MELLOW_SYNC_ACTION_ICONS[item.type]}/>
-								{$t(`mellow_bind.type.${item.type}.full`)}
-							</p>
-							<p>
-								{#if item.requirements_type}
-									<UiChecksGrid/>
-								{:else}
-									<GridFill/>
-								{/if}
-								{$t('mellow_bind.requirements', [item.requirements.length])}
-							</p>
-						</div>
-					</div>
-					<div class="buttons">
-						<Button on:click={() => (target = item, state++)}>
-							<PencilFill/>{$t('action.edit')}
-						</Button>
-						<Button colour="secondary" circle on:click={() => deleteLink(item.id)}>
-							<Trash/>
-						</Button>
-					</div>
-				</div>
+				<MellowProfileAction
+					{...item}
+					{index}
+					items={linkItems}
+					highlighted={highlighted === item.id}
+					on:click={() => (target = item, state++)}
+				/>
 			{/each}
 		</div>
 		<div class="fade"/>
@@ -175,50 +131,12 @@
 		}
 		.items {
 			gap: 16px;
+			width: 100%;
 			height: 100%;
 			display: flex;
 			padding: 16px 0;
 			overflow: auto;
 			flex-direction: column;
-			.item {
-				display: flex;
-				padding: 16px 16px 16px 20px;
-				background: var(--background-secondary);
-				align-items: center;
-				border-radius: 24px;
-				.info {
-					h1 {
-						margin: 0 0 6px;
-						font-size: .9em;
-						font-weight: 500;
-					}
-					.details {
-						gap: 8px;
-						margin: 8px 0 0;
-						display: flex;
-						p {
-							gap: 6px;
-							color: var(--color-secondary);
-							margin: 0;
-							height: 24px;
-							display: flex;
-							padding: 0 10px;
-							font-size: .75em;
-							box-shadow: 0 0 0 1px var(--border-secondary);
-							align-items: center;
-							border-radius: 16px;
-						}
-					}
-				}
-				.buttons {
-					gap: 16px;
-					display: flex;
-					margin-left: auto;
-				}
-				&.highlighted {
-					animation: 1s infinite alternate basic-focus;
-				}
-			}
 		}
 		.fade {
 			left: 0;

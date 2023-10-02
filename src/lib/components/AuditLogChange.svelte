@@ -70,6 +70,9 @@
 		.col {
 			flex-direction: column;
 		}
+		.row {
+			flex-wrap: wrap;
+		}
 		&:not(:last-child) {
 			margin-bottom: 8px;
 		}
