@@ -8,10 +8,9 @@ import type { PageServerLoad } from './$types';
 import { RequestErrorType, TeamRolePermission } from '$lib/enums';
 
 export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ params: { name }, parent }) => {
-	const { session } = await parent();
+export const load = (async ({ url, params: { name }, locals: { session } }) => {
 	if (!session)
-		throw redirect(302, '/sign-in');
+		throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`);
 
 	const response = await supabase.from('teams').select('id, display_name').eq(isUUID(name) ? 'id' : 'name', name).limit(1).single();
 	if (response.error) {

@@ -12,8 +12,8 @@
 
 	$: links = data.links.map(link => ({
 		...link,
-		target: data.users.find(u => u.id === link.target_id)!,
-		target_icon: data.icons.find(i => i.targetId === link.target_id)!.imageUrl
+		target: data.users.find(u => u.userId === link.target_id)!,
+		target_icon: data.icons.find(i => i.targetId === link.target_id)?.imageUrl
 	}));
 </script>
 

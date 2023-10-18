@@ -5,8 +5,9 @@
 	import { page } from '$app/stores';
 	import { hasBit } from '$lib/util';
 	import { deserialize } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import { RobloxLinkFlag, RequestErrorType } from '../enums';
-	import type { RobloxLink, RequestError, PartialRobloxUser } from '../types';
+	import type { RobloxLink, RequestError, RobloxUserProfile } from '../types';
 
 	import Avatar from './Avatar.svelte';
 	
@@ -14,9 +15,9 @@
 	import Trash from '../icons/Trash.svelte';
 	import ThreeDots from '$lib/icons/ThreeDots.svelte';
 	import BoxArrowUpRight from '$lib/icons/BoxArrowUpRight.svelte';
-	export let icon: string;
 	export let link: RobloxLink;
-	export let user: PartialRobloxUser;
+	export let user: RobloxUserProfile;
+	export let icon: string | undefined = undefined;
 
 	let trigger: () => void;
 
@@ -28,7 +29,7 @@
        	const response = await fetch(action, { body, method: 'POST' });
 		const result = deserialize(await response.text());
 		if (result.type === 'success')
-			return location.reload();
+			return invalidateAll();
 		else if (result.type === 'failure')
 			error = result.data as any;
 		else if (result.type === 'error')
@@ -40,16 +41,16 @@
 </script>
 
 <div class="user-link" class:active={isPrimary}>
-	<Avatar src={icon} size="xs" circle/>
+	<Avatar id={user.userId.toString()} src={icon} size="xs" circle/>
 	<div class="details">
 		<h1>
-			{user.displayName}
+			{user.names.combinedName}
 			{#if isPrimary}
 				<span class="primary">{$t('roblox_link.primary')}</span>
 			{/if}
 		</h1>
 		<p>
-			@{user.name}
+			@{user.names.username}
 			{#if link.public}
 				• {$t('roblox_link.visible')}
 			{/if}
@@ -62,8 +63,8 @@
 		<button type="button" class="options" slot="trigger" on:click={trigger}>
 			<ThreeDots/>
 		</button>
-		<p>{user.displayName} (@{user.name})</p>
-		<a href={`https://roblox.com/users/${user.id}/profile`} target="_blank">
+		<p>{user.names.combinedName} (@{user.names.username})</p>
+		<a href={`https://roblox.com/users/${user.userId}/profile`} target="_blank">
 			<BoxArrowUpRight/>{$t('roblox_link.view')}
 		</a>
 		<div class="separator"/>

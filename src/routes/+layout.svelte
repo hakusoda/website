@@ -26,12 +26,12 @@
 	import Eye from '$lib/icons/Eye.svelte';
 	import Bell from '$lib/icons/Bell.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
+	import BrandIcon from '$lib/icons/BrandIcon.svelte';
+	import BrandLogo from '$lib/icons/BrandLogo.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import Voxelified from '$lib/icons/Voxelified.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
 	import BoxArrowInRight from '$lib/icons/BoxArrowInRight.svelte';
-	import VoxelifiedBanner from '$lib/icons/VoxelifiedBanner.svelte';
 	$: [themeName, themeColour] = $theme.split('_');
 	const themeHues: Record<string, number> = {
 		purple: 280
@@ -75,9 +75,9 @@
 		<a href="/" class="logo">
 			<MediaQuery query="(min-width: 512px)" let:matches>
 				{#if matches}
-					<VoxelifiedBanner/>
+					<BrandLogo/>
 				{:else}
-					<Voxelified size={40}/>
+					<BrandIcon size={40}/>
 				{/if}
 			</MediaQuery>
 		</a>
@@ -169,7 +169,7 @@
 		<footer>
 			<div class="header">
 				<p class="name">
-					<VoxelifiedBanner/>
+					<BrandLogo/>
 				</p>
 				<p class="oss">
 					{$t('footer.oss')}
@@ -196,7 +196,7 @@
 <svelte:head>
 	<meta property="og:type" content="website">
 	<meta name="theme-color" content="#cc6699">
-	<meta name="og:site_name" content="Voxelified">
+	<meta name="og:site_name" content="HAKUMI">
 </svelte:head>
 
 <style lang="scss">
@@ -224,16 +224,38 @@
 
 	header {
 		width: -webkit-fill-available;
+		height: 56px;
 		z-index: 100;
 		display: flex;
-		padding: 8px 32px;
+		padding: 0 32px;
 		position: absolute;
-		background: color-mix(in srgb, transparent, var(--background-primary) 75%);
 		align-items: center;
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
 		@media (max-width: 512px) {
 			padding: 8px 16px;
+		}
+		&:before {
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100vh;
+			z-index: -1;
+			content: "";
+			position: absolute;
+			mask-image: linear-gradient(to bottom, #fff, #fff 56px, transparent 56px);
+			pointer-events: none;
+			backdrop-filter: blur(24px) brightness(1.25);
+			-webkit-mask-image: linear-gradient(to bottom, #fff, #fff 56px, transparent 56px);
+			-webkit-backdrop-filter: blur(24px) brightness(1.25);
+		}
+		&:after {
+			top: calc(100% - 1px);
+			left: 0;
+			width: 100%;
+			height: 1px;
+			content: "";
+			position: absolute;
+			backdrop-filter: brightness(200%);
+			-webkit-backdrop-filter: saturate(1.5) brightness(1.5);
 		}
 		:global(.container:first-of-type) {
 			margin: 0 32px 0 auto;
@@ -244,10 +266,10 @@
 		margin-right: 24px;
 	}
 	.nav-link {
-		color: var(--color-primary);
-		margin: auto 16px;
-		font-size: 14px;
-		font-weight: 500;
+		color: #fff;
+		margin: auto 24px;
+		font-size: 16px;
+		font-weight: 600;
 		text-decoration: none;
 		&.signin {
 			gap: 10px;

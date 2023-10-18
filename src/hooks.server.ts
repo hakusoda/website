@@ -39,7 +39,7 @@ export const handle = (async ({ event, resolve }) => {
 				}
 
 				event.cookies.delete('auth-token', { path: '/', domain: 'voxelified.com' });
-				throw redirect(302, '/sign-in');
+				throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(event.url.pathname + event.url.search)}`);
 			});
 		event.locals.session = response?.payload as any;
 	}

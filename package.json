@@ -2,8 +2,8 @@
 	"name": "website",
 	"type": "module",
 	"version": "1.0.0",
-	"repository": "https://github.com/Excalware/website.git",
-	"author": "Voxelified",
+	"repository": "https://github.com/voxelified/website.git",
+	"author": "HAKUMI",
 	"license": "MIT",
 	"scripts": {
 		"dev": "vite dev",
@@ -32,6 +32,7 @@
 		"@types/uuid": "^9.0.3",
 		"@vercel/analytics": "^1.0.2",
 		"@vercel/edge-config": "^0.4.0",
+		"@voxelified/roblox-open-cloud": "link:../../../source/repos/roblox-open-cloud",
 		"@voxelified/svelte-localisation": "^1.0.0",
 		"@voxelified/voxeliface": "^2.2.3",
 		"cropperjs": "^1.6.0",

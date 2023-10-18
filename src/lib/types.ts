@@ -149,17 +149,13 @@ export interface RobloxLink {
 	created_at: string
 }
 
-export interface PartialRobloxUser {
-	id: number
-	name: string
-	displayName: string
-	hasVerifiedBadge: boolean
-}
-export interface RobloxUser extends PartialRobloxUser {
-	created: string
-	isBanned: boolean
-	description: string
-	externalAppDisplayName: null
+export interface RobloxUserProfile {
+	names: {
+		username: string
+		combinedName: string
+	}
+	userId: number
+	platformProfileId: string
 }
 
 export interface PartialRobloxGroup {

@@ -1,12 +1,6 @@
 import { request } from './util';
 import { DISCORD_SECRET } from '$env/static/private';
 import { PUBLIC_DISCORD_ID } from '$env/static/public';
-export function getRobloxUserInfo(token: string, tokenType: string) {
-	return request<RobloxUserInfoResponse>('https://apis.roblox.com/oauth/v1/userinfo', 'GET', null, {
-		authorization: `${tokenType} ${token}`
-	});
-}
-
 export function getDiscordUser(token: string, tokenType: string) {
 	return request<DiscordUserResponse>('https://discord.com/api/v10/users/@me', 'GET', null, {
 		authorization: `${tokenType} ${token}`
@@ -64,10 +58,6 @@ export interface DiscordAuthInfoResponse {
 		description: string
 		bot_require_code_grant: boolean
 	}
-}
-
-export interface RobloxUserInfoResponse {
-	sub: string
 }
 
 export interface DiscordUserResponse {

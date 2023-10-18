@@ -39,7 +39,7 @@
 	};
 	const reset = () => (editingName = editing!.name, editingPermissions = editing!.permissions);
 
-	$: selfPermissions = data.members.find(member => member.id === data.session!.sub)?.role.permissions ?? 0;
+	$: selfPermissions = data.members.find(member => member.id === data.session!.sub)?.role?.permissions ?? 0;
 	$: canEdit = data.session!.sub === data.owner_id || hasBit(selfPermissions, TeamRolePermission.ManageRoles) || hasBit(selfPermissions, TeamRolePermission.Administrator);
 </script>
 

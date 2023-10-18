@@ -234,9 +234,9 @@
 					</div>
 					<div class="roblox">
 						{#each data.roblox_users as item}
-							<a href={`https://roblox.com/users/${item.id}/profile`} target="_blank">
+							<a href={`https://roblox.com/users/${item.userId}/profile`} target="_blank">
 								<Avatar src={item.icon.imageUrl} size="xxs" circle/>
-								{item.displayName}
+								{item.names.combinedName}
 							</a>
 						{/each}
 					</div>

@@ -198,7 +198,7 @@ export default {
 		'settings.account': 'Account',
 		'settings.account.username': 'Username',
 		'settings.account.connections': 'Connections',
-		'settings.account.connections.summary': 'Connect your Voxelified Account with a third-party service to use it for sign-in and other features.',
+		'settings.account.connections.summary': 'Connect your HAKUMI Account with a third-party service to use it for sign-in and other features.',
 		'settings.account.connections.add': 'Add New',
 		'settings.account.connections.add.exists': 'You already have an existing {0} connection. Remove it to add a new one.',
 
@@ -220,7 +220,7 @@ export default {
 
 		'settings.roblox': 'Roblox Settings',
 		'settings.roblox.accounts': 'Linked Accounts',
-		'settings.roblox.accounts.help': 'Linked accounts can be displayed on your profile, and used with mellow!',
+		'settings.roblox.accounts.help': 'Linked accounts can be displayed on your profile, and used with other services, such as mellow.',
 		'settings.roblox.accounts.list': 'Linked Roblox Accounts',
 		'settings.roblox.accounts.add': 'Link Roblox Account',
 		'settings.roblox.accounts.mellow': 'It appears that you signed-up via mellow, you can now close this page, and return to Discord.',
@@ -294,7 +294,7 @@ export default {
 		'mellow_link_editor.requirements.platforms.0': 'Roblox',
 		'mellow_link_editor.requirements.platforms.1': 'GitHub',
 		'mellow_link_editor.requirements.platforms.2': 'Steam',
-		'mellow_link_editor.requirements.platforms.3': 'Voxelified',
+		'mellow_link_editor.requirements.platforms.3': 'HAKUMI',
 		'mellow_link_editor.requirements.platforms.4': 'Other',
 		'mellow_link_editor.requirements.other': 'Other Requirements',
 		'mellow_link_editor.requirement': 'Requirement',
@@ -509,7 +509,7 @@ export default {
 		'time_ago.updated': 'Updated {0|time_ago}',
 		'time_ago.archived': 'Archived {0|time_ago}',
 
-		'footer.oss': 'Voxelified is',
+		'footer.oss': 'HAKUMI is',
 		'footer.oss.link': 'open-source',
 		'footer.resources': 'Resources',
 		'footer.resources.status': 'Status',
@@ -524,7 +524,7 @@ export default {
 		'modal.unsaved_changes.error': 'Failed to save changes.',
 		'modal.setup_profile': 'Create your profile',
 		'modal.setup_profile.summary': 'Last step! It\'s time to set-up your public profile...',
-		'modal.setup_profile.welcome': 'Welcome to Voxelified!',
+		'modal.setup_profile.welcome': 'Welcome to HAKUMI!',
 		'modal.setup_profile.welcome.summary': 'You are now a fellow member of our little community, neat!'
 	}
 };

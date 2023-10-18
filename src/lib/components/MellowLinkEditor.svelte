@@ -221,7 +221,7 @@
 								</Select.Item>
 							{/each}
 						</Select.Root>
-					{:else if item[0] === MellowProfileSyncActionRequirementType.VoxelifiedInTeam}
+					{:else if item[0] === MellowProfileSyncActionRequirementType.HAKUMIInTeam}
 						<GroupSelect source="self" bind:value={item[1][0]}/>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasAsset}
 						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.8.id')} bind:string={item[1][0]}/>

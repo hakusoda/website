@@ -34,14 +34,14 @@
 
 <div class="main">
 	<h1>{$t('roblox.verification.finish')}</h1>
-	<a class="user" href={`https://www.roblox.com/users/${data.user?.id}/profile`} target="_blank">
-		<Avatar src={data.icon.imageUrl} size="md" circle/>
+	<a class="user" href={data.user.profile} target="_blank">
+		<Avatar src={data.user.picture} size="md" circle/>
 		<div class="name">
-			<h1>{data.user?.displayName}</h1>
-			<p>@{data.user?.name}</p>
+			<h1>{data.user.name}</h1>
+			<p>@{data.user.preferred_username}</p>
 		</div>
 	</a>
-	<p class="sub">{$t('roblox.verification.finish.sub', [data.user?.created, data.user?.id])}</p>
+	<p class="sub">{$t('roblox.verification.finish.sub', [data.user.created_at * 1000, data.user.sub])}</p>
 	<RequestErrorUI data={error}/>
 	<div class="buttons">
 		<Button on:click={submit} disabled={finishing}>

@@ -12,8 +12,8 @@
 </div>
 
 <svelte:head>
-	<title>Voxelified</title>
-	<meta content="Voxelified Home" property="og:title">
+	<title>HAKUMI</title>
+	<meta content="HAKUMI" property="og:title">
 </svelte:head>
 
 <style lang="scss">

@@ -10,10 +10,10 @@ import Steam from '../icons/Steam.svelte';
 import GitHub from '../icons/GitHub.svelte';
 import Discord from '../icons/Discord.svelte';
 import StarFill from '../icons/StarFill.svelte';
+import BrandIcon from '../icons/BrandIcon.svelte';
 import PersonFill from '../icons/PersonFill.svelte';
 import PeopleFill from '../icons/PeopleFill.svelte';
 import RobloxIcon from '../icons/RobloxIcon.svelte';
-import Voxelified from '../icons/Voxelified.svelte';
 import BoxArrowRight from '../icons/BoxArrowRight.svelte';
 import ArrowLeftRight from '../icons/ArrowLeftRight.svelte';
 import PatchCheckFill from '../icons/PatchCheckFill.svelte';
@@ -55,11 +55,11 @@ export const MAPPED_MELLOW_SYNC_REQUIREMENTS: [([MellowProfileSyncActionRequirem
 		[MellowProfileSyncActionRequirementType.SteamInGroup, PeopleFill]
 	], Steam],
 	[[
-		[MellowProfileSyncActionRequirementType.VoxelifiedInTeam, PeopleFill]
-	], Voxelified],
+		[MellowProfileSyncActionRequirementType.HAKUMIInTeam, PeopleFill]
+	], BrandIcon],
 	[[
 		[MellowProfileSyncActionRequirementType.MeetOtherAction, Link]
-	], Voxelified]
+	], BrandIcon]
 ];
 
 export const USER_CONNECTION_METADATA: Record<UserConnectionType, {

@@ -52,7 +52,7 @@ export enum MellowProfileSyncActionRequirementType {
 	RobloxInGroup,
 	RobloxIsFriendsWith,
 	MeetOtherAction,
-	VoxelifiedInTeam,
+	HAKUMIInTeam,
 	SteamInGroup,
 	RobloxHasAsset,
 	RobloxHasBadge,

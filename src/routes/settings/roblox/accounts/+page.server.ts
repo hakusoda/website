@@ -39,7 +39,7 @@ export const load = (async ({ parent }) => {
 	return {
 		links,
 		users,
-		icons: users.then(users => getRobloxAvatars(users.map(user => user.id))),
+		icons: users.then(users => getRobloxAvatars(users.map(user => user.userId))),
 		mellow,
 		primaryId: response.data.primary_roblox_link_id
 	};

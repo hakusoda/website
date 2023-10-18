@@ -95,7 +95,7 @@ export const load = (async ({ params: { name }, parent }) => {
 	}
 
 	const robloxUsers = await getRobloxUsers(response.data.roblox_links.map(l => l.target_id));
-	const robloxIcons = await getRobloxAvatars(robloxUsers.map(l => l.id));
+	const robloxIcons = await getRobloxAvatars(robloxUsers.map(l => l.userId));
 
 	const teams = response.data.teams.map(team => ({
 		role: team.role,
