@@ -890,11 +890,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@voxelified/roblox-open-cloud@link:../../../source/repos/roblox-open-cloud::locator=website%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@voxelified/roblox-open-cloud@link:../../../source/repos/roblox-open-cloud::locator=website%40workspace%3A."
+"@voxelified/roblox-open-cloud@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@voxelified/roblox-open-cloud@npm:0.1.0"
+  checksum: 5e20ef3ae3db31958cbda2a6dde5e6e70f87b20529f653e38f7b942c902450fedaab0c2682a483ca60ab65c68c14b58f13574933c3fa00ff1e4214138ee033ff
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "@voxelified/svelte-localisation@npm:^1.0.0":
   version: 1.0.0
@@ -3738,7 +3739,7 @@ __metadata:
     "@types/uuid": "npm:^9.0.3"
     "@vercel/analytics": "npm:^1.0.2"
     "@vercel/edge-config": "npm:^0.4.0"
-    "@voxelified/roblox-open-cloud": "link:../../../source/repos/roblox-open-cloud"
+    "@voxelified/roblox-open-cloud": "npm:^0.1.0"
     "@voxelified/svelte-localisation": "npm:^1.0.0"
     "@voxelified/voxeliface": "npm:^2.2.3"
     cropperjs: "npm:^1.6.0"

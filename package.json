@@ -32,7 +32,7 @@
 		"@types/uuid": "^9.0.3",
 		"@vercel/analytics": "^1.0.2",
 		"@vercel/edge-config": "^0.4.0",
-		"@voxelified/roblox-open-cloud": "link:../../../source/repos/roblox-open-cloud",
+		"@voxelified/roblox-open-cloud": "^0.1.0",
 		"@voxelified/svelte-localisation": "^1.0.0",
 		"@voxelified/voxeliface": "^2.2.3",
 		"cropperjs": "^1.6.0",
