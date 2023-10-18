@@ -20,7 +20,7 @@ export const load = (async ({ url, locals: { session }, request }) => {
 	if (!session)
 		throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`);
 
-	const { redirect_uri, application_id } = await parseQuery(request, PAGE_QUERY);
+	const { redirect_uri, application_id } = parseQuery(request, PAGE_QUERY);
 
 	/*const response = await supabase.from('application_authorisations')
 		.select('scopes')

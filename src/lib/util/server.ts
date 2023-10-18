@@ -72,7 +72,7 @@ export async function throwIfFeatureNotEnabled(feature: FeatureFlag) {
 		throw requestError(503, RequestErrorType.FeatureFlagDisabled);
 }
 
-export async function parseQuery<T extends ZodSchema = ZodAny>(request: Request, schema: T): Promise<T['_output']> {
+export function parseQuery<T extends ZodSchema = ZodAny>(request: Request, schema: T): T['_output'] {
 	const result = schema.safeParse(Object.fromEntries(new URL(request.url).searchParams.entries()));
 	if (!result.success)
 		throw requestError(400, RequestErrorType.InvalidQuery, result.error.issues);
