@@ -38,11 +38,11 @@ export function requestError(statusCode: number, type: RequestErrorType, issues?
 export async function createUserSession(sub: string): Promise<[string, UserSessionJWT]> {
 	const now = Date.now();
 	const iat = Math.floor(now / 1000);
-	const exp = iat + 3600;
+	const exp = iat + 604800; // previously 3600 seconds (1 hour), refreshing is currently problematic.
 	const token = await new SignJWT({ sub })
 		.setProtectedHeader({ alg: 'HS256' })
 		.setIssuedAt()
-		.setExpirationTime('1h')
+		.setExpirationTime('7d')
 		.sign(JWT_SECRET);
 	return [token, { exp, iat, sub }];
 }
