@@ -1,37 +1,14 @@
 import supabase from './supabase';
 import { isUUID, hasBit } from './util';
 import { TeamRolePermission } from './enums';
-import type { User, RobloxLink, DatabaseTeam, UserNotification } from './types';
-import type { RobloxLinkType, TeamAuditLogType, MellowServerAuditLogType } from './enums';
-export function getUserRobloxLinks(userId: string, linkType?: RobloxLinkType) {
-	const builder = supabase.from('roblox_links')
-		.select<string, RobloxLink>('*')
-		.eq('owner_id', userId);
-
-	if (linkType !== undefined)
-		builder.eq('type', linkType);
-
-	return builder.then(response => {
-		if (response.error)
-			return [];
-		return response.data;
-	});
-}
-
+import type { TeamAuditLogType, MellowServerAuditLogType } from './enums';
+import type { User, DatabaseTeam, UserNotification } from './types';
 export async function getUser(userId: string) {
 	const { data, error } = await supabase.from('users').select<string, User>('*').eq('id', userId).limit(1).maybeSingle();
 	if (error)
 		console.error(error);
 
 	return data;
-}
-
-export async function getUsers(userIds: string[]) {
-	const { data, error } = await supabase.from('users').select<string, User>('*').in('id', userIds);
-	if (error)
-		console.error(error);
-
-	return data ?? [];
 }
 
 export async function getTeam(teamId: string) {

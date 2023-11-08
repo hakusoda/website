@@ -17,6 +17,8 @@
 	export let type: UserConnectionType;
 	export let metadata: any;
 	export let created_at: string;
+	export let avatar_url: string | null;
+	export let website_url: string | null;
 
 	let trigger: () => void;
 	let disconnecting = false;
@@ -34,13 +36,20 @@
 </script>
 
 <div class="user-connection">
-	<svelte:component this={USER_CONNECTION_METADATA[type].icon} size={32}/>
+	<svelte:component this={USER_CONNECTION_METADATA[type]?.icon} size={32}/>
+	{#if avatar_url}
+		<img src={avatar_url} alt="" width="32" height="32"/>
+	{/if}
 	<div class="details">
 		<h1>{$t(`user_connection.type.${type}`)}</h1>
 		<p>
-			{metadata?.global_name ?? metadata?.name}
-			(<a href={metadata?.html_url ?? `https://discord.com/users/${sub}`}>
-				@{metadata?.login ?? metadata?.username}</a>)
+			{#if metadata}
+				{metadata.global_name ?? metadata.name}
+				(<a href={website_url ?? metadata.html_url ?? `https://discord.com/users/${sub}`}>
+					@{metadata.login ?? metadata.username ?? metadata.preferred_username}</a>)
+			{:else}
+				{sub}
+			{/if}
 		</p>
 	</div>
 	<p class="created">{$t('user_connection.created', [created_at])}</p>
@@ -48,7 +57,7 @@
 		<button type="button" class="options" slot="trigger" on:click={trigger}>
 			<ThreeDots/>
 		</button>
-		<a href={type ? `https://github.com/settings/connections/applications/${PUBLIC_GITHUB_ID}` : 'https://discord.com/settings/authorized-apps'} target="_blank">
+		<a href={USER_CONNECTION_METADATA[type]?.manage_url} target="_blank">
 			<BoxArrowUpRight/>{$t(`user_connection.type.${type}.manage`)}
 		</a>
 		<button type="button" on:click={disconnect} disabled={disconnecting}>
@@ -62,9 +71,21 @@
 		height: 64px;
 		display: flex;
 		padding: 0 28px;
+		position: relative;
 		background: var(--background-secondary);
 		align-items: center;
 		border-radius: 32px;
+		img {
+			border-radius: 50%;
+		}
+		&:has(img) > :global(svg) {
+			top: 32px;
+			left: 48px;
+			width: 16px;
+			height: 24px;
+			filter: drop-shadow(0 0 1px #000);
+			position: absolute;
+		}
 		.details {
 			margin: 0 auto 0 24px;
 			h1 {

@@ -157,16 +157,6 @@ export default {
 		'user_role.2': 'Staff',
 		'user_role.4': 'Tester',
 
-		'roblox_link.verified.true': 'Verified',
-		'roblox_link.verified.false': 'Confirmation Needed',
-		'roblox_link.visible': 'Visible on Your Profile',
-		'roblox_link.view': 'View on roblox.com',
-		'roblox_link.primary': 'Primary',
-		'roblox_link.make_primary': 'Make Primary',
-		'roblox_link.change_visibility.true': 'Make Private',
-		'roblox_link.change_visibility.false': 'Make Public',
-		'roblox_link.delete': 'Unlink Account',
-
 		'user_action.user.profile': 'Your Profile',
 		'user_action.user.teams': 'Your Teams',
 		'user_action.settings': 'Settings',
@@ -186,13 +176,6 @@ export default {
 		'create_profile.username': 'Enter username',
 		'create_profile.finish': 'Create Profile',
 		'create_profile.error': 'An error occurred.',
-
-		'platform.0': 'Discord',
-
-		'roblox.verification.finish': 'Is this your Roblox Account?',
-		'roblox.verification.finish.sub': 'Joined {0|time_ago} • Identifier: {1}',
-		'roblox.verification.finish.yes': 'Confirm & Proceed',
-		'roblox.verification.finish.no': 'Change Account',
 
 		'settings': 'Your Account',
 		'settings.account': 'Account',
@@ -217,15 +200,6 @@ export default {
 		'settings.access.teams.create.header': 'Set-up your team',
 		'settings.access.teams.create.name': 'Team Name',
 		'settings.access.teams.create.avatar': 'Profile Picture',
-
-		'settings.roblox': 'Roblox Settings',
-		'settings.roblox.accounts': 'Linked Accounts',
-		'settings.roblox.accounts.help': 'Linked accounts can be displayed on your profile, and used with other services, such as mellow.',
-		'settings.roblox.accounts.list': 'Linked Roblox Accounts',
-		'settings.roblox.accounts.add': 'Link Roblox Account',
-		'settings.roblox.accounts.mellow': 'It appears that you signed-up via mellow, you can now close this page, and return to Discord.',
-		'settings.roblox.accounts.syncing': 'Want to sync your Discord Server with Roblox?',
-		'settings.roblox.accounts.syncing.summary': 'can give members roles depending on their Roblox Group Ranks, and much more!',
 
 		'settings.mellow': 'mellow Settings',
 		'settings.mellow.servers': 'Discord Servers',
@@ -370,6 +344,8 @@ export default {
 		'user_connection.type.0.manage': 'Manage on discord.com',
 		'user_connection.type.1': 'GitHub',
 		'user_connection.type.1.manage': 'Manage on github.com',
+		'user_connection.type.2': 'Roblox',
+		'user_connection.type.2.manage': 'Manage on roblox.com',
 		'user_connection.created': 'Connected {0|time_ago}',
 
 		'application.last_used': 'Last used {0|time_ago}',

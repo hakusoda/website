@@ -1,19 +1,33 @@
-export enum UserFlags {
+export enum UserFlag {
 	None,
 	Staff = 1 << 1,
 	Tester = 1 << 2
 }
 
+export enum UserNotificationType {
+	TeamInvite,
+	RemovedFromTeam,
+	RobloxAccountRemoved,
+	SOMETHING,
+	TeamMemberJoined,
+	TeamMemberLeft,
+	UserPostLiked
+}
+
+export enum UserNotificationState {
+	Unread,
+	Read
+}
+
+export enum UserConnectionType {
+	Discord,
+	GitHub,
+	Roblox
+}
+
 export enum TeamFlag {
 	None,
 	Verified = 1 << 0
-}
-
-export enum FeatureFlag {
-	None,
-	MellowSignUp = 1 << 0,
-	RobloxAccountLinking = 1 << 1,
-	ProfilePostViewing = 1 << 2
 }
 
 export enum TeamRolePermission {
@@ -25,18 +39,11 @@ export enum TeamRolePermission {
 	Administrator = 1 << 4
 }
 
-export enum RobloxLinkType {
-	User,
-	GroupRole
-}
-
-export enum RobloxLinkFlag {
+export enum FeatureFlag {
 	None,
-	Verified = 1 << 1
-}
-
-export enum Platform {
-	Discord
+	MellowSignUp = 1 << 0,
+	RobloxAccountLinking = 1 << 1,
+	ProfilePostViewing = 1 << 2
 }
 
 export enum MellowProfileSyncActionType {
@@ -111,26 +118,6 @@ export enum TeamAuditLogType {
 
 export enum ProjectFlag {
 	None
-}
-
-export enum UserNotificationType {
-	TeamInvite,
-	RemovedFromTeam,
-	RobloxAccountRemoved,
-	SOMETHING,
-	TeamMemberJoined,
-	TeamMemberLeft,
-	UserPostLiked
-}
-
-export enum UserNotificationState {
-	Unread,
-	Read
-}
-
-export enum UserConnectionType {
-	Discord,
-	GitHub
 }
 
 export enum RequestErrorType {

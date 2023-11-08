@@ -8,7 +8,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { hasBit, getDefaultAvatar } from '$lib/util';
 	import type { RequestError, ApiRequestError } from '$lib/types';
-	import { TeamFlag, UserFlags, RequestErrorType } from '$lib/enums';
+	import { TeamFlag, UserFlag, RequestErrorType } from '$lib/enums';
 	import { followUser, unfollowUser, uploadAvatar, updateProfile, createUserPost, createTeamInvite, uploadPostAttachments } from '$lib/api';
 
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -165,7 +165,7 @@
 			{#if !editing}
 				<div class="buttons">
 					<div class="roles">
-						{#each Object.values(UserFlags) as flag}
+						{#each Object.values(UserFlag) as flag}
 							{#if typeof flag === 'number' && flag && (data.flags & flag) === flag}
 								<p class="role"><StarFill/>{$t(`user_role.${flag}`)}</p>
 							{/if}
@@ -226,21 +226,6 @@
 					<Sunrise/>
 					<p>{$t('profile.joined', [data.created_at])}</p>
 				</div>
-				{#if data.roblox_links.length}
-					<div class="separator"/>
-					<div class="detail">
-						<Person/>
-						<p>{$t('profile.roblox')}</p>
-					</div>
-					<div class="roblox">
-						{#each data.roblox_users as item}
-							<a href={`https://roblox.com/users/${item.userId}/profile`} target="_blank">
-								<Avatar src={item.icon.imageUrl} size="xxs" circle/>
-								{item.names.combinedName}
-							</a>
-						{/each}
-					</div>
-				{/if}
 				<div class="separator"/>
 				<div class="detail">
 					<Star/>
@@ -492,21 +477,6 @@
 						overflow: hidden;
 						white-space: nowrap;
 						text-overflow: ellipsis;
-					}
-				}
-				.roblox {
-					gap: 8px;
-					display: flex;
-					a {
-						gap: 8px;
-						width: fit-content;
-						margin: 0;
-						display: flex;
-						padding: 4px 12px 4px 4px;
-						font-size: .9em;
-						background: var(--background-tertiary);
-						align-items: center;
-						border-radius: 24px;
 					}
 				}
 			}

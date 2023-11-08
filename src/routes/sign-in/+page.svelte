@@ -64,17 +64,16 @@
 		if (error)
 			signInError = { error: RequestErrorType.Unknown };
 	}
-	$: redirectUri = $page.url?.searchParams.get('redirect_uri');
 </script>
 
 {#if !data.session && !$page.url?.searchParams.get('code')}
 	<div class="auth-modal">
 		<h2>{$t('signin.social')}</h2>
 		<div class="social">
-			<a href={getUserConnectionUrl(UserConnectionType.Discord, redirectUri)}>
+			<a href={getUserConnectionUrl(UserConnectionType.Discord)}>
 				<Discord size={24} coloured/>Discord
 			</a>
-			<a href={getUserConnectionUrl(UserConnectionType.GitHub, redirectUri)}>
+			<a href={getUserConnectionUrl(UserConnectionType.GitHub)}>
 				<GitHub size={24}/>GitHub
 			</a>
 		</div>

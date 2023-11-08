@@ -10,7 +10,6 @@
 	import GridFill from '$lib/icons/GridFill.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 	import ShieldLockFill from '$lib/icons/ShieldLockFill.svelte';
 	export let data: LayoutData;
 </script>
@@ -38,11 +37,6 @@
 		</SideNavigationItem>
 		<SideNavigationItem id="settings.access.security" path="/settings/access/security">
 			<ShieldLockFill/>
-		</SideNavigationItem>
-	
-		<p>{$t('settings.roblox')}</p>
-		<SideNavigationItem id="settings.roblox.accounts" path="/settings/roblox/accounts">
-			<RobloxIcon/>
 		</SideNavigationItem>
 
 		<p>{$t('settings.mellow')}</p>

@@ -11,21 +11,13 @@ export function getDefaultAvatar(id: string) {
 	return `/img/avatar/default_${Math.floor(hash % 6) + 1}.svg`;
 }
 
-export function createDiscordRedirectUri(origin: string) {
-	return `${origin}/roblox/verify/platform/discord`;
-}
-
 export function createMellowServerDiscordRedirectUrl(origin: string) {
 	return `${origin}/settings/mellow/servers`;
 }
 
-export function createUserConnectionsDiscordRedirectUrl(origin: string) {
-	return `${origin}/settings/account/connections`;
-}
-
 export function getUserNotificationUrl({ type, target_user, target_team, target_profile_post_id }: UserNotification) {
 	if (type === UserNotificationType.RobloxAccountRemoved)
-		return '/settings/roblox/accounts'
+		return '/settings/account/connections';
 	if (target_profile_post_id)
 		return `/user/143/post/${target_profile_post_id}`;
 	if (target_team)
@@ -33,6 +25,12 @@ export function getUserNotificationUrl({ type, target_user, target_team, target_
 	if (target_user)
 		return `/user/${target_user.username}`;
 	return '';
+}
+
+export function getUserConnectionUrl(type: UserConnectionType) {
+	const metadata = USER_CONNECTION_METADATA[type];
+	const redirect = encodeURIComponent(`${API_BASE}/auth/callback/${type}`);
+	return metadata.url.replace('RD143', redirect);
 }
 
 export const uuidRegex = /^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/;
@@ -68,11 +66,4 @@ export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'PO
 		error: navigator.onLine ? RequestErrorType.FetchError : RequestErrorType.Offline, 
 		success: false
 	}));
-}
-
-export function getUserConnectionUrl(type: UserConnectionType, redirectUri?: string | null) {
-	const metadata = USER_CONNECTION_METADATA[type];
-	//const redirect = encodeURIComponent(`${API_BASE}/auth/callback/${metadata.id}${redirectUri ? `?redirect_uri=${redirectUri}` : ''}`);
-	const redirect = encodeURIComponent(`${API_BASE}/auth/callback/${metadata.id}`);
-	return metadata.url.replace('$$', redirect);
 }

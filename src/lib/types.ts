@@ -1,5 +1,5 @@
 import type { ZodIssue } from 'zod';
-import type { MellowProfileSyncActionType, RequestErrorType, RobloxLinkType, RobloxLinkFlag, DiscordChannelType, UserNotificationType, UserNotificationState, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
+import type { MellowProfileSyncActionType, RequestErrorType, DiscordChannelType, UserNotificationType, UserNotificationState, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -135,18 +135,6 @@ export interface TeamInvite {
 		username: string
 		avatar_url: string | null
 	} | null
-}
-
-export interface RobloxLink {
-	id: string
-	type: RobloxLinkType
-	owner: string
-	flags: RobloxLinkFlag
-	public: boolean
-	
-	target_id: number
-	
-	created_at: string
 }
 
 export interface RobloxUserProfile {

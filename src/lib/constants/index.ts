@@ -1,6 +1,7 @@
+import { createOAuthLink } from '@voxelified/roblox-open-cloud';
 import type { SvelteComponent } from 'svelte';
 
-import { PUBLIC_GITHUB_ID } from '$env/static/public';
+import { PUBLIC_ROBLOX_ID, PUBLIC_GITHUB_ID } from '$env/static/public';
 import { UserConnectionType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType } from '../enums';
 
 import X from '../icons/X.svelte';
@@ -63,22 +64,28 @@ export const MAPPED_MELLOW_SYNC_REQUIREMENTS: [([MellowProfileSyncActionRequirem
 ];
 
 export const USER_CONNECTION_METADATA: Record<UserConnectionType, {
-	id: string
 	url: string
 	icon: typeof SvelteComponent<any>
 	colour: string
+	manage_url: string
 }> = {
 	[UserConnectionType.Discord]: {
-		id: 'discord',
-		url: `https://discord.com/api/oauth2/authorize?client_id=1068554282481229885&redirect_uri=$$&response_type=code&scope=identify`,
+		url: `https://discord.com/api/oauth2/authorize?client_id=1068554282481229885&redirect_uri=RD143&response_type=code&scope=identify`,
 		icon: Discord,
-		colour: '#5865F2'
+		colour: '#5865F2',
+		manage_url: 'https://discord.com/settings/authorized-apps'
 	},
 	[UserConnectionType.GitHub]: {
-		id: 'github',
-		url: `https://github.com/login/oauth/authorize?client_id=${PUBLIC_GITHUB_ID}&redirect_uri=$$`,
+		url: `https://github.com/login/oauth/authorize?client_id=${PUBLIC_GITHUB_ID}&redirect_uri=RD143`,
 		icon: GitHub,
-		colour: '#333'
+		colour: '#333',
+		manage_url: `https://github.com/settings/connections/applications/${PUBLIC_GITHUB_ID}`
+	},
+	[UserConnectionType.Roblox]: {
+		url: createOAuthLink(PUBLIC_ROBLOX_ID as any, 'RD143', 'openid profile'),
+		icon: RobloxIcon,
+		colour: '#000',
+		manage_url: 'https://www.roblox.com/my/account#!/app-permissions'
 	}
 };
 

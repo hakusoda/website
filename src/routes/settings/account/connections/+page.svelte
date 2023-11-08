@@ -12,13 +12,6 @@
 	export let data: PageData;
 
 	let exists: UserConnectionType | null = null;
-	const connect = (type: UserConnectionType) => {
-		if (data.connections.some(item => item.type === type))
-			return exists = type;
-		exists = null;
-
-		location.href = getUserConnectionUrl(type);
-	};
 </script>
 
 <div class="main">
@@ -28,9 +21,9 @@
 	<div class="connection-types">
 		{#each Object.values(UserConnectionType) as item}
 			{#if typeof item === 'number'}
-				<button type="button" class="item focusable" style={`--bg: ${USER_CONNECTION_METADATA[item].colour};`} on:click={() => connect(typeof item === 'number' ? item : 0)}>
-					<svelte:component this={USER_CONNECTION_METADATA[item].icon}/>{$t(`user_connection.type.${item}`)}
-				</button>
+				<a class="item focusable" href={getUserConnectionUrl(item)} style={`--bg: ${USER_CONNECTION_METADATA[item]?.colour};`}>
+					<svelte:component this={USER_CONNECTION_METADATA[item]?.icon}/>{$t(`user_connection.type.${item}`)}
+				</a>
 			{/if}
 		{/each}
 	</div>
@@ -50,7 +43,8 @@
 <style lang="scss">
 	.main {
 		width: 100%;
-		margin: 0 64px 32px;
+		padding: 0 64px 32px;
+		overflow: auto;
 		.summary {
 			color: var(--color-secondary);
 			font-size: .9em;
@@ -88,7 +82,7 @@
 				padding: 0 24px;
 				font-size: .9em;
 				background: var(--bg);
-				transition: box-shadow .25s;
+				transition: background .5s, box-shadow .5s;
 				box-shadow: inset 0 0 0 1px var(--border-primary);
 				font-weight: 500;
 				line-height: 100%;
@@ -97,6 +91,7 @@
 				border-radius: 20px;
 				text-decoration: none;
 				&:hover {
+					background: color-mix(in srgb, var(--bg) 95%, #fff);
 					box-shadow: inset 0 0 0 1px var(--border-secondary);
 				}
 			}

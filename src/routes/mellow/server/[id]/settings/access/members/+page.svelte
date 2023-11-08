@@ -9,35 +9,20 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 
 	let query = '';
-	//let loading = false;
 
 	let sortBy = 0;
-	let results: DiscordMemberWithSyncInfo[] | null = null;
-	let allMembers: DiscordMemberWithSyncInfo[] = [];
+	let results: DiscordMember[] | null = null;
+	let allMembers: DiscordMember[] = [];
 
-	$: if (query) {
-		/*const body = query;
-		loading = true;
-
-		setTimeout(async () => {
-			if (query === body) {
-				results = await fetch(`/mellow/server/${$page.params.id}/get-members`)
-					.then(response => response.json());
-				loading = false;
-			}
-		}, 1000);*/
+	$: if (query)
 		results = allMembers.filter(item => item.user.global_name?.toLowerCase().includes(query.toLowerCase()) || item.user.username.toLowerCase().includes(query.toLowerCase()))
-	} else
+	else
 		results = null;
 
 	onMount(() => fetch(`/mellow/server/${$page.params.id}/get-members`)
 		.then(response => response.json())
 		.then(items => allMembers = items)
 	);
-
-	interface DiscordMemberWithSyncInfo extends DiscordMember {
-		primary_roblox_link: number | null
-	}
 </script>
 
 <div class="main">
@@ -45,7 +30,7 @@
 	<p class="summary">{$t('mellow.server.settings.access.members.summary')}</p>
 
 	<div class="members">
-		{#each (results ?? allMembers).sort((a, b) => sortBy === 1 ? Date.parse(b.joined_at) - Date.parse(a.joined_at) : (sortBy === 2 ? Number(!!b.primary_roblox_link) - Number(!!a.primary_roblox_link) : false) || (a.user.global_name || a.user.username).localeCompare(b.user.global_name || b.user.username)) as item}
+		{#each (results ?? allMembers).sort((a, b) => sortBy === 1 ? Date.parse(b.joined_at) - Date.parse(a.joined_at) : (sortBy === 2 ? Number(false) - Number(false) : false) || (a.user.global_name || a.user.username).localeCompare(b.user.global_name || b.user.username)) as item}
 			<a class="item" href={`https://discord.com/users/${item.user.id}`} target="_blank">
 				<Avatar src={`https://cdn.discordapp.com/avatars/${item.user.id}/${item.user.avatar}.png?size=256`} size="sm" circle/>
 				<div class="name">
@@ -56,12 +41,7 @@
 						{:else}
 							@{item.user.username}
 						{/if}
-						• {$t('profile.joined', [item.joined_at])} • {$t(`mellow.server.settings.access.members.item.syncable.${!!item.primary_roblox_link}`)}
-						{#if item.primary_roblox_link}
-							<a href={`https://roblox.com/users/${item.primary_roblox_link}`} target="_blank">
-								{item.primary_roblox_link}
-							</a>
-						{/if}
+						• {$t('profile.joined', [item.joined_at])} • {$t(`mellow.server.settings.access.members.item.syncable.false`)}
 					</p>
 				</div>
 			</a>

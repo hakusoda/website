@@ -2,7 +2,6 @@ import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
 import { EMPTY_UUID } from '$lib/constants';
 import type { Actions, PageServerLoad } from './$types';
-import { getRobloxUsers, getRobloxAvatars } from '$lib/roblox';
 import { requestFail, requestError, isFeatureEnabled } from '$lib/util/server';
 import { FeatureFlag, RequestErrorType, UserNotificationType } from '$lib/enums';
 
@@ -54,13 +53,8 @@ export const load = (async ({ params: { name }, parent }) => {
 			team_invites: {
 				team_id: string
 			}[]
-			roblox_links: {
-				target_id: number
-			}[]
-		}>(`id, bio, name, flags, username, is_edited, following:user_followers!user_followers_target_user_id_fkey ( count ), followers:user_followers!user_followers_target_user_id_fkey ( count ), avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( role:team_roles ( name ), team:teams ( id, name, flags, owner:users!teams_owner_id_fkey ( name, username ), avatar_url, display_name, members:team_members ( count ) ) ), team_invites!team_invites_user_id_fkey ( team_id ), roblox_links!roblox_links_owner_id_fkey ( target_id ), burger:user_notifications!user_notifications_user_id_fkey ( type )${postsEnabled ? ', posts:profile_posts ( id, content, created_at, likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), liked:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( count ), attachments:profile_post_attachments ( url ) )' : ''}`)
+		}>(`id, bio, name, flags, username, is_edited, following:user_followers!user_followers_target_user_id_fkey ( count ), followers:user_followers!user_followers_target_user_id_fkey ( count ), avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( role:team_roles ( name ), team:teams ( id, name, flags, owner:users!teams_owner_id_fkey ( name, username ), avatar_url, display_name, members:team_members ( count ) ) ), team_invites!team_invites_user_id_fkey ( team_id ), burger:user_notifications!user_notifications_user_id_fkey ( type )${postsEnabled ? ', posts:profile_posts ( id, content, created_at, likes:profile_post_likes!profile_post_likes_post_id_fkey ( count ), liked:profile_post_likes!profile_post_likes_post_id_fkey ( count ), comments:profile_posts ( count ), attachments:profile_post_attachments ( url ) )' : ''}`)
 		.eq(isUUID(name) ? 'id' : 'username', name)
-		.eq('roblox_links.public', true)
-		.gte('roblox_links.flags', 2)
 		.eq('user_notifications.target_user_id', session?.sub ?? EMPTY_UUID)
 		.eq('user_notifications.type', UserNotificationType.SOMETHING)
 		.eq('following.user_id', session?.sub ?? EMPTY_UUID);
@@ -94,9 +88,6 @@ export const load = (async ({ params: { name }, parent }) => {
 		throw requestError(500, RequestErrorType.ExternalRequestError);
 	}
 
-	const robloxUsers = await getRobloxUsers(response.data.roblox_links.map(l => l.target_id));
-	const robloxIcons = await getRobloxAvatars(robloxUsers.map(l => l.userId));
-
 	const teams = response.data.teams.map(team => ({
 		role: team.role,
 		...team.team
@@ -107,11 +98,7 @@ export const load = (async ({ params: { name }, parent }) => {
 		...response.data,
 		teams,
 		my_teams: my_teams.filter(item => !teams.some(team => team.id === item.id) && !team_invites.some(invite => invite.team_id === item.id)),
-		team_invites,
-		roblox_users: robloxUsers.map((user, index) => ({
-			...user,
-			icon: robloxIcons[index]
-		}))
+		team_invites
 	};
 }) satisfies PageServerLoad;
 
