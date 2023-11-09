@@ -444,6 +444,9 @@ export default {
 		'request_error.security_device_not_found': 'The requested security device does not exist.',
 		'request_error.user_connection_not_found': 'The requested user connection does not exist.',
 		'request_error.feature_disabled': 'This feature has been temporarily disabled, please try again later...',
+		'request_error.missing_signature': 'Failed to authenticate, security signature is missing, please sign-out.',
+		'request_error.invalid_signature': 'Failed to authenticate, security signature is invalid, please sign-out.',
+		'request_error.missing_device_key': 'Your session is out-of-date, and can no longer be used for security reasons, please sign-out.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 

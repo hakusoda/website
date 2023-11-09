@@ -6,7 +6,6 @@
 	import { RequestErrorType } from '$lib/enums';
 
 	import Discord from '$lib/icons/Discord.svelte';
-	import HouseDoorFill from '$lib/icons/HouseDoorFill.svelte';
 	import ArrowClockwise from '$lib/icons/ArrowClockwise.svelte';
 	$: status = $page.status;
 

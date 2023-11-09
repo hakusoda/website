@@ -14,7 +14,6 @@
 	let open: string[] = [];
 	const OPENABLE = [MellowServerAuditLogType.CreateRobloxLink, MellowServerAuditLogType.UpdateRobloxGlobalSettings, MellowServerAuditLogType.UpdateRobloxLink, MellowServerAuditLogType.UpdateLogging];
 
-	console.log(data.items.filter(i => i.type === MellowServerAuditLogType.UpdateRobloxLink).reverse().map(i => i.data));
 	const mapLogTypes = (old: number, now: number) =>
 		Object.values(MellowServerLogType).filter(i => typeof i === 'number' && i && hasBit(old, i) && !hasBit(now, i)).map(i => $t(`mellow_server_logging_type.${i as MellowServerLogType}`));
 </script>

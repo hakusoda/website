@@ -27,7 +27,6 @@
 	import Trash from '$lib/icons/Trash.svelte';
 	import Burger from '$lib/icons/Burger.svelte';
 	import People from '$lib/icons/People.svelte';
-	import Person from '$lib/icons/Person.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	import StarFill from '$lib/icons/StarFill.svelte';
 	import PencilFill from '$lib/icons/PencilFill.svelte';

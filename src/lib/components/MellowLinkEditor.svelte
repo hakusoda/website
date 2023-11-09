@@ -115,7 +115,6 @@
 	const getGroupRoles = (id: string) => fetch(`/api/roblox/group-roles?id=${id}`)
 		.then(response => response.json() as Promise<RobloxGroupRole[]>)
 		.then(data => groupRoles[id] = data.filter(role => role.rank).sort((a, b) => b.rank - a.rank));
-	$: console.log(requirements);
 </script>
 
 <div class="mellow-sync-action-editor">

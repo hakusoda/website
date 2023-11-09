@@ -362,6 +362,7 @@ export interface VerifySignUpPayload {
 	challenge: string
 	transports: string[]
 	attestation: string
+	device_public_key: string
 }
 
 export interface VerifySignUpResponse {
@@ -373,10 +374,11 @@ export interface VerifySignUpResponse {
 export interface VerifySignInPayload {
 	id: string
 	username: string
-	authData: string
+	auth_data: string
 	challenge: string
 	signature: string
-	clientData: string
+	client_data: string
+	device_public_key: string
 }
 
 export interface VerifyNewDevicePayload {

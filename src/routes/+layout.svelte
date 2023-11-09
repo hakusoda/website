@@ -2,6 +2,7 @@
 	import '@voxelified/voxeliface/styles.scss';
 	import { inject } from '@vercel/analytics';
 	import MediaQuery from 'svelte-media-queries';
+	import { onMount } from 'svelte';
 	import { DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation'; 
@@ -14,6 +15,7 @@
 	import type { LayoutData } from './$types';
 	import { UserNotificationState } from '$lib/enums';
 	import { getUserNotificationUrl } from '$lib/util';
+	import { storeKeyPairForAuthentication } from '$lib/crypto';
 	import { markNotificationAsRead, clearAllNotifications, markAllNotificationsAsRead } from '$lib/api';
 	inject({ mode: dev ? 'development' : 'production' });
 
@@ -68,6 +70,8 @@
 
 	$: unreadNotifications = data.notifications.filter(item => item.state === UserNotificationState.Unread);
 	let clearingNotifications = false;
+
+	onMount(storeKeyPairForAuthentication);
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>

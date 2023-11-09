@@ -29,14 +29,13 @@
 	const finish = async () => {
 		finishing = !(error = null);
 		
-		if (name) {
-			const response = await updateProfile({
-				name,
-				username: name.toLowerCase().replace(/ /g, '_').replace(/\W/g, '')
-			});
-			if (!response.success)
-				return finishing = !(error = response.error);
-		}
+		const name2 = name || user.username;
+		const response = await updateProfile({
+			name: name2,
+			username: name2.toLowerCase().replace(/ /g, '_').replace(/\W/g, '')
+		});
+		if (!response.success)
+			return finishing = !(error = response.error);
 
 		if (newAvatar) {
 			const response = await uploadAvatar(user.id, newAvatar);

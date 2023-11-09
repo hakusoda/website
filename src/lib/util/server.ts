@@ -1,12 +1,9 @@
-import base64 from '@hexagon/base64';
 import { get } from '@vercel/edge-config';
-import { SignJWT } from 'jose';
 import { fail, error, redirect } from '@sveltejs/kit';
 import type { ZodAny, ZodIssue, ZodSchema } from 'zod';
 
 import supabase from '../supabase';
 import { hasBit } from '.';
-import { JWT_SECRET } from '$lib/constants/server';
 import { RequestErrorType } from '$lib/enums';
 import type { FeatureFlag } from '$lib/enums';
 import type { RequestError, UserSessionJWT } from '$lib/types';
@@ -33,33 +30,6 @@ export function requestError(statusCode: number, type: RequestErrorType, issues?
 		error: type,
 		issues
 	} satisfies RequestError));
-}
-
-export async function createUserSession(sub: string): Promise<[string, UserSessionJWT]> {
-	const now = Date.now();
-	const iat = Math.floor(now / 1000);
-	const exp = iat + 604800; // previously 3600 seconds (1 hour), refreshing is currently problematic.
-	const token = await new SignJWT({ sub })
-		.setProtectedHeader({ alg: 'HS256' })
-		.setIssuedAt()
-		.setExpirationTime('7d')
-		.sign(JWT_SECRET);
-	return [token, { exp, iat, sub }];
-}
-
-export async function createRefreshToken(user_id: string) {
-	const token = new Uint32Array(64);
-	crypto.getRandomValues(token);
-
-	const refresh_token = base64.fromArrayBuffer(token);
-	const response = await supabase.from('user_refresh_tokens')
-		.insert({ user_id, refresh_token });
-	if (response.error) {
-		console.error(error);
-		throw requestError(500, RequestErrorType.DatabaseUpdate);
-	}
-
-	return refresh_token;
 }
 
 export function isFeatureEnabled(feature: FeatureFlag) {

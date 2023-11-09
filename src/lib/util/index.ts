@@ -1,4 +1,7 @@
+import { browser } from '$app/environment';
+
 import { enableSudoMode } from '../store';
+import { generateAuthenticationHeader } from '$lib/crypto';
 import { API_BASE, USER_CONNECTION_METADATA } from '../constants';
 import type { ApiResponse, UserNotification } from '../types';
 import { RequestErrorType, UserConnectionType, UserNotificationType } from '$lib/enums';
@@ -44,7 +47,10 @@ export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'PO
 	return fetch(url, {
 		body: body ? body instanceof URLSearchParams ? body.toString() : body instanceof ArrayBuffer ? body : JSON.stringify(body) : undefined,
 		method,
-		headers,
+		headers: browser ? {
+			'something': await generateAuthenticationHeader(),
+			...headers
+		} : headers,
 		credentials: 'include'
 	}).then(response => response.json().then(data => {
 		if (data.error) {
@@ -62,8 +68,11 @@ export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'PO
 		if (response.status < 200 || response.status > 399)
 			return UNKNOWN_ERROR;
 		return { success: true };
-	})).catch(() => ({
-		error: navigator.onLine ? RequestErrorType.FetchError : RequestErrorType.Offline, 
-		success: false
-	}));
+	})).catch(error => {
+		console.error(error);
+		return {
+			error: navigator.onLine ? RequestErrorType.FetchError : RequestErrorType.Offline, 
+			success: false
+		};
+	});
 }

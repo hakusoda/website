@@ -1,21 +1,22 @@
 <script lang="ts">
 	import base64 from '@hexagon/base64';
+	import { onMount } from 'svelte';
 	import { Button, TextInput } from '@voxelified/voxeliface';
 
 	import '$lib/styles/auth.scss';
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
+	import { getPublicKey } from '$lib/crypto';
 	import { invalidateAll } from '$app/navigation';
 	import type { PageData } from './$types';
 	import type { RequestError } from '$lib/types';
 	import { getUserConnectionUrl } from '$lib/util';
+	import { USER_CONNECTION_METADATA } from '$lib/constants';
 	import { verifySignIn, getSignInOptions } from '$lib/api';
 	import { RequestErrorType, UserConnectionType } from '$lib/enums';
 
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
-	import GitHub from '$lib/icons/GitHub.svelte';
-	import Discord from '$lib/icons/Discord.svelte';
 	import KeyFill from '$lib/icons/KeyFill.svelte';
 	export let data: PageData;
 
@@ -44,10 +45,11 @@
 			const response = await verifySignIn({
 				id: base64.fromArrayBuffer(credential.rawId),
 				username,
-				authData: base64.fromArrayBuffer((credential.response as any).authenticatorData),
+				auth_data: base64.fromArrayBuffer((credential.response as any).authenticatorData),
 				challenge: options.data.challenge as any,
 				signature: base64.fromArrayBuffer((credential.response as any).signature),
-				clientData: base64.fromArrayBuffer(credential.response.clientDataJSON)
+				client_data: base64.fromArrayBuffer(credential.response.clientDataJSON),
+				device_public_key: await getPublicKey()
 			});
 			if (!response.success)
 				return signingIn = !(signInError = response);
@@ -64,18 +66,23 @@
 		if (error)
 			signInError = { error: RequestErrorType.Unknown };
 	}
+
+	let publicKey = '';
+	onMount(async() => publicKey = `&state=${encodeURIComponent(await getPublicKey())}`);
 </script>
 
 {#if !data.session && !$page.url?.searchParams.get('code')}
 	<div class="auth-modal">
 		<h2>{$t('signin.social')}</h2>
 		<div class="social">
-			<a href={getUserConnectionUrl(UserConnectionType.Discord)}>
-				<Discord size={24} coloured/>Discord
-			</a>
-			<a href={getUserConnectionUrl(UserConnectionType.GitHub)}>
-				<GitHub size={24}/>GitHub
-			</a>
+			{#each Object.values(UserConnectionType) as type}
+				{#if typeof type === 'number'}
+					<a href={getUserConnectionUrl(type) + publicKey} style={`--bg: ${USER_CONNECTION_METADATA[type]?.colour};`}>
+						<svelte:component this={USER_CONNECTION_METADATA[type]?.icon} size={20}/>
+						{$t(`user_connection.type.${type}`)}
+					</a>
+				{/if}
+			{/each}
 		</div>
 
 		<h2>{$t('signin.manual')}</h2>
