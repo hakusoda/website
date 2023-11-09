@@ -3,6 +3,7 @@
 
 	import { t } from '$lib/localisation';
 	import { MAPPED_MELLOW_SYNC_ACTION_ICONS } from '$lib/constants';
+	import { deleteMellowServerProfileSyncAction } from '$lib/api';
 	import type { MellowProfileSyncActionType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
 
 	import Trash from '$lib/icons/Trash.svelte';
@@ -11,11 +12,14 @@
 	import ThreeDots from '$lib/icons/ThreeDots.svelte';
 	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import UiChecksGrid from '$lib/icons/UIChecksGrid.svelte';
+	export let id: string;
 	export let name: string;
 	export let type: MellowProfileSyncActionType;
-	export let items: any[];
 	export let index: number;
+	export let items: HTMLButtonElement[];
+	export let remove: () => void;
 	export let creator: { name: string | null, username: string } | null = null;
+	export let server_id: string;
 	export let last_edit: { author: { name: string | null, username: string }, created_at: string } | null = null;
 	export let created_at: string;
 	export let highlighted: boolean;
@@ -23,10 +27,20 @@
 	export let requirements_type: MellowProfileSyncActionRequirementsType;
 
 	let trigger: () => void;
+	let deleting = false;
+	const deleteAction = async () => {
+		deleting = true;
+
+		const { success } = await deleteMellowServerProfileSyncAction(server_id, id);
+		if (success)
+			remove();
+
+		deleting = false;
+	};
 </script>
 
 <DropdownMenu.Root bind:trigger>
-	<button slot="trigger" type="button" class="mellow-profile-action" on:click class:highlighted bind:this={items[index]}>
+	<button slot="trigger" type="button" class="mellow-profile-action" on:click class:highlighted bind:this={items[index]} disabled={deleting}>
 		<div class="info">
 			<h1>{name}</h1>
 			<div class="details">
@@ -67,7 +81,7 @@
 			<ThreeDots/>
 		</button>
 	</button>
-	<button type="button">
+	<button type="button" on:click={deleteAction} disabled={deleting}>
 		<Trash/>{$t('action.delete')}
 	</button>
 </DropdownMenu.Root>
@@ -86,15 +100,12 @@
 		font-size: 1em;
 		min-height: 80px;
 		text-align: start;
-		transition: box-shadow .5s;
+		transition: opacity .5s, box-shadow .5s;
 		background: var(--background-secondary);
 		box-shadow: inset 0 0 0 1px var(--border-primary);
 		align-items: center;
 		font-family: var(--font-primary);
 		border-radius: 32px;
-		&:hover {
-			box-shadow: inset 0 0 0 1px var(--border-secondary);
-		}
 		.info {
 			margin: 0 auto 0 0;
 			h1 {
@@ -129,6 +140,13 @@
 		}
 		&.highlighted {
 			animation: 1s infinite alternate basic-focus;
+		}
+		&:not(:disabled):hover {
+			box-shadow: inset 0 0 0 1px var(--border-secondary);
+		}
+		&:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
 		}
 	}
 </style>

@@ -5,10 +5,8 @@
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
-	import { mellowLinkViewMode } from '$lib/settings';
 	import type { RobloxGroupRole } from '$lib/types';
-	import { deleteMellowServerProfileSyncAction } from '$lib/api';
-	import { MellowLinkImportType, MellowLinkListViewMode } from '$lib/enums';
+	import { MellowLinkImportType } from '$lib/enums';
 
 	import Modal from '$lib/components/Modal.svelte';
 	import GroupSelect from '$lib/components/GroupSelect.svelte';
@@ -26,14 +24,6 @@
 	let importTarget: string | null = null;
 	let importTrigger: () => void;
 
-	const deleteLink = async (id: string) => {
-		const response = await deleteMellowServerProfileSyncAction($page.params.id, id);
-		if (response.success)
-			data.binds = data.binds.filter(bind => bind.id !== id);
-		else
-			alert($t(`request_error.${response.error as 0}`));
-	};
-
 	let groupRoles: Record<string, RobloxGroupRole[]> = {};
 	let roleSearchId: string | null = null;
 	$: if (roleSearchId && !groupRoles[roleSearchId]) {
@@ -45,10 +35,9 @@
 
 	let itemFilter = '';
 
-	$: compact = $mellowLinkViewMode === MellowLinkListViewMode.Compact;
 	$: highlighted = $page.url.searchParams.get('highlight');
 
-	const linkItems: HTMLDivElement[] = [];
+	const linkItems: HTMLButtonElement[] = [];
 	onMount(() => {
 		if (highlighted)
 			linksContainer.scrollTo({
@@ -76,6 +65,8 @@
 					{...item}
 					{index}
 					items={linkItems}
+					remove={() => data.binds = data.binds.filter(i => i !== item)}
+					server_id={$page.params.id}
 					highlighted={highlighted === item.id}
 					on:click={() => (target = item, state++)}
 				/>
