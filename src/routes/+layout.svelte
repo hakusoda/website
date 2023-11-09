@@ -193,6 +193,7 @@
 			<div class="links">
 				<p>{$t('footer.community')}</p>
 				<a href="https://discord.com/invite/rs3r4dQu9P" target="_blank">Discord</a>
+				<a href="https://x.com/@voxelified" target="_blank">X</a>
 			</div>
 		</footer>
 		<PageLoader/>
