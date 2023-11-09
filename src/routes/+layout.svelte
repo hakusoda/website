@@ -181,6 +181,11 @@
 				</p>
 			</div>
 			<div class="links">
+				<p>{$t('footer.legal')}</p>
+				<a href="/terms">{$t('footer.legal.terms')}</a>
+				<a href="/privacy">{$t('footer.legal.privacy')}</a>
+			</div>
+			<div class="links">
 				<p>{$t('footer.resources')}</p>
 				<a href="https://status.voxelified.com" target="_blank">Status</a>
 				<a href="https://github.com/voxelified" target="_blank">GitHub</a>

@@ -494,6 +494,9 @@ export default {
 
 		'footer.oss': 'HAKUMI is',
 		'footer.oss.link': 'open-source',
+		'footer.legal': 'Words Words',
+		'footer.legal.terms': 'Terms of Service',
+		'footer.legal.privacy': 'Privacy Policy',
 		'footer.resources': 'Resources',
 		'footer.resources.status': 'Status',
 		'footer.community': 'Community',
