@@ -100,6 +100,13 @@ export enum MellowWebhookEventType {
 	RobloxServerProfileSync = 1 << 0
 }
 
+// this is temporary, and will later be replaced with a fully-featured & user friendly system.
+export enum MellowDefaultNickname {
+	RobloxUsername = '{roblox_username}',
+	RobloxDisplayName = '{roblox_display_name}',
+	None = ''
+}
+
 export enum TeamAuditLogType {
 	CreateTeam,
 	RenameTeam,

@@ -1,17 +1,18 @@
 <script lang="ts">
-	import { TextInput } from '@voxelified/voxeliface';
+	import { Select } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
 	import { deserialize } from '$app/forms';
 	import type { PageData } from './$types';
 	import { invalidateAll } from '$app/navigation';
-	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
+	import { RequestErrorType, MellowDefaultNickname } from '$lib/enums';
 
 	import Radio from '$lib/components/Radio.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
-
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
+
+	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 	export let data: PageData;
 
 	let error: RequestError | null = null;
@@ -39,19 +40,24 @@
 		saving = false;
 	};
 	const reset = () => (defaultNickname = data.default_nickname, syncUnknownUsers = data.sync_unknown_users, allowForcedSyncing = data.allow_forced_syncing);
-
-	$: nickLength = defaultNickname.includes('{name}') ? defaultNickname.length + 14 : defaultNickname.length;
 </script>
 
 <div class="main">
 	<p class="input-label">{$t('mellow.server.settings.syncing.settings.nickname')}</p>
 	<p class="summary">{$t('mellow.server.settings.syncing.settings.nickname.summary')}</p>
 	
-	<p class="indicator">{nickLength}/32</p>
-	{#if nickLength > 32 && defaultNickname.length < 33}
-		<p class="indicator">{$t('mellow.server.settings.syncing.settings.nickname.long')}</p>
-	{/if}
-	<TextInput bind:value={defaultNickname} placeholder={$t('mellow.server.settings.syncing.settings.nickname.placeholder')}/>
+	<Select.Root bind:value={defaultNickname}>
+		{#each Object.values(MellowDefaultNickname) as item}
+			{#if !/^[A-Z]/.test(item)}
+				<Select.Item value={item}>
+					{#if item}
+						<RobloxIcon/>
+					{/if}
+					{$t(`mellow_default_nickname.${item}`)}
+				</Select.Item>
+			{/if}
+		{/each}
+	</Select.Root>
 
 	<p class="input-label">{$t('mellow.server.settings.syncing.settings.other')}</p>
 	<div class="radio-input">
@@ -83,14 +89,6 @@
 			font-size: .75em;
 			white-space: pre;
 			line-height: 1.5;
-		}
-		.indicator {
-			color: var(--color-secondary);
-			margin: 0 0 4px;
-			font-size: .75em;
-		}
-		:global(.text-input) {
-			width: 384px;
 		}
 		.radio-input {
 			display: flex;

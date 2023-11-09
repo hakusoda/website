@@ -245,7 +245,7 @@ export default {
 		'mellow.server.settings.syncing.actions.import.type.0': 'Roblox Group Roles → Discord Roles',
 		'mellow.server.settings.syncing.settings': 'Settings',
 		'mellow.server.settings.syncing.settings.nickname': 'Default Nickname',
-		'mellow.server.settings.syncing.settings.nickname.summary': 'This nickname will be applied to members if they do not meet the requirements of a nickname action.\nInstances of {name} will be replaced with their Roblox Display Name if possible.',
+		'mellow.server.settings.syncing.settings.nickname.summary': 'This nickname will be applied to members if they do not meet the requirements of a nickname action.',
 		'mellow.server.settings.syncing.settings.nickname.placeholder': 'Leave empty to disable',
 		'mellow.server.settings.syncing.settings.nickname.long': 'Long display names will cause the nickname to be truncated.',
 		'mellow.server.settings.syncing.settings.other': 'Advanced Settings',
@@ -300,6 +300,10 @@ export default {
 		'mellow_server_logging_type.0': '',
 		'mellow_server_logging_type.1': 'Mellow Audit Log',
 		'mellow_server_logging_type.2': 'Server Profile Sync',
+
+		'mellow_default_nickname.{roblox_username}': 'Roblox Username',
+		'mellow_default_nickname.{roblox_display_name}': 'Roblox Display Name',
+		'mellow_default_nickname.': 'Disabled',
 
 		'team_audit_log.type.0': 'created the team',
 		'team_audit_log.type.1': 'renamed the team from "{0.data.0}" to "{0.data.1}"',
