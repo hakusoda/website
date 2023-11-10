@@ -57,11 +57,11 @@
 	<p>{$t('enable_sudo_mode.summary')}</p>
 
 	<div class="buttons">
-		<Button on:click={enable}>
+		<Button on:click={enable} disabled={enabling}>
 			<KeyFill/>{$t('enable_sudo_mode.continue')}
 		</Button>
 		<form action="dialog">
-			<Button colour="secondary" on:click={() => $sudoModal = $sudoEnabled = false}>
+			<Button colour="secondary" on:click={() => $sudoModal = $sudoEnabled = false} disabled={enabling}>
 				<X/>{$t('action.cancel')}
 			</Button>
 		</form>
