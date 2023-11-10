@@ -1,5 +1,4 @@
 <script lang="ts">
-	// https://github.com/Blookerss/svelteblox/blob/master/src/lib/components/Modal.svelte
 	import { onMount } from 'svelte';
 
 	export let autoOpen = false;
@@ -28,13 +27,11 @@
 		animation: .5s show;
 		max-height: 90%;
 		box-sizing: border-box;
+		background: var(--background-primary);
 		box-shadow: inset 0 0 0 1px #ffffff40;
-		background: center / 200px repeat var(--grain), #00000040;
 		font-weight: initial;
-		border-radius: 52px;
+		border-radius: 40px;
 		flex-direction: column;
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
 		:global(h1:first-child) {
 			margin-top: 12px;
 		}
@@ -45,8 +42,9 @@
 			animation: .25s show;
 		}
 		&::backdrop {
-			animation: 1s show-backdrop forwards;
+			animation: 1s show-backdrop;
 			background: #00000080;
+			backdrop-filter: blur(8px);
 		}
 	}
 
@@ -63,11 +61,6 @@
 	@keyframes show-backdrop {
 		0% {
 			opacity: 0;
-			backdrop-filter: none;
-		}
-		100% {
-			opacity: 1;
-			backdrop-filter: blur(8px);
 		}
 	}
 </style>
