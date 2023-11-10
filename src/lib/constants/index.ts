@@ -1,7 +1,7 @@
 import { createOAuthLink } from '@voxelified/roblox-open-cloud';
 import type { SvelteComponent } from 'svelte';
 
-import { PUBLIC_ROBLOX_ID, PUBLIC_GITHUB_ID } from '$env/static/public';
+import { PUBLIC_API_BASE, PUBLIC_GITHUB_ID, PUBLIC_ROBLOX_ID } from '$env/static/public';
 import { UserConnectionType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType } from '../enums';
 
 import X from '../icons/X.svelte';
@@ -25,8 +25,7 @@ export const LOCALES = ['en-AU', 'ja-JP'] as const;
 export const USERNAME_REGEX = /^[\w-]+$/;
 export const DISPLAY_NAME_REGEX = /^[\w !@#$%^&*()-:;"'{}[\]?\\|~`<>]+$/;
 
-export const API_BASE = 'https://api.voxelified.com/v1';
-//export const API_BASE = 'https://api-dev-tunnel.voxelified.com/v1';
+export const API_BASE = PUBLIC_API_BASE || 'https://api.voxelified.com/v1';
 
 export const EMPTY_UUID = '00000000-0000-0000-0000-000000000000';
 
