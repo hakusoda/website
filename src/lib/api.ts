@@ -1,5 +1,4 @@
 import { get } from 'svelte/store';
-import { v4 as uuidv4 } from 'uuid';
 
 import { page } from '$app/stores';
 import { request } from './util';
@@ -96,7 +95,7 @@ export async function uploadPostAttachment([image, contentType]: [ArrayBuffer, s
 
 	const bucket = supabase!.storage.from('post_attachments');
 	const response = await bucket
-		.upload(`${(await session)!.user.id}/${uuidv4()}`, image, {
+		.upload(`${(await session)!.user.id}/${crypto.randomUUID()}`, image, {
 			contentType
 		});
 	if (response.error)

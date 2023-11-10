@@ -650,13 +650,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^9.0.3":
-  version: 9.0.3
-  resolution: "@types/uuid@npm:9.0.3"
-  checksum: a2d8a769952f5795c74d594b5fdbdc09972f6fb5e389a52854f5adc27aab85109dea38c09419c2283b14be78271b55eaac7b2300f59d8c058b5ed298a6844768
-  languageName: node
-  linkType: hard
-
 "@types/websocket@npm:^1.0.3":
   version: 1.0.6
   resolution: "@types/websocket@npm:1.0.6"
@@ -3617,15 +3610,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "uuid@npm:9.0.1"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
-  languageName: node
-  linkType: hard
-
 "v8-compile-cache-lib@npm:^3.0.1":
   version: 3.0.1
   resolution: "v8-compile-cache-lib@npm:3.0.1"
@@ -3736,7 +3720,6 @@ __metadata:
     "@supabase/supabase-js": "npm:^2.33.2"
     "@sveltejs/adapter-vercel": "npm:^3.0.3"
     "@sveltejs/kit": "npm:^1.25.0"
-    "@types/uuid": "npm:^9.0.3"
     "@vercel/analytics": "npm:^1.0.2"
     "@vercel/edge-config": "npm:^0.4.0"
     "@voxelified/roblox-open-cloud": "npm:^0.1.0"
@@ -3751,7 +3734,6 @@ __metadata:
     svelte-preprocess: "npm:^5.0.4"
     typescript: "npm:^5.2.2"
     user-agent-data-types: "npm:^0.4.2"
-    uuid: "npm:^9.0.1"
     vercel: "npm:^32.2.2"
     vite: "npm:^4.4.9"
     web-vitals: "npm:^3.4.0"
