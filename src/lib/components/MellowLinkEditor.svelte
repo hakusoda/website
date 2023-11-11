@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { GroupRole } from '@hakumi/roblox-api';
 	import { Button, Select, TextInput, NumberInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '../localisation';
 	import type { PageData } from '../../routes/mellow/server/[id]/settings/syncing/actions/$types';
-	import type { RequestError, RobloxGroupRole } from '../types';
+	import type { RequestError } from '../types';
 	import { MAPPED_MELLOW_SYNC_ACTION_ICONS, MAPPED_MELLOW_SYNC_REQUIREMENTS } from '$lib/constants';
 	import { createMellowServerProfileSyncAction, updateMellowServerProfileSyncAction } from '$lib/api';
 	import { MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '../enums';
@@ -37,7 +38,7 @@
 	let editing = false;
 	let saveError: RequestError | null = null;
 
-	let groupRoles: Record<string, RobloxGroupRole[]> = {};
+	let groupRoles: Record<string, GroupRole[]> = {};
 	let roleSearchId: string | null = null;
 	$: if (roleSearchId && !groupRoles[roleSearchId])
 		getGroupRoles(roleSearchId.toString());

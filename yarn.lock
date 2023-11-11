@@ -231,6 +231,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hakumi/roblox-api@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@hakumi/roblox-api@npm:0.1.0"
+  checksum: 81de6d71512e4714772194c78b4ad1273efed6036fe821312f20fd85b7defaede11e7da2e672b84c79142eab6267e5c7f152b759c86db7450bba289588da8e0c
+  languageName: node
+  linkType: hard
+
 "@hexagon/base64@npm:^1.1.28":
   version: 1.1.28
   resolution: "@hexagon/base64@npm:1.1.28"
@@ -4251,6 +4258,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "website@workspace:."
   dependencies:
+    "@hakumi/roblox-api": "npm:^0.1.0"
     "@hexagon/base64": "npm:^1.1.28"
     "@supabase/supabase-js": "npm:^2.38.4"
     "@sveltejs/adapter-vercel": "npm:^3.0.3"

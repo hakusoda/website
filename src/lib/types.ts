@@ -137,61 +137,6 @@ export interface TeamInvite {
 	} | null
 }
 
-export interface RobloxUserProfile {
-	names: {
-		username: string
-		combinedName: string
-	}
-	userId: number
-	platformProfileId: string
-}
-
-export interface PartialRobloxGroup {
-	id: number
-	name: string
-	memberCount: number
-	hasVerifiedBadge: boolean
-}
-
-export interface RobloxGetGroupsResponse {
-	data: {
-		id: number
-		name: string
-		owner: {
-			id: number
-			type: 'User'
-		}
-		created: string
-		description: number
-		hasVerifiedBadge: boolean
-	}[]
-}
-
-export interface RobloxLookupGroupsResponse {
-	data: PartialRobloxGroup[]
-}
-
-export interface RobloxThumbnailsResponse {
-	data: {
-		state: 'Success' | 'Error'
-		imageUrl: string
-		targetId: number
-	}[]
-}
-
-export interface RobloxGroupRole {
-	id: number
-	name: string
-	rank: number
-	description: string
-	memberCount: number
-}
-
-export interface RobloxGroupRolesResponse {
-	roles: RobloxGroupRole[]
-	groupId: number
-}
-
 export interface MellowLink {
 	name: string
 	data: string[]
