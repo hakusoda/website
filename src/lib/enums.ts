@@ -123,10 +123,6 @@ export enum TeamAuditLogType {
 	InviteUser
 }
 
-export enum ProjectFlag {
-	None
-}
-
 export enum RequestErrorType {
 	InvalidBody,
 	Unauthenticated,

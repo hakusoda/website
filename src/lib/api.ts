@@ -4,10 +4,6 @@ import { page } from '$app/stores';
 import { request } from './util';
 import type { User, UpdateTeamPayload, CreateTeamResponse, VerifySignInPayload, VerifySignUpPayload, VerifySignUpResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, VerifySudoModePayload, CreateUserPostResponse, VerifyNewDevicePayload, UpdateTeamMemberPayload, GetSignUpOptionsPayload, VerifyNewDeviceResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
 
-export function getUser(userId: string) {
-	return request<User>(`user/${userId}`).then(response => response.success ? response.data : null);
-}
-
 export function createProfile(username: string) {
 	return request<User>(`user`, 'POST', { username });
 }
