@@ -1,7 +1,7 @@
 <script lang="ts">
 	import 'cropperjs/dist/cropper.css';
 	import Cropper from 'cropperjs';
-	import { Button } from '@voxelified/voxeliface';
+	import { Button } from '@hakumi/essence';
 	import { onDestroy } from 'svelte';
 
 	import { t } from '../localisation';

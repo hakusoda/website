@@ -2,7 +2,7 @@ import { get } from 'svelte/store';
 
 import { page } from '$app/stores';
 import { request } from './util';
-import type { User, UpdateTeamPayload, CreateTeamResponse, VerifySignInPayload, VerifySignUpPayload, VerifySignUpResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, VerifySudoModePayload, CreateUserPostResponse, VerifyNewDevicePayload, UpdateTeamMemberPayload, GetSignUpOptionsPayload, VerifyNewDeviceResponse, CreateMellowServerRobloxLinkPayload, CreateMellowServerRobloxLinkResponse } from './types';
+import type { User, UpdateTeamPayload, CreateTeamResponse, VerifySignInPayload, VerifySignUpPayload, VerifySignUpResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, VerifySudoModePayload, CreateUserPostResponse, VerifyNewDevicePayload, UpdateTeamMemberPayload, GetSignUpOptionsPayload, VerifyNewDeviceResponse, CreateMellowProfileSyncActionPayload, CreateMellowProfileSyncActionResponse, UpdateMellowServerProfileSyncingSettingsPayload } from './types';
 
 export function createProfile(username: string) {
 	return request<User>(`user`, 'POST', { username });
@@ -106,16 +106,20 @@ export function uploadPostAttachments(images: [ArrayBuffer, string][]) {
 	return Promise.all(images.map(image => uploadPostAttachment(image)));
 }
 
-export function createMellowServerProfileSyncAction(serverId: string, payload: CreateMellowServerRobloxLinkPayload) {
-	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link`, 'POST', payload);
+export function updateMellowServerProfileSyncingSettings(serverId: string, payload: UpdateMellowServerProfileSyncingSettingsPayload) {
+	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${serverId}/syncing/settings`, 'PATCH', payload);
 }
 
-export function updateMellowServerProfileSyncAction(serverId: string, linkId: string, payload: Partial<CreateMellowServerRobloxLinkPayload>) {
-	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link/${linkId}`, 'PATCH', payload);
+export function createMellowServerProfileSyncAction(serverId: string, payload: CreateMellowProfileSyncActionPayload) {
+	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${serverId}/syncing/action`, 'POST', payload);
+}
+
+export function updateMellowServerProfileSyncAction(serverId: string, linkId: string, payload: Partial<CreateMellowProfileSyncActionPayload>) {
+	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${serverId}/syncing/action/${linkId}`, 'PATCH', payload);
 }
 
 export function deleteMellowServerProfileSyncAction(serverId: string, linkId: string) {
-	return request<CreateMellowServerRobloxLinkResponse>(`mellow/server/${serverId}/roblox/link/${linkId}`, 'DELETE');
+	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${serverId}/syncing/action/${linkId}`, 'DELETE');
 }
 
 export function getSignUpOptions(payload: GetSignUpOptionsPayload) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from '@voxelified/voxeliface';
+	import { Button } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { hasBit } from '$lib/util';

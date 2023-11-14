@@ -231,10 +231,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hakumi/roblox-api@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@hakumi/roblox-api@npm:0.1.0"
-  checksum: 81de6d71512e4714772194c78b4ad1273efed6036fe821312f20fd85b7defaede11e7da2e672b84c79142eab6267e5c7f152b759c86db7450bba289588da8e0c
+"@hakumi/essence@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@hakumi/essence@npm:2.3.0"
+  dependencies:
+    svelte: "npm:^4.2.3"
+  checksum: 52d285e96cce8c19ba54db9cab0ee0c945f397e2f555658f3a5c33c604e98c5e7e7e2b9f8e8f88d2ac7c50900c7037a02ed9d6a77bb1cb33eb76c2195f85982d
+  languageName: node
+  linkType: hard
+
+"@hakumi/roblox-api@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@hakumi/roblox-api@npm:0.1.1"
+  checksum: cc7df04c9e6037b2360b8d2b705ac69b997b1cb167b32614061c8bdfadbb4c0f698cbc0d301ae6a77ee61cf540f894c5f3c1c36576a974a83dbd1a173082fdc1
   languageName: node
   linkType: hard
 
@@ -919,15 +928,6 @@ __metadata:
   dependencies:
     svelte: "npm:^3.59.1"
   checksum: f5be0fcd5ac6fc4f21c93e787d9386d3561df8faf7e43f4dca7aadb63b43ffc9950b044f9301ac8a3527534e14217b7edd2b71ea94703d4caea6975969598669
-  languageName: node
-  linkType: hard
-
-"@voxelified/voxeliface@npm:^2.2.3":
-  version: 2.2.3
-  resolution: "@voxelified/voxeliface@npm:2.2.3"
-  dependencies:
-    svelte: "npm:^4.2.1"
-  checksum: d4e9123ee419129de9496f2323fa9df63a6a0a27562a58bf8ce29e9f83d68304af15a46798795c70ec9280874e51620fc9249540d70f2a416fdf1438436d22fc
   languageName: node
   linkType: hard
 
@@ -3807,27 +3807,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "svelte@npm:4.2.1"
-  dependencies:
-    "@ampproject/remapping": "npm:^2.2.1"
-    "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-    "@jridgewell/trace-mapping": "npm:^0.3.18"
-    acorn: "npm:^8.9.0"
-    aria-query: "npm:^5.3.0"
-    axobject-query: "npm:^3.2.1"
-    code-red: "npm:^1.0.3"
-    css-tree: "npm:^2.3.1"
-    estree-walker: "npm:^3.0.3"
-    is-reference: "npm:^3.0.1"
-    locate-character: "npm:^3.0.0"
-    magic-string: "npm:^0.30.0"
-    periscopic: "npm:^3.1.0"
-  checksum: 5262dfceb99809a7ed01addc684351ac297dc2967b49dc99563af646c113c33a1535fe6ea5b9af4c6986880b6803ac0ca4fecb15a65bb18b641929c400d5dead
-  languageName: node
-  linkType: hard
-
 "svelte@npm:^4.2.2":
   version: 4.2.2
   resolution: "svelte@npm:4.2.2"
@@ -3846,6 +3825,27 @@ __metadata:
     magic-string: "npm:^0.30.4"
     periscopic: "npm:^3.1.0"
   checksum: 2fec1033c139b5802d1142c57621d579c429d40a1c3ba8c101b6cef6e2e2277286f050d76f4995fb6355e49bc0299309f621570f9f80e1806caf40c62b73b182
+  languageName: node
+  linkType: hard
+
+"svelte@npm:^4.2.3":
+  version: 4.2.3
+  resolution: "svelte@npm:4.2.3"
+  dependencies:
+    "@ampproject/remapping": "npm:^2.2.1"
+    "@jridgewell/sourcemap-codec": "npm:^1.4.15"
+    "@jridgewell/trace-mapping": "npm:^0.3.18"
+    acorn: "npm:^8.9.0"
+    aria-query: "npm:^5.3.0"
+    axobject-query: "npm:^3.2.1"
+    code-red: "npm:^1.0.3"
+    css-tree: "npm:^2.3.1"
+    estree-walker: "npm:^3.0.3"
+    is-reference: "npm:^3.0.1"
+    locate-character: "npm:^3.0.0"
+    magic-string: "npm:^0.30.4"
+    periscopic: "npm:^3.1.0"
+  checksum: 61be05f65ede95151625981ad083bcc8f15baac0073b330c1a260e2dd6e199c087d6b4861a7711961e1de0618b972a15850e0fb245e9a845d94aef874f6e40bb
   languageName: node
   linkType: hard
 
@@ -4258,7 +4258,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "website@workspace:."
   dependencies:
-    "@hakumi/roblox-api": "npm:^0.1.0"
+    "@hakumi/essence": "npm:^2.3.0"
+    "@hakumi/roblox-api": "npm:^0.1.1"
     "@hexagon/base64": "npm:^1.1.28"
     "@supabase/supabase-js": "npm:^2.38.4"
     "@sveltejs/adapter-vercel": "npm:^3.0.3"
@@ -4267,7 +4268,6 @@ __metadata:
     "@vercel/edge-config": "npm:^0.4.1"
     "@voxelified/roblox-open-cloud": "npm:^0.1.0"
     "@voxelified/svelte-localisation": "npm:^1.0.0"
-    "@voxelified/voxeliface": "npm:^2.2.3"
     cropperjs: "npm:^1.6.1"
     jose: "npm:^5.1.0"
     sass: "npm:^1.69.5"

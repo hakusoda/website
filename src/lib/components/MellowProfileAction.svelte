@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropdownMenu } from '@voxelified/voxeliface';
+	import { DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { MAPPED_MELLOW_SYNC_ACTION_ICONS } from '$lib/constants';

@@ -7,7 +7,7 @@ export enum UserFlag {
 export enum UserNotificationType {
 	TeamInvite,
 	RemovedFromTeam,
-	RobloxAccountRemoved,
+	UserConnectionModerated,
 	SOMETHING,
 	TeamMemberJoined,
 	TeamMemberLeft,
@@ -42,37 +42,33 @@ export enum TeamRolePermission {
 export enum FeatureFlag {
 	None,
 	MellowSignUp = 1 << 0,
-	RobloxAccountLinking = 1 << 1,
+	UserConnections = 1 << 1,
 	ProfilePostViewing = 1 << 2
 }
 
 export enum MellowProfileSyncActionType {
-	DiscordRoles,
-	BanDiscord,
-	KickDiscord,
+	GiveRoles,
+	BanFromServer,
+	KickFromServer,
 	CancelSync
 }
 export enum MellowProfileSyncActionRequirementType {
-	RobloxHasVerifiedAccount,
-	RobloxHasGroupRole,
-	RobloxHasGroupRankInRange,
+	RobloxHaveConnection,
+	RobloxHaveGroupRole,
+	RobloxHaveGroupRankInRange,
 	RobloxInGroup,
-	RobloxIsFriendsWith,
+	RobloxBeFriendsWith,
 	MeetOtherAction,
 	HAKUMIInTeam,
 	SteamInGroup,
-	RobloxHasAsset,
-	RobloxHasBadge,
-	RobloxHasPass,
+	RobloxHaveAsset,
+	RobloxHaveBadge,
+	RobloxHavePass,
 	GitHubInOrganisation
 }
 export enum MellowProfileSyncActionRequirementsType {
 	MeetAll,
 	MeetOne
-}
-
-export enum MellowLinkImportType {
-	RobloxGroupRolesToDiscordRoles
 }
 
 export enum MellowLinkListViewMode {
@@ -82,10 +78,10 @@ export enum MellowLinkListViewMode {
 
 export enum MellowServerAuditLogType {
 	CreateServer,
-	CreateRobloxLink,
-	UpdateRobloxGlobalSettings,
-	DeleteRobloxLink,
-	UpdateRobloxLink,
+	CreateProfileSyncAction,
+	UpdateProfileSyncingSettings,
+	DeleteProfileSyncAction,
+	UpdateProfileSyncAction,
 	UpdateLogging
 }
 

@@ -1,5 +1,5 @@
 import type { ZodIssue } from 'zod';
-import type { MellowProfileSyncActionType, RequestErrorType, DiscordChannelType, UserNotificationType, UserNotificationState, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
+import type { RequestErrorType, DiscordChannelType, UserNotificationType, UserNotificationState, MellowServerAuditLogType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -137,17 +137,53 @@ export interface TeamInvite {
 	} | null
 }
 
-export interface MellowLink {
+export type MellowProfileAction = {
+	id: string
 	name: string
-	data: string[]
-	type: MellowProfileSyncActionType
 	creator: {
 		name: string | null
 		username: string
+	} | null
+	metadata: {}
+	last_edit: {
+		type: MellowServerAuditLogType
+		author: {
+			name: string | null
+			username: string
+		}
+		created_at: string
 	}
 	created_at: string
-	requirements: MellowProfileActionRequirement[]
+	requirements: {
+		id: string
+		data: string[]
+		type: MellowProfileSyncActionRequirementType
+	}[]
 	requirements_type: MellowProfileSyncActionRequirementsType
+} & ({
+	type: MellowProfileSyncActionType.GiveRoles
+	metadata: {
+		items: string[]
+		can_remove: boolean
+	}
+} | {
+	type: MellowProfileSyncActionType.BanFromServer
+	metadata: MellowRemoveMemberMetadata & {
+		delete_messages_seconds: number
+	}
+} | {
+	type: MellowProfileSyncActionType.KickFromServer
+	metadata: MellowRemoveMemberMetadata
+} | {
+	type: MellowProfileSyncActionType.CancelSync
+	metadata: {
+		user_facing_reason: string | null
+	}
+})
+
+export interface MellowRemoveMemberMetadata {
+	audit_log_reason: string | null
+	user_facing_reason: string | null
 }
 
 export interface MellowProfileActionRequirement {
@@ -178,33 +214,6 @@ export interface DiscordChannel {
 	guild_id?: string
 	position?: number
 	permission_overwrites?: any[]
-}
-
-export interface DiscordPartialUser {
-	id: string
-	bot?: boolean
-	avatar: string | null
-	username: string
-	global_name: string | null
-	public_flags: number
-	discriminator: string
-	avatar_decoration: string | null
-}
-
-// https://discord.com/developers/docs/resources/guild#guild-member-object
-export interface DiscordMember {
-	deaf: boolean
-	mute: boolean
-	nick: string | null
-	user: DiscordPartialUser
-	flags: number
-	roles: string[]
-	avatar: string | null
-	pending: boolean
-	joined_at: string
-	permissions: string
-	premium_since: unknown
-	communication_disabled_until: unknown
 }
 
 export interface RequestError {
@@ -255,10 +264,15 @@ export interface UpdateProfilePayload {
 	username?: string
 }
 
-export interface CreateMellowServerRobloxLinkPayload {
+export interface UpdateMellowServerProfileSyncingSettingsPayload {
+	default_nickname?: string
+	allow_forced_syncing?: boolean
+}
+
+export interface CreateMellowProfileSyncActionPayload {
 	name: string
-	data: string[]
 	type: MellowProfileSyncActionType
+	metadata: any
 	requirements: {
 		data: string[]
 		type: MellowProfileSyncActionRequirementType
@@ -266,7 +280,7 @@ export interface CreateMellowServerRobloxLinkPayload {
 	requirements_type: MellowProfileSyncActionRequirementsType
 }
 
-export interface CreateMellowServerRobloxLinkResponse {
+export interface CreateMellowProfileSyncActionResponse {
 	id: string
 	name: string
 	creator: {

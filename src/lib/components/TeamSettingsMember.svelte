@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, DropdownMenu } from '@voxelified/voxeliface';
+	import { Button, DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
 	import { page } from '$app/stores';

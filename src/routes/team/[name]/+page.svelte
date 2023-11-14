@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Tabs, Button, Select, TextInput, DropdownMenu } from '@voxelified/voxeliface';
+	import { Tabs, Button, Select, TextInput, DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { hasBit } from '$lib/util';

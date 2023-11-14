@@ -29,24 +29,43 @@ export const API_BASE = PUBLIC_API_BASE || 'https://api.voxelified.com/v1';
 
 export const EMPTY_UUID = '00000000-0000-0000-0000-000000000000';
 
+export const MELLOW_PROFILE_ACTION_DEFAULT_METADATA: Record<MellowProfileSyncActionType, any> = {
+	[MellowProfileSyncActionType.GiveRoles]: {
+		items: [],
+		can_remove: true
+	},
+	[MellowProfileSyncActionType.BanFromServer]: {
+		audit_log_reason: null,
+		user_facing_reason: null,
+		delete_messages_seconds: 0
+	},
+	[MellowProfileSyncActionType.KickFromServer]: {
+		audit_log_reason: null,
+		user_facing_reason: null
+	},
+	[MellowProfileSyncActionType.CancelSync]: {
+		user_facing_reason: null
+	}
+}
+
 export const MAPPED_MELLOW_SYNC_ACTION_ICONS: Record<MellowProfileSyncActionType, typeof SvelteComponent<any>> = {
-	[MellowProfileSyncActionType.DiscordRoles]: PersonBadgeFill,
-	[MellowProfileSyncActionType.BanDiscord]: BoxArrowRight,
-	[MellowProfileSyncActionType.KickDiscord]: BoxArrowRight,
+	[MellowProfileSyncActionType.GiveRoles]: PersonBadgeFill,
+	[MellowProfileSyncActionType.BanFromServer]: BoxArrowRight,
+	[MellowProfileSyncActionType.KickFromServer]: BoxArrowRight,
 	[MellowProfileSyncActionType.CancelSync]: X
 };
 
 export const MAPPED_MELLOW_SYNC_REQUIREMENTS: [([MellowProfileSyncActionRequirementType, typeof SvelteComponent<any>] | 'separator')[], typeof SvelteComponent<any>][] = [
 	[[
-		[MellowProfileSyncActionRequirementType.RobloxHasVerifiedAccount, PersonFill],
+		[MellowProfileSyncActionRequirementType.RobloxHaveConnection, PersonFill],
 		'separator',
 		[MellowProfileSyncActionRequirementType.RobloxInGroup, PeopleFill],
-		[MellowProfileSyncActionRequirementType.RobloxHasGroupRole, PersonBadgeFill],
-		[MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange, ArrowLeftRight],
+		[MellowProfileSyncActionRequirementType.RobloxHaveGroupRole, PersonBadgeFill],
+		[MellowProfileSyncActionRequirementType.RobloxHaveGroupRankInRange, ArrowLeftRight],
 		'separator',
-		[MellowProfileSyncActionRequirementType.RobloxHasAsset, Shop],
-		[MellowProfileSyncActionRequirementType.RobloxHasBadge, PatchCheckFill],
-		[MellowProfileSyncActionRequirementType.RobloxHasPass, StarFill]
+		[MellowProfileSyncActionRequirementType.RobloxHaveAsset, Shop],
+		[MellowProfileSyncActionRequirementType.RobloxHaveBadge, PatchCheckFill],
+		[MellowProfileSyncActionRequirementType.RobloxHavePass, StarFill]
 	], RobloxIcon],
 	[[
 		[MellowProfileSyncActionRequirementType.GitHubInOrganisation, PeopleFill]

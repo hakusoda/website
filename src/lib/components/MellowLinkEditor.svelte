@@ -1,14 +1,16 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import type { GroupRole } from '@hakumi/roblox-api';
-	import { Button, Select, TextInput, NumberInput, DropdownMenu } from '@voxelified/voxeliface';
+	import { Button, Select, TextInput, NumberInput, DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
-	import type { PageData } from '../../routes/mellow/server/[id]/settings/syncing/actions/$types';
-	import type { RequestError } from '../types';
-	import { MAPPED_MELLOW_SYNC_ACTION_ICONS, MAPPED_MELLOW_SYNC_REQUIREMENTS } from '$lib/constants';
+	import { copyJson } from '$lib/util';
+	import type { RequestError, MellowProfileAction } from '../types';
 	import { createMellowServerProfileSyncAction, updateMellowServerProfileSyncAction } from '$lib/api';
+	import { MAPPED_MELLOW_SYNC_ACTION_ICONS, MAPPED_MELLOW_SYNC_REQUIREMENTS, MELLOW_PROFILE_ACTION_DEFAULT_METADATA } from '$lib/constants';
 	import { MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '../enums';
 
+	import Radio from './Radio.svelte';
 	import Loader from './Loader.svelte';
 	import GroupSelect from './GroupSelect.svelte';
 	import RequestErrorUI from './RequestError.svelte';
@@ -19,38 +21,29 @@
 	import GridFill from '../icons/GridFill.svelte';
 	import Clipboard from '../icons/Clipboard.svelte';
 	import UIChecksGrid from '../icons/UIChecksGrid.svelte';
-	export let data: PageData;
-	export let target: PageData['binds'][number] | null = null;
+	export let data: { items: MellowProfileAction[] };
+	export let target: MellowProfileAction | null = null;
 	export let onSave: () => void;
 	export let serverId: string;
 	export let onCancel: () => void;
+	export let discordRoles: { id: string, name: string }[];
 
-	let roleTrigger: () => void;
 	let requirementTrigger: () => void;
 
-	let name = '';
-	let type = MellowProfileSyncActionType.DiscordRoles;
-	let actionData: string[] = [];
-	let requirements: [MellowProfileSyncActionRequirementType, string[]][] = [];
-	let requirementsType = MellowProfileSyncActionRequirementsType.MeetAll;
+	let name = target?.name ?? '';
+	let type = target?.type ?? MellowProfileSyncActionType.GiveRoles;
+	let metadata = { ...copyJson(MELLOW_PROFILE_ACTION_DEFAULT_METADATA[type]), ...(target ? copyJson(target.metadata) : {}) };
+	let requirements: [MellowProfileSyncActionRequirementType, string[]][] = target?.requirements.map(item => [item.type, [...item.data]]) ?? [];
+	let requirementsType = target?.requirements_type ?? MellowProfileSyncActionRequirementsType.MeetAll;
 
 	let saving = false;
-	let editing = false;
+	let editing = !!target;
 	let saveError: RequestError | null = null;
 
 	let groupRoles: Record<string, GroupRole[]> = {};
 	let roleSearchId: string | null = null;
 	$: if (roleSearchId && !groupRoles[roleSearchId])
 		getGroupRoles(roleSearchId.toString());
-
-	$: if (target && !editing) {
-		name = target.name, type = target.type, actionData = [...target.data];
-		requirements = target.requirements.map(item => [item.type, [...item.data]]), requirementsType = target.requirements_type;
-		editing = true;
-		for (const [type, data] of requirements)
-			if (type === MellowProfileSyncActionRequirementType.RobloxHasGroupRole || type === MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange || type === MellowProfileSyncActionRequirementType.RobloxInGroup)
-				getGroupRoles(data[0]);
-	}
 
 	let itemRefs: HTMLDivElement[] = [];
 	let lastItemRefLength = 0;
@@ -72,12 +65,12 @@
 			const response = await updateMellowServerProfileSyncAction(serverId, target.id, {
 				type: type === target.type ? undefined : type,
 				name: newName === target.name ? undefined : newName,
-				data: JSON.stringify(actionData) === JSON.stringify(target.data) ? undefined : actionData,
+				metadata: JSON.stringify(metadata) === JSON.stringify(target.metadata) ? undefined : metadata,
 				requirements: JSON.stringify(newRequirements) === JSON.stringify(target.requirements.map(item => ({ type: item.type, data: item.data }))) ? undefined : newRequirements,
 				requirements_type: requirementsType === target.requirements_type ? undefined : requirementsType
 			});
 			if (response.success) {
-				data.binds = data.binds.map(item => item.id === target!.id ? response.data as any : item);
+				data.items = data.items.map(item => item.id === target!.id ? response.data as any : item);
 				saving = false;
 				resetAdd();
 				onCancel();
@@ -86,8 +79,8 @@
 		} else {
 			const response = await createMellowServerProfileSyncAction(serverId, {
 				type,
-				data: actionData,
 				name: name || 'Unnamed Action',
+				metadata,
 				requirements: requirements.map(item => ({
 					type: item[0],
 					data: item[1]
@@ -95,7 +88,7 @@
 				requirements_type: requirementsType
 			});
 			if (response.success) {
-				data.binds = [...data.binds, response.data as any];
+				data.items = [...data.items, response.data as any];
 				saving = false;
 				resetAdd();
 				onCancel();
@@ -108,14 +101,21 @@
 	};
 	const addRequirement = (type: any) => requirements = [...requirements, [type, []]];
 	const resetAdd = () => {
-		actionData = [], name = '', requirements = [];
-		type = MellowProfileSyncActionType.DiscordRoles, requirementsType = MellowProfileSyncActionRequirementsType.MeetAll;
+		metadata = {}, name = '', requirements = [];
+		type = MellowProfileSyncActionType.GiveRoles, requirementsType = MellowProfileSyncActionRequirementsType.MeetAll;
 		target = null;
 		editing = false;
 	};
 	const getGroupRoles = (id: string) => fetch(`/api/roblox/group-roles?id=${id}`)
-		.then(response => response.json() as Promise<RobloxGroupRole[]>)
+		.then(response => response.json() as Promise<GroupRole[]>)
 		.then(data => groupRoles[id] = data.filter(role => role.rank).sort((a, b) => b.rank - a.rank));
+
+	onMount(() => {
+		let requesting: string[] = [];
+		for (const [type, data] of requirements)
+			if ((type === MellowProfileSyncActionRequirementType.RobloxHaveGroupRole || type === MellowProfileSyncActionRequirementType.RobloxHaveGroupRankInRange || type === MellowProfileSyncActionRequirementType.RobloxInGroup) && !requesting.includes(data[0]))
+				requesting.push(data[0]), getGroupRoles(data[0]);
+	});
 </script>
 
 <div class="mellow-sync-action-editor">
@@ -190,11 +190,12 @@
 						<svelte:component this={MAPPED_MELLOW_SYNC_REQUIREMENTS.find(i => i[0].some(j => j[0] === item[0]))?.[1]}/>
 						{$t(`mellow_bind.requirement.${item[0]}`)}
 					</p>
-					{#if item[0] === MellowProfileSyncActionRequirementType.RobloxHasGroupRole}
+					{#if item[0] === MellowProfileSyncActionRequirementType.RobloxHaveGroupRole}
 						<div class="fields">
 							<GroupSelect source="roblox" bind:value={item[1][0]} onChange={value => roleSearchId = value}/>
 							{#if groupRoles[item[1][0]]}
 								<Select.Root bind:value={item[1][1]} placeholder={$t('mellow_link_editor.requirement.group_role.placeholder')}>
+									<p>{$t('mellow_bind.requirement.1.select')}</p>
 									{#each groupRoles[item[1][0]] as role}
 										<Select.Item value={role.id.toString()}>
 											{role.name}
@@ -205,7 +206,7 @@
 								<Loader/>
 							{/if}
 						</div>
-					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasGroupRankInRange}
+					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHaveGroupRankInRange}
 						<div class="fields">
 							<GroupSelect source="roblox" bind:value={item[1][0]}/>
 							<NumberInput min={0} max={255} bind:string={item[1][1]}/>
@@ -215,19 +216,19 @@
 						<GroupSelect source="roblox" bind:value={item[1][0]}/>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.MeetOtherAction}
 						<Select.Root bind:value={item[1][0]} placeholder={$t('mellow_link_editor.requirement.link.placeholder')}>
-							{#each data.binds.filter(bind => bind.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowProfileSyncActionRequirementType.MeetOtherAction && r[1][0] === bind.id)) as bind}
-								<Select.Item value={bind.id}>
-									{bind.name}
+							{#each data.items.filter(action => action.id !== target?.id && !requirements.some(r => r !== item && r[0] === MellowProfileSyncActionRequirementType.MeetOtherAction && r[1][0] === action.id)) as action}
+								<Select.Item value={action.id}>
+									{action.name}
 								</Select.Item>
 							{/each}
 						</Select.Root>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.HAKUMIInTeam}
 						<GroupSelect source="self" bind:value={item[1][0]}/>
-					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasAsset}
+					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHaveAsset}
 						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.8.id')} bind:string={item[1][0]}/>
-					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasBadge}
+					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHaveBadge}
 						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.9.id')} bind:string={item[1][0]}/>
-					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHasPass}
+					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHavePass}
 						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.10.id')} bind:string={item[1][0]}/>
 					{/if}
 				</div>
@@ -257,59 +258,49 @@
 					{/if}
 				{/each}
 			</Select.Root>
+			{#if type === MellowProfileSyncActionType.GiveRoles}
+				<div class="radio-field">
+					<Radio bind:value={metadata.can_remove}/>
+					<p>Removeable</p>
+				</div>
+			{/if}
 		</div>
 	
-		{#if type === MellowProfileSyncActionType.DiscordRoles}
-			<div class="field">
+		{#if type === MellowProfileSyncActionType.GiveRoles}
+			<div class="field roles">
 				<p class="modal-label">{$t('mellow_link_editor.discord_roles')}</p>
-				<div class="roles">
-					{#each actionData as item}
-						<button class="item focusable" type="button" title={$t('action.remove')} on:click={() => actionData = actionData.filter(i => i !== item)}>
-							{data?.roles.find(role => role.id === item)?.name}
-						</button>
+				<Select.Root withSearch bind:values={metadata.items} placeholder={$t('mellow_link_editor.discord_roles.placeholder')}>
+					<p>{$t('mellow_link_editor.discord_roles.category')}</p>
+					{#each discordRoles as item}
+						<Select.Item value={item.id}>
+							{item.name}
+						</Select.Item>
 					{/each}
-					<DropdownMenu.Root bind:trigger={roleTrigger}>
-						<Button slot="trigger" circle on:click={roleTrigger}>
-							<Plus/>
-						</Button>
-						<p>{$t('mellow_link_editor.discord_roles.category')}</p>
-						{#each data?.roles.filter(role => !actionData.includes(role.id)) as item}
-							<button type="button" on:click={() => actionData = [...actionData, item.id]}>
-								{item.name}
-							</button>
-						{/each}
-						
-						<br/>
-						<p>{$t('mellow_link_editor.discord_roles.options')}</p>
-						<button type="button" on:click={() => actionData = data.roles.map(role => role.id)}>
-							{$t('mellow_link_editor.discord_roles.add_all')}
-						</button>
-					</DropdownMenu.Root>
-				</div>
+				</Select.Root>
 			</div>
-		{:else if type === MellowProfileSyncActionType.BanDiscord || type === MellowProfileSyncActionType.KickDiscord}
+		{:else if type === MellowProfileSyncActionType.BanFromServer || type === MellowProfileSyncActionType.KickFromServer}
 			<div class="field audit-reason">
 				<p class="modal-label">{$t('label.audit_reason')}</p>
-				<TextInput bind:value={actionData[0]} placeholder={$t('label.reason')}/>
+				<TextInput bind:value={metadata.audit_log_reason} placeholder={$t('label.reason')}/>
 			</div>
 		{:else if type === MellowProfileSyncActionType.CancelSync}
 			<div class="field audit-reason">
 				<p class="modal-label">{$t('label.user_reason')}</p>
-				<TextInput bind:value={actionData[0]} placeholder={$t('label.reason')}/>
+				<TextInput bind:value={metadata.user_facing_reason} placeholder={$t('label.reason')}/>
 			</div>
 		{/if}
 	</div>
-	{#if type === MellowProfileSyncActionType.BanDiscord || type === MellowProfileSyncActionType.KickDiscord}
+	{#if type === MellowProfileSyncActionType.BanFromServer || type === MellowProfileSyncActionType.KickFromServer}
 		<div class="fields">
 			<div class="field audit-reason">
 				<p class="modal-label">{$t('label.user_reason')}</p>
-				<TextInput bind:value={actionData[1]} placeholder={$t('label.reason')}/>
+				<TextInput bind:value={metadata.user_facing_reason} placeholder={$t('label.reason')}/>
 			</div>
 		</div>
 	{/if}
 
 	<RequestErrorUI data={saveError}/>
-	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [actionData.length])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
+	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [metadata])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
 	<div class="modal-buttons">
 		<Button on:click={save} disabled={saving}>
 			<Check/>{$t(target ? 'action.save_changes' : 'mellow_link_editor.finish')}
@@ -395,42 +386,23 @@
 				p {
 					margin-top: 0;
 				}
+				&.roles > :global(.select-trigger) {
+					width: 512px;
+				}
+			}
+		}
+		.radio-field {
+			margin: 8px 16px;
+			display: flex;
+			align-items: center;
+			p {
+				margin: 0;
+				font-size: .9em;
+				margin-left: 16px;
 			}
 		}
 		.audit-reason, .audit-reason :global(.text-input) {
 			width: 100%;
-		}
-
-		.roles {
-			gap: 8px 16px;
-			flex: 0 1 auto;
-			display: flex;
-			flex-wrap: wrap;
-			max-width: 512px;
-			.item {
-				color: #fff;
-				height: 40px;
-				border: none;
-				cursor: pointer;
-				display: flex;
-				padding: 0 24px;
-				font-size: 14px;
-				background: none;
-				transition: background .5s, box-shadow .5s;
-				box-shadow: inset 0 0 0 1px #fff;
-				font-weight: 500;
-				align-items: center;
-				font-family: var(--font-primary);
-				border-radius: 20px;
-				&:hover {
-					background: #ffffff0d;
-					box-shadow: inset 0 0 0 1px #ffffff80;
-				}
-			}
-			:global(.menu-content) {
-				overflow: auto;
-				max-height: 256px;
-			}
 		}
 
 		.modal-label {

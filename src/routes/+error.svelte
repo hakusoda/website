@@ -1,5 +1,5 @@
 <script>
-	import { Button } from '@voxelified/voxeliface';
+	import { Button } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
     import { page } from '$app/stores';

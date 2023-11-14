@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Tabs } from '@voxelified/voxeliface';
+	import { Tabs } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import type { PageData } from './$types';

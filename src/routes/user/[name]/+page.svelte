@@ -1,6 +1,6 @@
 <script lang="ts">
 	import MediaQuery from 'svelte-media-queries';
-	import { Tabs, Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
+	import { Tabs, Button, TextInput, DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { deserialize } from '$app/forms';

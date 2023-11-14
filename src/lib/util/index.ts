@@ -19,7 +19,7 @@ export function createMellowServerDiscordRedirectUrl(origin: string) {
 }
 
 export function getUserNotificationUrl({ type, target_user, target_team, target_profile_post_id }: UserNotification) {
-	if (type === UserNotificationType.RobloxAccountRemoved)
+	if (type === UserNotificationType.UserConnectionModerated)
 		return '/settings/account/connections';
 	if (target_profile_post_id)
 		return `/user/143/post/${target_profile_post_id}`;
@@ -34,6 +34,10 @@ export function getUserConnectionUrl(type: UserConnectionType) {
 	const metadata = USER_CONNECTION_METADATA[type];
 	const redirect = encodeURIComponent(`${API_BASE}/auth/callback/${type}`);
 	return metadata.url.replace('RD143', redirect);
+}
+
+export function copyJson<T>(object: T): T {
+	return JSON.parse(JSON.stringify(object));
 }
 
 export const uuidRegex = /^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/;

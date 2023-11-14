@@ -1,9 +1,9 @@
 <script lang="ts">
-	import '@voxelified/voxeliface/styles.scss';
+	import '@hakumi/essence/styles.scss';
 	import { inject } from '@vercel/analytics';
 	import MediaQuery from 'svelte-media-queries';
 	import { onMount } from 'svelte';
-	import { DropdownMenu } from '@voxelified/voxeliface';
+	import { DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation'; 
 	import { page } from '$app/stores';

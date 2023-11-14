@@ -12,7 +12,6 @@
 	import GearFill from '$lib/icons/GearFill.svelte';
 	import ArrowLeft from '$lib/icons/ArrowLeft.svelte';
 	import Newspaper from '$lib/icons/Newspaper.svelte';
-	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import HouseDoorFill from '$lib/icons/HouseDoorFill.svelte';
 	export let data: LayoutData;
 
@@ -30,12 +29,10 @@
 			<HouseDoorFill/>
 		</SideNavigationItem>
 
-		<p>{$t('mellow.server.settings.access')}</p>
-		<SideNavigationItem id="mellow.server.settings.access.members" path={`${base}/access/members`}>
-			<PersonFill/>
-		</SideNavigationItem>
-
 		<p>{$t('mellow.server.settings.automation')}</p>
+		<SideNavigationItem id="mellow.server.settings.automation.logging" path={`${base}/automation/logging`}>
+			<Newspaper/>
+		</SideNavigationItem>
 		<SideNavigationItem id="mellow.server.settings.automation.webhooks" path={`${base}/automation/webhooks`}>
 			<Webhook/>
 		</SideNavigationItem>
@@ -50,9 +47,6 @@
 
 		<p>{$t('team.settings.archive')}</p>
 		<SideNavigationItem id="mellow.server.settings.audit_log" path={`${base}/archive/audit-log`}>
-			<Newspaper/>
-		</SideNavigationItem>
-		<SideNavigationItem id="mellow.server.settings.logging" path={`${base}/logging`}>
 			<Newspaper/>
 		</SideNavigationItem>
 

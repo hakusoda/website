@@ -26,14 +26,14 @@
 		"vite": "^4.5.0"
 	},
 	"dependencies": {
-		"@hakumi/roblox-api": "^0.1.0",
+		"@hakumi/essence": "^2.3.0",
+		"@hakumi/roblox-api": "^0.1.1",
 		"@hexagon/base64": "^1.1.28",
 		"@supabase/supabase-js": "^2.38.4",
 		"@vercel/analytics": "^1.1.1",
 		"@vercel/edge-config": "^0.4.1",
 		"@voxelified/roblox-open-cloud": "^0.1.0",
 		"@voxelified/svelte-localisation": "^1.0.0",
-		"@voxelified/voxeliface": "^2.2.3",
 		"cropperjs": "^1.6.1",
 		"jose": "^5.1.0",
 		"svelte-markdown": "^0.4.0",

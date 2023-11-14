@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { Select } from '@voxelified/voxeliface';
+	import { Select } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
-	import { deserialize } from '$app/forms';
+	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import { invalidateAll } from '$app/navigation';
-	import type { RequestError } from '$lib/types';
-	import { RequestErrorType, MellowDefaultNickname } from '$lib/enums';
+	import type { ApiRequestError } from '$lib/types';
+	import { MellowDefaultNickname } from '$lib/enums';
+	import { updateMellowServerProfileSyncingSettings} from '$lib/api';
 
 	import Radio from '$lib/components/Radio.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
@@ -15,31 +16,21 @@
 	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 	export let data: PageData;
 
-	let error: RequestError | null = null;
+	let error: ApiRequestError | null = null;
 	let saving = false;
 	let defaultNickname = data.default_nickname;
-	let syncUnknownUsers = data.sync_unknown_users;
 	let allowForcedSyncing = data.allow_forced_syncing;
 	const save = async () => {
 		saving = !(error = null);
-		const response = await fetch('?/edit', {
-			body: JSON.stringify({
-				defaultNickname: defaultNickname === data.default_nickname ? undefined : defaultNickname,
-				syncUnknownUsers: syncUnknownUsers === data.sync_unknown_users ? undefined : syncUnknownUsers,
-				allowForcedSyncing: allowForcedSyncing === data.allow_forced_syncing ? undefined : allowForcedSyncing
-			}),
-            method: 'POST'
-        });
-		const result = deserialize(await response.text());
-		if (result.type === 'success')
-			await invalidateAll();
-		else if (result.type === 'failure')
-			error = result.data as any;
-		else if (result.type === 'error')
-			error = { error: RequestErrorType.Offline };
-		saving = false;
+		const response = await updateMellowServerProfileSyncingSettings($page.params.id, {
+			default_nickname: defaultNickname === data.default_nickname ? undefined : defaultNickname,
+			allow_forced_syncing: allowForcedSyncing === data.allow_forced_syncing ? undefined : allowForcedSyncing
+		});
+		if (response.success)
+			return invalidateAll();
+		saving = !(error = response);
 	};
-	const reset = () => (defaultNickname = data.default_nickname, syncUnknownUsers = data.sync_unknown_users, allowForcedSyncing = data.allow_forced_syncing);
+	const reset = () => (defaultNickname = data.default_nickname, allowForcedSyncing = data.allow_forced_syncing);
 </script>
 
 <div class="main">
@@ -64,16 +55,12 @@
 		<Radio bind:value={allowForcedSyncing}/>
 		<p>{$t('mellow.server.settings.syncing.settings.allow_forced_syncing')}</p>
 	</div>
-	<div class="radio-input">
-		<Radio bind:value={syncUnknownUsers}/>
-		<p>{$t('mellow.server.settings.syncing.settings.sync_unknown_users')}</p>
-	</div>
 
 	<RequestErrorUI data={error} background="var(--background-primary)"/>
 </div>
 
 <UnsavedChanges
-	show={defaultNickname !== data.default_nickname || syncUnknownUsers !== data.sync_unknown_users || allowForcedSyncing !== data.allow_forced_syncing}
+	show={defaultNickname !== data.default_nickname || allowForcedSyncing !== data.allow_forced_syncing}
 	error={error ? $t(`request_error.${error.error}`) : ''}
 	{save}
 	{reset}

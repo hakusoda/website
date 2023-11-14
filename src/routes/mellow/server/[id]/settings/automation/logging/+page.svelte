@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Select } from '@voxelified/voxeliface';
+	import { Select } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { hasBit } from '$lib/util';
@@ -55,12 +55,12 @@
 </script>
 
 <div class="main">
-	<p class="input-label">{$t('mellow.server.settings.logging.channel')}</p>
+	<p class="input-label">{$t('mellow.server.settings.automation.logging.channel')}</p>
 	<Select.Root bind:value={channel}>
 		<Select.Item value={null}>
 			{$t('label.disabled')}
 		</Select.Item>
-		<p>{$t('mellow.server.settings.logging.channel.category')}</p>
+		<p>{$t('mellow.server.settings.automation.logging.channel.category')}</p>
 		{#each data.channels.sort((a, b) => (a?.position ?? 0) - (b?.position ?? 0)) as item}
 			{#if item.type === DiscordChannelType.GuildText}
 				<Select.Item value={item.id}>
@@ -72,7 +72,7 @@
 		{/each}
 	</Select.Root>
 
-	<p class="input-label">{$t('mellow.server.settings.logging.types')}</p>
+	<p class="input-label">{$t('mellow.server.settings.automation.logging.types')}</p>
 	<div class="types">
 		{#each Object.values(MellowServerLogType) as item}
 			{#if typeof item === 'number' && item}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import base64 from '@hexagon/base64';
 	import { onMount } from 'svelte';
-	import { Button, TextInput } from '@voxelified/voxeliface';
+	import { Button, TextInput } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { getPublicKey } from '$lib/crypto';

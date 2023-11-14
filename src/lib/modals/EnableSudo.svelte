@@ -1,6 +1,6 @@
 <script lang="ts">
 	import base64 from '@hexagon/base64';
-	import { Button } from '@voxelified/voxeliface';
+	import { Button } from '@hakumi/essence';
 
 	import { t } from '../localisation';
 	import { RequestErrorType } from '../enums';

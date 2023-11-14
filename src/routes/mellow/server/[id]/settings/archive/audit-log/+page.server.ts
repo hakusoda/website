@@ -33,7 +33,7 @@ interface MellowServerAuditLogBase {
 	target_link_id: string | null
 }
 
-interface MellowServerAuditLogCreateRobloxLink extends MellowServerAuditLogBase {
+interface MellowServerAuditLogCreateProfileSyncAction extends MellowServerAuditLogBase {
 	data: {
 		name: string
 		type: MellowProfileSyncActionType
@@ -41,26 +41,25 @@ interface MellowServerAuditLogCreateRobloxLink extends MellowServerAuditLogBase 
 		requirements: number
 		requirements_type: MellowProfileSyncActionRequirementsType
 	}
-	type: MellowServerAuditLogType.CreateRobloxLink
+	type: MellowServerAuditLogType.CreateProfileSyncAction
 }
 
-interface MellowServerAuditLogUpdateRobloxGlobalSettings extends MellowServerAuditLogBase {
+interface MellowServerAuditLogUpdateProfileSyncingSettings extends MellowServerAuditLogBase {
 	data: {
 		default_nickname: [string, string | undefined]
-		sync_unknown_users?: [boolean, boolean | undefined]
 		allow_forced_syncing?: [boolean, boolean | undefined]
 	}
-	type: MellowServerAuditLogType.UpdateRobloxGlobalSettings
+	type: MellowServerAuditLogType.UpdateProfileSyncingSettings
 }
 
-interface MellowServerAuditLogDeleteRobloxLink extends MellowServerAuditLogBase {
+interface MellowServerAuditLogDeleteProfileSyncAction extends MellowServerAuditLogBase {
 	data: {
 		name: string
 	}
-	type: MellowServerAuditLogType.DeleteRobloxLink
+	type: MellowServerAuditLogType.DeleteProfileSyncAction
 }
 
-interface MellowServerAuditLogUpdateRobloxLink extends MellowServerAuditLogBase {
+interface MellowServerAuditLogUpdateProfileSyncAction extends MellowServerAuditLogBase {
 	data: {
 		name: [string, string | undefined]
 		data: [string[], string[] | undefined]
@@ -68,7 +67,7 @@ interface MellowServerAuditLogUpdateRobloxLink extends MellowServerAuditLogBase 
 		requirements?: [MellowProfileActionRequirement[], MellowProfileActionRequirement[] | undefined]
 		requirements_type: [MellowProfileSyncActionRequirementsType, MellowProfileSyncActionRequirementsType | undefined]
 	}
-	type: MellowServerAuditLogType.UpdateRobloxLink
+	type: MellowServerAuditLogType.UpdateProfileSyncAction
 }
 
 interface MellowServerAuditLogUpdateLogging extends MellowServerAuditLogBase {
@@ -81,8 +80,8 @@ interface MellowServerAuditLogUpdateLogging extends MellowServerAuditLogBase {
 }
 
 type MellowServerAuditLog =
-	MellowServerAuditLogCreateRobloxLink |
-	MellowServerAuditLogUpdateRobloxGlobalSettings |
-	MellowServerAuditLogDeleteRobloxLink |
-	MellowServerAuditLogUpdateRobloxLink |
+	MellowServerAuditLogCreateProfileSyncAction |
+	MellowServerAuditLogUpdateProfileSyncingSettings |
+	MellowServerAuditLogDeleteProfileSyncAction |
+	MellowServerAuditLogUpdateProfileSyncAction |
 	MellowServerAuditLogUpdateLogging

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import base64 from '@hexagon/base64';
-	import { Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
+	import { Button, TextInput, DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import type { PageData } from './$types';

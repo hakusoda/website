@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TextInput, DropdownMenu } from '@voxelified/voxeliface';
+	import { DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
 	import type { GroupSelectItem } from '../types';
@@ -52,8 +52,7 @@
 			<ChevronDown/>
 		</button>
 		{#if state || !cached.length}
-			<p>{$t(searching ? 'group_select.searching' : results.length ? 'group_select.select' : query ? 'group_select.empty' : 'group_select.enter')}</p>
-			<TextInput bind:value={query} placeholder={$t('group_select.search')}/>
+			<input type="text" class="search" bind:value={query} placeholder={$t('group_select.search')}/>
 			{#if searching}
 				<Loader/>
 			{/if}

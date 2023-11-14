@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropdownMenu } from '@voxelified/voxeliface';
+	import { DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
 	import { invalidateAll } from '$app/navigation';

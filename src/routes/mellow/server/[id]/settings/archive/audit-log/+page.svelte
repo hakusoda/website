@@ -12,7 +12,7 @@
     export let data: PageData;
 
 	let open: string[] = [];
-	const OPENABLE = [MellowServerAuditLogType.CreateRobloxLink, MellowServerAuditLogType.UpdateRobloxGlobalSettings, MellowServerAuditLogType.UpdateRobloxLink, MellowServerAuditLogType.UpdateLogging];
+	const OPENABLE = [MellowServerAuditLogType.CreateProfileSyncAction, MellowServerAuditLogType.UpdateProfileSyncingSettings, MellowServerAuditLogType.UpdateProfileSyncAction, MellowServerAuditLogType.UpdateLogging];
 
 	const mapLogTypes = (old: number, now: number) =>
 		Object.values(MellowServerLogType).filter(i => typeof i === 'number' && i && hasBit(old, i) && !hasBit(now, i)).map(i => $t(`mellow_server_logging_type.${i as MellowServerLogType}`));
@@ -30,17 +30,11 @@
 			authorName={item.author.name}
 			on:click={OPENABLE.includes(item.type) ? () => open = open.includes(item.id) ? open.filter(i => i !== item.id) : [...open, item.id] : null}
 		>
-			{#if item.type === MellowServerAuditLogType.UpdateRobloxGlobalSettings}
+			{#if item.type === MellowServerAuditLogType.UpdateProfileSyncingSettings}
 				{#if item.data.default_nickname?.[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.2.default_nickname')}
 						value={item.data.default_nickname}
-					/>
-				{/if}
-				{#if item.data.sync_unknown_users?.[1] !== undefined}
-					<AuditLogChange
-						name={$t('mellow_server_audit_log.type.2.sync_unknown_users')}
-						value={item.data.sync_unknown_users}
 					/>
 				{/if}
 				{#if item.data.allow_forced_syncing?.[1] !== undefined}
@@ -49,9 +43,9 @@
 						value={item.data.allow_forced_syncing}
 					/>
 				{/if}
-			{:else if item.type === MellowServerAuditLogType.CreateRobloxLink}
+			{:else if item.type === MellowServerAuditLogType.CreateProfileSyncAction}
 				<p>{$t(`mellow_bind.explanation.${item.data.type}`, [item.data.data?.length])}{$t(`mellow_bind.explanation.end.${item.data.requirements_type}`, [item.data.requirements])}</p>
-			{:else if item.type === MellowServerAuditLogType.UpdateRobloxLink}
+			{:else if item.type === MellowServerAuditLogType.UpdateProfileSyncAction}
 				{#if item.data.name?.[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.4.name')}
@@ -99,14 +93,14 @@
 					/>
 				{/if}
 			{/if}
-			{#if item.target_link_id || item.type === MellowServerAuditLogType.CreateRobloxLink || item.type === MellowServerAuditLogType.UpdateRobloxLink}
+			{#if item.target_link_id || item.type === MellowServerAuditLogType.CreateProfileSyncAction || item.type === MellowServerAuditLogType.UpdateProfileSyncAction}
 				{#if item.target_link_id}
 					<a href={`/mellow/server/${$page.params.id}/settings/syncing/actions?highlight=${item.target_link_id}`}>
-						{$t('action.view_roblox_link')}<BoxArrowUpRight size={12}/>
+						{$t('action.view_profile_sync_action')}<BoxArrowUpRight size={12}/>
 					</a>
-					<p class="footer">{$t('label.roblox_link_id', [item.target_link_id])}</p>
+					<p class="footer">{$t('label.profile_sync_action_id', [item.target_link_id])}</p>
 				{:else}
-					<p class="footer">{$t('label.roblox_link_deleted')}</p>
+					<p class="footer">{$t('label.profile_sync_action_deleted')}</p>
 				{/if}
 			{/if}
 		</AuditLog>
