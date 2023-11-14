@@ -77,7 +77,7 @@
 			{#each Object.values(MellowLinkListViewMode) as item}
 				{#if typeof item === 'number'}
 					<Select.Item value={item}>
-						{$t(`mellow_bind.view_mode.${item}`)}
+						{$t(`mellow_sync_action.view_mode.${item}`)}
 					</Select.Item>
 				{/if}
 			{/each}

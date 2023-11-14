@@ -4,10 +4,10 @@
 	import { Button, Select, TextInput, NumberInput, DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
-	import { copyJson } from '$lib/util';
+	import { copyJson } from '../util';
 	import type { RequestError, MellowProfileAction } from '../types';
-	import { createMellowServerProfileSyncAction, updateMellowServerProfileSyncAction } from '$lib/api';
-	import { MAPPED_MELLOW_SYNC_ACTION_ICONS, MAPPED_MELLOW_SYNC_REQUIREMENTS, MELLOW_PROFILE_ACTION_DEFAULT_METADATA } from '$lib/constants';
+	import { createMellowServerProfileSyncAction, updateMellowServerProfileSyncAction } from '../api';
+	import { MAPPED_MELLOW_SYNC_ACTION_ICONS, MAPPED_MELLOW_SYNC_REQUIREMENTS, MELLOW_PROFILE_ACTION_DEFAULT_METADATA } from '../constants';
 	import { MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '../enums';
 
 	import Radio from './Radio.svelte';
@@ -137,7 +137,7 @@
 						{:else}
 							<GridFill/>
 						{/if}
-						{$t(`mellow_bind.requirements_type.${item}`)}
+						{$t(`mellow_sync_action.requirements_type.${item}`)}
 					</Select.Item>
 				{/if}
 			{/each}
@@ -157,7 +157,7 @@
 						{:else}
 							<button type="button" on:click={() => addRequirement(item[0])}>
 								<svelte:component this={item[1]}/>
-								{$t(`mellow_bind.requirement.${item[0]}`)}
+								{$t(`mellow_sync_action.requirement.${item[0]}`)}
 							</button>
 						{/if}
 					{/each}
@@ -173,7 +173,7 @@
 							{:else}
 								<button type="button" on:click={() => addRequirement(item[0])}>
 									<svelte:component this={item[1]}/>
-									{$t(`mellow_bind.requirement.${item[0]}`)}
+									{$t(`mellow_sync_action.requirement.${item[0]}`)}
 								</button>
 							{/if}
 						{/each}
@@ -188,14 +188,14 @@
 				<div class="rfields">
 					<p class="title">
 						<svelte:component this={MAPPED_MELLOW_SYNC_REQUIREMENTS.find(i => i[0].some(j => j[0] === item[0]))?.[1]}/>
-						{$t(`mellow_bind.requirement.${item[0]}`)}
+						{$t(`mellow_sync_action.requirement.${item[0]}`)}
 					</p>
 					{#if item[0] === MellowProfileSyncActionRequirementType.RobloxHaveGroupRole}
 						<div class="fields">
 							<GroupSelect source="roblox" bind:value={item[1][0]} onChange={value => roleSearchId = value}/>
 							{#if groupRoles[item[1][0]]}
 								<Select.Root bind:value={item[1][1]} placeholder={$t('mellow_link_editor.requirement.group_role.placeholder')}>
-									<p>{$t('mellow_bind.requirement.1.select')}</p>
+									<p>{$t('mellow_sync_action.requirement.1.select')}</p>
 									{#each groupRoles[item[1][0]] as role}
 										<Select.Item value={role.id.toString()}>
 											{role.name}
@@ -225,11 +225,11 @@
 					{:else if item[0] === MellowProfileSyncActionRequirementType.HAKUMIInTeam}
 						<GroupSelect source="self" bind:value={item[1][0]}/>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHaveAsset}
-						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.8.id')} bind:string={item[1][0]}/>
+						<NumberInput min={0} placeholder={$t('mellow_sync_action.requirement.8.id')} bind:string={item[1][0]}/>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHaveBadge}
-						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.9.id')} bind:string={item[1][0]}/>
+						<NumberInput min={0} placeholder={$t('mellow_sync_action.requirement.9.id')} bind:string={item[1][0]}/>
 					{:else if item[0] === MellowProfileSyncActionRequirementType.RobloxHavePass}
-						<NumberInput min={0} placeholder={$t('mellow_bind.requirement.10.id')} bind:string={item[1][0]}/>
+						<NumberInput min={0} placeholder={$t('mellow_sync_action.requirement.10.id')} bind:string={item[1][0]}/>
 					{/if}
 				</div>
 				<div class="buttons">
@@ -253,7 +253,7 @@
 					{#if typeof item === 'number'}
 						<Select.Item value={item}>
 							<svelte:component this={MAPPED_MELLOW_SYNC_ACTION_ICONS[item]}/>
-							{$t(`mellow_bind.type.${item}`)}
+							{$t(`mellow_sync_action.type.${item}`)}
 						</Select.Item>
 					{/if}
 				{/each}
@@ -261,7 +261,7 @@
 			{#if type === MellowProfileSyncActionType.GiveRoles}
 				<div class="radio-field">
 					<Radio bind:value={metadata.can_remove}/>
-					<p>Removeable</p>
+					<p>{$t('mellow_sync_action.type.0.can_remove')}</p>
 				</div>
 			{/if}
 		</div>
@@ -300,7 +300,7 @@
 	{/if}
 
 	<RequestErrorUI data={saveError}/>
-	<p class="explanation">{$t(`mellow_bind.explanation.${type}`, [metadata])} {$t(`mellow_bind.explanation.end.${requirementsType}`, [requirements.length])}</p>
+	<p class="explanation">{$t(`mellow_sync_action.explanation.${type}`, [metadata])} {$t(`mellow_sync_action.explanation.end.${requirementsType}`, [requirements.length])}</p>
 	<div class="modal-buttons">
 		<Button on:click={save} disabled={saving}>
 			<Check/>{$t(target ? 'action.save_changes' : 'mellow_link_editor.finish')}

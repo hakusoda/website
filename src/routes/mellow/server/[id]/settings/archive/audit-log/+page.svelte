@@ -44,7 +44,7 @@
 					/>
 				{/if}
 			{:else if item.type === MellowServerAuditLogType.CreateProfileSyncAction}
-				<p>{$t(`mellow_bind.explanation.${item.data.type}`, [item.data.data?.length])}{$t(`mellow_bind.explanation.end.${item.data.requirements_type}`, [item.data.requirements])}</p>
+				<p>{$t(`mellow_sync_action.explanation.${item.data.type}`, [item.data.data?.length])}{$t(`mellow_sync_action.explanation.end.${item.data.requirements_type}`, [item.data.requirements])}</p>
 			{:else if item.type === MellowServerAuditLogType.UpdateProfileSyncAction}
 				{#if item.data.name?.[1]}
 					<AuditLogChange
@@ -55,19 +55,19 @@
 				{#if item.data.type?.[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.4.type')}
-						value={[$t(`mellow_bind.type.${item.data.type[0]}`), $t(`mellow_bind.type.${item.data.type[1]}`)]}
+						value={[$t(`mellow_sync_action.type.${item.data.type[0]}`), $t(`mellow_sync_action.type.${item.data.type[1]}`)]}
 					/>
 				{/if}
 				{#if item.data.requirements?.[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.4.requirements')}
-						diff={[item.data.requirements[0].map(i => $t(`mellow_bind.requirement.${i.type}`)), item.data.requirements[1].map(i => $t(`mellow_bind.requirement.${i.type}`))]}
+						diff={[item.data.requirements[0].map(i => $t(`mellow_sync_action.requirement.${i.type}`)), item.data.requirements[1].map(i => $t(`mellow_sync_action.requirement.${i.type}`))]}
 					/>
 				{/if}
 				{#if item.data.requirements_type?.[1]}
 					<AuditLogChange
 						name={$t('mellow_server_audit_log.type.4.requirements_type')}
-						value={[$t(`mellow_bind.requirements_type.${item.data.requirements_type[0]}`), $t(`mellow_bind.requirements_type.${item.data.requirements_type[1]}`)]}
+						value={[$t(`mellow_sync_action.requirements_type.${item.data.requirements_type[0]}`), $t(`mellow_sync_action.requirements_type.${item.data.requirements_type[1]}`)]}
 					/>
 				{/if}
 				{#if item.data.data?.[1]}

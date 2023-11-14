@@ -65,7 +65,7 @@
 				{/if}
 				<p>
 					<svelte:component this={MAPPED_MELLOW_SYNC_ACTION_ICONS[type]}/>
-					{$t(`mellow_bind.type.${type}.full`)}
+					{$t(`mellow_sync_action.type.${type}.full`)}
 				</p>
 				<p>
 					{#if requirements_type}
@@ -73,7 +73,7 @@
 					{:else}
 						<GridFill/>
 					{/if}
-					{$t('mellow_bind.requirements', [requirements.length])}
+					{$t('mellow_sync_action.requirements', [requirements.length])}
 				</p>
 			</div>
 		</div>
