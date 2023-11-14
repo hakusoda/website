@@ -61,7 +61,7 @@
 		});
 
 	const signout = () => {
-		document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=None; domain=.voxelified.com; path=/; Secure';
+		document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=None; domain=.hakumi.cafe; path=/; Secure';
 
 		// incase that doesn't work...
 		(window as any).cookieStore?.delete?.({ path: '/', name: 'auth-token' });
@@ -177,7 +177,7 @@
 				</p>
 				<p class="oss">
 					{$t('footer.oss')}
-					<a href="https://github.com/voxelified">{$t('footer.oss.link')}</a>.
+					<a href="https://github.com/hakusoda">{$t('footer.oss.link')}</a>.
 				</p>
 			</div>
 			<div class="links">
@@ -187,8 +187,8 @@
 			</div>
 			<div class="links">
 				<p>{$t('footer.resources')}</p>
-				<a href="https://status.voxelified.com" target="_blank">Status</a>
-				<a href="https://github.com/voxelified" target="_blank">GitHub</a>
+				<a href="https://status.hakumi.cafe" target="_blank">Status</a>
+				<a href="https://github.com/hakusoda" target="_blank">GitHub</a>
 			</div>
 			<div class="links">
 				<p>{$t('footer.community')}</p>

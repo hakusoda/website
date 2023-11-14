@@ -13,7 +13,7 @@ export const handle = (async ({ event, resolve }) => {
 	if (cookie) {
 		const response = await jwtVerify(cookie, JWT_SECRET)
 			.catch(() => {
-				event.cookies.delete('auth-token', { path: '/', domain: '.voxelified.com' });
+				event.cookies.delete('auth-token', { path: '/', domain: '.hakumi.cafe' });
 				throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(event.url.pathname + event.url.search)}`);
 			});
 		event.locals.session = response?.payload as any;

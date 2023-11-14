@@ -2264,6 +2264,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hakumi-website@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "hakumi-website@workspace:."
+  dependencies:
+    "@hakumi/essence": "npm:^2.3.0"
+    "@hakumi/roblox-api": "npm:^0.1.1"
+    "@hexagon/base64": "npm:^1.1.28"
+    "@supabase/supabase-js": "npm:^2.38.4"
+    "@sveltejs/adapter-vercel": "npm:^3.0.3"
+    "@sveltejs/kit": "npm:^1.27.4"
+    "@vercel/analytics": "npm:^1.1.1"
+    "@vercel/edge-config": "npm:^0.4.1"
+    "@voxelified/roblox-open-cloud": "npm:^0.1.0"
+    "@voxelified/svelte-localisation": "npm:^1.0.0"
+    cropperjs: "npm:^1.6.1"
+    jose: "npm:^5.1.0"
+    sass: "npm:^1.69.5"
+    svelte: "npm:^4.2.2"
+    svelte-markdown: "npm:^0.4.0"
+    svelte-media-queries: "npm:^1.6.2"
+    svelte-preprocess: "npm:^5.1.0"
+    typescript: "npm:^5.2.2"
+    user-agent-data-types: "npm:^0.4.2"
+    vercel: "npm:^32.5.3"
+    vite: "npm:^4.5.0"
+    web-vitals: "npm:^3.5.0"
+    zod: "npm:^3.22.4"
+  languageName: unknown
+  linkType: soft
+
 "has-unicode@npm:^2.0.1":
   version: 2.0.1
   resolution: "has-unicode@npm:2.0.1"
@@ -4253,36 +4283,6 @@ __metadata:
   checksum: 5612d5f3e54760a797052eb4927f0ddc01383550f542ccd33d5238cfd65aeed392a45ad38364970d0a0f4fea32e1f4d231b3d8dac4a3bdd385e5cf802ae097db
   languageName: node
   linkType: hard
-
-"website@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "website@workspace:."
-  dependencies:
-    "@hakumi/essence": "npm:^2.3.0"
-    "@hakumi/roblox-api": "npm:^0.1.1"
-    "@hexagon/base64": "npm:^1.1.28"
-    "@supabase/supabase-js": "npm:^2.38.4"
-    "@sveltejs/adapter-vercel": "npm:^3.0.3"
-    "@sveltejs/kit": "npm:^1.27.4"
-    "@vercel/analytics": "npm:^1.1.1"
-    "@vercel/edge-config": "npm:^0.4.1"
-    "@voxelified/roblox-open-cloud": "npm:^0.1.0"
-    "@voxelified/svelte-localisation": "npm:^1.0.0"
-    cropperjs: "npm:^1.6.1"
-    jose: "npm:^5.1.0"
-    sass: "npm:^1.69.5"
-    svelte: "npm:^4.2.2"
-    svelte-markdown: "npm:^0.4.0"
-    svelte-media-queries: "npm:^1.6.2"
-    svelte-preprocess: "npm:^5.1.0"
-    typescript: "npm:^5.2.2"
-    user-agent-data-types: "npm:^0.4.2"
-    vercel: "npm:^32.5.3"
-    vite: "npm:^4.5.0"
-    web-vitals: "npm:^3.5.0"
-    zod: "npm:^3.22.4"
-  languageName: unknown
-  linkType: soft
 
 "websocket@npm:^1.0.34":
   version: 1.0.34

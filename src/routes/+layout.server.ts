@@ -24,7 +24,7 @@ export const config = { runtime: 'edge' };
 export const load = (async ({ url, locals: { session }, cookies }) => {
 	const user = session ? cachedUsers[session.sub] ??= await getUser(session) : null;
 	if (session && !user) {
-		cookies.delete('auth-token', { path: '/', domain: '.voxelified.com' });
+		cookies.delete('auth-token', { path: '/', domain: '.hakumi.cafe' });
 		throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`);
 	}
 

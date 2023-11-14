@@ -6,8 +6,8 @@
 	<h1>{$t('home.landing')}</h1>
 	<p>{$t('home.landing.sub')}</p>
 
-	<a href="https://miku.voxelified.com" target="_blank">
-		<img src="https://miku.voxelified.com/miku.gif" alt="Landing Banner">
+	<a href="https://miku.hakumi.cafe" target="_blank">
+		<img src="https://miku.hakumi.cafe/miku.gif" alt="Landing Banner">
 	</a>
 </div>
 
