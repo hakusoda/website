@@ -221,7 +221,7 @@
 			height: 100%;
 			display: flex;
 			background: center url(/img/background.svg);
-			padding-top: 48px;
+			padding-top: 56px;
 			flex-direction: column;
 		}
 

@@ -2,7 +2,27 @@ import { get } from 'svelte/store';
 
 import { page } from '$app/stores';
 import { request } from './util';
-import type { User, UpdateTeamPayload, CreateTeamResponse, VerifySignInPayload, VerifySignUpPayload, VerifySignUpResponse, UpdateProfilePayload, UpdateTeamRolePayload, CreateUserPostPayload, VerifySudoModePayload, CreateUserPostResponse, VerifyNewDevicePayload, UpdateTeamMemberPayload, GetSignUpOptionsPayload, VerifyNewDeviceResponse, CreateMellowProfileSyncActionPayload, CreateMellowProfileSyncActionResponse, UpdateMellowServerProfileSyncingSettingsPayload } from './types';
+import type {
+	User,
+	UpdateTeamPayload,
+	CreateTeamResponse,
+	VerifySignInPayload,
+	VerifySignUpPayload,
+	VerifySignUpResponse,
+	UpdateProfilePayload,
+	UpdateTeamRolePayload,
+	CreateUserPostPayload,
+	VerifySudoModePayload,
+	CreateUserPostResponse,
+	VerifyNewDevicePayload,
+	UpdateTeamMemberPayload,
+	GetSignUpOptionsPayload,
+	VerifyNewDeviceResponse,
+	CreateMellowProfileSyncActionPayload,
+	CreateMellowProfileSyncActionResponse,
+	UpdateMellowUserServerSettingsPayload,
+	UpdateMellowServerProfileSyncingSettingsPayload
+} from './types';
 
 export function createProfile(username: string) {
 	return request<User>(`user`, 'POST', { username });
@@ -104,6 +124,10 @@ export async function uploadPostAttachment([image, contentType]: [ArrayBuffer, s
 
 export function uploadPostAttachments(images: [ArrayBuffer, string][]) {
 	return Promise.all(images.map(image => uploadPostAttachment(image)));
+}
+
+export function updateMellowUserServerSettings(serverId: string, payload: UpdateMellowUserServerSettingsPayload) {
+	return request(`mellow/server/${serverId}/user-settings`, 'PATCH', payload);
 }
 
 export function updateMellowServerProfileSyncingSettings(serverId: string, payload: UpdateMellowServerProfileSyncingSettingsPayload) {

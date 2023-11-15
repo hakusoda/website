@@ -363,6 +363,15 @@ export default {
 		'group_select.results': '{0} Item{0|s}',
 		'group_select.back': 'Back to Recent',
 
+		'mellow_onboarding.server': 'Welcome to {0}!',
+		'mellow_onboarding.server.sub': 'Before you continue, please review the section below.',
+		'mellow_onboarding.connections': 'Recommended connections',
+		'mellow_onboarding.connections.sub': 'This server utilises the following services to base your server profile on.\nCheck the server for details if you aren\'t sure what\'s required.',
+		'mellow_onboarding.connection.chosen': 'You have chosen to sync as {0}, you will be able to change this later.',
+		'mellow_onboarding.connection.summary': 'Connect your {0} Account to unlock roles, and more! ({1} actions)',
+		'mellow_onboarding.connection.accounts': '{0} Accounts',
+		'mellow_onboarding.done': 'You may now close this page, and return to Discord.',
+
 		'mellow_sync_action.type.0': 'Give Roles',
 		'mellow_sync_action.type.0.full': 'Gives Roles',
 		'mellow_sync_action.type.0.can_remove': 'Removable',

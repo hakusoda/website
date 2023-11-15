@@ -207,6 +207,51 @@ export interface DiscordRole {
 	unicode_emoji: string | null
 }
 
+export interface DiscordServer {
+	id: string
+	name: string
+	icon: string | null
+	roles: DiscordRole[]
+	owner?: boolean
+	splash: string | null
+	banner: string | null
+	//emojis: DiscordEmoji[]
+	owner_id: string
+	//features: DiscordGuildFeature[]
+	//stickers?: DiscordSticker[]
+	//mfa_level: DiscordGuildMFALevel
+	icon_hash?: string | null
+	//nsfw_level: DiscordGuildNSFWLevel
+	afk_timeout: number
+	description: string | null
+	permissions?: string
+	max_members?: number
+	//premium_tier: DiscordGuildPremiumTier
+	max_presences?: number | null
+	application_id: string | null
+	afk_channel_id: string | null
+	widget_enabled?: boolean
+	//welcome_screen?: DiscordWelcomeScreen
+	vanity_url_code: string | null
+	//preferred_locale: DiscordLocale
+	rules_channel_id: string | null
+	discovery_splash: string | null
+	system_channel_id: string | null
+	widget_channel_id?: string | null
+	verification_level: number
+	system_channel_flags: number
+	explicit_content_filter: number
+	max_video_channel_users?: number
+	safety_alerts_channel_id: string | null
+	approximate_member_count?: number
+	public_updates_channel_id: string | null
+	approximate_presence_count?: number
+	premium_subscription_count?: number
+	premium_progress_bar_enabled: boolean
+	default_message_notifications: number
+	max_stage_video_channel_users?: number
+}
+
 export interface DiscordChannel {
 	id: string
 	name: string
@@ -262,6 +307,12 @@ export interface UpdateProfilePayload {
 	bio?: string | null
 	name?: string | null
 	username?: string
+}
+
+export interface UpdateMellowUserServerSettingsPayload {
+	connections: {
+		id: string
+	}[]
 }
 
 export interface UpdateMellowServerProfileSyncingSettingsPayload {

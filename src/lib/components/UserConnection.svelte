@@ -3,7 +3,6 @@
 
 	import { t } from '../localisation';
 	import { invalidateAll } from '$app/navigation';
-	import { PUBLIC_GITHUB_ID } from '$env/static/public';
 	import { removeUserConnection } from '../api';
 	import type { UserConnectionType } from '../enums';
 	import { USER_CONNECTION_METADATA } from '../constants';

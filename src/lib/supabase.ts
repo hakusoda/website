@@ -12,9 +12,10 @@ export default createClient(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
 	}
 });
 
-export function handleResponse(response: PostgrestSingleResponse<any>) {
+export function handleResponse<T extends PostgrestSingleResponse<any>>(response: T) {
 	if (response.error) {
 		console.error(response.error);
 		throw requestError(500, RequestErrorType.DatabaseUpdate);
 	}
+	return response;
 }
