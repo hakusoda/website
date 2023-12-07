@@ -32,7 +32,7 @@
 
 <svelte:head>
 	<meta property="og:type" content="website">
-	<meta name="theme-color" content="#cc6699">
+	<meta name="theme-color" content="#1e1e20">
 	<meta name="og:site_name" content="HAKUMI">
 </svelte:head>
 
