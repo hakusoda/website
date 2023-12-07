@@ -1,8 +1,7 @@
 import { RequestErrorType } from '$lib/enums';
-import type { LayoutServerLoad } from './$types';
 import supabase, { handleResponse } from '$lib/supabase';
 import { requestError, verifyServerMembership } from '$lib/util/server';
-export const load = (async ({ url, params: { id }, locals: { session } }) => {
+export const load = async ({ url, params: { id }, locals: { session } }) => {
 	await verifyServerMembership(session, id, url);
 
 	const response = await supabase.from('mellow_servers')
@@ -16,4 +15,4 @@ export const load = (async ({ url, params: { id }, locals: { session } }) => {
 		throw requestError(404, RequestErrorType.NotFound);
 
 	return response.data;
-}) satisfies LayoutServerLoad;
+};

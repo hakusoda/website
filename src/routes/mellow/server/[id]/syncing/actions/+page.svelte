@@ -40,7 +40,15 @@
 	});
 </script>
 
-<div class="main">
+{#if !state}
+	<div class="header">
+		<div class="geist">
+			<h1>{$t('mellow.server.settings.syncing.actions.header')}</h1>
+			<p>{$t('mellow.server.settings.syncing.actions.summary')}</p>
+		</div>
+	</div>
+{/if}
+<div class="geist">
 	{#if state}
 		<MellowLinkEditor
 			onSave={() => linksContainer.scrollTo({ top: linksContainer.scrollHeight, behavior: 'smooth' })}
@@ -51,8 +59,12 @@
 			bind:target
 		/>
 	{:else}
-		<h1>{$t('mellow.server.settings.syncing.actions.header')}</h1>
-		<h2>{$t('mellow.server.settings.syncing.actions.summary')}</h2>
+		<div class="buttons">
+			<TextInput bind:value={itemFilter} placeholder={$t('action.search')}/>
+			<Button on:click={() => state++}>
+				<Plus/>{$t('mellow.server.settings.syncing.actions.create')}
+			</Button>
+		</div>
 		<div class="items" bind:this={linksContainer}>
 			{#each data.items.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item, index}
 				<MellowProfileAction
@@ -66,58 +78,23 @@
 				/>
 			{/each}
 		</div>
-		<div class="fade"/>
-		<div class="buttons">
-			<Button on:click={() => state++}>
-				<Plus/>{$t('mellow.server.settings.syncing.actions.create')}
-			</Button>
-			<TextInput bind:value={itemFilter} placeholder={$t('action.search')}/>
-		</div>
 	{/if}
 </div>
 
 <style lang="scss">
-	.main {
+	.items {
+		gap: 16px;
 		width: 100%;
-		margin: 0px 64px 32px;
+		height: 100%;
 		display: flex;
-		position: relative;
+		padding: 16px 0;
+		overflow: auto;
 		flex-direction: column;
-		h1 {
-			margin: 24px 0 16px;
-		}
-		h2 {
-			color: var(--color-secondary);
-			margin: 0 0 16px;
-			font-size: .9em;
-			font-weight: 400;
-			line-height: normal;
-			white-space: pre-line;
-		}
-		.items {
-			gap: 16px;
-			width: 100%;
-			height: 100%;
-			display: flex;
-			padding: 16px 0;
-			overflow: auto;
-			flex-direction: column;
-		}
-		.fade {
-			left: 0;
-			width: 100%;
-			bottom: 48px;
-			height: 32px;
-			position: absolute;
-			background: linear-gradient(to bottom, transparent, var(--background-primary));
-		}
-		& > .buttons {
-			gap: 16px;
-			margin: 16px 0 0;
-			display: flex;
-			:global(input) {
-				margin-left: auto;
-			}
-		}
+	}
+	.buttons {
+		gap: 16px;
+		margin: 16px 0 0;
+		display: flex;
+		justify-content: space-between;
 	}
 </style>

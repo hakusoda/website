@@ -36,6 +36,7 @@ export default {
 		'action.edit_profile': 'Edit Profile',
 		'action.view_profile': 'View Profile',
 		'action.save_changes': 'Save Changes',
+		'action.return_from_mellow': 'Return to HAKUMI',
 		'action.view_profile_sync_action': 'View Profile Sync Action',
 
 		'label.by': 'by',
@@ -210,17 +211,17 @@ export default {
 		'settings.integrations.applications': 'Applications',
 		'settings.integrations.applications.summary': 'This is a list of applications that you have authorised to access certain aspects of your account.',
 
-		'mellow.server.settings.home': 'Home',
+		'mellow.server.0': 'Server',
+		'mellow.server.1': 'Profile Sync Actions',
+		'mellow.server.2': 'Settings',
 
-		'mellow.server.settings.audit_log': 'Audit Log',
+		'mellow.server.settings': 'Server Settings',
+		'mellow.server.settings.0': 'General',
+		'mellow.server.settings.1': 'Logging',
+		'mellow.server.settings.2': 'Syncing',
+		'mellow.server.settings.3': 'Webhooks',
+		'mellow.server.settings.4': 'Action Log',
 
-		'mellow.server.settings.commands.custom': 'Custom Commands',
-
-		'mellow.server.settings.access': 'Access',
-		'mellow.server.settings.access.members': 'Members',
-
-		'mellow.server.settings.automation': 'Automation',
-		'mellow.server.settings.automation.logging': 'Logging',
 		'mellow.server.settings.automation.logging.channel': 'Logging Channel',
 		'mellow.server.settings.automation.logging.channel.category': 'Discord Channels',
 		'mellow.server.settings.automation.logging.types': 'Actions to log',
@@ -228,8 +229,6 @@ export default {
 		'mellow.server.settings.automation.webhooks.summary': 'Webhooks allow external services to be notified when certain events happen.',
 		'mellow.server.settings.automation.webhooks.create': 'Create New Webhook',
 
-		'mellow.server.settings.syncing': 'Profile Syncing',
-		'mellow.server.settings.syncing.actions': 'Actions',
 		'mellow.server.settings.syncing.actions.header': 'Profile Sync Actions',
 		'mellow.server.settings.syncing.actions.summary': 'Actions allow you to manage members based on information from external services.\nFor example, you could have an action that gives a member a role if they\'re in a Roblox Group.',
 		'mellow.server.settings.syncing.actions.create': 'Create New Action',

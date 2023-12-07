@@ -31,7 +31,7 @@
 					<p>{$t('settings.mellow.servers.server.members', [item.members[0].count])}</p>
 				</div>
 				<div class="buttons">
-					<Button href={`/mellow/server/${item.id}/settings`}>
+					<Button href={`/mellow/server/${item.id}`}>
 						<BoxArrowUpRight/>{$t('action.view')}
 					</Button>
 					<Button>

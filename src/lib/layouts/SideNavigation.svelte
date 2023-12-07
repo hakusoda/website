@@ -1,6 +1,5 @@
 <div class="main">
 	<div class="nav">
-		<div class="lazy"/>
 		<slot name="nav"/>
 	</div>
 	<slot/>
@@ -24,14 +23,6 @@
 				margin: 32px 16px 6px;
 				font-size: 12px;
 				font-weight: 500;
-			}
-			.lazy {
-				top: -58px;
-				left: 0;
-				width: 100%;
-				height: 58px;
-				position: absolute;
-				background: #00000040;
 			}
 		}
 	}

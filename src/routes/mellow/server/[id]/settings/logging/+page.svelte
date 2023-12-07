@@ -11,7 +11,6 @@
 
 	import Radio from '$lib/components/Radio.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
-	import RequestErrorUI from '$lib/components/RequestError.svelte';
 	export let data: PageData;
 
 	let error: RequestError | null = null;
@@ -54,37 +53,33 @@
 	}
 </script>
 
-<div class="main">
-	<p class="input-label">{$t('mellow.server.settings.automation.logging.channel')}</p>
-	<Select.Root bind:value={channel}>
-		<Select.Item value={null}>
-			{$t('label.disabled')}
-		</Select.Item>
-		<p>{$t('mellow.server.settings.automation.logging.channel.category')}</p>
-		{#each data.channels.sort((a, b) => (a?.position ?? 0) - (b?.position ?? 0)) as item}
-			{#if item.type === DiscordChannelType.GuildText}
-				<Select.Item value={item.id}>
-					#{item.name}
-				</Select.Item>
-			<!--{:else if item.type === DiscordChannelType.GuildCategory}
-				<p>{item.name}</p>-->
-			{/if}
-		{/each}
-	</Select.Root>
+<p class="input-label">{$t('mellow.server.settings.automation.logging.channel')}</p>
+<Select.Root bind:value={channel}>
+	<Select.Item value={null}>
+		{$t('label.disabled')}
+	</Select.Item>
+	<p>{$t('mellow.server.settings.automation.logging.channel.category')}</p>
+	{#each data.channels.sort((a, b) => (a?.position ?? 0) - (b?.position ?? 0)) as item}
+		{#if item.type === DiscordChannelType.GuildText}
+			<Select.Item value={item.id}>
+				#{item.name}
+			</Select.Item>
+		<!--{:else if item.type === DiscordChannelType.GuildCategory}
+			<p>{item.name}</p>-->
+		{/if}
+	{/each}
+</Select.Root>
 
-	<p class="input-label">{$t('mellow.server.settings.automation.logging.types')}</p>
-	<div class="types">
-		{#each Object.values(MellowServerLogType) as item}
-			{#if typeof item === 'number' && item}
-				<div class="item">
-					<Radio bind:value={enabled[item]}/>
-					<p>{$t(`mellow_server_logging_type.${item}`)}</p>
-				</div>
-			{/if}
-		{/each}
-	</div>
-
-	<RequestErrorUI data={error} background="var(--background-primary)"/>
+<p class="input-label">{$t('mellow.server.settings.automation.logging.types')}</p>
+<div class="types">
+	{#each Object.values(MellowServerLogType) as item}
+		{#if typeof item === 'number' && item}
+			<div class="item">
+				<Radio bind:value={enabled[item]}/>
+				<p>{$t(`mellow_server_logging_type.${item}`)}</p>
+			</div>
+		{/if}
+	{/each}
 </div>
 
 <UnsavedChanges
@@ -96,25 +91,25 @@
 />
 
 <style lang="scss">
-	.main {
-		margin: 32px 0 32px 64px;
-		.input-label {
-			color: var(--color-secondary);
-			margin: 32px 0 8px;
-			font-size: .9em;
+	.input-label {
+		color: var(--color-secondary);
+		margin: 32px 0 8px;
+		font-size: .9em;
+		&:first-child {
+			margin-top: 0;
 		}
-		.types {
-			gap: 8px;
+	}
+	.types {
+		gap: 8px;
+		display: flex;
+		flex-direction: column;
+		.item {
 			display: flex;
-			flex-direction: column;
-			.item {
-				display: flex;
-				align-items: center;
-				p {
-					margin: 0;
-					font-size: .9em;
-					margin-left: 16px;
-				}
+			align-items: center;
+			p {
+				margin: 0;
+				font-size: .9em;
+				margin-left: 16px;
 			}
 		}
 	}
