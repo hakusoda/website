@@ -68,7 +68,7 @@
 				if (newAvatar)
 					uploadAvatar2();
 				else
-					invalidateAll();
+					invalidateAll().then(() => saving = editing = false);
 			} else
 				saving = !(saveError = response);
 		} else if (newAvatar)
@@ -80,7 +80,7 @@
 	let newAvatarUri: string | null = null;
 	const uploadAvatar2 = () => uploadAvatar(data.id, newAvatar!).then(response => {
 		if (response.success)
-			invalidateAll();
+			invalidateAll().then(() => saving = editing = false);
 		else
 			saving = !(saveError = response);
 	});
