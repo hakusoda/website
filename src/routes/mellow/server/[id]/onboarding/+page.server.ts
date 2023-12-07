@@ -1,9 +1,12 @@
+import { redirect } from '@sveltejs/kit';
+
 import { requestError } from '$lib/util/server';
 import { getDiscordServer } from '$lib/discord';
+import { getUserConnectionUrl } from '$lib/util';
 import supabase, { handleResponse } from '$lib/supabase';
 import { MELLOW_SYNC_REQUIREMENT_CONNECTIONS } from '$lib/constants';
 import { RequestErrorType, UserConnectionType, MellowProfileSyncActionRequirementType } from '$lib/enums';
-export const load = async ({ params: { id }, locals: { session } }) => {
+export const load = async ({ url, params: { id }, locals: { session } }) => {
 	if (!session)
 		throw requestError(401, RequestErrorType.Unauthenticated);
 
@@ -16,7 +19,8 @@ export const load = async ({ params: { id }, locals: { session } }) => {
 					type: MellowProfileSyncActionRequirementType
 				}[]
 			}[]
-		}>('name, avatar_url, actions:mellow_binds ( requirements:mellow_bind_requirements ( type ) )')
+			skip_onboarding_to: UserConnectionType | null
+		}>('name, avatar_url, actions:mellow_binds ( requirements:mellow_bind_requirements ( type ) ), skip_onboarding_to')
 		.eq('id', id)
 		.limit(1)
 		.maybeSingle();
@@ -25,7 +29,10 @@ export const load = async ({ params: { id }, locals: { session } }) => {
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);
 
-	const { actions, ...data } = response.data;
+	const { actions, skip_onboarding_to, ...data } = response.data;
+	if (skip_onboarding_to !== null && url.searchParams.get('done') !== '')
+		throw redirect(302, getUserConnectionUrl(skip_onboarding_to) + `&state=mlw${id}mlwSKIPmlw`);
+
 	const connections: { type: UserConnectionType, actions: number }[] = [];
 	for (const action of actions) {
 		for (const type of [...new Set(action.requirements.map(item => MELLOW_SYNC_REQUIREMENT_CONNECTIONS[item.type]!).filter(i => i))]) {
@@ -44,6 +51,7 @@ export const load = async ({ params: { id }, locals: { session } }) => {
 		.then(response => handleResponse(response).data!) : [];
 	return {
 		...data,
+		skip: skip_onboarding_to !== null,
 		discord: getDiscordServer(id).then(response => {
 			if (!response.success)
 				throw requestError(500, RequestErrorType.ExternalRequestError);

@@ -25,7 +25,7 @@
 
 	$: bannerUrl = data.discord.banner ? `https://cdn.discordapp.com/banners/${data.discord.id}/${data.discord.banner}.webp?size=512` : `https://cdn.discordapp.com/icons/${data.discord.id}/${data.discord.icon}.webp?size=512`;
 
-	let state = 0;
+	let state = data.skip ? 1 : 0;
 	let saving = false;
 	const save = async () => {
 		saving = true;

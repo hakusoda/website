@@ -1,5 +1,5 @@
 import type { ZodIssue } from 'zod';
-import type { RequestErrorType, DiscordChannelType, UserNotificationType, UserNotificationState, MellowServerAuditLogType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
+import type { RequestErrorType, DiscordChannelType, UserConnectionType, UserNotificationType, UserNotificationState, MellowServerAuditLogType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
 export interface User {
 	id: string
 	bio: string | null
@@ -317,6 +317,7 @@ export interface UpdateMellowUserServerSettingsPayload {
 
 export interface UpdateMellowServerProfileSyncingSettingsPayload {
 	default_nickname?: string
+	skip_onboarding_to?: UserConnectionType | null
 	allow_forced_syncing?: boolean
 }
 

@@ -6,8 +6,9 @@
 	import type { PageData } from './$types';
 	import { invalidateAll } from '$app/navigation';
 	import type { ApiRequestError } from '$lib/types';
-	import { MellowDefaultNickname } from '$lib/enums';
-	import { updateMellowServerProfileSyncingSettings} from '$lib/api';
+	import { USER_CONNECTION_METADATA } from '$lib/constants';
+	import { updateMellowServerProfileSyncingSettings } from '$lib/api';
+	import { UserConnectionType, MellowDefaultNickname } from '$lib/enums';
 
 	import Radio from '$lib/components/Radio.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
@@ -19,11 +20,13 @@
 	let error: ApiRequestError | null = null;
 	let saving = false;
 	let defaultNickname = data.default_nickname;
+	let skipOnboardingTo = data.skip_onboarding_to;
 	let allowForcedSyncing = data.allow_forced_syncing;
 	const save = async () => {
 		saving = !(error = null);
 		const response = await updateMellowServerProfileSyncingSettings($page.params.id, {
 			default_nickname: defaultNickname === data.default_nickname ? undefined : defaultNickname,
+			skip_onboarding_to: skipOnboardingTo === data.skip_onboarding_to ? undefined : skipOnboardingTo,
 			allow_forced_syncing: allowForcedSyncing === data.allow_forced_syncing ? undefined : allowForcedSyncing
 		});
 		if (response.success)
@@ -36,7 +39,6 @@
 <div class="main">
 	<p class="input-label">{$t('mellow.server.settings.syncing.settings.nickname')}</p>
 	<p class="summary">{$t('mellow.server.settings.syncing.settings.nickname.summary')}</p>
-	
 	<Select.Root bind:value={defaultNickname}>
 		{#each Object.values(MellowDefaultNickname) as item}
 			{#if !/^[A-Z]/.test(item)}
@@ -45,6 +47,21 @@
 						<RobloxIcon/>
 					{/if}
 					{$t(`mellow_default_nickname.${item}`)}
+				</Select.Item>
+			{/if}
+		{/each}
+	</Select.Root>
+
+	<p class="input-label">{$t('mellow.server.settings.syncing.settings.skip_onboarding')}</p>
+	<Select.Root bind:value={skipOnboardingTo}>
+		<Select.Item value={null}>
+			{$t('mellow.server.settings.syncing.settings.skip_onboarding.default')}
+		</Select.Item>
+		{#each Object.values(UserConnectionType) as item}
+			{#if typeof item === 'number' && item}
+				<Select.Item value={item}>
+					<svelte:component this={USER_CONNECTION_METADATA[item]?.icon}/>
+					{$t('mellow.server.settings.syncing.settings.skip_onboarding.connect', [$t(`user_connection.type.${item}`)])}
 				</Select.Item>
 			{/if}
 		{/each}
@@ -60,7 +77,7 @@
 </div>
 
 <UnsavedChanges
-	show={defaultNickname !== data.default_nickname || allowForcedSyncing !== data.allow_forced_syncing}
+	show={defaultNickname !== data.default_nickname || skipOnboardingTo !== data.skip_onboarding_to || allowForcedSyncing !== data.allow_forced_syncing}
 	error={error ? $t(`request_error.${error.error}`) : ''}
 	{save}
 	{reset}
