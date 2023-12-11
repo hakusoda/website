@@ -1,4 +1,5 @@
 import adapter from '@sveltejs/adapter-vercel';
+import { mdsvex } from 'mdsvex';
 import preprocess from 'svelte-preprocess';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
@@ -8,8 +9,14 @@ export default {
 		csrf: { checkOrigin: false },
 		adapter: adapter({ runtime: 'edge' })
 	},
-	extensions: ['.svelte'],
+	extensions: ['.svelte', '.md'],
 	preprocess: [
+		mdsvex({
+			layout: {
+				_: './src/routes/(docs)/article.svelte'
+			},
+			extensions: ['.md']
+		}),
 		preprocess({}),
 		vitePreprocess()
 	]

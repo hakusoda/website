@@ -44,6 +44,7 @@ export default {
 		'label.events': '{0} Event{0|s}',
 		'label.reason': 'Reason',
 		'label.disabled': 'Disabled',
+		'label.overview': 'Overview',
 		'label.team_roles': 'Team Roles',
 		'label.permissions': 'Permissions',
 		'label.user_reason': 'User-facing Reason',
@@ -413,6 +414,16 @@ export default {
 		'mellow_sync_action.explanation.3': 'Cancels Server Profile Sync',
 		'mellow_sync_action.explanation.end.0': ' if they meet {0} requirement{0|s}.',
 		'mellow_sync_action.explanation.end.1': ' if they meet at least one of {0} requirement{0|s}.',
+
+		'docs': 'Documentation',
+		'docs.articles.api': 'API',
+		'docs.articles.mellow': 'mellow',
+		'docs.articles.mellow.quickstart': 'Quickstart',
+
+		'reference': 'Reference',
+		'reference.articles.rest-api': 'Rest API',
+		'reference.articles.rest-api.team': 'Team',
+		'reference.articles.rest-api.user': 'User',
 
 		'error.page': '(。>︿<)_θ',
 		'error.page2': 'oh noes, something\'s wrong!',
