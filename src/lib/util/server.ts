@@ -2,20 +2,20 @@ import { get } from '@vercel/edge-config';
 import { fail, error, redirect } from '@sveltejs/kit';
 import type { ZodAny, ZodIssue, ZodSchema } from 'zod';
 
-import supabase from '../supabase';
+import supabase, { handleResponse } from '../supabase';
 import { hasBit } from '.';
 import { RequestErrorType } from '$lib/enums';
 import type { FeatureFlag } from '$lib/enums';
 import type { RequestError, UserSessionJWT } from '$lib/types';
-export async function verifyServerMembership(session: UserSessionJWT | null, serverId: string, url: URL) {
+export async function verifyServerMembership(session: UserSessionJWT | null, server_id: string, url: URL) {
 	if (!session)
 		throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`);
 
-	const response = await supabase.from('mellow_server_members').select('id').eq('user_id', session.sub).eq('server_id', serverId).limit(1).maybeSingle();
-	if (response.error) {
-		console.error(response.error);
-		throw requestError(500, RequestErrorType.ExternalRequestError);
-	}
+	const response = await supabase.rpc('mellow_server_accessible_by_user2', {
+		user_id: session.sub,
+		server_id
+	});
+	handleResponse(response);
 
 	if (!response.data)
 		throw requestError(403, RequestErrorType.Unauthorised);

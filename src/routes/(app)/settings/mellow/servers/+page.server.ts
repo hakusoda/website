@@ -1,25 +1,17 @@
-import supabase from '$lib/supabase';
 import { requestError } from '$lib/util/server';
 import { getDiscordToken } from '$lib/verification';
 import { RequestErrorType } from '$lib/enums';
 import type { PageServerLoad } from './$types';
+import supabase, { handleResponse } from '$lib/supabase';
 import { createMellowServerDiscordRedirectUrl } from '$lib/util';
 
 export const config = { regions: ['iad1'], runtime: 'edge' };
 export const load = (async ({ url, parent }) => {
 	const { session } = await parent();
-	const response = await supabase.from('mellow_server_members').select<string, {
-		server: {
-			id: string
-			name: string
-			members: [{ count: number }]
-			avatar_url: string
-		}
-	}>('server:mellow_servers ( id, name, avatar_url, members:mellow_server_members ( count ) )').eq('user_id', session!.sub);
-	if (response.error) {
-		console.error(response.error);
-		throw requestError(500, RequestErrorType.ExternalRequestError);
-	}
+	const response = await supabase.rpc('website_get_user_mellow_servers2', {
+		target_user_id: session!.sub
+	});
+	handleResponse(response);
 
 	let allServers: {
 		id: string
@@ -64,5 +56,5 @@ export const load = (async ({ url, parent }) => {
 		allServers = response.data?.data ?? [];
 	}
 
-	return { servers: response.data.map(item => item.server), allServers };
+	return { servers: response.data as { id: string, name: string, avatar_url: string | null }[], allServers };
 }) satisfies PageServerLoad;

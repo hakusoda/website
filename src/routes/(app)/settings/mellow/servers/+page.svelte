@@ -28,7 +28,6 @@
 				<Avatar src={item.avatar_url} size="sm2" transparent/>
 				<div class="name">
 					<h1>{item.name}</h1>
-					<p>{$t('settings.mellow.servers.server.members', [item.members[0].count])}</p>
 				</div>
 				<div class="buttons">
 					<Button href={`/mellow/server/${item.id}`}>

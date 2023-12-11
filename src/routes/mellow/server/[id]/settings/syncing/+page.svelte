@@ -30,7 +30,7 @@
 			allow_forced_syncing: allowForcedSyncing === data.allow_forced_syncing ? undefined : allowForcedSyncing
 		});
 		if (response.success)
-			return invalidateAll();
+			return invalidateAll().then(() => saving = false);
 		saving = !(error = response);
 	};
 	const reset = () => (
