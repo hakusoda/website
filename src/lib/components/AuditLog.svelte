@@ -1,28 +1,48 @@
 <script lang="ts">
 	import { t } from '../localisation';
+	import { page } from '$app/stores';
 
 	import Avatar from './Avatar.svelte';
 
 	import CaretDown from '../icons/CaretDown.svelte';
 	export let text: string;
 	export let open: boolean;
-	export let author: string;
-	export let avatar: string;
+	export let author: {
+		id: string
+		name: string | null
+		username: string
+		avatar_url: string | null
+	};
 	export let openable: boolean;
 	export let createdAt: string;
-	export let authorName: string | null = null;
+	export let target_user: { name: string | null, username: string } | null = null;
 </script>
 
 <div class="audit-log">
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<svelte:element this={openable ? 'button' : 'div'} type="button" class="header" on:click>
-		<Avatar src={avatar} size="xs" circle/>
+		<Avatar src={author.avatar_url} size="xs" circle/>
 		<div class="details">
 			<h1>
-				<a href={`/user/${author}`}>
-					{authorName ?? `@${author}`}
-				</a>
-				{text}
+				{#if $page.data.session?.sub === author.id}
+					{$t('label.you_monster')}
+				{:else}
+					<a href={`/user/${author.username}`}>
+						{author.name ?? `@${author.username}`}
+					</a>
+				{/if}
+				{#if target_user}
+					{#each text.split(' ') as item}
+						{#if item === '{user}'}
+							<a href={`/user/${target_user.username}`}>
+								{target_user.name ?? `@${target_user.username}`}</a>&nbsp
+						{:else}
+							{item}&nbsp
+						{/if}
+					{/each}
+				{:else}
+					{text}
+				{/if}
 			</h1>
 		</div>
 		<p class="created">{$t('time_ago', [createdAt])}</p>

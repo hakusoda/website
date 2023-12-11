@@ -6,22 +6,10 @@ import { RequestErrorType } from '$lib/enums';
 import type { UserSessionJWT } from '$lib/types';
 import { getUserNotifications } from '$lib/database';
 import type { LayoutServerLoad } from './$types';
-import type { UserConnectionType } from '$lib/enums';
 
-const cachedUsers: Record<string, {
-	id: string
-	name: string | null
-	username: string
-	avatar_url: string
-	connections: {
-		sub: string
-		type: UserConnectionType
-	}[]
-	mellow_pending: boolean
-} | null> = {};
 export const config = { runtime: 'edge' };
 export const load = (async ({ url, locals: { session }, cookies }) => {
-	const user = session ? cachedUsers[session.sub] ??= await getUser(session) : null;
+	const user = session ? await getUser(session) : null;
 	if (session && !user) {
 		cookies.delete('auth-token', { path: '/', domain: '.hakumi.cafe' });
 		throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`);
@@ -37,7 +25,7 @@ export const load = (async ({ url, locals: { session }, cookies }) => {
 
 async function getUser(session: UserSessionJWT) {
 	const response = await supabase.from('users')
-		.select('id, name, username, avatar_url, mellow_pending, connections:user_connections ( sub, type )')
+		.select('id, name, username, avatar_url, created_at')
 		.eq('id', session.sub)
 		.limit(1)
 		.maybeSingle();

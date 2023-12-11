@@ -1,8 +1,7 @@
 import { isUUID } from '$lib/util';
-import type { PageServerLoad } from './$types';
 import supabase, { handleResponse } from '$lib/supabase';
 export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ params: { name } }) => {
+export async function load({ params: { name } }) {
 	const response = await supabase.from('teams')
 		.select<string, {
 			applications: {
@@ -19,4 +18,4 @@ export const load = (async ({ params: { name } }) => {
 	handleResponse(response);
 
 	return response.data!;
-}) satisfies PageServerLoad;
+};

@@ -6,7 +6,11 @@
 	
 	import { dev } from '$app/environment';
 	import { theme } from '$lib/settings';
+	import { sudoModal } from '$lib/store';
 	import { storeKeyPairForAuthentication } from '$lib/crypto';
+
+	import EnableSudo from '$lib/modals/EnableSudo.svelte';
+	import PageLoader from '$lib/components/PageLoader.svelte';
 	inject({ mode: dev ? 'development' : 'production' });
 	injectSpeedInsights();
 
@@ -17,6 +21,10 @@
 
 <div class={`app theme-${themeName}`}>
 	<slot/>
+	<PageLoader/>
+	{#if $sudoModal}
+		<EnableSudo/>
+	{/if}
 </div>
 
 <svelte:head>
@@ -29,11 +37,9 @@
 	.app {
 		width: 100vw;
 		height: 100vh;
-		display: flex;
 		overflow: auto;
 		min-height: 100vh;
 		background: var(--background-primary);
-		flex-direction: column;
 
 		--color-link: hsl(330 90% 80%);
 		--color-verified: color-mix(in srgb, var(--button-background) 75%, #fff);

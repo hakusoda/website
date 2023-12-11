@@ -23,11 +23,9 @@
 		<AuditLog
 			open={open.includes(item.id)}
 			text={$t(`mellow_server_audit_log.type.${item.type}`, [item])}
-			author={item.author.username}
-			avatar={item.author.avatar_url}
+			author={item.author}
 			openable={OPENABLE.includes(item.type)}
 			createdAt={item.created_at}
-			authorName={item.author.name}
 			on:click={OPENABLE.includes(item.type) ? () => open = open.includes(item.id) ? open.filter(i => i !== item.id) : [...open, item.id] : null}
 		>
 			{#if item.type === MellowServerAuditLogType.UpdateProfileSyncingSettings}

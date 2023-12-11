@@ -12,7 +12,7 @@
 	$: myRole = data.members.find(member => member.user.id === data.user?.id)?.role;
 </script>
 
-<div class="main">
+<div class="geist">
 	<Tabs.Root bind:value={tab}>
 		<Tabs.Item title={$t('team.settings.access.members.tab', [data.members.length])} value={0}>
 			<div class="members">
@@ -54,18 +54,17 @@
 </div>
 
 <style lang="scss">
-	.main {
-		width: 100%;
-		margin: 64px;
-		.members {
-			gap: 16px;
-			display: flex;
-			flex-direction: column;
-		}
-		.tip {
-			color: var(--color-secondary);
-			font-size: .9em;
-			margin-top: 32px;
-		}
+	.geist {
+		margin-top: 32px;
+	}
+	.members {
+		gap: 16px;
+		display: flex;
+		flex-direction: column;
+	}
+	.tip {
+		color: var(--color-secondary);
+		font-size: .9em;
+		margin-top: 32px;
 	}
 </style>

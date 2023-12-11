@@ -68,7 +68,7 @@
 			{/if}
 			{$t('action.next')}
 		</Button>
-		<Button href="/settings/access/teams" colour="secondary" disabled={creating}>
+		<Button href="/settings/teams" colour="secondary" disabled={creating}>
 			<X/>{$t('action.cancel')}
 		</Button>
 	</div>

@@ -19,9 +19,13 @@
 	$: discordUrl = `https://discord.com/api/oauth2/authorize?client_id=1068554282481229885&redirect_uri=${encodeURIComponent(createMellowServerDiscordRedirectUrl($page.url.origin))}&response_type=code&scope=identify%20guilds`;
 </script>
 
-<div class="main">
-	<h1>{$t('settings.mellow.servers')}</h1>
-	<p class="add">{$t('settings.mellow.servers.add')}</p>
+<div class="header">
+	<div class="geist">
+		<h1>{$t('settings.mellow.servers')}</h1>
+		<p>{$t('settings.mellow.servers.add')}</p>
+	</div>
+</div>
+<div class="geist">
 	<div class="servers">
 		{#each data.servers.sort((a, b) => a.name.localeCompare(b.name)) as item}
 			<div class="item focusable">
@@ -55,56 +59,46 @@
 </div>
 
 <style lang="scss">
-	.main {
-		width: 100%;
-		padding: 0 64px 32px;
-		overflow: auto;
-		.add {
-			color: var(--color-secondary);
-			font-size: .9em;
-		}
-		.servers {
-			gap: 16px;
-			margin: 24px 0 16px;
+	.servers {
+		gap: 16px;
+		margin: 24px 0 16px;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+		.item {
 			display: flex;
-			flex-wrap: wrap;
-			.item {
-				width: calc(30% - 16px);
-				display: flex;
-				padding: 16px 8px;
-				background: var(--background-secondary);
-				align-items: center;
-				border-radius: 8px;
+			padding: 16px 8px;
+			background: var(--background-secondary);
+			align-items: center;
+			border-radius: 8px;
+			flex-direction: column;
+			text-decoration: none;
+			.name {
+				width: 100%;
+				margin-top: 16px;
+				text-align: center;
+				white-space: nowrap;
 				flex-direction: column;
-				text-decoration: none;
-				.name {
-					width: 100%;
-					margin-top: 16px;
-					text-align: center;
-					white-space: nowrap;
-					flex-direction: column;
-					h1 {
-						margin: 0;
-						overflow: hidden;
-						font-size: 1.25em;
-						font-weight: 600;
-						text-overflow: ellipsis;
-					}
-					p {
-						color: var(--color-secondary);
-						margin: 4px 0 0;
-						font-size: .8em;
-					}
+				h1 {
+					margin: 0;
+					overflow: hidden;
+					font-size: 1.25em;
+					font-weight: 600;
+					text-overflow: ellipsis;
 				}
-				&.unknown {
-					background: none;
-					box-shadow: 0 0 0 1px var(--border-primary);
+				p {
+					color: var(--color-secondary);
+					margin: 4px 0 0;
+					font-size: .8em;
 				}
-				.buttons {
-					gap: 8px;
-					display: flex;
-					margin-top: 16px;
-				}
+			}
+			&.unknown {
+				background: none;
+				box-shadow: 0 0 0 1px var(--border-primary);
+			}
+			.buttons {
+				gap: 8px;
+				display: flex;
+				margin-top: 16px;
 			}
 		}
 	}

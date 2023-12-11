@@ -43,11 +43,14 @@
 	$: canEdit = data.session!.sub === data.owner_id || hasBit(selfPermissions, TeamRolePermission.ManageRoles) || hasBit(selfPermissions, TeamRolePermission.Administrator);
 </script>
 
-<div class="team-roles">
-	{#if !editing}
-		<h1>{$t('team.settings.access.roles')}</h1>
-		<p class="summary">{$t('team.settings.access.roles.summary')}</p>
-
+{#if !editing}
+	<div class="header">
+		<div class="geist">
+			<h1>{$t('team.settings.access.roles')}</h1>
+			<p>{$t('team.settings.access.roles.summary')}</p>
+		</div>
+	</div>
+	<div class="geist">
 		<div class="items">
 			{#each data.roles as item}
 				<div class="item">
@@ -73,19 +76,20 @@
 				</div>
 			{/each}
 		</div>
-	{:else}
-		<h1>
-			{$t('team.settings.access.roles')}
-			<ArrowRightShort size={40}/>
-			<p>{editing.name}</p>
-		</h1>
-		<button type="button" class="return" on:click={() => editing = null}>
-			<ArrowLeft/>{$t('team.settings.access.roles.return')}
-		</button>
-
+	</div>
+{:else}
+	<div class="header">
+		<div class="geist">
+			<h1>{$t('team.settings.access.roles')} — {editing.name}</h1>
+			<button type="button" class="return" on:click={() => editing = null}>
+				<ArrowLeft/>{$t('team.settings.access.roles.return')}
+			</button>
+		</div>
+	</div>
+	<div class="geist">
 		<p class="input-label">{$t('mellow_link_editor.name')}</p>
 		<TextInput bind:value={editingName}/>
-
+	
 		<p class="input-label">{$t('label.permissions')}</p>
 		<div class="permissions">
 			<!-- TODO: not do this... -->
@@ -129,72 +133,49 @@
 				<p>{$t('team_role_permission.16')}</p>
 			</div>
 		</div>
+	</div>
 
-		<UnsavedChanges
-			show={editingName !== editing.name || editingPermissions !== editing.permissions}
-			error={error ? $t(`request_error.${error.error}`) : ''}
-			{save}
-			{reset}
-			{saving}
-		/>
-	{/if}
-</div>
+	<UnsavedChanges
+		show={editingName !== editing.name || editingPermissions !== editing.permissions}
+		error={error ? $t(`request_error.${error.error}`) : ''}
+		{save}
+		{reset}
+		{saving}
+	/>
+{/if}
 
 <style lang="scss">
-	h1 {
-		display: flex;
-		line-height: normal;
-		:global(svg) {
-			color: var(--color-secondary);
-			margin: 0 12px;
-			animation: appear .5s;
-		}
-		p {
-			margin: 0;
-			opacity: 0;
-			animation: appear .5s .1s forwards;
-			line-height: normal;
-		}
+	:global(.text-input) {
+		width: 512px;
 	}
-	.team-roles {
-		width: 100%;
-		margin: 0 64px 32px;
-		:global(.text-input) {
-			width: 512px;
-		}
-		.summary {
-			color: var(--color-secondary);
-			font-size: .9em;
-			margin-bottom: 32px;
-		}
-		.items {
-			gap: 8px;
+	.items {
+		gap: 16px;
+		display: flex;
+		margin-top: 32px;
+		flex-direction: column;
+		.item {
 			display: flex;
-			flex-direction: column;
-			.item {
+			padding: 16px 20px 16px 28px;
+			background: var(--background-secondary);
+			align-items: center;
+			border-radius: 36px;
+			.name {
+				margin-left: 16px;
+				h1 {
+					margin: 0;
+					font-size: 1em;
+					font-weight: 500;
+				}
+				p {
+					color: var(--color-secondary);
+					margin: 4px 0 0;
+					font-size: .8em;
+				}
+			}
+			.buttons {
+				gap: 16px;
+				margin: 0 0 0 auto;
 				display: flex;
-				padding: 16px 20px 16px 28px;
-				background: var(--background-secondary);
-				align-items: center;
-				border-radius: 36px;
-				.name {
-					margin-left: 16px;
-					h1 {
-						margin: 0;
-						font-size: 1em;
-						font-weight: 500;
-					}
-					p {
-						color: var(--color-secondary);
-						margin: 4px 0 0;
-						font-size: .8em;
-					}
-				}
-				.buttons {
-					gap: 16px;
-					margin: 0 0 0 auto;
-					display: flex;
-				}
 			}
 		}
 	}

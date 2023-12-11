@@ -18,10 +18,12 @@
 	export let data: PageData;
 </script>
 
-<div class="main">
-	<h1>{$t('user_action.user.teams')}</h1>
-	<p class="summary">{$t('settings.access.teams.summary')}</p>
-
+<div class="header">
+	<div class="geist">
+		<h1>{$t('user_action.user.teams')}</h1>
+	</div>
+</div>
+<div class="geist teams-page">
 	<div class="teams">
 		{#each data.teams.sort((a, b) => a.display_name.localeCompare(b.display_name)) as item}
 			<a class="item focusable" href={`/team/${item.name}`}>
@@ -56,7 +58,7 @@
 				</div>
 				<div class="buttons">
 					{#if data.session?.sub === item.owner?.id || (item.role && hasBit(item.role.permissions, TeamRolePermission.ManageTeam))}
-						<a href={`/team/${item.name}/settings/profile`}>
+						<a href={`/team/${item.name}/dashboard/profile`}>
 							<GearFill/>{$t('action.manage')}
 						</a>
 					{/if}
@@ -67,118 +69,108 @@
 			</a>
 		{/each}
 	</div>
-
-	<Button href="/settings/access/teams/create">
+	<Button href="/settings/teams/create">
 		<Plus/>{$t('settings.access.teams.create')}
 	</Button>
 </div>
 
 <style lang="scss">
-	.main {
-		width: 100%;
-		padding: 0 64px 32px 64px;
-		overflow: auto;
-		.summary {
-			color: var(--color-secondary);
-			font-size: .9em;
-			line-height: 1.25;
-			white-space: pre-wrap;
-			margin-bottom: 32px;
-		}
-		.teams {
-			gap: 16px;
-			margin: 0 0 16px;
+	.teams-page {
+		margin-top: 32px;
+		margin-bottom: 32px;
+	}
+	.teams {
+		gap: 16px;
+		margin: 0 0 16px;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+		.item {
 			display: flex;
-			flex-wrap: wrap;
-			.item {
-				width: calc(30% - 16px);
+			padding: 16px;
+			overflow: hidden;
+			transition: box-shadow .5s;
+			background: var(--background-secondary);
+			box-shadow: inset 0 0 0 1px var(--border-primary);
+			border-radius: 16px;
+			flex-direction: column;
+			text-decoration: none;
+			.header {
 				display: flex;
-				padding: 16px;
-				overflow: hidden;
-				transition: box-shadow .5s;
-				background: var(--background-secondary);
-				box-shadow: inset 0 0 0 1px var(--border-primary);
-				border-radius: 16px;
-				flex-direction: column;
-				text-decoration: none;
-				.header {
+				align-items: center;
+				.name {
+					width: 100%;
 					display: flex;
-					align-items: center;
-					.name {
-						width: 100%;
-						display: flex;
-						overflow: hidden;
-						margin-left: 16px;
-						flex-direction: column;
-						h1 {
-							margin: 0;
-							overflow: hidden;
-							max-width: 100%;
-							font-size: 1.25em;
-							font-weight: 600;
-							white-space: nowrap;
-							text-overflow: ellipsis;
-							:global(svg) {
-								color: var(--color-verified);
-								margin-left: 2px;
-							}
-						}
-						p {
-							color: var(--color-secondary);
-							margin: 2px 0 0;
-							font-size: .8em;
-							line-height: normal;
-						}
-					}
-				}
-				.details {
-					gap: 8px;
-					margin: 8px 0 0;
-					height: fit-content;
-					display: flex;
-					p {
-						gap: 6px;
-						color: var(--color-secondary);
+					overflow: hidden;
+					margin-left: 16px;
+					flex-direction: column;
+					h1 {
 						margin: 0;
-						height: 24px;
-						display: flex;
-						padding: 0 10px;
 						overflow: hidden;
-						font-size: .75em;
-						box-shadow: 0 0 0 1px var(--border-secondary);
+						max-width: 100%;
+						font-size: 1.25em;
+						font-weight: 600;
 						white-space: nowrap;
-						align-items: center;
-						border-radius: 16px;
+						text-overflow: ellipsis;
 						:global(svg) {
-							min-width: 14px;
+							color: var(--color-verified);
+							margin-left: 2px;
 						}
 					}
-				}
-				.buttons {
-					display: flex;
-					margin-top: 16px;
-					a, button {
-						gap: 8px;
+					p {
 						color: var(--color-secondary);
-						border: none;
-						cursor: pointer;
-						padding: 0;
-						display: flex;
-						font-size: .9em;
-						background: none;
-						font-family: var(--font-primary);
-						text-decoration: none;
-						&:hover {
-							color: var(--color-primary);
-						}
-					}
-					.leave {
-						margin-left: auto;
+						margin: 2px 0 0;
+						font-size: .8em;
+						line-height: normal;
 					}
 				}
-				&:hover {
-					box-shadow: inset 0 0 0 1px var(--border-secondary);
+			}
+			.details {
+				gap: 8px;
+				margin: 8px 0 0;
+				height: fit-content;
+				display: flex;
+				p {
+					gap: 6px;
+					color: var(--color-secondary);
+					margin: 0;
+					height: 24px;
+					display: flex;
+					padding: 0 10px;
+					overflow: hidden;
+					font-size: .75em;
+					box-shadow: 0 0 0 1px var(--border-secondary);
+					white-space: nowrap;
+					align-items: center;
+					border-radius: 16px;
+					:global(svg) {
+						min-width: 14px;
+					}
 				}
+			}
+			.buttons {
+				display: flex;
+				margin-top: 16px;
+				a, button {
+					gap: 8px;
+					color: var(--color-secondary);
+					border: none;
+					cursor: pointer;
+					padding: 0;
+					display: flex;
+					font-size: .9em;
+					background: none;
+					font-family: var(--font-primary);
+					text-decoration: none;
+					&:hover {
+						color: var(--color-primary);
+					}
+				}
+				.leave {
+					margin-left: auto;
+				}
+			}
+			&:hover {
+				box-shadow: inset 0 0 0 1px var(--border-secondary);
 			}
 		}
 	}

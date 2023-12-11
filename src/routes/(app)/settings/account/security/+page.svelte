@@ -51,48 +51,39 @@
 	};
 </script>
 
-<div class="security">
-	<h1>{$t('settings.access.security.devices')}</h1>
-	<p class="summary">{$t('settings.access.security.devices.summary')}</p>
-
-	<div class="devices">
-		{#each data.devices as item}
-			<SecurityDevice {...item}/>
-		{/each}
-	</div>
-	<div class="buttons">
-		<DropdownMenu.Root bind:trigger>
-			<Button slot="trigger" on:click={trigger} disabled={addingKey}>
-				<Plus/>{$t('settings.access.security.create')}
-			</Button>
-	
-			<p>{$t('settings.access.security.create.name')}</p>
-			<TextInput bind:value={securityKeyName}/>
-			<br/><br/>
-			<button type="button" on:click={addDevice}>
-				<Check/>{$t('action.continue')}
-			</button>
-		</DropdownMenu.Root>
-	</div>
-	<RequestError data={error} background="var(--background-primary)"/>
+<div class="header">
+	<h2>{$t('settings.access.security.devices')}</h2>
+	<p>{$t('settings.access.security.devices.summary')}</p>
 </div>
 
+<div class="devices">
+	{#each data.devices as item}
+		<SecurityDevice {...item}/>
+	{/each}
+</div>
+<div class="buttons">
+	<DropdownMenu.Root bind:trigger>
+		<Button slot="trigger" on:click={trigger} disabled={addingKey}>
+			<Plus/>{$t('settings.access.security.create')}
+		</Button>
+
+		<p>{$t('settings.access.security.create.name')}</p>
+		<TextInput bind:value={securityKeyName}/>
+		<br/><br/>
+		<button type="button" on:click={addDevice}>
+			<Check/>{$t('action.continue')}
+		</button>
+	</DropdownMenu.Root>
+</div>
+<RequestError data={error} background="var(--background-primary)"/>
+
 <style lang="scss">
-	.security {
-		width: 100%;
-		margin: 0 64px 32px;
-		.summary {
-			color: var(--color-secondary);
-			font-size: .9em;
-			margin-bottom: 32px;
-		}
-		.devices {
-			gap: 16px;
-			display: flex;
-			flex-direction: column;
-		}
-		.buttons {
-			margin: 16px 0;
-		}
+	.devices {
+		gap: 16px;
+		display: flex;
+		flex-direction: column;
+	}
+	.buttons {
+		margin: 16px 0;
 	}
 </style>

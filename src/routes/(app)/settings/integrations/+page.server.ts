@@ -1,4 +1,4 @@
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad } from './applications/$types';
 import supabase, { handleResponse } from '$lib/supabase';
 export const config = { regions: ['iad1'], runtime: 'edge' };
 export const load = (async ({ parent }) => {

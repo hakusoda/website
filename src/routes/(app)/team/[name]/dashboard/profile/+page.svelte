@@ -55,8 +55,12 @@
 	const reset = () => (bio = data.bio ?? '', name = data.name, websiteUrl = data.website_url ?? '', displayName = data.display_name, newAvatar = null, newAvatarUri = null, error = null);
 </script>
 
-<div class="main">
-	<h1>{$t('team.settings.profile.header')}</h1>
+<div class="header">
+	<div class="geist">
+		<h1>{$t('team.settings.profile.header')}</h1>
+	</div>
+</div>
+<div class="geist">
 	<div class="profile">
 		<div class="header">
 			<Avatar src={newAvatarUri ?? data.avatar_url} size="md" hover/>
@@ -72,7 +76,7 @@
 		</div>
 		<p class="details">{$t('team.created.false', [data.created_at])}</p>
 	</div>
-
+	
 	<div class="input-row">
 		<div>
 			<p class="input-label">{$t('team.settings.profile.display_name')}</p>
@@ -83,7 +87,7 @@
 			<TextInput bind:value={name}/>
 		</div>
 	</div>
-
+	
 	<SegmentedControl title={$t('profile.bio')} bind:value={bioEdit}>
 		<svelte:fragment slot="true">
 			{$t('action.edit')}
@@ -99,10 +103,10 @@
 			<Markdown source={bio}/>
 		</div>
 	{/if}
-
+	
 	<p class="input-label">{$t('team.settings.profile.website_url')}</p>
 	<TextInput bind:value={websiteUrl} placeholder="https://example.com"/>
-
+	
 	<p class="input-label">{$t('profile.avatar')}</p>
 	<AvatarFile
 		name={displayName}
@@ -111,76 +115,71 @@
 		bind:result={newAvatar}
 		bind:resultUri={newAvatarUri}
 	/>
-
-	<UnsavedChanges
-		show={bio !== (data.bio ?? '') || name !== data.name || displayName !== data.display_name || websiteUrl !== (data.website_url ?? '') || !!newAvatar}
-		error={error ? $t(`request_error.${error.error}`) : ''}
-		{save}
-		{reset}
-		{saving}
-	/>
 </div>
 
+<UnsavedChanges
+	show={bio !== (data.bio ?? '') || name !== data.name || displayName !== data.display_name || websiteUrl !== (data.website_url ?? '') || !!newAvatar}
+	error={error ? $t(`request_error.${error.error}`) : ''}
+	{save}
+	{reset}
+	{saving}
+/>
+
 <style lang="scss">
-	.main {
-		width: 100%;
-		padding: 0 64px 32px;
-		overflow: auto;
-		.profile {
-			padding: 16px;
-			position: relative;
-			margin-top: 64px;
-			background: var(--background-secondary);
-			border-radius: 36px;
-			.header {
-				display: flex;
-				padding: 0 0 0 128px;
-				:global(.avatar) {
-					top: -32px;
-					left: 24px;
-					position: absolute;
-				}
-				.name {
-					h1 {
-						margin: 0;
-					}
-					p {
-						color: var(--color-secondary);
-						margin: 4px 0 0;
-						font-size: .9em;
-					}
-				}
-				.buttons {
-					margin-left: auto;
-				}
-			}
-			.details {
-				color: var(--color-secondary);
-				margin: 32px 8px 4px;
-				font-size: .9em;
-			}
-		}
-		.input-row {
-			gap: 16px;
-			margin: 0 0 32px;
+	.profile {
+		padding: 16px;
+		position: relative;
+		margin-top: 64px;
+		background: var(--background-secondary);
+		border-radius: 36px;
+		.header {
 			display: flex;
+			padding: 0 0 0 128px;
+			:global(.avatar) {
+				top: -32px;
+				left: 24px;
+				position: absolute;
+			}
+			.name {
+				h1 {
+					margin: 0;
+				}
+				p {
+					color: var(--color-secondary);
+					margin: 4px 0 0;
+					font-size: .9em;
+				}
+			}
+			.buttons {
+				margin-left: auto;
+			}
 		}
-		.input-label {
+		.details {
 			color: var(--color-secondary);
-			margin: 32px 0 8px;
+			margin: 32px 8px 4px;
 			font-size: .9em;
 		}
-		.bio-preview {
-			padding: 20px 24px;
-			background: var(--background-secondary);
-			border-radius: 16px;
-		}
-		:global(.text-input) {
-			width: 100%;
-		}
-		.buttons {
-			gap: 16px;
-			display: flex;
-		}
+	}
+	.input-row {
+		gap: 16px;
+		margin: 0 0 32px;
+		display: flex;
+	}
+	.input-label {
+		color: var(--color-secondary);
+		margin: 32px 0 8px;
+		font-size: .9em;
+	}
+	.bio-preview {
+		padding: 20px 24px;
+		background: var(--background-secondary);
+		border-radius: 16px;
+	}
+	:global(.text-input) {
+		width: 100%;
+	}
+	.buttons {
+		gap: 16px;
+		display: flex;
 	}
 </style>

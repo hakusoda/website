@@ -2,12 +2,9 @@ import type { ZodIssue } from 'zod';
 import type { RequestErrorType, DiscordChannelType, UserConnectionType, UserNotificationType, UserNotificationState, MellowServerAuditLogType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
 export interface User {
 	id: string
-	bio: string | null
 	name: string | null
-	flags: number
 	username: string
 	avatar_url: string | null
-	mellow_pending: boolean
 
 	created_at: string
 }

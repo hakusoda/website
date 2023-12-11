@@ -15,12 +15,11 @@
 	{#each data.items as item}
 		<AuditLog
 			open={open.includes(item.id)}
-			text={$t(`team_audit_log.type.${item.type}`, [item, item.target_user ? `@${item.target_user.username}` : ''])}
-			author={item.author.username}
-			avatar={item.author.avatar_url}
+			text={$t(`team_audit_log.type.${item.type}`, [item])}
+			author={item.author}
 			openable={OPENABLE.includes(item.type)}
 			createdAt={item.created_at}
-			authorName={item.author.name}
+			target_user={item.target_user}
 			on:click={OPENABLE.includes(item.type) ? () => open = open.includes(item.id) ? open.filter(i => i !== item.id) : [...open, item.id] : null}
 		>
 			{#if item.type === TeamAuditLogType.UpdateRole}
@@ -50,10 +49,7 @@
 <style lang="scss">
 	.main {
 		gap: 16px;
-		width: 100%;
-		padding: 32px;
 		display: flex;
-		overflow: hidden auto;
 		flex-direction: column;
 	}
 </style>
