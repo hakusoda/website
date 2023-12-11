@@ -128,7 +128,7 @@
 				</button>
 			</DropdownMenu.Root>
 		{:else if !data.session}
-			<a href="/sign-in" class="nav-link signin">
+			<a href="/sign-in" class="sign-in">
 				<BoxArrowInRight/>{$t('action.sign_in')}
 			</a>
 		{/if}
@@ -311,6 +311,21 @@
 		@media (max-width: 512px) {
 			.user :global(svg) {
 				margin-left: 16px;
+			}
+		}
+		.sign-in {
+			gap: 10px;
+			margin: 0 0 0 auto;
+			display: flex;
+			padding: 6px 14px;
+			font-size: .8em;
+			transition: box-shadow .5s;
+			box-shadow: inset 0 0 0 1px var(--border-secondary);
+			align-items: center;
+			border-radius: 12px;
+			&:hover {
+				box-shadow: inset 0 0 0 1px #ffffff80;
+				text-decoration: none;
 			}
 		}
 	}
