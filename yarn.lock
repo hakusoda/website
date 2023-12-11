@@ -899,6 +899,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vercel/speed-insights@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@vercel/speed-insights@npm:1.0.1"
+  checksum: 2c550f1eed12c56390022484db6dfb25d7231437cfc5ee1e93052a9099f99648e092a51c30a2877cacc26b2d4c276053d8b8a3dc0d24ac9b72e74481a867ee33
+  languageName: node
+  linkType: hard
+
 "@vercel/static-build@npm:2.0.10":
   version: 2.0.10
   resolution: "@vercel/static-build@npm:2.0.10"
@@ -2283,6 +2290,7 @@ __metadata:
     "@sveltejs/kit": "npm:^1.27.4"
     "@vercel/analytics": "npm:^1.1.1"
     "@vercel/edge-config": "npm:^0.4.1"
+    "@vercel/speed-insights": "npm:^1.0.1"
     "@voxelified/roblox-open-cloud": "npm:^0.1.0"
     "@voxelified/svelte-localisation": "npm:^1.0.0"
     cropperjs: "npm:^1.6.1"
@@ -2297,7 +2305,6 @@ __metadata:
     user-agent-data-types: "npm:^0.4.2"
     vercel: "npm:^32.5.3"
     vite: "npm:^4.5.0"
-    web-vitals: "npm:^3.5.0"
     zod: "npm:^3.22.4"
   languageName: unknown
   linkType: soft
@@ -4322,13 +4329,6 @@ __metadata:
   version: 0.2.4
   resolution: "web-vitals@npm:0.2.4"
   checksum: 811a510dddf4d570aab62b568d08d23dec78eb8bf8f50dc86e88b8333bfcaeeeee4377da9b2668203b1e23586c98f14797b372f4bf5b600200aba4dd21588930
-  languageName: node
-  linkType: hard
-
-"web-vitals@npm:^3.5.0":
-  version: 3.5.0
-  resolution: "web-vitals@npm:3.5.0"
-  checksum: 9409011cf6cf405796aba919cd0f6957eb59f1170481f948e4f70e34a0cc461103accc8ce80fa0ceaf3c68d4c8d2b92788454323cfda08722eaa1ec9c36159d5
   languageName: node
   linkType: hard
 

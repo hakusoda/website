@@ -32,6 +32,7 @@
 		"@supabase/supabase-js": "^2.38.4",
 		"@vercel/analytics": "^1.1.1",
 		"@vercel/edge-config": "^0.4.1",
+		"@vercel/speed-insights": "^1.0.1",
 		"@voxelified/roblox-open-cloud": "^0.1.0",
 		"@voxelified/svelte-localisation": "^1.0.0",
 		"cropperjs": "^1.6.1",
@@ -39,7 +40,6 @@
 		"mdsvex": "^0.11.0",
 		"svelte-markdown": "^0.4.0",
 		"svelte-media-queries": "^1.6.2",
-		"web-vitals": "^3.5.0",
 		"zod": "^3.22.4"
 	},
 	"overrides": {

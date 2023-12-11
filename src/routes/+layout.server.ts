@@ -1,6 +1,5 @@
 import { redirect } from '@sveltejs/kit';
 
-import { env } from '$env/dynamic/private';
 import supabase from '$lib/supabase';
 import { requestError } from '$lib/util/server';
 import { RequestErrorType } from '$lib/enums';
@@ -32,7 +31,6 @@ export const load = (async ({ url, locals: { session }, cookies }) => {
 	return {
 		user,
 		session,
-		analyticsId: env.VERCEL_ANALYTICS_ID,
 		notifications
 	};
 }) satisfies LayoutServerLoad;

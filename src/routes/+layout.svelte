@@ -2,26 +2,15 @@
 	import '@hakumi/essence/styles.scss';
 	import { inject } from '@vercel/analytics';
 	import { onMount } from 'svelte';
+	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	
-	import { page } from '$app/stores';
+	import { dev } from '$app/environment';
 	import { theme } from '$lib/settings';
-	import { webVitals } from '$lib/vitals';
-	import { dev, browser } from '$app/environment';
-	import type { LayoutData } from './$types';
 	import { storeKeyPairForAuthentication } from '$lib/crypto';
 	inject({ mode: dev ? 'development' : 'production' });
+	injectSpeedInsights();
 
 	$: [themeName] = $theme.split('_');
-
-	export let data: LayoutData;
-
-	const { analyticsId } = data;
-	$: if (browser && analyticsId)
-		webVitals({
-			path: $page.url.pathname,
-			params: $page.params,
-			analyticsId
-		});
 
 	onMount(storeKeyPairForAuthentication);
 </script>
