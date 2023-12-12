@@ -76,15 +76,6 @@ export enum MellowLinkListViewMode {
 	Compact
 }
 
-export enum MellowServerAuditLogType {
-	CreateServer,
-	CreateProfileSyncAction,
-	UpdateProfileSyncingSettings,
-	DeleteProfileSyncAction,
-	UpdateProfileSyncAction,
-	UpdateLogging
-}
-
 export enum MellowServerLogType {
 	None,
 	AuditLog = 1 << 0,

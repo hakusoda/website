@@ -1,5 +1,5 @@
 import type { ZodIssue } from 'zod';
-import type { RequestErrorType, DiscordChannelType, UserConnectionType, UserNotificationType, UserNotificationState, MellowServerAuditLogType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
+import type { RequestErrorType, DiscordChannelType, UserConnectionType, UserNotificationType, UserNotificationState, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
 export interface User {
 	id: string
 	name: string | null
@@ -133,6 +133,14 @@ export interface TeamInvite {
 		avatar_url: string | null
 	} | null
 }
+
+export type MellowServerAuditLogType =
+	'mellow.server.created' |
+	'mellow.server.syncing.action.created' |
+	'mellow.server.syncing.action.updated' |
+	'mellow.server.syncing.action.deleted' |
+	'mellow.server.syncing.settings.updated' |
+	'mellow.server.discord_logging.updated'
 
 export type MellowProfileAction = {
 	id: string

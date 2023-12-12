@@ -4,8 +4,8 @@ import supabase from '$lib/supabase';
 import { getDiscordServerChannels } from '$lib/discord';
 import { createMellowServerAuditLog } from '$lib/database';
 import type { Actions, PageServerLoad } from './$types';
+import { RequestErrorType, MellowServerLogType } from '$lib/enums';
 import { requestFail, requestError, verifyServerMembership } from '$lib/util/server';
-import { RequestErrorType, MellowServerLogType, MellowServerAuditLogType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
 	const response = await supabase.from('mellow_servers')
@@ -65,7 +65,7 @@ export const actions = {
 			}
 
 			const oldChannelId = old.data.logging_channel_id;
-			await createMellowServerAuditLog(MellowServerAuditLogType.UpdateLogging, session.sub, id, {
+			await createMellowServerAuditLog('mellow.server.discord_logging.updated', session.sub, id, {
 				types: [old.data.logging_types, data.types].filter(filtUndf),
 				channel: [oldChannelId ? 'NOT IMPLEMENTED' : null, data.channel_name].filter(filtUndf),
 				channel_id: [oldChannelId, data.channel].filter(filtUndf)

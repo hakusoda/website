@@ -2,7 +2,8 @@ import { requestError } from '$lib/util/server';
 import type { PageServerLoad } from './$types';
 import { getDiscordServerRoles } from '$lib/discord';
 import supabase, { handleResponse } from '$lib/supabase';
-import { MellowProfileSyncActionType, RequestErrorType, MellowServerAuditLogType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
+import type { MellowServerAuditLogType } from '$lib/types';
+import { MellowProfileSyncActionType, RequestErrorType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
 export const config = { regions: ['iad1'] };
 export const load = (async ({ params: { id } }) => {
 	const response = await supabase.from('mellow_binds')
@@ -43,7 +44,7 @@ export const load = (async ({ params: { id } }) => {
 
 	return {
 		items: response.data!.map(item => {
-			const edits = item.edits.filter(item => item.type === MellowServerAuditLogType.UpdateProfileSyncAction);
+			const edits = item.edits.filter(item => item.type === 'mellow.server.syncing.action.updated');
 			return {
 				...item,
 				edits: undefined,
