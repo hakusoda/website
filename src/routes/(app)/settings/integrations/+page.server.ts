@@ -1,8 +1,5 @@
-import type { PageServerLoad } from './applications/$types';
 import supabase, { handleResponse } from '$lib/supabase';
-export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ parent }) => {
-	const { session } = await parent();
+export async function load({ locals: { session } }) {
 	const response = await supabase.from('application_authorisations')
 		.select<string, {
 			id: string
@@ -23,4 +20,4 @@ export const load = (async ({ parent }) => {
 	handleResponse(response);
 
 	return { applications: response.data! };
-}) satisfies PageServerLoad;
+}

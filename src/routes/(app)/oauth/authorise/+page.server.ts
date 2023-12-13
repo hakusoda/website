@@ -15,8 +15,7 @@ const PAGE_QUERY = z.object({
 	redirect_uri: z.string().transform(value => decodeURIComponent(value)).and(z.string().url()),
 	application_id: z.string().uuid()
 });
-export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ url, locals: { session }, request }) => {
+export async function load({ url, locals: { session }, request }) {
 	if (!session)
 		throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`);
 
@@ -51,4 +50,4 @@ export const load = (async ({ url, locals: { session }, request }) => {
 	handleResponse(response2);
 
 	return { ...response2.data!, id: application_id, redirect_uri };
-});
+}

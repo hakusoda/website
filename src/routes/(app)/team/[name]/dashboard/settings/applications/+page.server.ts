@@ -1,6 +1,5 @@
 import { isUUID } from '$lib/util';
 import supabase, { handleResponse } from '$lib/supabase';
-export const config = { regions: ['iad1'], runtime: 'edge' };
 export async function load({ params: { name } }) {
 	const response = await supabase.from('teams')
 		.select<string, {
@@ -18,4 +17,4 @@ export async function load({ params: { name } }) {
 	handleResponse(response);
 
 	return response.data!;
-};
+}

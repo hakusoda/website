@@ -3,9 +3,7 @@ import { getTeam } from '$lib/database';
 import { requestError } from '$lib/util/server';
 import type { TeamInvite } from '$lib/types';
 import { RequestErrorType } from '$lib/enums';
-import type { PageServerLoad } from './$types';
-export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ params: { name }, parent }) => {
+export async function load({ params: { name }, parent }) {
 	const { user } = await parent();
 
 	const team = await getTeam(name);
@@ -19,4 +17,4 @@ export const load = (async ({ params: { name }, parent }) => {
 	}
 
 	return { ...team, invite: response?.data };
-}) satisfies PageServerLoad;
+}

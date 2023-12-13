@@ -1,13 +1,9 @@
 import { requestError } from '$lib/util/server';
 import { getDiscordToken } from '$lib/verification';
 import { RequestErrorType } from '$lib/enums';
-import type { PageServerLoad } from './$types';
 import supabase, { handleResponse } from '$lib/supabase';
 import { createMellowServerDiscordRedirectUrl } from '$lib/util';
-
-export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ url, parent }) => {
-	const { session } = await parent();
+export async function load({ url, locals: { session } }) {
 	const response = await supabase.rpc('website_get_user_mellow_servers2', {
 		target_user_id: session!.sub
 	});
@@ -40,21 +36,15 @@ export const load = (async ({ url, parent }) => {
 			data: response2,
 			user_id: session.sub
 		}, { onConflict: 'user_id' });
-		if (response3.error) {
-			console.error(response3.error);
-			throw requestError(500, RequestErrorType.ExternalRequestError);
-		}
+		handleResponse(response3);
 
 		allServers = response2;
 	} else if (session) {
 		const response = await supabase.from('mellow_user_servers').select('data').eq('user_id', session.sub).limit(1).maybeSingle();
-		if (response.error) {
-			console.error(response.error);
-			throw requestError(500, RequestErrorType.ExternalRequestError);
-		}
+		handleResponse(response);
 
-		allServers = response.data?.data ?? [];
+		allServers = response.data?.data! ?? [];
 	}
 
 	return { servers: response.data as { id: string, name: string, avatar_url: string | null }[], allServers };
-}) satisfies PageServerLoad;
+}

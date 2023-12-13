@@ -1,11 +1,9 @@
 import { requestError } from '$lib/util/server';
-import type { PageServerLoad } from './$types';
 import { getDiscordServerRoles } from '$lib/discord';
 import supabase, { handleResponse } from '$lib/supabase';
 import type { MellowServerAuditLogType } from '$lib/types';
 import { MellowProfileSyncActionType, RequestErrorType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
-export const config = { regions: ['iad1'] };
-export const load = (async ({ params: { id } }) => {
+export async function load({ params: { id } }) {
 	const response = await supabase.from('mellow_binds')
 		.select<string, {
 			id: string
@@ -53,4 +51,4 @@ export const load = (async ({ params: { id } }) => {
 		}),
 		roles: roles.data.filter(role => role.name !== '@everyone' && !role.managed).sort((a, b) => b.position - a.position).map(role => ({ id: role.id, name: role.name.trim().replace(/^ㅤ+|ㅤ+$/g, '') }))
 	};
-}) satisfies PageServerLoad;
+}

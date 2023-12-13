@@ -1,14 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 
-import supabase from '$lib/supabase';
-import { requestError } from '$lib/util/server';
-import { RequestErrorType } from '$lib/enums';
 import type { UserSessionJWT } from '$lib/types';
 import { getUserNotifications } from '$lib/database';
-import type { LayoutServerLoad } from './$types';
-
-export const config = { runtime: 'edge' };
-export const load = (async ({ url, locals: { session }, cookies }) => {
+import supabase, { handleResponse } from '$lib/supabase';
+export async function load({ url, locals: { session }, cookies }) {
 	const user = session ? await getUser(session) : null;
 	if (session && !user) {
 		cookies.delete('auth-token', { path: '/', domain: '.hakumi.cafe' });
@@ -21,7 +16,7 @@ export const load = (async ({ url, locals: { session }, cookies }) => {
 		session,
 		notifications
 	};
-}) satisfies LayoutServerLoad;
+}
 
 async function getUser(session: UserSessionJWT) {
 	const response = await supabase.from('users')
@@ -29,10 +24,7 @@ async function getUser(session: UserSessionJWT) {
 		.eq('id', session.sub)
 		.limit(1)
 		.maybeSingle();
-	if (response.error) {
-		console.error(response.error);
-		throw requestError(500, RequestErrorType.ExternalRequestError);
-	}
+	handleResponse(response);
 
-	return response.data;
+	return response.data!;
 }

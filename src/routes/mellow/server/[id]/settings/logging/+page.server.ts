@@ -1,13 +1,11 @@
 import { z } from 'zod';
 
-import supabase from '$lib/supabase';
 import { getDiscordServerChannels } from '$lib/discord';
+import supabase, { handleResponse } from '$lib/supabase';
 import { createMellowServerAuditLog } from '$lib/database';
-import type { Actions, PageServerLoad } from './$types';
 import { RequestErrorType, MellowServerLogType } from '$lib/enums';
 import { requestFail, requestError, verifyServerMembership } from '$lib/util/server';
-export const config = { regions: ['iad1'] };
-export const load = (async ({ params: { id } }) => {
+export async function load({ params: { id } }) {
 	const response = await supabase.from('mellow_servers')
 		.select<string, {
 			logging_types: number
@@ -16,16 +14,13 @@ export const load = (async ({ params: { id } }) => {
 		.eq('id', id)
 		.limit(1)
 		.single();
-	if (response.error) {
-		console.error(response.error);
-		throw requestError(500, RequestErrorType.ExternalRequestError);
-	}
+	handleResponse(response);
 
 	return {
-		...response.data,
+		...response.data!,
 		channels: getDiscordServerChannels(id)
 	};
-}) satisfies PageServerLoad;
+}
 
 const EDIT_SCHEMA = z.object({
 	types: z.number().int().max((Object.values(MellowServerLogType).filter(type => typeof type === 'number') as number[]).reduce((p, v) => p + v, 0)).optional(),
@@ -48,28 +43,27 @@ export const actions = {
 		}
 
 		const { data } = response;
-		const old = await supabase.from('mellow_servers').select('logging_types, logging_channel_id').eq('id', id).single();
-		if (old.error) {
-			console.error(old.error);
-			return requestFail(500, RequestErrorType.ExternalRequestError);
-		}
+		const old = await supabase.from('mellow_servers')
+			.select('logging_types, logging_channel_id')
+			.eq('id', id)
+			.single();
+		handleResponse(old);
 
 		if (data.types !== undefined || data.channel !== undefined) {
-			const response2 = await supabase.from('mellow_servers').update({
-				logging_types: data.types,
-				logging_channel_id: data.channel
-			}).eq('id', id);
-			if (response2.error) {
-				console.error(response2.error);
-				return requestFail(500, RequestErrorType.DatabaseUpdate);
-			}
+			handleResponse(await supabase.from('mellow_servers')
+				.update({
+					logging_types: data.types,
+					logging_channel_id: data.channel
+				})
+				.eq('id', id)
+			);
 
-			const oldChannelId = old.data.logging_channel_id;
+			const oldChannelId = old.data!.logging_channel_id;
 			await createMellowServerAuditLog('mellow.server.discord_logging.updated', session.sub, id, {
-				types: [old.data.logging_types, data.types].filter(filtUndf),
+				types: [old.data!.logging_types, data.types].filter(filtUndf),
 				channel: [oldChannelId ? 'NOT IMPLEMENTED' : null, data.channel_name].filter(filtUndf),
 				channel_id: [oldChannelId, data.channel].filter(filtUndf)
 			});
 		}
 	}
-} satisfies Actions;
+}

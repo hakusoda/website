@@ -1,9 +1,7 @@
 import { requestError } from '$lib/util/server';
-import type { PageServerLoad } from './$types';
 import supabase, { handleResponse } from '$lib/supabase';
 import { RequestErrorType, UserConnectionType } from '$lib/enums';
-export const config = { regions: ['iad1'] };
-export const load = (async ({ params: { id } }) => {
+export async function load({ params: { id } }) {
 	const response = await supabase.from('mellow_servers')
 		.select<string, {
 			default_nickname: string
@@ -19,4 +17,4 @@ export const load = (async ({ params: { id } }) => {
 		throw requestError(404, RequestErrorType.NotFound);
 
 	return response.data;
-}) satisfies PageServerLoad;
+}

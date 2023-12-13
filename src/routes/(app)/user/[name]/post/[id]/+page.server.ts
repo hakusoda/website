@@ -1,11 +1,8 @@
-import supabase from '$lib/supabase';
 import { EMPTY_UUID } from '$lib/constants';
-import type { PageServerLoad } from './$types';
+import supabase, { handleResponse } from '$lib/supabase';
 import { FeatureFlag, RequestErrorType } from '$lib/enums';
 import { requestError, throwIfFeatureNotEnabled } from '$lib/util/server';
-
-export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ locals: { session }, params: { id } }) => {
+export async function load({ locals: { session }, params: { id } }) {
 	await throwIfFeatureNotEnabled(FeatureFlag.ProfilePostViewing);
 
 	const response = await supabase.from('profile_posts')
@@ -43,10 +40,7 @@ export const load = (async ({ locals: { session }, params: { id } }) => {
 		.eq('comments.liked.user_id', session?.sub ?? EMPTY_UUID)
 		.limit(1)
 		.maybeSingle();
-	if (response.error) {
-		console.error(response.error);
-		throw requestError(500, RequestErrorType.ExternalRequestError);
-	}
+	handleResponse(response);
 
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);
@@ -72,13 +66,10 @@ export const load = (async ({ locals: { session }, params: { id } }) => {
 			.eq('liked.user_id', session?.sub ?? EMPTY_UUID)
 			.limit(1)
 			.single();
-		if (response2.error) {
-			console.error(response2.error);
-			throw requestError(500, RequestErrorType.ExternalRequestError);
-		}
+		handleResponse(response2);
 
-		return { ...response.data, parent: response2.data };
+		return { ...response.data, parent: response2.data! };
 	}
 
 	return response.data;
-}) satisfies PageServerLoad;
+}

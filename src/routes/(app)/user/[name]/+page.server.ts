@@ -1,13 +1,9 @@
-import supabase from '$lib/supabase';
 import { isUUID } from '$lib/util';
 import { EMPTY_UUID } from '$lib/constants';
-import type { Actions, PageServerLoad } from './$types';
+import supabase, { handleResponse } from '$lib/supabase';
 import { requestFail, requestError, isFeatureEnabled } from '$lib/util/server';
 import { FeatureFlag, RequestErrorType, UserNotificationType } from '$lib/enums';
-
-export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ params: { name }, parent }) => {
-	const { session } = await parent();
+export async function load({ params: { name }, locals: { session } }) {
 	const postsEnabled = await isFeatureEnabled(FeatureFlag.ProfilePostViewing);
 	const filter = supabase.from('users')
 		.select<string, {
@@ -68,25 +64,18 @@ export const load = (async ({ params: { name }, parent }) => {
 	const response = await filter
 		.limit(1)
 		.maybeSingle();
-	if (response.error) {
-		console.error(response.error);
-		throw requestError(500, RequestErrorType.ExternalRequestError);
-	}
+	handleResponse(response);
 
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);
 
-	const myTeams = session ? await supabase.from('team_members').select<string, {
+	const myTeams = session ? handleResponse(await supabase.from('team_members').select<string, {
 		team: {
 			id: string
 			avatar_url: string
 			display_name: string
 		}
-	}>('team:teams ( id, avatar_url, display_name )').eq('user_id', session.sub) : null;
-	if (myTeams?.error) {
-		console.error(myTeams.error);
-		throw requestError(500, RequestErrorType.ExternalRequestError);
-	}
+	}>('team:teams ( id, avatar_url, display_name )').eq('user_id', session.sub)) : null;
 
 	const teams = response.data.teams.map(team => ({
 		role: team.role,
@@ -100,29 +89,26 @@ export const load = (async ({ params: { name }, parent }) => {
 		my_teams: my_teams.filter(item => !teams.some(team => team.id === item.id) && !team_invites.some(invite => invite.team_id === item.id)),
 		team_invites
 	};
-}) satisfies PageServerLoad;
+}
 
 export const actions = {
 	burger: async ({ locals: { session }, params: { name } }) => {
 		if (!session)
 			return requestFail(401, RequestErrorType.Unauthenticated);
 
-		const response = await supabase.from('users').select('id').eq(isUUID(name) ? 'id' : 'username', name).limit(1).single();
-		if (response.error) {
-			console.error(response.error);
-			return requestFail(500, RequestErrorType.DatabaseUpdate);
-		}
+		const response = await supabase.from('users')
+			.select('id')
+			.eq(isUUID(name) ? 'id' : 'username', name)
+			.limit(1)
+			.single();
+		handleResponse(response);
 
-		const { error } = await supabase.from('user_notifications').upsert({
+		handleResponse(await supabase.from('user_notifications').upsert({
 			type: UserNotificationType.SOMETHING,
-			user_id: response.data.id,
+			user_id: response.data!.id,
 			target_user_id: session.sub
-		});
-		if (error) {
-			console.error(error);
-			return requestFail(500, RequestErrorType.DatabaseUpdate);
-		}
+		}));
 
 		return {};
 	}
-} satisfies Actions;
+}

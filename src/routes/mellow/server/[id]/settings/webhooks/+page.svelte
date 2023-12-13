@@ -15,7 +15,7 @@
 	export let data: PageData;
 
 	let itemFilter = '';
-	const calculateEvents = ({ events }: PageData['webhooks'][number]) => {
+	const calculateEvents = ({ events }: { events: number }) => {
 		let amount = 0;
 		for (const type of Object.values(MellowWebhookEventType))
 			if (typeof type === 'number' && type && hasBit(events, type))
@@ -34,46 +34,48 @@
 		<Plus/>{$t('mellow.server.settings.automation.webhooks.create')}
 	</Button>
 </div>
-<div class="items">
-	{#each data.webhooks.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item}
-		<div class="item">
-			<div class="info">
-				<h1>{item.name}</h1>
-				<div class="details">
-					<p>
-						<Sunrise/>
-						{$t('time_ago', [item.created_at])}
-						{#if item.creator}
-							{$t('label.by')}
-							<a href={`/user/${item.creator.username}`}>
-								{item.creator.name ?? `@${item.creator.username}`}
+{#await data.streamed.items then items}
+	<div class="items">
+		{#each items.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item}
+			<div class="item">
+				<div class="info">
+					<h1>{item.name}</h1>
+					<div class="details">
+						<p>
+							<Sunrise/>
+							{$t('time_ago', [item.created_at])}
+							{#if item.creator}
+								{$t('label.by')}
+								<a href={`/user/${item.creator.username}`}>
+									{item.creator.name ?? `@${item.creator.username}`}
+								</a>
+							{/if}
+						</p>
+						<p>
+							<Link/>
+							{item.request_method}
+							<a href={item.target_url} target="_blank">
+								{item.target_url}
 							</a>
-						{/if}
-					</p>
-					<p>
-						<Link/>
-						{item.request_method}
-						<a href={item.target_url} target="_blank">
-							{item.target_url}
-						</a>
-					</p>
-					<p>
-						<SendFill/>
-						{$t('label.events', [calculateEvents(item)])}
-					</p>
+						</p>
+						<p>
+							<SendFill/>
+							{$t('label.events', [calculateEvents(item)])}
+						</p>
+					</div>
+				</div>
+				<div class="buttons">
+					<Button disabled>
+						<PencilFill/>{$t('action.edit')}
+					</Button>
+					<Button colour="secondary" circle disabled>
+						<Trash/>
+					</Button>
 				</div>
 			</div>
-			<div class="buttons">
-				<Button disabled>
-					<PencilFill/>{$t('action.edit')}
-				</Button>
-				<Button colour="secondary" circle disabled>
-					<Trash/>
-				</Button>
-			</div>
-		</div>
-	{/each}
-</div>
+		{/each}
+	</div>
+{/await}
 
 <style lang="scss">
 	.controls {

@@ -1,9 +1,9 @@
 import { json } from '@sveltejs/kit';
 
-import supabase from '$lib/supabase';
 import { requestError } from '$lib/util/server';
 import { RequestErrorType } from '$lib/enums';
 import type { RequestHandler } from './$types';
+import supabase, { handleResponse } from '$lib/supabase';
 export const GET = (async ({ url, params: { id } }) => {
 	const response = await supabase.from('profile_posts')
 		.select<string, {
@@ -35,10 +35,7 @@ export const GET = (async ({ url, params: { id } }) => {
 		.eq('id', id)
 		.limit(1)
 		.maybeSingle();
-	if (response.error) {
-		console.error(response.error);
-		throw requestError(500, RequestErrorType.ExternalRequestError);
-	}
+	handleResponse(response);
 
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);

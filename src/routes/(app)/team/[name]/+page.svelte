@@ -173,29 +173,6 @@
 				{/each}
 			</div>
 		</Tabs.Item>
-		{#if data.projects.length}
-			<Tabs.Item title={$t('team.projects')} value={1}>
-				<div class="projects">
-					{#each data.projects as item}
-						<a class="item" href={`/project/${item.name}`} style={`--banner: url("${item.banner_url}"); --project-color: ${item.theme_color ?? 'var(--background-secondary)'}`}>
-							<Avatar src={item.avatar_url} size="sm2" hover/>
-							<div class="name">
-								<h1>
-									{item.display_name}
-									{#if item.archived_at}
-										<p class="archived">{$t('time_ago.archived', [item.archived_at])}</p>
-									{/if}
-								</h1>
-								<p>{item.summary}</p>
-							</div>
-							<div class="details">
-								<p>{$t('time_ago.updated', [item.updated_at])} • {$t('project.contributors.count', [item.contributors.length + item.external_contributors])}</p>
-							</div>
-						</a>
-					{/each}
-				</div>
-			</Tabs.Item>
-		{/if}
 	</Tabs.Root>
 </div>
 
@@ -375,81 +352,6 @@
 				}
 			}
 		}
-		.projects {
-			gap: 16px 32px;
-			display: flex;
-			flex-direction: column;
-			.item {
-				flex: 1 1 calc(50% - 48px);
-				color: color-mix(in srgb, var(--project-color) 20%, #fff);
-				display: flex;
-				padding: 16px;
-				position: relative;
-				margin-top: 32px;
-				background: var(--project-color);
-				border-radius: 16px;
-				flex-direction: column;
-				text-decoration: none;
-				--pcolor2: color-mix(in srgb, var(--project-color) 40%, #fff);
-				&:before {
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					opacity: .5;
-					content: '';
-					display: block;
-					position: absolute;
-					background: no-repeat center/cover var(--banner);
-					mask-image: linear-gradient(to bottom, #fff -40%, #ffffff00 80%);
-					border-radius: 16px;
-					-webkit-mask-image: -webkit-gradient(linear, left -40%, left 80%, from(#fff), to(#ffffff00));
-				}
-				:global(.avatar) {
-					top: -24px;
-					left: 16px;
-					position: absolute;
-				}
-				.name {
-					z-index: 1;
-					margin-left: 88px;
-					h1 {
-						gap: 16px;
-						margin: 0;
-						display: flex;
-						align-items: center;
-						.archived {
-							color: #e8c47d;
-							margin: 0;
-							border: 1px solid #e8c47d;
-							padding: 4px 8px;
-							font-size: .4em;
-							background: var(--background-primary);
-							font-weight: 500;
-							line-height: normal;
-							border-radius: 4px;
-						}
-					}
-					p {
-						color: var(--pcolor2);
-						margin: 8px 0 0;
-						font-size: .9em;
-					}
-				}
-				.details {
-					gap: 24px;
-					display: flex;
-					margin-top: 24px;
-					white-space: nowrap;
-					justify-content: space-between;
-					p {
-						color: var(--pcolor2);
-						margin: 0;
-						font-size: .9em;
-					}
-				}
-			}
-		}
 	}
 	@media (max-width: 512px) {
 		.main {
@@ -462,9 +364,6 @@
 				border-radius: 0 !important;
 			}
 			.members .member {
-				border-radius: 0;
-			}
-			.projects .item {
 				border-radius: 0;
 			}
 		}

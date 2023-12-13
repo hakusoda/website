@@ -1,16 +1,15 @@
 import supabase, { handleResponse } from '$lib/supabase';
 import type { MellowProfileActionRequirement } from '$lib/types';
 import type { MellowProfileSyncActionType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
-
-export const config = { regions: ['iad1'] };
 export async function load({ params: { id } }) {
-	const response = await supabase.from('mellow_server_audit_logs')
-		.select<string, MellowServerAuditLog>('id, type, data, author:users( id, name, username, avatar_url ), created_at, target_action:mellow_binds ( id, name )')
-		.eq('server_id', id)
-		.order('created_at', { ascending: false });
-	handleResponse(response);
-
-	return { items: response.data! };
+	return { streamed: {
+		items: supabase.from('mellow_server_audit_logs')
+			.select<string, MellowServerAuditLog>('id, type, data, author:users( id, name, username, avatar_url ), created_at, target_action:mellow_binds ( id, name )')
+			.eq('server_id', id)
+			.order('created_at', { ascending: false })
+			.then(handleResponse)
+			.then(response => response.data!)
+	} };
 }
 
 type MellowServerAuditLog = {

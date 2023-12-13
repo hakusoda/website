@@ -106,7 +106,6 @@ export default {
 		'team.created.true': 'Created {0|time_ago} by',
 		'team.affiliations': 'Affiliated with',
 		'team.members': 'Members ({0})',
-		'team.projects': 'Projects',
 
 		'team.invite': 'Welcome to {0}',
 		'team.invite.summary': 'This page is currently unfinished, and will pop into existence at a later date!',
@@ -136,19 +135,6 @@ export default {
 		'team_invite.author2': 'invited by',
 
 		'members': '{0} Member{0|s}',
-
-		'project.author.0': 'by ',
-		'project.author.1': ', and {0} contributor{0|s}',
-		'project.archived': 'This project has been archived as of {0|date}.',
-		'project.website': 'Visit Website',
-		'project.github': 'GitHub Repository',
-		'project.about': 'About this project',
-		'project.about.empty': '# {0.display_name}\nThe authors of this project haven\'t written a description yet...',
-		'project.about.empty.github': '<br/>Perhaps try visiting the [GitHub Repository]({0.github_url}) for more information!',
-		'project.contributors': 'Contributors',
-		'project.contributors.count': '{0} Contributor{0|s}',
-		'project.contributors.external': '... plus {0} external contributor{0|s}.',
-		'project.id': 'Project ID: {0}',
 
 		'team_role.unknown': 'No Role',
 
@@ -300,10 +286,6 @@ export default {
 		'team_audit_log.type.1': 'renamed the team from "{0.data.0}" to "{0.data.1}"',
 		'team_audit_log.type.2': 'changed the team avatar',
 		'team_audit_log.type.3': 'modified the team profile',
-		'team_audit_log.type.4': 'created a new project named "{0.data.name}"',
-		'team_audit_log.type.5': 'modified the PLACEHOLDER project',
-		'team_audit_log.type.6': 'changed the PLACEHOLDER project\'s avatar',
-		'team_audit_log.type.7': 'changed the PLACEHOLDER project\'s banner',
 		'team_audit_log.type.8': 'created a new role named "{0.data.name}"',
 		'team_audit_log.type.9': 'updated the "{0.data.name.0}" role',
 		'team_audit_log.type.9.name': 'Name Updated',

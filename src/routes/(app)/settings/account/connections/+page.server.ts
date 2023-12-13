@@ -1,9 +1,6 @@
-import type { PageServerLoad } from './$types';
 import type { UserConnectionType } from '$lib/enums';
 import supabase, { handleResponse } from '$lib/supabase';
-export const config = { regions: ['iad1'], runtime: 'edge' };
-export const load = (async ({ parent }) => {
-	const { session } = await parent();
+export async function load({ locals: { session } }) {
 	const response = await supabase.from('user_connections')
 		.select<string, {
 			id: string
@@ -19,4 +16,4 @@ export const load = (async ({ parent }) => {
 	handleResponse(response);
 
 	return { connections: response.data! };
-}) satisfies PageServerLoad;
+}

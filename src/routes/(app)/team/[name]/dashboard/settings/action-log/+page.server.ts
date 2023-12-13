@@ -1,8 +1,6 @@
 import { isUUID } from '$lib/util';
 import type { TeamAuditLogType } from '$lib/enums';
 import supabase, { handleResponse } from '$lib/supabase';
-
-export const config = { regions: ['iad1'], runtime: 'edge' };
 export async function load({ params: { name } }) {
 	const response = await supabase.from('team_audit_logs')
 		.select<string, TeamAuditLog>('id, type, data, team:teams!inner ( name ), author:users!team_audit_logs_author_id_fkey ( id, name, username, avatar_url ), created_at, target_user:users!team_audit_logs_target_user_id_fkey ( name, username )')
@@ -11,7 +9,7 @@ export async function load({ params: { name } }) {
 	handleResponse(response);
 
 	return { items: response.data! };
-};
+}
 
 interface TeamAuditLogBase {
 	id: string

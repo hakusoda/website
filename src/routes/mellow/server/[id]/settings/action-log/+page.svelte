@@ -6,7 +6,9 @@
     export let data: PageData;
 </script>
 
-<ActionLog items={data.items.map(item => ({
-	...item,
-	text: $t(`action_log.type.${item.type}`, [item])
-}))}/>
+{#await data.streamed.items then items}
+	<ActionLog items={items.map(item => ({
+		...item,
+		text: $t(`action_log.type.${item.type}`, [item])
+	}))}/>
+{/await}
