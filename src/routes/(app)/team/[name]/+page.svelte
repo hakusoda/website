@@ -68,7 +68,7 @@
 			{/if}
 			<div class="buttons">
 				{#if data.user && (data.owner?.id === data.user.id || data.members.some(member => member.id === data.user?.id && member.role && hasBit(member.role.permissions, TeamRolePermission.ManageTeam)))}
-					<Button href={`/team/${data.name}/settings/profile`}>
+					<Button href={`/team/${data.name}/dashboard/profile`}>
 						<GearFill/>{$t('action.manage')}
 					</Button>
 				{/if}
