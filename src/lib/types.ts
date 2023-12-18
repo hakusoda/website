@@ -339,6 +339,10 @@ export interface CreateMellowProfileSyncActionResponse {
 	requirements_type: MellowProfileSyncActionRequirementsType
 }
 
+export interface GenerateMellowServerApiKeyResponse {
+	api_key: string
+}
+
 export interface CreateUserPostPayload {
 	content: string
 	attachments?: {

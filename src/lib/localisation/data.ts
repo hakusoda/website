@@ -218,6 +218,7 @@ export default {
 		'mellow.server.settings.3': 'Webhooks',
 		'mellow.server.settings.4': 'Action Log',
 
+		'mellow.server.settings.automation': 'Automation',
 		'mellow.server.settings.automation.logging.channel': 'Logging Channel',
 		'mellow.server.settings.automation.logging.channel.category': 'Discord Channels',
 		'mellow.server.settings.automation.logging.types': 'Actions to log',
@@ -240,6 +241,18 @@ export default {
 		'mellow.server.settings.syncing.settings.sync_unknown_users': 'Sync Unknown Users',
 		'mellow.server.settings.syncing.settings.allow_forced_syncing': 'Allow Forced Syncing',
 		'mellow.server.settings.return': 'Return to Server List',
+
+		'mellow.server.settings.api': 'Rest API',
+		'mellow.server.settings.api.title': 'Rest API Settings',
+		'mellow.server.settings.api.summary': 'The HAKUMI Rest API allows you to fetch information about members.',
+		'mellow.server.settings.api.key': 'API Key',
+		'mellow.server.settings.api.key.summary': 'All server endpoints require an API Key for every request.',
+		'mellow.server.settings.api.key.new': 'Here is your new API Key, be very careful with it... {0}',
+		'mellow.server.settings.api.key.exists': 'An API Key for {0} already exists, it was requested {1|time_ago}. Generating a new key will invalidate the existing key.',
+		'mellow.server.settings.api.key.generate': 'Generate new API Key',
+
+		'mellow.server.member.connections': '{0}\'s Server Connections',
+		'mellow.server.member.connections.summary': 'This list contains all connections that {0} has set for this server.',
 
 		'mellow_link_editor.header.false': 'Create Action',
 		'mellow_link_editor.header.true': 'Update Existing Action',

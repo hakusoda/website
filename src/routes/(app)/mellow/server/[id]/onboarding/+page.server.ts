@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 
+import { MELLOW_KEY } from '$env/static/private';
 import { requestError } from '$lib/util/server';
 import { getDiscordServer } from '$lib/discord';
 import { getUserConnectionUrl } from '$lib/util';
@@ -49,6 +50,24 @@ export const load = async ({ url, params: { id }, locals: { session } }) => {
 		.eq('user_id', session.sub)
 		.in('type', connections.map(item => item.type))
 		.then(response => handleResponse(response).data!) : [];
+
+	if (skip_onboarding_to !== null) {
+		const response = await supabase.from('user_connections')
+			.select('sub')
+			.eq('type', UserConnectionType.Discord)
+			.eq('user_id', session.sub)
+			.limit(1)
+			.single();
+		handleResponse(response);
+		await fetch(`https://mellow-internal-api.hakumi.cafe/server/${id}/member/${response.data!.sub}/sync`, {
+			body: '{"is_sign_up":true}',
+			method: 'POST',
+			headers: {
+				'x-api-key': MELLOW_KEY,
+				'content-type': 'application/json'
+			}
+		});
+	}
 	return {
 		...data,
 		skip: skip_onboarding_to !== null,

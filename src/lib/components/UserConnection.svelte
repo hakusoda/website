@@ -14,10 +14,11 @@
 	export let id: string;
 	export let sub: string;
 	export let type: UserConnectionType;
-	export let metadata: any;
+	export let username: string | null;
 	export let created_at: string;
 	export let avatar_url: string | null;
 	export let website_url: string | null;
+	export let display_name: string | null;
 
 	let trigger: () => void;
 	let disconnecting = false;
@@ -42,12 +43,13 @@
 	<div class="details">
 		<h1>{$t(`user_connection.type.${type}`)}</h1>
 		<p>
-			{#if metadata}
-				{metadata.global_name ?? metadata.name}
-				(<a href={website_url ?? metadata.html_url ?? `https://discord.com/users/${sub}`}>
-					@{metadata.login ?? metadata.username ?? metadata.preferred_username}</a>)
-			{:else}
-				{sub}
+			{display_name ?? username ?? sub}
+			{#if username}
+				<!-- yes, this formatting is strange, formatting it normally results in an unwanted space -->
+				({#if website_url}
+					<a href={website_url} target="_blank">
+						@{username}</a>{:else}
+					@{username}{/if})
 			{/if}
 		</p>
 	</div>

@@ -3,16 +3,20 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	export let items: [string, typeof SvelteComponent<any>, string?][] = [];
+	export let items: (string | [string, typeof SvelteComponent<any>, string?])[] = [];
 </script>
 
 <div class="with-side-navigation geist">
 	<div class="navigation">
-		{#each items as [href, icon, tkey]}
-			<a {href} class:active={$page.url.pathname === href}>
-				<svelte:component this={icon}/>
-				{$t(tkey ?? `side_navigation${href.replace(/\//g, '.')}`)}
-			</a>
+		{#each items as item}
+			{#if typeof item === 'string'}
+				<p>{$t(item)}</p>
+			{:else}
+				<a href={item[0]} class:active={$page.url.pathname === item[0]}>
+					<svelte:component this={item[1]}/>
+					{$t(item[2] ?? `side_navigation${item[0].replace(/\//g, '.')}`)}
+				</a>
+			{/if}
 		{/each}
 	</div>
 	<div class="content">
@@ -32,6 +36,10 @@
 			position: sticky;
 			min-width: 256px;
 			flex-direction: column;
+			p {
+				margin: 24px 0 0;
+				font-size: 12px;
+			}
 			a {
 				gap: 12px;
 				color: hsl(250 20% 90% / 80%);

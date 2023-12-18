@@ -18,6 +18,7 @@ import type {
 	UpdateTeamMemberPayload,
 	GetSignUpOptionsPayload,
 	VerifyNewDeviceResponse,
+	GenerateMellowServerApiKeyResponse,
 	CreateMellowProfileSyncActionPayload,
 	CreateMellowProfileSyncActionResponse,
 	UpdateMellowUserServerSettingsPayload,
@@ -144,6 +145,10 @@ export function updateMellowServerProfileSyncAction(serverId: string, linkId: st
 
 export function deleteMellowServerProfileSyncAction(serverId: string, linkId: string) {
 	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${serverId}/syncing/action/${linkId}`, 'DELETE');
+}
+
+export function generateMellowServerApiKey(serverId: string) {
+	return request<GenerateMellowServerApiKeyResponse>(`mellow/server/${serverId}/api-key`, 'POST');
 }
 
 export function getSignUpOptions(payload: GetSignUpOptionsPayload) {

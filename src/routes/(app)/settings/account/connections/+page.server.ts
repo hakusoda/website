@@ -6,11 +6,12 @@ export async function load({ locals: { session } }) {
 			id: string
 			sub: string
 			type: UserConnectionType
-			metadata: any
+			username: string | null
 			created_at: string
 			avatar_url: string | null
 			website_url: string | null
-		}>('id, sub, type, metadata, created_at, avatar_url, website_url')
+			display_name: string | null
+		}>('id, sub, type, username, created_at, avatar_url, website_url, display_name')
 		.eq('user_id', session!.sub)
 		.order('type');
 	handleResponse(response);
