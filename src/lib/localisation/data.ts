@@ -138,6 +138,7 @@ export default {
 
 		'team_role.unknown': 'No Role',
 
+		'team_role_permission.0': '',
 		'team_role_permission.1': 'Manage Team',
 		'team_role_permission.2': 'Invite Users',
 		'team_role_permission.4': 'Manage Members',

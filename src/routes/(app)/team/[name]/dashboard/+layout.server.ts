@@ -28,6 +28,7 @@ export const load = (async ({ url, params: { name }, locals: { session } }) => {
 			members: {
 				id: string
 				role: {
+					position: number
 					permissions: number
 				}
 			}[]
@@ -36,9 +37,9 @@ export const load = (async ({ url, params: { name }, locals: { session } }) => {
 			avatar_url: string | null
 			website_url: string | null
 			display_name: string
-		}>('id, bio, name, roles:team_roles ( id, name, creator:users ( name, username ), position, created_at, permissions ), owner_id, avatar_url, created_at, website_url, display_name, members:team_members( id:user_id, role:team_roles!team_members_role_id_fkey ( permissions ) )')
+		}>('id, bio, name, roles:team_roles ( id, name, creator:users ( name, username ), position, created_at, permissions ), owner_id, avatar_url, created_at, website_url, display_name, members:team_members( id:user_id, role:team_roles!team_members_role_id_fkey ( position, permissions ) )')
 		.eq(isUUID(name) ? 'id' : 'name', name)
-		.order('position', { ascending: false, foreignTable: 'team_roles' })
+		.order('position', { ascending: false, referencedTable: 'team_roles' })
 		.limit(1)
 		.maybeSingle();
 	handleResponse(response);

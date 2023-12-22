@@ -147,40 +147,43 @@
 			{/if}
 		</div>
 	</header>
-	<main>
+	<main class:hasnav={!!navigation.length}>
 		<slot/>
 	</main>
 </div>
-<footer>
-	<div class="header">
-		<p class="name">
-			<BrandLogo/>
-		</p>
-		<p class="oss">
-			{$t('footer.oss')}
-			<a href="https://github.com/hakusoda">{$t('footer.oss.link')}</a>.
-		</p>
-	</div>
-	<div class="links">
-		<p>{$t('footer.legal')}</p>
-		<a href="/terms">{$t('footer.legal.terms')}</a>
-		<a href="/privacy">{$t('footer.legal.privacy')}</a>
-	</div>
-	<div class="links">
-		<p>{$t('footer.resources')}</p>
-		<a href="https://status.hakumi.cafe" target="_blank">Status</a>
-		<a href="https://github.com/hakusoda" target="_blank">GitHub</a>
-	</div>
-	<div class="links">
-		<p>{$t('footer.community')}</p>
-		<a href="https://discord.com/invite/rs3r4dQu9P" target="_blank">Discord</a>
-		<a href="https://x.com/@voxelified" target="_blank">X</a>
-	</div>
-</footer>
+{#if !$page.params.role_id}
+	<footer>
+		<div class="header">
+			<p class="name">
+				<BrandLogo/>
+			</p>
+			<p class="oss">
+				{$t('footer.oss')}
+				<a href="https://github.com/hakusoda">{$t('footer.oss.link')}</a>.
+			</p>
+		</div>
+		<div class="links">
+			<p>{$t('footer.legal')}</p>
+			<a href="/terms">{$t('footer.legal.terms')}</a>
+			<a href="/privacy">{$t('footer.legal.privacy')}</a>
+		</div>
+		<div class="links">
+			<p>{$t('footer.resources')}</p>
+			<a href="https://status.hakumi.cafe" target="_blank">Status</a>
+			<a href="https://github.com/hakusoda" target="_blank">GitHub</a>
+		</div>
+		<div class="links">
+			<p>{$t('footer.community')}</p>
+			<a href="https://discord.com/invite/rs3r4dQu9P" target="_blank">Discord</a>
+			<a href="https://x.com/@voxelified" target="_blank">X</a>
+		</div>
+	</footer>
+{/if}
 
 <style lang="scss">
 	.app-container {
-		min-height: 100vh;
+		height: unset;
+		min-height: 100%;
 	}
 	header {
 		top: -56px;
@@ -328,14 +331,17 @@
 
 	main {
 		width: 100%;
+		min-height: calc(100% - 65px);
 		background: center url(/img/background.svg);
+		&.hasnav {
+			min-height: calc(100% - 105px);
+		}
 	}
 
 	footer {
 		color: var(--color-secondary);
 		display: flex;
 		flex-wrap: wrap;
-		margin-top: auto;
 		min-height: 192px;
 		border-top: 1px solid var(--border-primary);
 		align-items: center;

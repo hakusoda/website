@@ -3,7 +3,7 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	export let items: (string | [string, typeof SvelteComponent<any>, string?])[] = [];
+	export let items: (string | [string, typeof SvelteComponent<any>?, string?, boolean?])[] = [];
 </script>
 
 <div class="with-side-navigation geist">
@@ -12,7 +12,7 @@
 			{#if typeof item === 'string'}
 				<p>{$t(item)}</p>
 			{:else}
-				<a href={item[0]} class:active={$page.url.pathname === item[0]}>
+				<a href={item[0]} class:active={$page.url.pathname === item[0]} class:disabled={item[3]}>
 					<svelte:component this={item[1]}/>
 					{$t(item[2] ?? `side_navigation${item[0].replace(/\//g, '.')}`)}
 				</a>
@@ -47,9 +47,13 @@
 				font-size: 13px;
 				transition: color .1s;
 				align-items: center;
-				&.active, &:hover {
+				&.active, &:not(.disabled):hover {
 					color: var(--menu-color-hover);
 					text-decoration: none;
+				}
+				&.disabled {
+					opacity: .5;
+					pointer-events: none; // not ideal... but i'm lazy.
 				}
 			}
 		}
