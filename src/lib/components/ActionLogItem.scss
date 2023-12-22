@@ -1,0 +1,12 @@
+.action-log-item {
+	b {
+		color: var(--color-primary);
+		font-weight: normal;
+		svg {
+			margin: 0 4px -2px;
+		}
+		&.deleted {
+			color: #e06c6c;
+		}
+	}
+}

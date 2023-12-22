@@ -15,24 +15,25 @@
 		"pull-env": "vercel env pull .env.local"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-vercel": "^3.1.0",
-		"@sveltejs/kit": "^1.29.0",
+		"@sveltejs/adapter-vercel": "^4.0.3",
+		"@sveltejs/kit": "^2.0.5",
+		"@sveltejs/vite-plugin-svelte": "^3.0.1",
 		"sass": "^1.69.5",
 		"svelte": "^4.2.8",
-		"svelte-preprocess": "^5.1.1",
+		"svelte-preprocess": "^5.1.3",
 		"typescript": "^5.3.3",
 		"user-agent-data-types": "^0.4.2",
-		"vercel": "^32.7.0",
-		"vite": "^5.0.8"
+		"vercel": "^33.0.1",
+		"vite": "^5.0.10"
 	},
 	"dependencies": {
 		"@hakumi/essence": "^2.3.0",
 		"@hakumi/roblox-api": "^0.1.1",
 		"@hexagon/base64": "^1.1.28",
-		"@supabase/supabase-js": "^2.39.0",
+		"@supabase/supabase-js": "^2.39.1",
 		"@vercel/analytics": "^1.1.1",
 		"@vercel/edge-config": "^0.4.1",
-		"@vercel/speed-insights": "^1.0.1",
+		"@vercel/speed-insights": "^1.0.2",
 		"@voxelified/roblox-open-cloud": "^0.1.0",
 		"@voxelified/svelte-localisation": "^1.0.0",
 		"cropperjs": "^1.6.1",

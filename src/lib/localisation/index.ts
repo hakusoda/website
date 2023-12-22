@@ -6,6 +6,15 @@ const numFormatter = new Intl.NumberFormat();
 const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 	s: value => parseInt(value) === 1 ? '' : 's',
 	number: value => numFormatter.format(parseInt(value)),
+	days_ago: (value, trans) => {
+		const date = new Date(value);
+		const diff = Date.now() - date.getTime();
+		
+		const day = Math.floor(diff / 86400000);
+		const hrs = date.getHours();
+		const mins = date.getMinutes();
+		return trans(ta(3, day), [day, (hrs % 12) + 1, mins > 9 ? mins : `0${mins}`, hrs > 11 ? 'PM' : 'AM']);
+	},
 	time_ago: (value, trans) => {
 		const date = new Date(value);
 		const diff = Date.now() - date.getTime();
@@ -41,7 +50,7 @@ const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 			return trans('time_ago.0_1');
 		return trans(ta(0, second), [second]);
 	},
-	date: (value, trans) => {
+	date: value => {
 		const date = new Date(value);
 		return date.toLocaleDateString('en-US', {
 			day: '2-digit',

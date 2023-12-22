@@ -4,6 +4,8 @@ import { page } from '$app/stores';
 import { request } from './util';
 import type {
 	User,
+	Pagination,
+	ActionLogItem,
 	UpdateTeamPayload,
 	CreateTeamResponse,
 	VerifySignInPayload,
@@ -49,6 +51,10 @@ export function markAllNotificationsAsRead(userId: string) {
 
 export function clearAllNotifications(userId: string) {
 	return request(`user/${userId}/notifications`, 'DELETE');
+}
+
+export function getTeamActionLog(teamId: string, limit = 20, offset = 0) {
+	return request<Pagination<ActionLogItem>>(`team/${teamId}/action_log?limit=${limit}&offset=${offset}`);
 }
 
 export function createTeam(displayName: string) {
@@ -125,6 +131,10 @@ export async function uploadPostAttachment([image, contentType]: [ArrayBuffer, s
 
 export function uploadPostAttachments(images: [ArrayBuffer, string][]) {
 	return Promise.all(images.map(image => uploadPostAttachment(image)));
+}
+
+export function getMellowServerActionLog(serverId: string, limit = 20, offset = 0) {
+	return request<Pagination<ActionLogItem>>(`mellow/server/${serverId}/action_log?limit=${limit}&offset=${offset}`);
 }
 
 export function updateMellowUserServerSettings(serverId: string, payload: UpdateMellowUserServerSettingsPayload) {

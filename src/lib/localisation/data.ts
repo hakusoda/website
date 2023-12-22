@@ -54,10 +54,11 @@ export default {
 		'label.requirements': 'Requirements',
 		'label.audit_reason': 'Reason for Audit Log',
 		'label.requirements2': '{0} requirement{0|s}',
-		'label.profile_sync_action_id': 'Action ID: {0}',
 		'label.search.members': 'Search Members',
-		'label.profile_sync_action_deleted': 'This Profile Sync Action was recently deleted, and can no longer be viewed.',
+		'label.copyrighted_joke': 'That\'s all, folks!',
 		'label.originally_created_by': 'Originally created by',
+		'label.profile_sync_action_id': 'Action ID: {0}',
+		'label.profile_sync_action_deleted': 'This Profile Sync Action was recently deleted, and can no longer be viewed.',
 
 		'sort_by': 'Sort by',
 		'sort_by.name': 'Name',
@@ -127,7 +128,6 @@ export default {
 		'team.settings.access.roles.summary': 'Use roles to group your team members and assign permissions.',
 		'team.settings.access.roles.return': 'Return to Roles',
 		'team.settings.archive': 'Archive',
-		'team.settings.archive.audit_log': 'Audit Log',
 		'team.settings.developer': 'Developer',
 		'team.settings.developer.applications': 'Applications',
 
@@ -280,7 +280,18 @@ export default {
 		'mellow_link_editor.requirement.link.placeholder': 'Select an action',
 		'mellow_link_editor.finish': 'Create Link',
 
+		'action_log.type.team.created': 'created the team',
+		'action_log.type.team.renamed': 'renamed the team from **{0.data.0}** to **{0.data.1}**',
+		'action_log.type.team.avatar.updated': 'updated the team\'s avatar',
+		'action_log.type.team.public_profile.updated': 'updated the team\'s public profile',
+		'action_log.type.team.role.created': 'created {team_role}',
+		'action_log.type.team.role.updated': 'updated {team_role}',
+		'action_log.type.team.role.deleted': 'deleted {team_role}',
+		'action_log.type.team.member.updated': 'updated {team_member}',
+		'action_log.type.team.member_invitation.created': 'invited {user} to the team',
+
 		'action_log.type.mellow.server.created': 'added this server',
+		'action_log.type.mellow.server.api_key.created': 'created a new API Key',
 		'action_log.type.mellow.server.syncing.action.created': 'created {mellow_sync_action}',
 		'action_log.type.mellow.server.syncing.action.updated': 'updated {mellow_sync_action}',
 		'action_log.type.mellow.server.syncing.action.deleted': 'deleted {mellow_sync_action}',
@@ -294,19 +305,6 @@ export default {
 		'mellow_default_nickname.{roblox_username}': 'Roblox Username',
 		'mellow_default_nickname.{roblox_display_name}': 'Roblox Display Name',
 		'mellow_default_nickname.': 'Disabled',
-
-		'team_audit_log.type.0': 'created the team',
-		'team_audit_log.type.1': 'renamed the team from "{0.data.0}" to "{0.data.1}"',
-		'team_audit_log.type.2': 'changed the team avatar',
-		'team_audit_log.type.3': 'modified the team profile',
-		'team_audit_log.type.8': 'created a new role named "{0.data.name}"',
-		'team_audit_log.type.9': 'updated the "{0.data.name.0}" role',
-		'team_audit_log.type.9.name': 'Name Updated',
-		'team_audit_log.type.9.position': 'Position Updated',
-		'team_audit_log.type.9.permissions': 'Permissions Updated',
-		'team_audit_log.type.10': 'created a new role named "{0.data.name}"',
-		'team_audit_log.type.11': 'updated {user}',
-		'team_audit_log.type.12': 'invited {user} to join the team',
 
 		'user_notification.type.0': 'Team Invite',
 		'user_notification.type.0.summary': 'You have been invited to join {0.target_team.display_name}',
@@ -493,6 +491,8 @@ export default {
 		'zod_issue.custom': 'Received data is invalid.',
 
 		'number': '{0|number}',
+
+		'days_ago': '{0|days_ago}',
 
 		'time_ago': '{0|time_ago}',
 		'time_ago.0_0': '{0} seconds ago',

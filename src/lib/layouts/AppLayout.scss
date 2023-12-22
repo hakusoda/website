@@ -1,0 +1,37 @@
+header {
+	.head {
+		.notification {
+			.avatar:not(:first-child) {
+				top: 36px;
+				left: 36px;
+				position: absolute;
+			}
+		}
+	}
+}
+
+main > .header {
+	padding: 48px 0;
+	background: var(--background-primary);
+	border-bottom: 1px solid var(--border-primary);
+	h1 {
+		margin: 0;
+		font-weight: 600;
+	}
+	p {
+		color: var(--color-secondary);
+		font-size: .9em;
+		white-space: pre;
+		line-height: normal;
+	}
+	*:nth-child(2) {
+		margin: 16px 0 0;
+	}
+}
+
+.geist {
+	width: 1400px;
+	margin: 0 auto;
+	padding: 0 64px;
+	max-width: calc(100vw - 128px);
+}

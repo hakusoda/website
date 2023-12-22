@@ -1,26 +1,16 @@
 <script lang="ts">
-	import type { MellowServerAuditLogType } from '$lib/types';
+	import { onMount } from 'svelte';
+
+	import { t } from '../localisation';
+	import type { ActionLogItem } from '../types';
+	import { getTeamActionLog, getMellowServerActionLog } from '../api';
 	
-	import AuditLog from './AuditLog.svelte';
-	export let items: {
-		data: any
-		text: string
-		type: MellowServerAuditLogType
-		author: {
-			id: string
-			name: string | null
-			username: string
-			avatar_url: string | null
-		}
-		created_at: string
-		target_user?: {
-			name: string | null
-			username: string
-		} | null
-		target_action?: {
-			name: string
-		} | null
-	}[];
+	import ActionLogUIItem from './ActionLogItem.svelte';
+
+	import Hourglass from '../icons/Hourglass.svelte';
+	export let team_id: string | null = null;
+	export let server_id: string | null = null;
+	$: items = server_id ? [] : [] as ActionLogItem[];
 
 	$: i = items.reduce((items, value) => {
 		const key = new Date(value.created_at).toLocaleString(undefined, { year: 'numeric', month: 'long' });
@@ -32,21 +22,58 @@
 			]
 		};
 	}, {} as Record<string, typeof items>);
+
+	let limit = 100;
+	let offset = -limit;
+	let finished = false;
+	let requesting = false;
+
+	let intersect: HTMLDivElement;
+	onMount(() => {
+		const observer = new IntersectionObserver(async (entries, observer) => {
+			if (entries[0]?.intersectionRatio && !requesting) {
+				requesting = true;
+
+				const response = await (team_id ? getTeamActionLog : getMellowServerActionLog)(team_id ?? server_id!, limit, offset += limit);
+				requesting = false;
+
+				if (response.success) {
+					if (!response.data.results.length)
+						return observer.disconnect(), finished = true;
+					items = [...items, ...response.data.results];
+
+					if (offset + limit >= response.data.total_results)
+						return observer.disconnect(), finished = true;
+				}
+			}
+		});
+		observer.observe(intersect);
+
+		return () => observer.disconnect();
+	});
 </script>
 
 <div class="audit-log-list">
 	{#each Object.entries(i) as [period, items]}
 		<h3>{period}</h3>
 		{#each items as item}
-			<AuditLog {...item}/>
+			<ActionLogUIItem data={item}/>
 		{/each}
 	{/each}
+	{#if requesting}
+		<Hourglass size={32}/>
+	{/if}
+	{#if finished}
+		<p class="finished">{$t('label.copyrighted_joke')}</p>
+	{/if}
+	<div class="intersect" bind:this={intersect}/>
 </div>
 
 <style lang="scss">
 	.audit-log-list {
 		gap: 24px;
 		display: flex;
+		position: relative;
 		flex-direction: column;
 		h3 {
 			margin: 0;
@@ -54,6 +81,20 @@
 			&:not(:first-child) {
 				margin-top: 32px;
 			}
+		}
+		.finished {
+			color: var(--color-secondary);
+			margin: 0 auto 64px;
+			font-size: .9em;
+		}
+		.intersect {
+			left: 0;
+			width: 100%;
+			bottom: 0;
+			height: 512px;
+			content: '';
+			position: absolute;
+			pointer-events: none;
 		}
 	}
 </style>

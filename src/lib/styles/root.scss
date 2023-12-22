@@ -1,0 +1,14 @@
+body {
+	overflow: hidden auto;
+}
+
+a {
+	color: var(--color-primary);
+	text-decoration: none;
+
+	&:hover { text-decoration: underline; }
+}
+
+.menu-content {
+	min-width: 256px;
+}

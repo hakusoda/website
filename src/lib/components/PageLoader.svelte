@@ -1,18 +1,17 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
-	import { onDestroy } from 'svelte';
 	import { navigating } from '$app/stores';
 
 	const progress = tweened(0, { easing: cubicOut, duration: 3500 });
-	const unsubscribe = navigating.subscribe(state => {
+	onMount(() => navigating.subscribe(state => {
 		if (!state) {
 			progress.set(1.5, { duration: 1000 });
 			setTimeout(() => progress.set(0, { duration: 0 }), 1000);
 		} else
 			progress.set(0.5);
-	});
-	onDestroy(() => unsubscribe());
+	}));
 </script>
 
 

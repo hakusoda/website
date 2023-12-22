@@ -1,4 +1,5 @@
 <script lang="ts">
+	import './AppLayout.scss';
 	import { DropdownMenu } from '@hakumi/essence';
 	import type { SvelteComponent } from 'svelte';
 
@@ -7,7 +8,6 @@
 	import { invalidateAll } from '$app/navigation';
 	import { UserNotificationState } from '$lib/enums';
 	import { getUserNotificationUrl } from '$lib/util';
-	import type { UserConnectionType } from '$lib/enums';
 	import type { User, UserSessionJWT, UserNotification } from '$lib/types';
 	import { markNotificationAsRead, clearAllNotifications, markAllNotificationsAsRead } from '$lib/api';
 
@@ -240,11 +240,6 @@
 				padding: 0 16px 0 8px;
 				position: relative;
 				transition: .5s opacity, .5s box-shadow, .5s background;
-				:global(.avatar):not(:first-child) {
-					top: 36px;
-					left: 36px;
-					position: absolute;
-				}
 				.details {
 					margin-right: 32px;
 					.time {
@@ -334,24 +329,6 @@
 	main {
 		width: 100%;
 		background: center url(/img/background.svg);
-		& > :global(.header) {
-			padding: 48px 0;
-			background: var(--background-primary);
-			border-bottom: 1px solid var(--border-primary);
-			:global(h1) {
-				margin: 0;
-				font-weight: 600;
-			}
-			:global(p) {
-				color: var(--color-secondary);
-				font-size: .9em;
-				white-space: pre;
-				line-height: normal;
-			}
-			:global(*:nth-child(2)) {
-				margin: 16px 0 0;
-			}
-		}
 	}
 
 	footer {
@@ -390,11 +367,5 @@
 				font-size: .9em;
 			}
 		}
-	}
-	:global(.geist) {
-		width: 1400px;
-		margin: 0 auto;
-		padding: 0 64px;
-		max-width: calc(100vw - 128px);
 	}
 </style>

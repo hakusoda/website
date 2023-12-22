@@ -1,5 +1,3 @@
-import type { Session, SupabaseClient } from '@supabase/supabase-js';
-
 import type { UserSessionJWT } from '$lib/types';
 export interface Database {
 	public: {

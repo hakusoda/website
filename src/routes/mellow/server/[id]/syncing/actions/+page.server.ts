@@ -1,7 +1,7 @@
 import { requestError } from '$lib/util/server';
 import { getDiscordServerRoles } from '$lib/discord';
 import supabase, { handleResponse } from '$lib/supabase';
-import type { MellowServerAuditLogType } from '$lib/types';
+import type { MellowServerActionLogType } from '$lib/types';
 import { MellowProfileSyncActionType, RequestErrorType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
 export async function load({ params: { id } }) {
 	const response = await supabase.from('mellow_binds')
@@ -10,7 +10,7 @@ export async function load({ params: { id } }) {
 			name: string
 			type: MellowProfileSyncActionType
 			edits: {
-				type: MellowServerAuditLogType
+				type: MellowServerActionLogType
 				author: {
 					name: string | null
 					username: string

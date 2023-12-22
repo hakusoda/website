@@ -94,22 +94,6 @@ export enum MellowDefaultNickname {
 	None = ''
 }
 
-export enum TeamAuditLogType {
-	CreateTeam,
-	RenameTeam,
-	UpdateAvatar,
-	UpdateProfile,
-	_143,
-	__143,
-	___143,
-	____143,
-	CreateRole,
-	UpdateRole,
-	DeleteRole,
-	UpdateMember,
-	InviteUser
-}
-
 export enum RequestErrorType {
 	InvalidBody,
 	Unauthenticated,

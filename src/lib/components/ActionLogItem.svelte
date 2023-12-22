@@ -1,0 +1,90 @@
+<script lang="ts">
+	import './ActionLogItem.scss';
+	import { t } from '../localisation';
+	import { page } from '$app/stores';
+	import type { ActionLogItem } from '../types';
+
+	import Avatar from './Avatar.svelte';
+	import ActionLogItemDetail from './ActionLogItemDetail.svelte';
+
+	import Link from '../icons/Link.svelte';
+	import PeopleFill from '../icons/PeopleFill.svelte';
+	export let data: ActionLogItem;
+
+	$: text = $t(`action_log.type.${data.type}`, [data]);
+</script>
+
+<div class="action-log-item">
+	<div class="header">
+		<Avatar src={data.author.avatar_url} size="xs" circle/>
+		<p class="text">
+			{#if $page.data.session?.sub === data.author.id}
+				<b>{$t('label.you_monster')}</b>
+			{:else}
+				<a href={`/user/${data.author.username}`}>
+					{data.author.name ?? `@${data.author.username}`}
+				</a>
+			{/if}
+			{#each text.split(' ') as item}
+				{#if item === '{user}'}
+					{#if data.target_user}
+						<a href={`/user/${data.target_user.username}`}>
+							{data.target_user.name ?? `@${data.target_user.username}`}</a>&nbsp
+					{:else}
+						<b>Unknown user</b>
+					{/if}
+				{:else if item === '{mellow_sync_action}'}
+					<b class:deleted={!data.target_action && !!data.data?.name}><Link/>{#if data.target_action}{data.target_action.name}{:else if data.data?.name}{data.data.name}{:else}Unknown mellow action{/if}</b>
+				{:else if item === '{team_role}'}
+					<b class:deleted={!data.target_team_role && !!data.data?.name}><PeopleFill/>{#if data.target_team_role}{data.target_team_role.name}{:else if data.data?.name}{data.data.name}{:else}Unknown Role{/if}</b>
+				{:else}
+					{item}&nbsp
+				{/if}
+			{/each}
+		</p>
+		<p class="created">{$t('days_ago', [data.created_at])}</p>
+	</div>
+	{#if data}
+		{#if data.type === 'mellow.server.syncing.action.created'}
+			<ActionLogItemDetail name="name" type="with" value={data.data.name}/>
+			<ActionLogItemDetail name="type" type="with" value={data.data.type} tv="mellow_sync_action.type.%"/>
+			<ActionLogItemDetail type="with2" value={$t('label.requirements2', [data.data.requirements])}/>
+			<ActionLogItemDetail name="requirements type" type="with" value={data.data.requirements_type} tv="mellow_sync_action.requirements_type.%"/>
+		{:else if data.type === 'mellow.server.syncing.action.updated'}
+			<ActionLogItemDetail type="rename" change={data.data.name}/>
+			<ActionLogItemDetail name="type" change={data.data.type}/>
+			<ActionLogItemDetail name="metadata" change={data.data.data}/>
+			<ActionLogItemDetail name="requirements" change={data.data.requirements}/>
+			<ActionLogItemDetail name="requirements type" change={data.data.requirements_type} tv="mellow_sync_action.type.%"/>
+		{:else if data.type === 'mellow.server.syncing.settings.updated'}
+			<ActionLogItemDetail name="default nickname" change={data.data.default_nickname}/>
+			<ActionLogItemDetail name="forceful syncing" change={data.data.allow_forced_syncing}/>
+		{:else if data.type === 'mellow.server.discord_logging.updated'}
+			<ActionLogItemDetail name="target channel" change={data.data.channel}/>
+		{:else if data.type === 'team.role.updated'}
+			<ActionLogItemDetail type="rename" change={data.data.name}/>
+			<ActionLogItemDetail name="position" change={data.data.position}/>
+			<ActionLogItemDetail name="permissions" change={data.data.permissions}/>
+		{/if}
+	{/if}
+</div>
+
+<style lang="scss">
+	.action-log-item {
+		width: 100%;
+		.header {
+			display: flex;
+			align-items: center;
+			.text {
+				color: var(--color-secondary);
+				margin: 0 0 0 16px;
+				font-size: .9em;
+			}
+			.created {
+				color: var(--color-secondary);
+				margin: 0 0 0 auto;
+				font-size: .8em;
+			}
+		}
+	}
+</style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '$lib/styles/root.scss';
 	import '@hakumi/essence/styles.scss';
 	import { inject } from '@vercel/analytics';
 	import { onMount } from 'svelte';
@@ -43,19 +44,5 @@
 
 		--color-link: hsl(330 90% 80%);
 		--color-verified: color-mix(in srgb, var(--button-background) 75%, #fff);
-	}
-	:global(body) {
-		overflow: hidden auto;
-	}
-
-	:global(a) {
-		color: var(--color-primary);
-		text-decoration: none;
-
-		&:hover { text-decoration: underline; }
-	}
-
-	:global(.menu-content) {
-		min-width: 256px;
 	}
 </style>

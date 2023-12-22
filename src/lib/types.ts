@@ -119,8 +119,20 @@ export interface TeamInvite {
 	} | null
 }
 
-export type MellowServerAuditLogType =
+export type TeamActionLogType =
+	'team.created' |
+	'team.renamed' |
+	'team.avatar.updated' |
+	'team.public_profile.updated' |
+	'team.role.created' |
+	'team.role.updated' |
+	'team.role.deleted' |
+	'team.member.updated' |
+	'team.member_invitation.created'
+
+export type MellowServerActionLogType =
 	'mellow.server.created' |
+	'mellow.server.api_key.created' |
 	'mellow.server.syncing.action.created' |
 	'mellow.server.syncing.action.updated' |
 	'mellow.server.syncing.action.deleted' |
@@ -136,7 +148,7 @@ export type MellowProfileAction = {
 	} | null
 	metadata: {}
 	last_edit: {
-		type: MellowServerAuditLogType
+		type: MellowServerActionLogType
 		author: {
 			name: string | null
 			username: string
@@ -297,6 +309,40 @@ export interface UpdateProfilePayload {
 	bio?: string | null
 	name?: string | null
 	username?: string
+}
+
+export interface Pagination<T> {
+	limit: number
+	offset: number
+	results: T[]
+	total_results: number
+}
+
+export type ActionLogItem = {
+	id: string
+	data: any
+	type: TeamActionLogType | MellowServerActionLogType
+	author: {
+		id: string
+		name: string | null
+		username: string
+		avatar_url: string | null
+	}
+	created_at: string
+	target_team_role?: {
+		id: string
+		name: string
+	}
+	target_user?: {
+		id: string
+		name: string | null
+		username: string
+		avatar_url: string | null
+	} | null
+	target_action?: {
+		id: string
+		name: string
+	} | null
 }
 
 export interface UpdateMellowUserServerSettingsPayload {
