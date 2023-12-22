@@ -2,9 +2,10 @@
 	import { onMount } from 'svelte';
 
 	import { t } from '../localisation';
-	import type { ActionLogItem } from '../types';
+	import type { ActionLogItem, ApiRequestError } from '../types';
 	import { getTeamActionLog, getMellowServerActionLog } from '../api';
 	
+	import RequestError from './RequestError.svelte';
 	import ActionLogUIItem from './ActionLogItem.svelte';
 
 	import Hourglass from '../icons/Hourglass.svelte';
@@ -23,6 +24,7 @@
 		};
 	}, {} as Record<string, typeof items>);
 
+	let error: ApiRequestError | null = null;
 	let limit = 100;
 	let offset = -limit;
 	let finished = false;
@@ -44,7 +46,8 @@
 
 					if (offset + limit >= response.data.total_results)
 						return observer.disconnect(), finished = true;
-				}
+				} else
+					error = response, finished = true, observer.disconnect();
 			}
 		});
 		observer.observe(intersect);
@@ -63,7 +66,8 @@
 	{#if requesting}
 		<Hourglass size={32}/>
 	{/if}
-	{#if finished}
+	<RequestError data={error} background="var(--background-primary)"/>
+	{#if finished && !error}
 		<p class="finished">{$t('label.copyrighted_joke')}</p>
 	{/if}
 	<div class="intersect" bind:this={intersect}/>

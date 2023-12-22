@@ -10,8 +10,7 @@
 {#if data}
 	<div class="request-error" style={`--bg: ${background}`}>
 		<div class="container message">
-			<p class="title">{$t('request_error.title')}</p>
-			<p class="message">{$t(`request_error.${data.error}`)}</p>
+			<p>{$t(`request_error.${data.error}`)}</p>
 		</div>
 		{#if data.issues?.length}
 			<div class="container zod-issues">
@@ -37,11 +36,12 @@
 <style lang="scss">
 	.container {
 		gap: 8px;
-		border: 2px solid var(--border-secondary);
+		border: 1px solid var(--border-secondary);
 		display: flex;
 		padding: 16px 24px;
 		position: relative;
 		margin-top: 24px;
+		background: #ffffff0d;
 		border-radius: 20px;
 		flex-direction: column;
 		.title {
@@ -55,11 +55,10 @@
 			font-weight: 500;
 		}
 		&.message {
+			background: #ff76761a;
 			border-color: #ff767680;
-			.title {
-				color: #ff8b8b;
-			}
-			.message {
+			p {
+				color: #ffdada;
 				margin: 0;
 				font-size: .9em;
 			}
