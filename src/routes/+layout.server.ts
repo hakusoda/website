@@ -20,7 +20,25 @@ export async function load({ url, locals: { session }, cookies }) {
 
 async function getUser(session: UserSessionJWT) {
 	const response = await supabase.from('users')
-		.select('id, name, username, avatar_url, created_at')
+		.select<string, {
+			id: string
+			name: string | null
+			username: string
+			avatar_url: string | null
+			created_at: string
+			teams: {
+				team: {
+					id: string
+					name: string
+					owner_id: string | null
+					avatar_url: string | null
+					display_name: string | null
+				}
+				role: {
+					permissions: number
+				} | null
+			}[]
+		}>('id, name, username, avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( team:teams ( id, name, owner_id, avatar_url, display_name ), role:team_roles ( permissions ) )')
 		.eq('id', session.sub)
 		.limit(1)
 		.maybeSingle();

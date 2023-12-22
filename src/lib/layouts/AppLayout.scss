@@ -1,5 +1,40 @@
 header {
 	.head {
+		.navigation {
+			.context-selector {
+				gap: 12px;
+				color: inherit;
+				margin: 0;
+				border: none;
+				cursor: pointer;
+				padding: 0;
+				display: flex;
+				position: relative;
+				font-size: .9em;
+				background: none;
+				font-weight: 500;
+				align-items: center;
+				font-family: inherit;
+				border-radius: 8px;
+				.arrows {
+					display: flex;
+					flex-direction: column;
+				}
+				&:before {
+					top: -8px;
+					left: -8px;
+					width: calc(100% + 16px);
+					height: calc(100% + 16px);
+					content: '';
+					position: absolute;
+					transition: background .25s;
+					border-radius: 8px;
+				}
+				&:hover:before {
+					background: #ffffff0d;
+				}
+			}
+		}
 		.notification {
 			.avatar:not(:first-child) {
 				top: 36px;

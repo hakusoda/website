@@ -27,6 +27,7 @@
 	export let session: UserSessionJWT | null;
 	export let navigation: [string, typeof SvelteComponent<any>, string?][] = [];
 	export let notifications: UserNotification[];
+	export let disableDefaultTopNav = false;
 
 	let userMenuTrigger: () => void;
 	let notificationsTrigger: () => void;
@@ -51,7 +52,10 @@
 					<BrandLogo size={32}/>
 				</a>
 				<div class="navigation">
-					<a href="/" class="nav-link" class:active={$page.url.pathname === '/'}>{$t('home')}</a>
+					{#if !disableDefaultTopNav}
+						<a href="/" class="nav-link" class:active={$page.url.pathname === '/'}>{$t('home')}</a>
+					{/if}
+					<slot name="header-top-nav"/>
 				</div>
 				{#if session && user}
 					<DropdownMenu.Root bind:trigger={notificationsTrigger}>
