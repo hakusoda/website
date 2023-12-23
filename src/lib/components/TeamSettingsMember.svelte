@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, DropdownMenu } from '@hakumi/essence';
+	import { DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
 	import { page } from '$app/stores';
@@ -86,7 +86,7 @@
 			<ThreeDots/>
 		</button>
 		<p>{name || username} (@{username})</p>
-		{#if filteredRoles.length && owner !== id && (owner === $page.data.user?.id || (myRole && hasBit(myRole.permissions, TeamRolePermission.ManageMembers)))}
+		{#if filteredRoles.length && owner !== id && (id !== $page.data.session.sub || owner === $page.data.session.sub) && (owner === $page.data.session.sub || (myRole && (hasBit(myRole.permissions, TeamRolePermission.ManageMembers) || hasBit(myRole.permissions, TeamRolePermission.Administrator))))}
 			<DropdownMenu.Sub>
 				<svelte:fragment slot="trigger">
 					<PeopleFill/>{$t('action.change_role')}
