@@ -288,7 +288,7 @@ export default {
 		'action_log.type.team.role.created': 'created {team_role}',
 		'action_log.type.team.role.updated': 'updated {team_role}',
 		'action_log.type.team.role.deleted': 'deleted {team_role}',
-		'action_log.type.team.member.updated': 'updated {team_member}',
+		'action_log.type.team.member.updated': 'updated {user}',
 		'action_log.type.team.member_invitation.created': 'invited {user} to the team',
 		'action_log.unknown_user': 'Unknown User',
 		'action_log.unknown_team_role': 'Unknown Role',
