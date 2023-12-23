@@ -18,7 +18,7 @@ export async function load({ params: { id } }) {
 
 	return {
 		...response.data!,
-		channels: getDiscordServerChannels(id)
+		channels: await getDiscordServerChannels(id)
 	};
 }
 
