@@ -290,6 +290,9 @@ export default {
 		'action_log.type.team.role.deleted': 'deleted {team_role}',
 		'action_log.type.team.member.updated': 'updated {team_member}',
 		'action_log.type.team.member_invitation.created': 'invited {user} to the team',
+		'action_log.unknown_user': 'Unknown User',
+		'action_log.unknown_team_role': 'Unknown Role',
+		'action_log.unknown_mellow_action': 'Unknown Action',
 
 		'action_log.type.mellow.server.created': 'added this server',
 		'action_log.type.mellow.server.api_key.created': 'created a new API Key',

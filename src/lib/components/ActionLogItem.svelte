@@ -12,6 +12,8 @@
 	export let data: ActionLogItem;
 
 	$: text = $t(`action_log.type.${data.type}`, [data]);
+
+	const n = (value: string[] | string | undefined) => Array.isArray(value) ? value[0] : value;
 </script>
 
 <div class="action-log-item">
@@ -31,12 +33,20 @@
 						<a href={`/user/${data.target_user.username}`}>
 							{data.target_user.name ?? `@${data.target_user.username}`}</a>&nbsp
 					{:else}
-						<b>Unknown user</b>
+						<b class="deleted">{$t('action_log.unknown_user')}</b>
 					{/if}
 				{:else if item === '{mellow_sync_action}'}
-					<b class:deleted={!data.target_action && !!data.data?.name}><Link/>{#if data.target_action}{data.target_action.name}{:else if data.data?.name}{data.data.name}{:else}Unknown mellow action{/if}</b>
+					<b class:deleted={!data.target_action}><Link/>{#if data.target_action}{data.target_action.name}{:else}{n(data.data?.name) ?? $t('action_log.unknown_mellow_action')}{/if}</b>
 				{:else if item === '{team_role}'}
-					<b class:deleted={!data.target_team_role && !!data.data?.name}><PeopleFill/>{#if data.target_team_role}{data.target_team_role.name}{:else if data.data?.name}{data.data.name}{:else}Unknown Role{/if}</b>
+					{#if data.target_team_role}
+						<a href={`/team/${$page.params.name}/dashboard/roles/${data.target_team_role.id}`}>
+							<PeopleFill/>{data.target_team_role.name}
+						</a>
+					{:else}
+						<b class="deleted">
+							<PeopleFill/>{n(data.data?.name) ?? $t('action_log.unknown_team_role')}
+						</b>
+					{/if}
 				{:else}
 					{item}&nbsp
 				{/if}
