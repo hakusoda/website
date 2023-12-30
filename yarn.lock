@@ -171,10 +171,10 @@
   resolved "https://registry.yarnpkg.com/@fastify/busboy/-/busboy-2.1.0.tgz#0709e9f4cb252351c609c6e6d8d6779a8d25edff"
   integrity sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==
 
-"@hakumi/essence@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@hakumi/essence/-/essence-2.3.0.tgz#06e4be55597aab39e74c59be2fd15530d2db1ea9"
-  integrity sha512-0mfLTXF418wMJjb1Vs3FhbNeqsXEZ1SZulcD50zURWhZwxpUKP3KqSNRFQdx1MY4t/wJbW4uCsxyfldSL9Rrgw==
+"@hakumi/essence@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@hakumi/essence/-/essence-2.3.1.tgz#c832f077442830caad7d1614864d7276607e9196"
+  integrity sha512-oQJYQ+XKRl+mHJp07CRt683IKXQwxqxgTIMMuuvaA29x6GTahBpErF4gfL+9f6jjN/IbWLRoi7DhIt0KTI9NyA==
   dependencies:
     svelte "^4.2.3"
 

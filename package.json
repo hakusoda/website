@@ -27,7 +27,7 @@
 		"vite": "^5.0.10"
 	},
 	"dependencies": {
-		"@hakumi/essence": "^2.3.0",
+		"@hakumi/essence": "^2.3.1",
 		"@hakumi/roblox-api": "^0.1.1",
 		"@hexagon/base64": "^1.1.28",
 		"@supabase/supabase-js": "^2.39.1",
