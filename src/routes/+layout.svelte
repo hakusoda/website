@@ -67,7 +67,7 @@
 
 		.app-container {
 			height: inherit;
-			overflow: auto;
+			overflow: hidden auto;
 			min-height: inherit;
 		}
 		&:has(.editor-controls) .app-container {
