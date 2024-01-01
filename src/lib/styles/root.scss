@@ -12,3 +12,16 @@ a {
 .menu-content {
 	min-width: 256px !important;
 }
+
+#absolute-solver {
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 100000;
+	position: fixed;
+	pointer-events: none;
+	* {
+		pointer-events: initial;
+	}
+}

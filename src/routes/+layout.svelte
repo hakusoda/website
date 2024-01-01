@@ -32,6 +32,7 @@
 	<div class="app-container">
 		<slot/>
 	</div>
+	<div id="absolute-solver"/>
 	{#if $page.params.role_id}
 		<div class="editor-controls">
 			<button type="button" on:click={() => editor.callback?.()} disabled={!$editorCanSave || $editorSaving}>

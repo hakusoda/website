@@ -21,6 +21,7 @@ import type {
 	GetSignUpOptionsPayload,
 	VerifyNewDeviceResponse,
 	GenerateMellowServerApiKeyResponse,
+	UpdateMellowServerOwnershipPayload,
 	CreateMellowProfileSyncActionPayload,
 	CreateMellowProfileSyncActionResponse,
 	UpdateMellowUserServerSettingsPayload,
@@ -139,6 +140,10 @@ export function getMellowServerActionLog(serverId: string, limit = 20, offset = 
 
 export function updateMellowUserServerSettings(serverId: string, payload: UpdateMellowUserServerSettingsPayload) {
 	return request(`mellow/server/${serverId}/user-settings`, 'PATCH', payload);
+}
+
+export function updateMellowServerOwnership(serverId: string, payload: UpdateMellowServerOwnershipPayload) {
+	return request(`mellow/server/${serverId}/ownership`, 'PATCH', payload);
 }
 
 export function updateMellowServerProfileSyncingSettings(serverId: string, payload: UpdateMellowServerProfileSyncingSettingsPayload) {

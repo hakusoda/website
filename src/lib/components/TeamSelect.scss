@@ -1,0 +1,13 @@
+.team-select {
+	svg, .avatar {
+		top: 50%;
+		left: 24px;
+		color: var(--color-secondary);
+		position: absolute !important;
+		transform: translateY(-50%);
+	}
+	svg:last-child {
+		left: unset;
+		right: 24px;
+	}
+}

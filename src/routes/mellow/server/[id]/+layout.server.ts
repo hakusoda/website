@@ -7,7 +7,14 @@ export const load = async ({ params: { id }, parent }) => {
 		throw requestError(401, RequestErrorType.Unauthorised);
 
 	const response = await supabase.from('mellow_servers')
-		.select('name, avatar_url')
+		.select<string, {
+			name: string
+			avatar_url: string | null
+			owner_team: {
+				display_name: string
+			} | null
+			owner_user_id: string
+		}>('name, avatar_url, owner_team:teams ( display_name ), owner_user_id')
 		.eq('id', id)
 		.limit(1)
 		.maybeSingle();

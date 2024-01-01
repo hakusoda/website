@@ -128,16 +128,18 @@ export type TeamActionLogType =
 	'team.role.updated' |
 	'team.role.deleted' |
 	'team.member.updated' |
-	'team.member_invitation.created'
+	'team.member_invitation.created' |
+	'team.mellow_server.transferred.to_here'
 
-export type MellowServerActionLogType =
+export type MellowActionLogItemType =
 	'mellow.server.created' |
-	'mellow.server.api_key.created' |
 	'mellow.server.syncing.action.created' |
 	'mellow.server.syncing.action.updated' |
 	'mellow.server.syncing.action.deleted' |
 	'mellow.server.syncing.settings.updated' |
-	'mellow.server.discord_logging.updated'
+	'mellow.server.discord_logging.updated' |
+	'mellow.server.api_key.created' |
+	'mellow.server.ownership.changed'
 
 export type MellowProfileAction = {
 	id: string
@@ -148,7 +150,7 @@ export type MellowProfileAction = {
 	} | null
 	metadata: {}
 	last_edit: {
-		type: MellowServerActionLogType
+		type: MellowActionLogItemType
 		author: {
 			name: string | null
 			username: string
@@ -321,7 +323,7 @@ export interface Pagination<T> {
 export type ActionLogItem = {
 	id: string
 	data: any
-	type: TeamActionLogType | MellowServerActionLogType
+	type: TeamActionLogType | MellowActionLogItemType
 	author: {
 		id: string
 		name: string | null
@@ -383,6 +385,11 @@ export interface CreateMellowProfileSyncActionResponse {
 		type: MellowProfileSyncActionRequirementType
 	}[]
 	requirements_type: MellowProfileSyncActionRequirementsType
+}
+
+export interface UpdateMellowServerOwnershipPayload {
+	team_id?: string
+	user_id?: string
 }
 
 export interface GenerateMellowServerApiKeyResponse {

@@ -23,8 +23,9 @@ export default {
 		'action.sign_in': 'Sign in',
 		'action.go_home': 'Go Home',
 		'action.preview': 'Preview',
-		'action.unfollow': 'Unfollow',
 		'action.continue': 'Continue',
+		'action.transfer': 'Transfer',
+		'action.unfollow': 'Unfollow',
 		'action.duplicate': 'Duplicate',
 		'action.try_again': 'Try Again',
 		'action.disconnect': 'Disconnect',
@@ -219,6 +220,10 @@ export default {
 		'mellow.server.settings.3': 'Webhooks',
 		'mellow.server.settings.4': 'Action Log',
 
+		'mellow.server.settings.general.transfer': 'Transfer to Team',
+		'mellow.server.settings.general.transfer.summary': 'Transferring this server to a Team will allow you to assign members to manage this server.',
+		'mellow.server.settings.general.transfer.already_team': 'This server is currently being managed by members of {0}.',
+
 		'mellow.server.settings.automation': 'Automation',
 		'mellow.server.settings.automation.logging.channel': 'Logging Channel',
 		'mellow.server.settings.automation.logging.channel.category': 'Discord Channels',
@@ -290,9 +295,7 @@ export default {
 		'action_log.type.team.role.deleted': 'deleted {team_role}',
 		'action_log.type.team.member.updated': 'updated {user}',
 		'action_log.type.team.member_invitation.created': 'invited {user} to the team',
-		'action_log.unknown_user': 'Unknown User',
-		'action_log.unknown_team_role': 'Unknown Role',
-		'action_log.unknown_mellow_action': 'Unknown Action',
+		'action_log.type.team.mellow_server.transferred.to_here':  'transferred ownership of {mellow_server} to this team',
 
 		'action_log.type.mellow.server.created': 'added this server',
 		'action_log.type.mellow.server.api_key.created': 'created a new API Key',
@@ -301,6 +304,11 @@ export default {
 		'action_log.type.mellow.server.syncing.action.deleted': 'deleted {mellow_sync_action}',
 		'action_log.type.mellow.server.syncing.settings.updated': 'updated the syncing settings',
 		'action_log.type.mellow.server.discord_logging.updated': 'updated Discord logging settings',
+		'action_log.type.mellow.server.ownership.changed': 'transferred ownership to {unimplemented}',
+
+		'action_log.unknown_user': 'Unknown User',
+		'action_log.unknown_team_role': 'Unknown Role',
+		'action_log.unknown_mellow_action': 'Unknown Action',
 
 		'mellow_server_logging_type.0': '',
 		'mellow_server_logging_type.1': 'Mellow Audit Log',

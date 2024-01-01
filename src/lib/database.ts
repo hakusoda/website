@@ -1,7 +1,7 @@
 import supabase from './supabase';
 import { isUUID, hasBit } from './util';
 import { TeamRolePermission } from './enums';
-import type { DatabaseTeam, UserNotification, TeamActionLogType, MellowServerActionLogType } from './types';
+import type { DatabaseTeam, UserNotification, TeamActionLogType, MellowActionLogItemType } from './types';
 export async function getTeam(teamId: string) {
 	let filter = supabase.from('teams').select<string, DatabaseTeam>('id, bio, name, flags, roles:team_roles ( id, name, position, permissions ), owner:users!teams_owner_id_fkey ( id, name, username, avatar_url ), creator:users!teams_creator_id_fkey ( name, username, avatar_url ), members:team_members ( role_id, user:users!team_members_user_id_fkey ( id, bio, name, flags, username, avatar_url, created_at ), joined_at ), avatar_url, website_url, created_at, display_name, affiliations:team_affiliations!team_affiliations_affiliator_id_fkey ( team:teams!team_affiliations_team_id_fkey ( name, avatar_url, display_name ) ), parent_affiliations:team_affiliations!team_affiliations_team_id_fkey ( team:teams!team_affiliations_affiliator_id_fkey ( name, avatar_url, display_name ) )').limit(1);
 	if (isUUID(teamId))
@@ -49,7 +49,7 @@ export async function createTeamAuditLog(type: TeamActionLogType, author_id: str
 		console.error(error);
 }
 
-export async function createMellowServerAuditLog(type: MellowServerActionLogType, author_id: string, server_id: string, data?: any, target_link_id?: string) {
+export async function createMellowServerAuditLog(type: MellowActionLogItemType, author_id: string, server_id: string, data?: any, target_link_id?: string) {
 	const { error } = await supabase.from('mellow_server_audit_logs').insert({
 		type,
 		data,
