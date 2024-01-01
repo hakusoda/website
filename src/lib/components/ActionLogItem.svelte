@@ -47,6 +47,8 @@
 							<PeopleFill/>{n(data.data?.name) ?? $t('action_log.unknown_team_role')}
 						</b>
 					{/if}
+				{:else if /^\*\*.*\*\*$/.test(item)}
+					<b>{item.slice(2, -2)}&nbsp</b>
 				{:else}
 					{item}&nbsp
 				{/if}

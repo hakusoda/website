@@ -294,6 +294,7 @@ export default {
 		'action_log.type.team.role.updated': 'updated {team_role}',
 		'action_log.type.team.role.deleted': 'deleted {team_role}',
 		'action_log.type.team.member.updated': 'updated {user}',
+		'action_log.type.team.member.removed': 'removed {user} from the team',
 		'action_log.type.team.member_invitation.created': 'invited {user} to the team',
 		'action_log.type.team.mellow_server.transferred.to_here':  'transferred ownership of {mellow_server} to this team',
 

@@ -44,6 +44,12 @@ export const uuidRegex = /^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/;
 
 export const isUUID = (uuid: string) => uuidRegex.test(uuid);
 export const hasBit = (bits: number, bit: number) => (bits & bit) === bit;
+export const hasOneOfBits = (bits: number, thebits: number[]) => {
+	for (const bit of thebits)
+		if (hasBit(bits, bit))
+			return true;
+	return false;
+};
 
 const UNKNOWN_ERROR = { error: RequestErrorType.Unknown, success: false };
 export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' = 'GET', body?: any, headers?: Record<string, string>): Promise<ApiResponse<T>> {

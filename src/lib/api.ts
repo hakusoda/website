@@ -94,6 +94,10 @@ export function updateTeamMember(teamId: string, userId: string, payload: Update
 	return request(`team/${teamId}/member/${userId}`, 'PATCH', payload);
 }
 
+export function removeTeamMember(teamId: string, userId: string) {
+	return request(`team/${teamId}/member/${userId}`, 'DELETE');
+}
+
 export function updateTeamRole(teamId: string, roleId: string, payload: UpdateTeamRolePayload) {
 	return request(`team/${teamId}/role/${roleId}`, 'PATCH', payload);
 }

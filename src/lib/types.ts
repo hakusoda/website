@@ -128,6 +128,7 @@ export type TeamActionLogType =
 	'team.role.updated' |
 	'team.role.deleted' |
 	'team.member.updated' |
+	'team.member.removed' |
 	'team.member_invitation.created' |
 	'team.mellow_server.transferred.to_here'
 

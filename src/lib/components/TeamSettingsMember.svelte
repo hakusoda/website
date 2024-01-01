@@ -3,15 +3,16 @@
 
 	import { t } from '../localisation';
 	import { page } from '$app/stores';
-	import { hasBit } from '../util';
-	import { updateTeamMember } from '../api';
 	import { TeamRolePermission } from '../enums';
+	import { hasBit, hasOneOfBits } from '../util';
+	import { updateTeamMember, removeTeamMember } from '../api';
 
 	import Avatar from './Avatar.svelte';
 
-	import X from '$lib/icons/X.svelte';
+	import X from '../icons/X.svelte';
 	import ThreeDots from '../icons/ThreeDots.svelte';
 	import PeopleFill from '../icons/PeopleFill.svelte';
+	import BoxArrowLeft from '../icons/BoxArrowLeft.svelte';
 	import ClipboardPlusFill from '../icons/ClipboardPlusFill.svelte';
 	export let id: string;
 	export let name: string | null = null;
@@ -28,6 +29,7 @@
 	export let isInvite = false;
 	export let username: string;
 	export let joinedAt: string;
+	export let removed: (() => void) | null = null;
 
 	export let roles: PartialRole[] = [];
 	export let myRole: PartialRole | null = null;
@@ -40,6 +42,7 @@
 	}
 
 	let trigger: () => void;
+	let removing = false;
 	let changingRole = false;
 
 	$: filteredRoles = role ? roles.filter(item => item.id !== role!.id) : roles;
@@ -57,9 +60,18 @@
 
 		changingRole = false;
 	};
+	const remove = async () => {
+		removing = true;
+
+		const response = await removeTeamMember(teamId, id);
+		if (response.success)
+			removed?.();
+
+		removing = false;
+	};
 </script>
 
-<div class="team-settings-member">
+<div class="team-settings-member" class:removing>
 	<Avatar {id} src={avatar} size="xs" circle/>
 	<div class="details">
 		<a href={`/user/${username}`}>{name || username}</a>
@@ -82,11 +94,11 @@
 		{/if}
 	</p>
 	<DropdownMenu.Root bind:trigger>
-		<button type="button" class="options" slot="trigger" on:click={trigger}>
+		<button type="button" class="options" slot="trigger" on:click={trigger} disabled={removing}>
 			<ThreeDots/>
 		</button>
 		<p>{name || username} (@{username})</p>
-		{#if filteredRoles.length && owner !== id && (id !== $page.data.session.sub || owner === $page.data.session.sub) && (owner === $page.data.session.sub || (myRole && (hasBit(myRole.permissions, TeamRolePermission.ManageMembers) || hasBit(myRole.permissions, TeamRolePermission.Administrator))))}
+		{#if !removing && filteredRoles.length && owner !== id && (id !== $page.data.session.sub || owner === $page.data.session.sub) && (owner === $page.data.session.sub || (myRole && (hasBit(myRole.permissions, TeamRolePermission.ManageMembers) || hasBit(myRole.permissions, TeamRolePermission.Administrator))))}
 			<DropdownMenu.Sub>
 				<svelte:fragment slot="trigger">
 					<PeopleFill/>{$t('action.change_role')}
@@ -107,6 +119,12 @@
 			</DropdownMenu.Sub>
 			<div class="separator"/>
 		{/if}
+		{#if owner === $page.data.session.sub || (myRole && hasOneOfBits(myRole.permissions, [TeamRolePermission.Administrator, TeamRolePermission.ManageMembers]))}
+			<button type="button" on:click={remove} disabled={removing}>
+				<BoxArrowLeft/>
+				{$t('action.remove')}
+			</button>
+		{/if}
 		<button type="button" on:click={() => navigator.clipboard.writeText(id)}>
 			<ClipboardPlusFill/>
 			{$t('action.copy_id')}
@@ -119,9 +137,13 @@
 		height: 64px;
 		display: flex;
 		padding: 0 28px;
+		transition: opacity .5s;
 		background: var(--background-secondary);
 		align-items: center;
 		border-radius: 32px;
+		&.removing {
+			opacity: .5;
+		}
 		.details {
 			margin: 0 auto 0 24px;
 			a {

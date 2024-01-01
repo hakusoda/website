@@ -28,6 +28,7 @@
 						inviter={item.inviter}
 						joinedAt={item.joined_at}
 						username={item.user.username}
+						removed={() => data.members = data.members.filter(i => i != item)}
 						{myRole}
 					/>
 				{/each}
