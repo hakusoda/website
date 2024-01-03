@@ -15,10 +15,13 @@
 	$: paths = {
 		docs: [{
 			id: 'api',
-			icon: BrandIcon
+			icon: CodeSlash
 		}, {
 			id: 'mellow',
 			icon: MellowFace
+		}, {
+			id: 'platform',
+			icon: BrandIcon
 		}],
 		reference: [{
 			id: 'rest-api',
@@ -64,7 +67,7 @@
 			</a>
 			{#each data.articles.filter(item => item.url !== basePath && item.url.startsWith(basePath)) as item}
 				<a href={item.url} class:active={$page.url.pathname === item.url}>
-					{$t(`${docsArea}.articles.${item.url.replace(/^\/\w+\/?/, '').replace('/', '.')}`)}
+					{$t(`${docsArea}.articles.${item.url.replace(/^\/\w+\/?/, '').replace(/\//g, '.')}`)}
 				</a>
 			{/each}
 		</div>
@@ -160,7 +163,6 @@
 			.content {
 				width: 100%;
 				padding: 16px 64px;
-				background: center url(/img/background.svg);
 			}
 		}
 	}

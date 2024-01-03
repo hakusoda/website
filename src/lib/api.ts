@@ -20,6 +20,7 @@ import type {
 	UpdateTeamMemberPayload,
 	GetSignUpOptionsPayload,
 	VerifyNewDeviceResponse,
+	CreateMellowWebhookPayload,
 	GenerateMellowServerApiKeyResponse,
 	UpdateMellowServerOwnershipPayload,
 	CreateMellowProfileSyncActionPayload,
@@ -164,6 +165,18 @@ export function updateMellowServerProfileSyncAction(serverId: string, linkId: st
 
 export function deleteMellowServerProfileSyncAction(serverId: string, linkId: string) {
 	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${serverId}/syncing/action/${linkId}`, 'DELETE');
+}
+
+export function createMellowServerWebhook(serverId: string, payload: CreateMellowWebhookPayload) {
+	return request(`mellow/server/${serverId}/webhook`, 'POST', payload);
+}
+
+export function updateMellowServerWebhook(serverId: string, webhookId: string, payload: Partial<CreateMellowWebhookPayload>) {
+	return request(`mellow/server/${serverId}/webhook/${webhookId}`, 'PATCH', payload);
+}
+
+export function deleteMellowServerWebhook(serverId: string, webhookId: string) {
+	return request(`mellow/server/${serverId}/webhook/${webhookId}`, 'DELETE');
 }
 
 export function generateMellowServerApiKey(serverId: string) {

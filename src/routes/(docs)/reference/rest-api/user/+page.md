@@ -6,5 +6,5 @@
 	path="/v0/user/[user]"
 	title="Get User"
 	method="GET"
-	description="Returns the specified user.\nEither a username, or full UUIDv4 (recommended) can be specified."
+	description="Returns the specified user.\nEither a username, or full UUID (recommended) can be specified."
 />

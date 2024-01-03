@@ -2,17 +2,15 @@
 	import { Button, TextInput } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
+	import { page } from '$app/stores';
 	import { hasBit } from '$lib/util';
-	import type { PageData } from './$types';
 	import { MellowWebhookEventType } from '$lib/enums';
 
 	import Plus from '$lib/icons/Plus.svelte';
 	import Link from '$lib/icons/Link.svelte';
-	import Trash from '$lib/icons/Trash.svelte';
 	import Sunrise from '$lib/icons/Sunrise.svelte';
 	import SendFill from '$lib/icons/SendFill.svelte';
-	import PencilFill from '$lib/icons/PencilFill.svelte';
-	export let data: PageData;
+	export let data;
 
 	let itemFilter = '';
 	const calculateEvents = ({ events }: { events: number }) => {
@@ -30,14 +28,14 @@
 </div>
 <div class="controls">
 	<TextInput bind:value={itemFilter} placeholder={$t('action.search')}/>
-	<Button disabled>
+	<Button>
 		<Plus/>{$t('mellow.server.settings.automation.webhooks.create')}
 	</Button>
 </div>
-{#await data.streamed.items then items}
+{#await data.webhooks then items}
 	<div class="items">
 		{#each items.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item}
-			<div class="item">
+			<a class="item" href={`/mellow/server/${$page.params.id}/settings/webhooks/${item.id}`}>
 				<div class="info">
 					<h1>{item.name}</h1>
 					<div class="details">
@@ -53,7 +51,6 @@
 						</p>
 						<p>
 							<Link/>
-							{item.request_method}
 							<a href={item.target_url} target="_blank">
 								{item.target_url}
 							</a>
@@ -64,15 +61,7 @@
 						</p>
 					</div>
 				</div>
-				<div class="buttons">
-					<Button disabled>
-						<PencilFill/>{$t('action.edit')}
-					</Button>
-					<Button colour="secondary" circle disabled>
-						<Trash/>
-					</Button>
-				</div>
-			</div>
+			</a>
 		{/each}
 	</div>
 {/await}
@@ -92,10 +81,17 @@
 		flex-direction: column;
 		.item {
 			display: flex;
-			padding: 16px 16px 16px 20px;
+			padding: 0 28px;
+			min-height: 80px;
+			transition: opacity .5s, box-shadow .5s;
 			background: var(--background-secondary);
+			box-shadow: inset 0 0 0 1px var(--border-primary);
 			align-items: center;
-			border-radius: 24px;
+			border-radius: 32px;
+			text-decoration: none;
+			&:not(:disabled):hover {
+				box-shadow: inset 0 0 0 1px var(--border-secondary);
+			}
 			.info {
 				h1 {
 					margin: 0 0 6px;
@@ -118,11 +114,6 @@
 						border-radius: 16px;
 					}
 				}
-			}
-			.buttons {
-				gap: 16px;
-				display: flex;
-				margin-left: auto;
 			}
 		}
 	}

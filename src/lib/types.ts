@@ -134,6 +134,9 @@ export type TeamActionLogType =
 
 export type MellowActionLogItemType =
 	'mellow.server.created' |
+	'mellow.server.webhook.created' |
+	'mellow.server.webhook.updated' |
+	'mellow.server.webhook.deleted' |
 	'mellow.server.syncing.action.created' |
 	'mellow.server.syncing.action.updated' |
 	'mellow.server.syncing.action.deleted' |
@@ -335,7 +338,7 @@ export type ActionLogItem = {
 	target_team_role?: {
 		id: string
 		name: string
-	}
+	} | null
 	target_user?: {
 		id: string
 		name: string | null
@@ -343,6 +346,10 @@ export type ActionLogItem = {
 		avatar_url: string | null
 	} | null
 	target_action?: {
+		id: string
+		name: string
+	} | null
+	target_webhook?: {
 		id: string
 		name: string
 	} | null
@@ -386,6 +393,13 @@ export interface CreateMellowProfileSyncActionResponse {
 		type: MellowProfileSyncActionRequirementType
 	}[]
 	requirements_type: MellowProfileSyncActionRequirementsType
+}
+
+export interface CreateMellowWebhookPayload {
+	name: string
+	events?: number
+	enabled?: boolean
+	target_url: string
 }
 
 export interface UpdateMellowServerOwnershipPayload {

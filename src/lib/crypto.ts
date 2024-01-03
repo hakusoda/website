@@ -11,15 +11,21 @@ export function storeKeyPairForAuthentication() {
 		(target as IDBOpenDBRequest).result.createObjectStore('SOMETHING', { autoIncrement: true });
 	request.onsuccess = async ({ target }) => {
 		const database = (target as IDBOpenDBRequest).result;
-		const store = database.transaction(['SOMETHING'], 'readonly').objectStore('SOMETHING');
-		if (!await getStoreCount(store)) {
-			const { publicKey, privateKey } = await crypto.subtle.generateKey({
-				name: 'ECDSA',
-				namedCurve: 'P-384',
-			}, false, ['sign', 'verify']);
+		try {
+			const store = database.transaction(['SOMETHING'], 'readonly').objectStore('SOMETHING');
+			if (!await getStoreCount(store)) {
+				const { publicKey, privateKey } = await crypto.subtle.generateKey({
+					name: 'ECDSA',
+					namedCurve: 'P-384',
+				}, false, ['sign', 'verify']);
 
-			const store = database.transaction(['SOMETHING'], 'readwrite').objectStore('SOMETHING');
-			store.put({ publicKey, privateKey });
+				const store = database.transaction(['SOMETHING'], 'readwrite').objectStore('SOMETHING');
+				store.put({ publicKey, privateKey });
+			}
+		} catch (err) {
+			console.warn(err);
+			indexedDB.deleteDatabase('SOMETHING');
+			storeKeyPairForAuthentication();
 		}
 	};
 }

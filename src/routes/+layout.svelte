@@ -33,12 +33,12 @@
 		<slot/>
 	</div>
 	<div id="absolute-solver"/>
-	{#if $page.params.role_id}
+	{#if $page.params.role_id || $page.params.webhook_id}
 		<div class="editor-controls">
 			<button type="button" on:click={() => editor.callback?.()} disabled={!$editorCanSave || $editorSaving}>
 				<FloppyFill/>{$t('action.save_changes')}
 			</button>
-			<a class="secondary" href={`/team/${$page.params.name}/dashboard/roles`}>
+			<a class="secondary" href={$page.url.pathname.replace(/\/[^\/]*?$/, '')}>
 				<BoxArrowLeft/>{$t('action.cancel')}
 			</a>
 		</div>

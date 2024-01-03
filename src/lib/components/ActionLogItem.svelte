@@ -8,6 +8,7 @@
 	import ActionLogItemDetail from './ActionLogItemDetail.svelte';
 
 	import Link from '../icons/Link.svelte';
+	import Webhook from '../icons/Webhook.svelte';
 	import PeopleFill from '../icons/PeopleFill.svelte';
 	export let data: ActionLogItem;
 
@@ -37,6 +38,16 @@
 					{/if}
 				{:else if item === '{mellow_sync_action}'}
 					<b class:deleted={!data.target_action}><Link/>{#if data.target_action}{data.target_action.name}{:else}{n(data.data?.name) ?? $t('action_log.unknown_mellow_action')}{/if}</b>
+				{:else if item === '{mellow_webhook}'}
+					{#if data.target_webhook}
+						<a href={`/mellow/server/${$page.params.id}/settings/webhooks/${data.target_webhook.id}`}>
+							<Webhook/>{data.target_webhook.name}
+						</a>
+					{:else}
+						<b class="deleted">
+							<Webhook/>{n(data.data?.name) ?? $t('action_log.unknown_webhook')}
+						</b>
+					{/if}
 				{:else if item === '{team_role}'}
 					{#if data.target_team_role}
 						<a href={`/team/${$page.params.name}/dashboard/roles/${data.target_team_role.id}`}>

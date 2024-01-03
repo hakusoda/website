@@ -336,7 +336,6 @@
 	main {
 		width: 100%;
 		min-height: calc(100% - 65px);
-		background: center url(/img/background.svg);
 		&.hasnav {
 			min-height: calc(100% - 105px);
 		}

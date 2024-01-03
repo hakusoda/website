@@ -146,6 +146,9 @@ export default {
 		'team_role_permission.8': 'Manage Roles',
 		'team_role_permission.16': 'All Permissions (Dangerous!)',
 
+		'mellow_webhook_event.0': '',
+		'mellow_webhook_event.1': 'Server Profile Synced',
+
 		'user_role.2': 'Staff',
 		'user_role.4': 'Tester',
 
@@ -299,6 +302,9 @@ export default {
 		'action_log.type.team.mellow_server.transferred.to_here':  'transferred ownership of {mellow_server} to this team',
 
 		'action_log.type.mellow.server.created': 'added this server',
+		'action_log.type.mellow.server.webhook.created': 'created {mellow_webhook}',
+		'action_log.type.mellow.server.webhook.updated': 'updated {mellow_webhook}',
+		'action_log.type.mellow.server.webhook.deleted': 'deleted {mellow_webhook}',
 		'action_log.type.mellow.server.api_key.created': 'created a new API Key',
 		'action_log.type.mellow.server.syncing.action.created': 'created {mellow_sync_action}',
 		'action_log.type.mellow.server.syncing.action.updated': 'updated {mellow_sync_action}',
@@ -308,6 +314,7 @@ export default {
 		'action_log.type.mellow.server.ownership.changed': 'transferred ownership to {unimplemented}',
 
 		'action_log.unknown_user': 'Unknown User',
+		'action_log.unknown_webhook': 'Unknown Webhook',
 		'action_log.unknown_team_role': 'Unknown Role',
 		'action_log.unknown_mellow_action': 'Unknown Action',
 
@@ -424,6 +431,8 @@ export default {
 		'docs.articles.api': 'API',
 		'docs.articles.mellow': 'mellow',
 		'docs.articles.mellow.quickstart': 'Quickstart',
+		'docs.articles.platform': 'Platform',
+		'docs.articles.platform.account.connections': 'Connections',
 
 		'reference': 'Reference',
 		'reference.articles.rest-api': 'Rest API',

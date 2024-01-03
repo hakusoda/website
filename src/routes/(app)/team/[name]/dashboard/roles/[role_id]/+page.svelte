@@ -16,12 +16,13 @@
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	export let data;
 
-	const role = data.roles.find(item => item.id === $page.params.role_id);
+	$: role = data.roles.find(item => item.id === $page.params.role_id);
 
 	let name = '';
 	let permissions = 0;
+	const reset = () => (name = role!.name, permissions = role!.permissions);
 	$: if (role)
-		name = role.name, permissions = role.permissions;
+		reset();
 
 	$: editingHasAdmin = hasBit(permissions, TeamRolePermission.Administrator);
 

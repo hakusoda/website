@@ -6,5 +6,5 @@
 	path="/v0/team/[team]"
 	title="Get Team"
 	method="GET"
-	description="Returns the specified team.\nEither a name, or full UUIDv4 (recommended) can be specified."
+	description="Returns the specified team.\nEither a name, or full (recommended) can be specified."
 />

@@ -7,21 +7,29 @@
 	$: base = $page.url.pathname.split('/')[1];
 </script>
 
-<h1>
-	{title || $t(`${base}.articles.${$page.url.pathname.replace(/^\/\w+\/?/, '').replace('/', '.')}`)}
-</h1>
-{#if summary}
-	<p>{summary}</p>
-{/if}
-<slot/>
+<article>
+	<h1>
+		{title || $t(`${base}.articles.${$page.url.pathname.replace(/^\/\w+\/?/, '').replace(/\//g, '.')}`)}
+	</h1>
+	{#if summary}
+		<p class="summary">{summary}</p>
+	{/if}
+	<slot/>
+</article>
 
-<style lang="scss">
-	h1 {
+<style>
+	article h1 {
 		font-size: 2.5em;
 		font-weight: 600;
 	}
-	p {
+	article p.summary {
 		color: var(--color-secondary);
 		font-size: 1.1em;
+	}
+	article :global(a) {
+		color: var(--color-link);
+	}
+	article :global(p:not(.summary)) {
+		line-height: normal;
 	}
 </style>

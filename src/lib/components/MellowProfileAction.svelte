@@ -135,8 +135,14 @@
 			color: var(--color-primary);
 			border: none;
 			cursor: pointer;
-			padding: 0;
+			padding: 8px;
+			display: flex;
 			background: none;
+			transition: background .5s;
+			border-radius: 50%;
+			&:hover {
+				background: #ffffff1a;
+			}
 		}
 		&.highlighted {
 			animation: 1s infinite alternate basic-focus;

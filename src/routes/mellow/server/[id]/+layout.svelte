@@ -149,7 +149,6 @@
 	main {
 		width: 100%;
 		height: 100%;
-		background: center url(/img/background.svg);
 		& > :global(.header) {
 			padding: 48px 0;
 			background: var(--background-primary);
