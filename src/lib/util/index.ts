@@ -51,6 +51,16 @@ export const hasOneOfBits = (bits: number, thebits: number[]) => {
 	return false;
 };
 
+export function payloadDiff<T extends Record<any, any>>(old: Record<any, any>, new_: T): T {
+	const final: Record<any, any> = {};
+	for (const [key, value] of Object.entries(new_)) {
+		if (JSON.stringify(value) !== JSON.stringify(old[key]))
+			final[key] = value;
+	}
+
+	return final;
+}
+
 const UNKNOWN_ERROR = { error: RequestErrorType.Unknown, success: false };
 export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' = 'GET', body?: any, headers?: Record<string, string>): Promise<ApiResponse<T>> {
 	const url = path.startsWith('http') ? path : `${API_BASE}/${path}`;

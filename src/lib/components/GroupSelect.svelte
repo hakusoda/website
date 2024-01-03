@@ -2,6 +2,7 @@
 	import { DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
+	import { browser } from '$app/environment';
 	import type { GroupSelectItem } from '../types';
 
 	import Avatar from './Avatar.svelte';
@@ -16,7 +17,7 @@
 	export let onChange: ((newValue: string) => void) | null = null;
 
 	$: storageName = `recent-${source === 'roblox' ? 'bind' : source}-groups`;
-	$: cached = (JSON.parse(localStorage.getItem(storageName) || '[]') || []) as GroupSelectItem[];
+	$: cached = (browser ? JSON.parse(localStorage.getItem(storageName) || '[]') || [] : []) as GroupSelectItem[];
 
 	let state = 0;
 	let query = '';

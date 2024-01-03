@@ -61,13 +61,13 @@ export const MAPPED_MELLOW_SYNC_REQUIREMENTS: [([MellowProfileSyncActionRequirem
 		'separator',
 		[MellowProfileSyncActionRequirementType.RobloxInGroup, PeopleFill],
 		[MellowProfileSyncActionRequirementType.RobloxHaveGroupRole, PersonBadgeFill],
-		[MellowProfileSyncActionRequirementType.RobloxHaveGroupRankInRange, ArrowLeftRight],
+		[MellowProfileSyncActionRequirementType.RobloxHaveGroupRankInRange, ArrowLeftRight]/*,
 		'separator',
 		[MellowProfileSyncActionRequirementType.RobloxHaveAsset, Shop],
 		[MellowProfileSyncActionRequirementType.RobloxHaveBadge, PatchCheckFill],
-		[MellowProfileSyncActionRequirementType.RobloxHavePass, StarFill]
+		[MellowProfileSyncActionRequirementType.RobloxHavePass, StarFill]*/
 	], RobloxIcon],
-	[[
+	/*[[
 		[MellowProfileSyncActionRequirementType.GitHubInOrganisation, PeopleFill]
 	], GitHub],
 	[[
@@ -75,7 +75,7 @@ export const MAPPED_MELLOW_SYNC_REQUIREMENTS: [([MellowProfileSyncActionRequirem
 	], Steam],
 	[[
 		[MellowProfileSyncActionRequirementType.HAKUMIInTeam, PeopleFill]
-	], BrandIcon],
+	], BrandIcon],*/
 	[[
 		[MellowProfileSyncActionRequirementType.MeetOtherAction, Link]
 	], BrandIcon]

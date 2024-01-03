@@ -7,14 +7,11 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 
-	import MellowLinkEditor from '$lib/components/MellowLinkEditor.svelte';
 	import MellowProfileAction from '$lib/components/MellowProfileAction.svelte';
 
 	import Plus from '$lib/icons/Plus.svelte';
 	export let data: PageData;
 
-	let state = 0;
-	let target: PageData['items'][number] | null = null;
 	let linksContainer: HTMLDivElement;
 
 	let groupRoles: Record<string, GroupRole[]> = {};
@@ -30,7 +27,7 @@
 
 	$: highlighted = $page.url.searchParams.get('highlight');
 
-	const linkItems: HTMLButtonElement[] = [];
+	const linkItems: HTMLAnchorElement[] = [];
 	onMount(() => {
 		if (highlighted)
 			linksContainer.scrollTo({
@@ -40,45 +37,31 @@
 	});
 </script>
 
-{#if !state}
-	<div class="header">
-		<div class="geist">
-			<h1>{$t('mellow.server.settings.syncing.actions.header')}</h1>
-			<p>{$t('mellow.server.settings.syncing.actions.summary')}</p>
-		</div>
+<div class="header">
+	<div class="geist">
+		<h1>{$t('mellow.server.settings.syncing.actions.header')}</h1>
+		<p>{$t('mellow.server.settings.syncing.actions.summary')}</p>
 	</div>
-{/if}
+</div>
 <div class="geist">
-	{#if state}
-		<MellowLinkEditor
-			onSave={() => linksContainer.scrollTo({ top: linksContainer.scrollHeight, behavior: 'smooth' })}
-			onCancel={() => state = 0}
-			serverId={$page.params.id}
-			discordRoles={data.roles}
-			bind:data
-			bind:target
-		/>
-	{:else}
-		<div class="buttons">
-			<TextInput bind:value={itemFilter} placeholder={$t('action.search')}/>
-			<Button on:click={() => state++}>
-				<Plus/>{$t('mellow.server.settings.syncing.actions.create')}
-			</Button>
-		</div>
-		<div class="items" bind:this={linksContainer}>
-			{#each data.items.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item, index}
-				<MellowProfileAction
-					{...item}
-					{index}
-					items={linkItems}
-					remove={() => data.items = data.items.filter(i => i !== item)}
-					server_id={$page.params.id}
-					highlighted={highlighted === item.id}
-					on:click={() => (target = item, state++)}
-				/>
-			{/each}
-		</div>
-	{/if}
+	<div class="buttons">
+		<TextInput bind:value={itemFilter} placeholder={$t('action.search')}/>
+		<Button href={`/mellow/server/${$page.params.id}/syncing/actions/create`}>
+			<Plus/>{$t('mellow.server.settings.syncing.actions.create')}
+		</Button>
+	</div>
+	<div class="items" bind:this={linksContainer}>
+		{#each data.items.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item, index}
+			<MellowProfileAction
+				{...item}
+				{index}
+				items={linkItems}
+				remove={() => data.items = data.items.filter(i => i !== item)}
+				server_id={$page.params.id}
+				highlighted={highlighted === item.id}
+			/>
+		{/each}
+	</div>
 </div>
 
 <style lang="scss">

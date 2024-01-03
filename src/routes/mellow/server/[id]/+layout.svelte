@@ -148,7 +148,7 @@
 	}
 	main {
 		width: 100%;
-		height: 100%;
+		min-height: calc(100% - 105px);
 		& > :global(.header) {
 			padding: 48px 0;
 			background: var(--background-primary);

@@ -15,6 +15,8 @@
 	import EnableSudo from '$lib/modals/EnableSudo.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
 
+	import Plus from '$lib/icons/Plus.svelte';
+	import Hourglass from '$lib/icons/Hourglass.svelte';
 	import FloppyFill from '$lib/icons/FloppyFill.svelte';
 	import BoxArrowLeft from '$lib/icons/BoxArrowLeft.svelte';
 	inject({ mode: dev ? 'development' : 'production' });
@@ -26,6 +28,9 @@
 
 	const editorSaving = editor.isSaving;
 	const editorCanSave = editor.canSave;
+
+	$: editorTargetId = $page.params.role_id || $page.params.action_id || $page.params.webhook_id;
+	$: editorCreating = editorTargetId === 'create';
 </script>
 
 <div class={`app theme-${themeName}`}>
@@ -33,10 +38,11 @@
 		<slot/>
 	</div>
 	<div id="absolute-solver"/>
-	{#if $page.params.role_id || $page.params.webhook_id}
+	{#if editorTargetId}
 		<div class="editor-controls">
 			<button type="button" on:click={() => editor.callback?.()} disabled={!$editorCanSave || $editorSaving}>
-				<FloppyFill/>{$t('action.save_changes')}
+				{#if editorCreating}<Plus/>{:else}{#if $editorSaving}<Hourglass/>{:else}<FloppyFill/>{/if}{/if}
+				{$t(editorCreating ? 'action.create' :'action.save_changes')}
 			</button>
 			<a class="secondary" href={$page.url.pathname.replace(/\/[^\/]*?$/, '')}>
 				<BoxArrowLeft/>{$t('action.cancel')}

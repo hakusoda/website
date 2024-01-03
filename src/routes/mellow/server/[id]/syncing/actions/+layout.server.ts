@@ -48,7 +48,7 @@ export async function load({ params: { id } }) {
 				edits: undefined,
 				last_edit: edits.reverse()[0]
 			};
-		}),
+		}) as (Omit<NonNullable<typeof response.data>[number], 'edits'> & { last_edit?: NonNullable<typeof response.data>[number]['edits'][number] })[],
 		roles: roles.data.filter(role => role.name !== '@everyone' && !role.managed).sort((a, b) => b.position - a.position).map(role => ({ id: role.id, name: role.name.trim().replace(/^ㅤ+|ㅤ+$/g, '') }))
 	};
 }

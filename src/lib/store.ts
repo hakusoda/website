@@ -5,6 +5,7 @@ export const editor = {
 	active: writable(false),
 	canSave: writable(false),
 	isSaving: writable(false),
+	isCreating: writable(false),
 	callback: null as (() => void) | null
 };
 export const sudoModal = writable(false);
@@ -27,7 +28,7 @@ export function setEditorCallback(callback: () => Promise<void>) {
 		editor.callback = () => {
 			editor.callback = null;
 			editor.isSaving.set(true);
-			callback().then(() => editor.isSaving.set(false));
+			callback().then(() => (editor.isSaving.set(false), editor.isCreating.set(false)));
 		};
 		return () => editor.callback = null;
 	});

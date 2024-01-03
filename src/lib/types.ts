@@ -381,12 +381,13 @@ export interface CreateMellowProfileSyncActionPayload {
 export interface CreateMellowProfileSyncActionResponse {
 	id: string
 	name: string
+	type: MellowProfileSyncActionType
 	creator: {
 		name: string | null
 		username: string
 	}
+	metadata: any
 	created_at: string
-	target_ids: string[]
 	requirements: {
 		id: string
 		data: string[]

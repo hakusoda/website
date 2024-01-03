@@ -2,6 +2,7 @@
 	import { DropdownMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
+	import { page } from '$app/stores';
 	import { MAPPED_MELLOW_SYNC_ACTION_ICONS } from '$lib/constants';
 	import { deleteMellowServerProfileSyncAction } from '$lib/api';
 	import type { MellowProfileSyncActionType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
@@ -16,7 +17,7 @@
 	export let name: string;
 	export let type: MellowProfileSyncActionType;
 	export let index: number;
-	export let items: HTMLButtonElement[];
+	export let items: HTMLAnchorElement[];
 	export let remove: () => void;
 	export let creator: { name: string | null, username: string } | null = null;
 	export let server_id: string;
@@ -40,7 +41,7 @@
 </script>
 
 <DropdownMenu.Root bind:trigger>
-	<button slot="trigger" type="button" class="mellow-profile-action" on:click class:highlighted bind:this={items[index]} disabled={deleting}>
+	<a slot="trigger" class="mellow-profile-action" href={`/mellow/server/${$page.params.id}/syncing/actions/${id}`} class:highlighted bind:this={items[index]}>
 		<div class="info">
 			<h1>{name}</h1>
 			<div class="details">
@@ -77,10 +78,10 @@
 				</p>
 			</div>
 		</div>
-		<button type="button" class="options" on:click|stopPropagation={trigger}>
+		<button type="button" class="options" on:click|preventDefault={trigger}>
 			<ThreeDots/>
 		</button>
-	</button>
+	</a>
 	<button type="button" on:click={deleteAction} disabled={deleting}>
 		<Trash/>{$t('action.delete')}
 	</button>
@@ -91,8 +92,9 @@
 		width: 100% !important;
 	}
 	.mellow-profile-action {
-		width: 100%;
+		width: -moz-available;
 		color: var(--color-primary);
+		width: -webkit-fill-available;
 		border: none;
 		cursor: pointer;
 		display: flex;
@@ -106,6 +108,7 @@
 		align-items: center;
 		font-family: var(--font-primary);
 		border-radius: 32px;
+		text-decoration: none;
 		.info {
 			margin: 0 auto 0 0;
 			h1 {

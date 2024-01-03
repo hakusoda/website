@@ -10,7 +10,11 @@
 	<div class="navigation">
 		{#each items as item}
 			{#if typeof item === 'string'}
-				<p>{$t(item)}</p>
+				{#if item === 'space'}
+					<br/>
+				{:else}
+					<p>{$t(item)}</p>
+				{/if}
 			{:else}
 				<a href={item[0]} class:active={$page.url.pathname === item[0]} class:disabled={item[3]}>
 					<svelte:component this={item[1]}/>
@@ -28,8 +32,8 @@
 	.with-side-navigation {
 		display: flex;
 		margin-top: 64px;
+		margin-bottom: 64px;
 		.navigation {
-			gap: 16px;
 			top: 128px;
 			height: fit-content;
 			display: flex;
@@ -37,12 +41,13 @@
 			min-width: 256px;
 			flex-direction: column;
 			p {
-				margin: 24px 0 0;
+				margin: 32px 0 6px;
 				font-size: 12px;
 			}
 			a {
 				gap: 12px;
 				color: hsl(250 20% 90% / 80%);
+				height: 32px;
 				display: flex;
 				font-size: 13px;
 				transition: color .1s;
@@ -59,7 +64,9 @@
 		}
 		.content {
 			width: 100%;
+			display: flex;
 			margin-left: 16px;
+			flex-direction: column;
 			& > :global(.header) {
 				margin-bottom: 32px;
 				:global(h2) {
