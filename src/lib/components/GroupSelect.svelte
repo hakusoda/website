@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropdownMenu } from '@hakumi/essence';
+	import { ContextMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
 	import { browser } from '$app/environment';
@@ -42,16 +42,16 @@
 </script>
 
 <div class="group-select-container" style="display: contents">
-	<DropdownMenu.Root bind:trigger>
-		<button class="group-select" slot="trigger" on:click={trigger} class:select={!value}>
-			{#if value}
-				<Avatar id={value} src={cachedValue?.avatar_url ?? cachedValue?.icon} size="xxxs"/>
-				{cachedValue?.name ?? value}
-			{:else}
-				{$t(source === 'self' ? 'group_select.team' : 'group_select')}
-			{/if}
-			<ChevronDown/>
-		</button>
+	<button class="group-select" on:click={trigger} class:select={!value}>
+		{#if value}
+			<Avatar id={value} src={cachedValue?.avatar_url ?? cachedValue?.icon} size="xxxs"/>
+			{cachedValue?.name ?? value}
+		{:else}
+			{$t(source === 'self' ? 'group_select.team' : 'group_select')}
+		{/if}
+		<ChevronDown/>
+	</button>
+	<ContextMenu.Root bind:trigger>
 		{#if state || !cached.length}
 			<input type="text" class="search" bind:value={query} placeholder={$t('group_select.search')}/>
 			{#if searching}
@@ -93,7 +93,7 @@
 				{$t('group_select.search')}
 			</button>
 		{/if}
-	</DropdownMenu.Root>
+	</ContextMenu.Root>
 </div>
 
 <style lang="scss">

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import base64 from '@hexagon/base64';
-	import { Button, TextInput, DropdownMenu } from '@hakumi/essence';
+	import { Button, TextInput, ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import type { PageData } from './$types';
@@ -62,20 +62,20 @@
 	{/each}
 </div>
 <div class="buttons">
-	<DropdownMenu.Root bind:trigger>
-		<Button slot="trigger" on:click={trigger} disabled={addingKey}>
-			<Plus/>{$t('settings.access.security.create')}
-		</Button>
-
-		<p>{$t('settings.access.security.create.name')}</p>
-		<TextInput bind:value={securityKeyName}/>
-		<br/><br/>
-		<button type="button" on:click={addDevice}>
-			<Check/>{$t('action.continue')}
-		</button>
-	</DropdownMenu.Root>
+	<Button on:click={trigger} disabled={addingKey}>
+		<Plus/>{$t('settings.access.security.create')}
+	</Button>
 </div>
 <RequestError data={error} background="var(--background-primary)"/>
+
+<ContextMenu.Root bind:trigger>
+	<p>{$t('settings.access.security.create.name')}</p>
+	<TextInput bind:value={securityKeyName}/>
+	<br/><br/>
+	<button type="button" on:click={addDevice}>
+		<Check/>{$t('action.continue')}
+	</button>
+</ContextMenu.Root>
 
 <style lang="scss">
 	.devices {

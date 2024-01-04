@@ -71,7 +71,7 @@ export const load = async ({ url, params: { id }, locals: { session } }) => {
 	return {
 		...data,
 		skip: skip_onboarding_to !== null,
-		discord: getDiscordServer(id).then(response => {
+		discord: await getDiscordServer(id).then(response => {
 			if (!response.success)
 				throw requestError(500, RequestErrorType.ExternalRequestError);
 			return response.data;

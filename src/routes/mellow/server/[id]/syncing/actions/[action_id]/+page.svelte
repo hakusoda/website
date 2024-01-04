@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { GroupRole } from '@hakumi/roblox-api';
-	import { Button, Select, TextInput, NumberInput, DropdownMenu } from '@hakumi/essence';
+	import { Button, Select, TextInput, NumberInput, ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
@@ -195,45 +195,9 @@
 						{/if}
 					{/each}
 				</Select.Root>
-				<DropdownMenu.Root bind:trigger={requirementTrigger}>
-					<Button slot="trigger" on:click={requirementTrigger}>
-						<Plus/>{$t('action.create_new')}
-					</Button>
-					<p>{$t('mellow_link_editor.requirements.platforms')}</p>
-					{#each MAPPED_MELLOW_SYNC_REQUIREMENTS.entries() as [id, [items, icon]]}
-						{#if id === MAPPED_MELLOW_SYNC_REQUIREMENTS.length - 1}
-							<p>{$t('mellow_link_editor.requirements.other')}</p>
-							<!-- is there any way to re-use the same code below? -->
-							{#each items as item}
-								{#if item === 'separator'}
-									<div class="separator"/>
-								{:else}
-									<button type="button" on:click={() => addRequirement(item[0])}>
-										<svelte:component this={item[1]}/>
-										{$t(`mellow_sync_action.requirement.${item[0]}`)}
-									</button>
-								{/if}
-							{/each}
-						{:else}
-							<DropdownMenu.Sub>
-								<svelte:fragment slot="trigger">
-									<svelte:component this={icon}/>{$t(`mellow_link_editor.requirements.platforms.${id}`)}
-								</svelte:fragment>
-								<p>{$t(`mellow_link_editor.requirements.platforms.${id}`)} {$t('label.requirements')}</p>
-								{#each items as item}
-									{#if item === 'separator'}
-										<div class="separator"/>
-									{:else}
-										<button type="button" on:click={() => addRequirement(item[0])}>
-											<svelte:component this={item[1]}/>
-											{$t(`mellow_sync_action.requirement.${item[0]}`)}
-										</button>
-									{/if}
-								{/each}
-							</DropdownMenu.Sub>
-						{/if}
-					{/each}
-				</DropdownMenu.Root>
+				<Button on:click={requirementTrigger}>
+					<Plus/>{$t('action.create_new')}
+				</Button>
 			</div>
 
 			<div class="requirements">
@@ -300,6 +264,43 @@
 		</div>
 	</div>
 </WithSideNavigation>
+
+<ContextMenu.Root bind:trigger={requirementTrigger}>
+	<p>{$t('mellow_link_editor.requirements.platforms')}</p>
+	{#each MAPPED_MELLOW_SYNC_REQUIREMENTS.entries() as [id, [items, icon]]}
+		{#if id === MAPPED_MELLOW_SYNC_REQUIREMENTS.length - 1}
+			<p>{$t('mellow_link_editor.requirements.other')}</p>
+			<!-- is there any way to re-use the same code below? -->
+			{#each items as item}
+				{#if item === 'separator'}
+					<div class="separator"/>
+				{:else}
+					<button type="button" on:click={() => addRequirement(item[0])}>
+						<svelte:component this={item[1]}/>
+						{$t(`mellow_sync_action.requirement.${item[0]}`)}
+					</button>
+				{/if}
+			{/each}
+		{:else}
+			<ContextMenu.Sub>
+				<svelte:fragment slot="trigger">
+					<svelte:component this={icon}/>{$t(`mellow_link_editor.requirements.platforms.${id}`)}
+				</svelte:fragment>
+				<p>{$t(`mellow_link_editor.requirements.platforms.${id}`)} {$t('label.requirements')}</p>
+				{#each items as item}
+					{#if item === 'separator'}
+						<div class="separator"/>
+					{:else}
+						<button type="button" on:click={() => addRequirement(item[0])}>
+							<svelte:component this={item[1]}/>
+							{$t(`mellow_sync_action.requirement.${item[0]}`)}
+						</button>
+					{/if}
+				{/each}
+			</ContextMenu.Sub>
+		{/if}
+	{/each}
+</ContextMenu.Root>
 
 <style lang="scss">
 	.mellow-action {

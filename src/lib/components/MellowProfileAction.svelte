@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropdownMenu } from '@hakumi/essence';
+	import { ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
@@ -40,57 +40,54 @@
 	};
 </script>
 
-<DropdownMenu.Root bind:trigger>
-	<a slot="trigger" class="mellow-profile-action" href={`/mellow/server/${$page.params.id}/syncing/actions/${id}`} class:highlighted bind:this={items[index]}>
-		<div class="info">
-			<h1>{name}</h1>
-			<div class="details">
-				<p>
-					<Sunrise/>
-					{$t('time_ago', [created_at])}
-					{#if creator}
-						{$t('label.by')}
-						<a href={`/user/${creator.username}`}>
-							{creator.name ?? `@${creator.username}`}
-						</a>
-					{/if}
-				</p>
-				{#if last_edit}
-					<p>
-						<PencilFill/>
-						<a href={`/user/${last_edit.author.username}`}>
-							{last_edit.author.name ?? `@${last_edit.author.username}`}
-						</a>
-						{$t('time_ago', [last_edit.created_at])}
-					</p>
+<a class="mellow-profile-action" href={`/mellow/server/${$page.params.id}/syncing/actions/${id}`} class:highlighted bind:this={items[index]}>
+	<div class="info">
+		<h1>{name}</h1>
+		<div class="details">
+			<p>
+				<Sunrise/>
+				{$t('time_ago', [created_at])}
+				{#if creator}
+					{$t('label.by')}
+					<a href={`/user/${creator.username}`}>
+						{creator.name ?? `@${creator.username}`}
+					</a>
 				{/if}
+			</p>
+			{#if last_edit}
 				<p>
-					<svelte:component this={MAPPED_MELLOW_SYNC_ACTION_ICONS[type]}/>
-					{$t(`mellow_sync_action.type.${type}.full`)}
+					<PencilFill/>
+					<a href={`/user/${last_edit.author.username}`}>
+						{last_edit.author.name ?? `@${last_edit.author.username}`}
+					</a>
+					{$t('time_ago', [last_edit.created_at])}
 				</p>
-				<p>
-					{#if requirements_type}
-						<UiChecksGrid/>
-					{:else}
-						<GridFill/>
-					{/if}
-					{$t('mellow_sync_action.requirements', [requirements.length])}
-				</p>
-			</div>
+			{/if}
+			<p>
+				<svelte:component this={MAPPED_MELLOW_SYNC_ACTION_ICONS[type]}/>
+				{$t(`mellow_sync_action.type.${type}.full`)}
+			</p>
+			<p>
+				{#if requirements_type}
+					<UiChecksGrid/>
+				{:else}
+					<GridFill/>
+				{/if}
+				{$t('mellow_sync_action.requirements', [requirements.length])}
+			</p>
 		</div>
-		<button type="button" class="options" on:click|preventDefault={trigger}>
-			<ThreeDots/>
-		</button>
-	</a>
+	</div>
+	<button type="button" class="options" on:click|preventDefault={trigger}>
+		<ThreeDots/>
+	</button>
+</a>
+<ContextMenu.Root bind:trigger>
 	<button type="button" on:click={deleteAction} disabled={deleting}>
 		<Trash/>{$t('action.delete')}
 	</button>
-</DropdownMenu.Root>
+</ContextMenu.Root>
 
 <style lang="scss">
-	:global(.container:has(.mellow-profile-action)) {
-		width: 100% !important;
-	}
 	.mellow-profile-action {
 		width: -moz-available;
 		color: var(--color-primary);

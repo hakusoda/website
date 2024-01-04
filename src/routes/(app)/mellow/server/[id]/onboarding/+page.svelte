@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, DropdownMenu } from '@hakumi/essence';
+	import { Button, ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
@@ -51,22 +51,22 @@
 		<p class="conn-info">{$t('mellow_onboarding.connections.sub')}</p>
 		<div class="connections">
 			{#each data.connections as item}
-				<DropdownMenu.Root bind:trigger>
-					<button class="item" type="button" slot="trigger" on:click={data.current_connections.some(i => i.type === item.type) ? trigger : () => location.href = getUserConnectionUrl(item.type) + `&state=mlw${$page.params.id}mlw`}>
-						<svelte:component this={USER_CONNECTION_METADATA[item.type]?.icon} size={32}/>
+				<button class="item" type="button" on:click={data.current_connections.some(i => i.type === item.type) ? trigger : () => location.href = getUserConnectionUrl(item.type) + `&state=mlw${$page.params.id}mlw`}>
+					<svelte:component this={USER_CONNECTION_METADATA[item.type]?.icon} size={32}/>
+					{#if connections[item.type]}
+						<img src={connections[item.type]?.avatar_url} alt="" width="32" height="32"/>
+					{/if}
+					<div class="details">
+						<h1>{$t(`user_connection.type.${item.type}`)}</h1>
 						{#if connections[item.type]}
-							<img src={connections[item.type]?.avatar_url} alt="" width="32" height="32"/>
+							<p>{$t('mellow_onboarding.connection.chosen', [connections[item.type]?.display_name])}</p>
+						{:else}
+							<p>{$t('mellow_onboarding.connection.summary', [$t(`user_connection.type.${item.type}`), item.actions])}</p>
 						{/if}
-						<div class="details">
-							<h1>{$t(`user_connection.type.${item.type}`)}</h1>
-							{#if connections[item.type]}
-								<p>{$t('mellow_onboarding.connection.chosen', [connections[item.type]?.display_name])}</p>
-							{:else}
-								<p>{$t('mellow_onboarding.connection.summary', [$t(`user_connection.type.${item.type}`), item.actions])}</p>
-							{/if}
-						</div>
-						<ChevronDown/>
-					</button>
+					</div>
+					<ChevronDown/>
+				</button>
+				<ContextMenu.Root bind:trigger>
 					<p>{$t('mellow_onboarding.connection.accounts', [$t(`user_connection.type.${item.type}`)])}</p>
 					{#each data.current_connections.filter(i => i.type === item.type) as connection}
 						<button type="button" on:click={() => connections[item.type] = connection}>
@@ -77,7 +77,7 @@
 					<button type="button" on:click={() => connections[item.type] = undefined}>
 						{$t('label.none')}
 					</button>
-				</DropdownMenu.Root>
+				</ContextMenu.Root>
 			{/each}
 		</div>
 

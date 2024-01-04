@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropdownMenu } from '@hakumi/essence';
+	import { ContextMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
 	import { invalidateAll } from '$app/navigation';
@@ -54,17 +54,17 @@
 		</p>
 	</div>
 	<p class="created">{$t('user_connection.created', [created_at])}</p>
-	<DropdownMenu.Root bind:trigger>
-		<button type="button" class="options" slot="trigger" on:click={trigger}>
-			<ThreeDots/>
-		</button>
+	<button type="button" class="options" on:click={trigger}>
+		<ThreeDots/>
+	</button>
+	<ContextMenu.Root bind:trigger>
 		<a href={USER_CONNECTION_METADATA[type]?.manage_url} target="_blank">
 			<BoxArrowUpRight/>{$t(`user_connection.type.${type}.manage`)}
 		</a>
 		<button type="button" on:click={disconnect} disabled={disconnecting}>
 			<X/>{$t('action.disconnect')} {$t(`user_connection.type.${type}`)}
 		</button>
-	</DropdownMenu.Root>
+	</ContextMenu.Root>
 </div>
 
 <style lang="scss">

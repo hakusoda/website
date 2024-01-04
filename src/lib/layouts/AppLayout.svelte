@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './AppLayout.scss';
-	import { DropdownMenu } from '@hakumi/essence';
+	import { ContextMenu } from '@hakumi/essence';
 	import type { SvelteComponent } from 'svelte';
 
 	import { t } from '$lib/localisation'; 
@@ -58,13 +58,13 @@
 					<slot name="header-top-nav"/>
 				</div>
 				{#if session && user}
-					<DropdownMenu.Root bind:trigger={notificationsTrigger}>
-						<button class="notifications focusable" class:unread={notifications.some(item => item.state === UserNotificationState.Unread)} type="button" slot="trigger" on:click={notificationsTrigger}>
-							<Bell/>
-							{#if unreadNotifications.length}
-								{unreadNotifications.length}
-							{/if}
-						</button>
+					<button class="notifications focusable" class:unread={notifications.some(item => item.state === UserNotificationState.Unread)} type="button" on:click={notificationsTrigger}>
+						<Bell/>
+						{#if unreadNotifications.length}
+							{unreadNotifications.length}
+						{/if}
+					</button>
+					<ContextMenu.Root bind:trigger={notificationsTrigger}>
 						<p>{$t('notifications', [notifications.length, unreadNotifications.length])}</p>
 						{#if notifications.length}
 							<div class="notifications-container">
@@ -112,11 +112,12 @@
 						{:else}
 							<p class="notifications-empty">{$t('notifications.empty')}</p>
 						{/if}
-					</DropdownMenu.Root>
-					<DropdownMenu.Root bind:trigger={userMenuTrigger}>
-						<button class="user" type="button" slot="trigger" on:click={userMenuTrigger}>
-							<Avatar id={user.id} src={user.avatar_url} size="xs" circle/>
-						</button>
+					</ContextMenu.Root>
+
+					<button class="user" type="button" on:click={userMenuTrigger}>
+						<Avatar id={user.id} src={user.avatar_url} size="xs" circle/>
+					</button>
+					<ContextMenu.Root bind:trigger={userMenuTrigger}>
 						<p>{user.name ?? user.username}</p>
 						<a href={`/user/${user.username}`}>
 							<PersonFill/>{$t('user_action.user.profile')}
@@ -132,7 +133,7 @@
 						<button type="button" on:click={signout}>
 							<BoxArrowRight/>{$t('user_action.other.logout')}
 						</button>
-					</DropdownMenu.Root>
+					</ContextMenu.Root>
 				{:else if !session}
 					<a href="/sign-in" class="sign-in">
 						<BoxArrowInRight/>{$t('action.sign_in')}

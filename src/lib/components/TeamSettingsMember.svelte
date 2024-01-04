@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropdownMenu } from '@hakumi/essence';
+	import { ContextMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
 	import { page } from '$app/stores';
@@ -93,13 +93,13 @@
 			{/if}
 		{/if}
 	</p>
-	<DropdownMenu.Root bind:trigger>
-		<button type="button" class="options" slot="trigger" on:click={trigger} disabled={removing}>
-			<ThreeDots/>
-		</button>
+	<button type="button" class="options" on:click={trigger} disabled={removing}>
+		<ThreeDots/>
+	</button>
+	<ContextMenu.Root bind:trigger>
 		<p>{name || username} (@{username})</p>
 		{#if !removing && filteredRoles.length && owner !== id && (id !== $page.data.session.sub || owner === $page.data.session.sub) && (owner === $page.data.session.sub || (myRole && (hasBit(myRole.permissions, TeamRolePermission.ManageMembers) || hasBit(myRole.permissions, TeamRolePermission.Administrator))))}
-			<DropdownMenu.Sub>
+			<ContextMenu.Sub>
 				<svelte:fragment slot="trigger">
 					<PeopleFill/>{$t('action.change_role')}
 				</svelte:fragment>
@@ -116,7 +116,7 @@
 						<X/>{$t('team_role.unknown')}
 					</button>
 				{/if}
-			</DropdownMenu.Sub>
+			</ContextMenu.Sub>
 			<div class="separator"/>
 		{/if}
 		{#if owner === $page.data.session.sub || (myRole && hasOneOfBits(myRole.permissions, [TeamRolePermission.Administrator, TeamRolePermission.ManageMembers]))}
@@ -129,7 +129,7 @@
 			<ClipboardPlusFill/>
 			{$t('action.copy_id')}
 		</button>
-	</DropdownMenu.Root>
+	</ContextMenu.Root>
 </div>
 
 <style lang="scss">

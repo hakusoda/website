@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Tabs, Button, Select, TextInput, DropdownMenu } from '@hakumi/essence';
+	import { Tabs, Button, Select, TextInput, ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { hasBit } from '$lib/util';
@@ -72,21 +72,9 @@
 						<GearFill/>{$t('action.manage')}
 					</Button>
 				{/if}
-				<DropdownMenu.Root bind:trigger={dropdownTrigger}>
-					<Button slot="trigger" circle on:click={dropdownTrigger}>
-						<ThreeDotsVertical/>
-					</Button>
-					<p>{data.display_name} (@{data.name})</p>
-					{#if data.user && data.user.id !== data.owner?.id && data.members.some(member => member.id === data.user?.id)}
-						<button type="button" on:click={leave}>
-							<BoxArrowRight/>{$t('action.leave_team')}
-						</button>
-						<div class="separator"/>
-					{/if}
-					<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
-						<ClipboardPlusFill/>{$t('action.copy_id')}
-					</button>
-				</DropdownMenu.Root>
+				<Button circle on:click={dropdownTrigger}>
+					<ThreeDotsVertical/>
+				</Button>
 			</div>
 		</div>
 		{#if data.bio}
@@ -185,6 +173,19 @@
 		userAvatar={data.user?.avatar_url}
 	/>
 {/if}
+
+<ContextMenu.Root bind:trigger={dropdownTrigger}>
+	<p>{data.display_name} (@{data.name})</p>
+	{#if data.user && data.user.id !== data.owner?.id && data.members.some(member => member.id === data.user?.id)}
+		<button type="button" on:click={leave}>
+			<BoxArrowRight/>{$t('action.leave_team')}
+		</button>
+		<div class="separator"/>
+	{/if}
+	<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
+		<ClipboardPlusFill/>{$t('action.copy_id')}
+	</button>
+</ContextMenu.Root>
 
 <svelte:head>
 	<title>{data.display_name}</title>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import MediaQuery from 'svelte-media-queries';
-	import { Tabs, Button, TextInput, DropdownMenu } from '@hakumi/essence';
+	import { Tabs, Button, TextInput, ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { deserialize } from '$app/forms';
@@ -175,42 +175,13 @@
 							<PencilFill/>{$t('action.edit_profile')}
 						</Button>
 					{:else if data.session}
-						<Button circle on:click={burger} disabled={burgering || data.burger.length} title={$t(`profile.burger.${!!data.burger.length}`)}>
+						<Button circle on:click={burger} disabled={burgering || !!data.burger.length} title={$t(`profile.burger.${!!data.burger.length}`)}>
 							<Burger/>
 						</Button>
 					{/if}
-					<DropdownMenu.Root bind:trigger={dropdownTrigger}>
-						<Button slot="trigger" circle on:click={dropdownTrigger}>
-							<ThreeDotsVertical/>
-						</Button>
-						<p>{data.name || data.username} (@{data.username})</p>
-						{#if data.session && data.id !== data.session.sub}
-							<button type="button" on:click={follow}>
-								{#if isFollowing}
-									<PersonDash/>{$t('action.unfollow')}
-								{:else}
-									<PersonPlus/>{$t('action.follow')}
-								{/if}
-							</button>
-							<DropdownMenu.Sub>
-								<svelte:fragment slot="trigger">
-									<EnvelopePlusFill/>{$t('action.invite_team')}
-								</svelte:fragment>
-	
-								<p>{$t('profile.invite')}</p>
-								{#each data.my_teams as item}
-									<button type="button" on:click={() => inviteToTeam(item.id)}>
-										<Avatar src={item.avatar_url} size="xxs" transparent/>
-										{item.display_name}
-									</button>
-								{/each}
-							</DropdownMenu.Sub>
-							<div class="separator"/>
-						{/if}
-						<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
-							<ClipboardPlusFill/>{$t('action.copy_id')}
-						</button>
-					</DropdownMenu.Root>
+					<Button circle on:click={dropdownTrigger}>
+						<ThreeDotsVertical/>
+					</Button>
 				</div>
 				{#if data.bio}
 					<div class="separator"/>
@@ -355,6 +326,36 @@
 {#if !data.is_edited && data.user?.id === data.id}
 	<SetupUserProfile/>
 {/if}
+
+<ContextMenu.Root bind:trigger={dropdownTrigger}>
+	<p>{data.name || data.username} (@{data.username})</p>
+	{#if data.session && data.id !== data.session.sub}
+		<button type="button" on:click={follow}>
+			{#if isFollowing}
+				<PersonDash/>{$t('action.unfollow')}
+			{:else}
+				<PersonPlus/>{$t('action.follow')}
+			{/if}
+		</button>
+		<ContextMenu.Sub>
+			<svelte:fragment slot="trigger">
+				<EnvelopePlusFill/>{$t('action.invite_team')}
+			</svelte:fragment>
+
+			<p>{$t('profile.invite')}</p>
+			{#each data.my_teams as item}
+				<button type="button" on:click={() => inviteToTeam(item.id)}>
+					<Avatar src={item.avatar_url} size="xxs" transparent/>
+					{item.display_name}
+				</button>
+			{/each}
+		</ContextMenu.Sub>
+		<div class="separator"/>
+	{/if}
+	<button type="button" on:click={() => navigator.clipboard.writeText(data.id)}>
+		<ClipboardPlusFill/>{$t('action.copy_id')}
+	</button>
+</ContextMenu.Root>
 
 <svelte:head>
 	<title>{data.name ?? data.username}</title>

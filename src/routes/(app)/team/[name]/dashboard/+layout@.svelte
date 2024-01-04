@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropdownMenu } from '@hakumi/essence';
+	import { ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
@@ -29,29 +29,30 @@
 	[`${base}/settings`, GearFill, 'navigation.settings.account']
 ]} disableDefaultTopNav {...data}>
 	<svelte:fragment slot="header-top-nav">
-		<DropdownMenu.Root bind:trigger>
-			<button class="context-selector" type="button" slot="trigger" on:click={trigger}>
-				<Avatar id={$page.params.id} src={data.avatar_url} size="xxs"/>
-				{data.display_name ?? data.name}
-				<div class="arrows">
-					<ChevronUp size={12}/>
-					<ChevronDown size={12}/>
-				</div>
-			</button>
-			<p>{$t('user_action.user.teams')}</p>
-			{#if data.user}
-				{#each data.user.teams
-					.filter(i => i.team.owner_id === data.session?.sub || (i.role && (hasBit(i.role.permissions, TeamRolePermission.ManageTeam) || hasBit(i.role.permissions, TeamRolePermission.Administrator))))
-					.map(i => i.team)
-					.sort((a, b) => (a.display_name ?? a.name).localeCompare(b.display_name ?? b.name))
-				as team}
-					<a href={`/team/${team.name}/dashboard/${$page.url.pathname.match(/team\/.+?\/dashboard\/(.*)/)?.[1] ?? ''}`}>
-						<Avatar id={team.id} src={team.avatar_url} size="xxs"/>
-						{team.display_name ?? team.name}
-					</a>
-				{/each}
-			{/if}
-		</DropdownMenu.Root>
+		<button class="context-selector" type="button" on:click={trigger}>
+			<Avatar id={$page.params.id} src={data.avatar_url} size="xxs"/>
+			{data.display_name ?? data.name}
+			<div class="arrows">
+				<ChevronUp size={12}/>
+				<ChevronDown size={12}/>
+			</div>
+		</button>
 	</svelte:fragment>
 	<slot/>
 </AppLayout>
+
+<ContextMenu.Root bind:trigger>
+	<p>{$t('user_action.user.teams')}</p>
+	{#if data.user}
+		{#each data.user.teams
+			.filter(i => i.team.owner_id === data.session?.sub || (i.role && (hasBit(i.role.permissions, TeamRolePermission.ManageTeam) || hasBit(i.role.permissions, TeamRolePermission.Administrator))))
+			.map(i => i.team)
+			.sort((a, b) => (a.display_name ?? a.name).localeCompare(b.display_name ?? b.name))
+		as team}
+			<a href={`/team/${team.name}/dashboard/${$page.url.pathname.match(/team\/.+?\/dashboard\/(.*)/)?.[1] ?? ''}`}>
+				<Avatar id={team.id} src={team.avatar_url} size="xxs"/>
+				{team.display_name ?? team.name}
+			</a>
+		{/each}
+	{/if}
+</ContextMenu.Root>

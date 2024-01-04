@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropdownMenu } from '@hakumi/essence';
+	import { ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
@@ -41,27 +41,15 @@
 			{user.name || user.username}
 		</p>
 		<ArrowRightShort size={24} fill="#ffffff80"/>
-		<DropdownMenu.Root bind:trigger>
-			<button class="server" type="button" slot="trigger" on:click={trigger}>
-				<Avatar id={$page.params.id} src={data.avatar_url} size="xxs"/>
-				{data.name}
-				<div class="arrows">
-					<ChevronUp size={12}/>
-					<ChevronDown size={12}/>
-				</div>
-			</button>
-			<p>{$t('settings.mellow.servers')}</p>
-			{#each data.servers as item}
-				<a href={`/mellow/server/${item.id}${$page.url.pathname.match(/server\/\d+(.*)/)?.[1] ?? ''}`}>
-					<Avatar id={item.id} src={item.avatar_url} size="xxs"/>
-					{item.name}
-				</a>
-			{/each}
-			<div class="separator"/>
-			<a href="/settings/mellow/servers">
-				<BrandIcon/>{$t('action.return_from_mellow')}
-			</a>
-		</DropdownMenu.Root>
+
+		<button class="server" type="button" on:click={trigger}>
+			<Avatar id={$page.params.id} src={data.avatar_url} size="xxs"/>
+			{data.name}
+			<div class="arrows">
+				<ChevronUp size={12}/>
+				<ChevronDown size={12}/>
+			</div>
+		</button>
 	</div>
 	<div class="navigation">
 		{#each paths as path, index}
@@ -75,6 +63,20 @@
 <main>
 	<slot/>
 </main>
+
+<ContextMenu.Root bind:trigger>
+	<p>{$t('settings.mellow.servers')}</p>
+	{#each data.servers as item}
+		<a href={`/mellow/server/${item.id}${$page.url.pathname.match(/server\/\d+(.*)/)?.[1] ?? ''}`}>
+			<Avatar id={item.id} src={item.avatar_url} size="xxs"/>
+			{item.name}
+		</a>
+	{/each}
+	<div class="separator"/>
+	<a href="/settings/mellow/servers">
+		<BrandIcon/>{$t('action.return_from_mellow')}
+	</a>
+</ContextMenu.Root>
 
 <style lang="scss">
 	header {

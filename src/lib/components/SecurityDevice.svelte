@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DropdownMenu } from '@hakumi/essence';
+	import { ContextMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
 	import { invalidateAll } from '$app/navigation';
@@ -49,14 +49,14 @@
 	<p class="used">
 		{$t('settings.access.security.device.last_used', [last_used_at])}
 	</p>
-	<DropdownMenu.Root bind:trigger>
-		<button type="button" class="options" slot="trigger" on:click={trigger}>
-			<ThreeDots/>
-		</button>
+	<button type="button" class="options" on:click={trigger}>
+		<ThreeDots/>
+	</button>
+	<ContextMenu.Root bind:trigger>
 		<button type="button" on:click={remove} disabled={removing}>
 			<X/>{$t('action.remove')}
 		</button>
-	</DropdownMenu.Root>
+	</ContextMenu.Root>
 </div>
 
 <style lang="scss">
