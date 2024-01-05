@@ -27,13 +27,22 @@
 
 	$: action = data.items.find(item => item.id === $page.params.action_id);
 
+	const cloneId = $page.url.searchParams.get('clone_from_id');
+	const toClone = cloneId ? data.items.find(item => item.id === cloneId) : undefined;
+
 	let name = '';
 	let type = MellowProfileSyncActionType.GiveRoles;
-	let metadata: any = { ...copyJson(MELLOW_PROFILE_ACTION_DEFAULT_METADATA[type]), ...(action ? copyJson(action.metadata) : {}) };
+	let metadata: any = {};
 	let requirements: Omit<NonNullable<typeof action>['requirements'][number], 'id'>[] = [];
 	let requirements_type = MellowProfileSyncActionRequirementsType.MeetAll;
 	const reset = () => (name = action!.name, type = action!.type, metadata = copyJson(action!.metadata), requirements = action!.requirements.map(i => ({ data: i.data, type: i.type })), requirements_type = action!.requirements_type);
-	const reset2 = () => (name = '', type = MellowProfileSyncActionType.GiveRoles, metadata = copyJson(MELLOW_PROFILE_ACTION_DEFAULT_METADATA[type]), requirements = [], requirements_type = MellowProfileSyncActionRequirementsType.MeetAll);
+	const reset2 = () => (
+		name = toClone?.name ?? '',
+		type = toClone?.type ?? MellowProfileSyncActionType.GiveRoles,
+		metadata = { ...copyJson(MELLOW_PROFILE_ACTION_DEFAULT_METADATA[type]), ...(toClone ? copyJson(toClone.metadata) : action ? copyJson(action.metadata) : {}) },
+		requirements = toClone?.requirements ?? [],
+		requirements_type = toClone?.requirements_type ?? MellowProfileSyncActionRequirementsType.MeetAll
+	);
 	$: if (action)
 		reset();
 	else

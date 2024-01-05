@@ -5,6 +5,7 @@ export default {
 		'action.edit': 'Edit',
 		'action.next': 'Next',
 		'action.view': 'View',
+		'action.clone': 'Clone',
 		'action.reset': 'Reset',
 		'action.retry': 'Retry',
 		'action.leave': 'Leave',

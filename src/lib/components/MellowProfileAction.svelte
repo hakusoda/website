@@ -12,7 +12,8 @@
 	import GridFill from '$lib/icons/GridFill.svelte';
 	import ThreeDots from '$lib/icons/ThreeDots.svelte';
 	import PencilFill from '$lib/icons/PencilFill.svelte';
-	import UiChecksGrid from '$lib/icons/UIChecksGrid.svelte';
+	import UIChecksGrid from '$lib/icons/UIChecksGrid.svelte';
+	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
 	export let id: string;
 	export let name: string;
 	export let type: MellowProfileSyncActionType;
@@ -69,7 +70,7 @@
 			</p>
 			<p>
 				{#if requirements_type}
-					<UiChecksGrid/>
+					<UIChecksGrid/>
 				{:else}
 					<GridFill/>
 				{/if}
@@ -82,6 +83,10 @@
 	</button>
 </a>
 <ContextMenu.Root bind:trigger>
+	<p>{name}</p>
+	<a href={`/mellow/server/${$page.params.id}/syncing/actions/create?clone_from_id=${id}`}>
+		<ClipboardPlusFill/>{$t('action.clone')}
+	</a>
 	<button type="button" on:click={deleteAction} disabled={deleting}>
 		<Trash/>{$t('action.delete')}
 	</button>
