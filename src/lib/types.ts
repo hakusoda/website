@@ -460,6 +460,7 @@ export interface VerifyNewDevicePayload {
 	challenge: string
 	transports: string[]
 	attestation: string
+	device_public_key?: string
 }
 
 export interface VerifyNewDeviceResponse {
@@ -490,5 +491,12 @@ export interface GroupSelectItem {
 export interface UserSessionJWT {
 	sub: string
 	iat: number
-	exp: number
+	source_device_id: string
+	device_public_key: string
+
+	/**@deprecated */
+	source_connection_id?: string
+	
+	/**@deprecated */
+	source_connection_type?: UserConnectionType
 }

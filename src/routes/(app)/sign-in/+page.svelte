@@ -1,6 +1,5 @@
 <script lang="ts">
 	import base64 from '@hexagon/base64';
-	import { onMount } from 'svelte';
 	import { Button, TextInput } from '@hakumi/essence';
 
 	import '$lib/styles/auth.scss';
@@ -9,11 +8,9 @@
 	import { getPublicKey } from '$lib/crypto';
 	import { invalidateAll } from '$app/navigation';
 	import type { PageData } from './$types';
+	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
-	import { getUserConnectionUrl } from '$lib/util';
-	import { USER_CONNECTION_METADATA } from '$lib/constants';
 	import { verifySignIn, getSignInOptions } from '$lib/api';
-	import { RequestErrorType, UserConnectionType } from '$lib/enums';
 
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
@@ -66,25 +63,10 @@
 		if (error)
 			signInError = { error: RequestErrorType.Unknown };
 	}
-
-	let publicKey = '';
-	onMount(async() => publicKey = `&state=${encodeURIComponent(await getPublicKey())}`);
 </script>
 
 {#if !data.session && !$page.url?.searchParams.get('code')}
 	<div class="auth-modal">
-		<h2>{$t('signin.social')}</h2>
-		<div class="social">
-			{#each Object.values(UserConnectionType) as type}
-				{#if typeof type === 'number'}
-					<a href={getUserConnectionUrl(type) + publicKey} style={`--bg: ${USER_CONNECTION_METADATA[type]?.colour};`}>
-						<svelte:component this={USER_CONNECTION_METADATA[type]?.icon} size={20}/>
-						{$t(`user_connection.type.${type}`)}
-					</a>
-				{/if}
-			{/each}
-		</div>
-
 		<h2>{$t('signin.manual')}</h2>
 		<form>
 			<TextInput bind:value={username} placeholder={$t('signin.manual.name')}/>

@@ -162,14 +162,14 @@ export default {
 		'user_action.settings': 'Settings',
 		'user_action.other.logout': 'Sign out',
 
-		'signin.social': 'Sign in with',
-		'signin.manual': 'Or use a security key',
-		'signin.manual.name': 'Enter your username',
+		'signin.manual': 'Sign-in to your HAKUMI account',
+		'signin.manual.name': 'Enter your creative username',
 		'signin.signup': 'Create an account',
 
-		'signup.social': 'Sign up with',
-		'signup.manual': 'Or create an account yourself',
-		'signup.manual.name': 'Enter a username',
+		'signup': 'Create a HAKUMI account',
+		'signup.name': 'Enter a creative username!',
+		'signup.name_error.1': 'Add {0} more character{0|s} to that!',
+		'signup.continue': 'Join HAKUMI!',
 		'signup.signin': 'Already have an account?',
 
 		'create_profile': 'Set-up your profile',
@@ -187,7 +187,7 @@ export default {
 		'settings.account.id.summary': 'This is your unique identifier within HAKUMI, it cannot be changed.',
 
 		'settings.account.connections': 'Connections',
-		'settings.account.connections.summary': 'Connect your HAKUMI Account with a third-party service to use it for sign-in and other features.',
+		'settings.account.connections.summary': 'Connect your HAKUMI Account with a third-party service to display it on your profile, or use it for other features.',
 		'settings.account.connections.add': 'Add New',
 		'settings.account.connections.add.exists': 'You already have an existing {0} connection. Remove it to add a new one.',
 
@@ -486,7 +486,7 @@ export default {
 		'request_error.team_not_found': 'This team could not be found.',
 		'request_error.cannot_leave_team': 'You cannot leave this team as its current owner.',
 		'request_error.invalid_id': 'An identifier associated with this request was deemed invalid, please file a bug report.',
-		'request_error.username_taken': 'That username has already been taken by another user.',
+		'request_error.username_taken': 'apologies, that username is taken! just a bit more creativity!!!',
 		'request_error.no_permission_target_role': 'You do not have permission to manage this role.',
 		'request_error.not_found': 'The requested resource could not be found.',
 		'request_error.user_not_found': 'The requested user does not exist.',

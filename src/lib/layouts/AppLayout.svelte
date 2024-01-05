@@ -26,7 +26,7 @@
 	export let user: User | null;
 	export let session: UserSessionJWT | null;
 	export let navigation: [string, typeof SvelteComponent<any>, string?][] = [];
-	export let notifications: UserNotification[];
+	export let notifications: UserNotification[] = [];
 	export let disableDefaultTopNav = false;
 
 	let userMenuTrigger: () => void;

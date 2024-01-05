@@ -1,23 +1,30 @@
 <script lang="ts">
 	import base64 from '@hexagon/base64';
-	import { onMount } from 'svelte';
 	import { Button, TextInput } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
 	import { getPublicKey } from '$lib/crypto';
 	import { invalidateAll } from '$app/navigation';
-	import { UserConnectionType } from '$lib/enums';
-	import { getUserConnectionUrl } from '$lib/util';
 	import type { ApiRequestError } from '$lib/types';
-	import { USER_CONNECTION_METADATA } from '$lib/constants';
 	import { verifySignUp, getSignUpOptions } from '$lib/api';
 
 	import '$lib/styles/auth.scss';
 	import RequestError from '$lib/components/RequestError.svelte';
 
-	import Plus from '$lib/icons/Plus.svelte';
+	import PersonFillAdd from '$lib/icons/PersonFillAdd.svelte';
 
 	let username = '';
+	let usernameError: 0 | 1 = 0;
+	let typedInitial = false;
+	$: if (username.length > 2 && !typedInitial)
+		typedInitial = true;
+	$: if (typedInitial)
+		if (username.length < 3)
+			usernameError = 1;
+		else
+			usernameError = 0;
+	$: username = username.slice(0, 20);
+
 	let signingUp = false;
 	let signUpError: ApiRequestError | null = null;
 	const signUp = async () => {
@@ -50,34 +57,22 @@
 
 		invalidateAll();
 	};
-
-	let publicKey = '';
-	onMount(async() => publicKey = `&state=${encodeURIComponent(await getPublicKey())}`);
 </script>
 
 <div class="auth-modal">
-	<h2>{$t('signup.social')}</h2>
-	<div class="social">
-		{#each Object.values(UserConnectionType) as type}
-			{#if typeof type === 'number'}
-				<a href={getUserConnectionUrl(type) + publicKey} style={`--bg: ${USER_CONNECTION_METADATA[type]?.colour};`}>
-					<svelte:component this={USER_CONNECTION_METADATA[type]?.icon} size={20}/>
-					{$t(`user_connection.type.${type}`)}
-				</a>
-			{/if}
-		{/each}
-	</div>
-
-	<h2>{$t('signup.manual')}</h2>
+	<h2>{$t('signup')}</h2>
 	<form>
-		<TextInput bind:value={username} placeholder={$t('signup.manual.name')}/>
+		<TextInput bind:value={username} placeholder={$t('signup.name')}/>
 		<Button on:click={signUp} disabled={signingUp || username.length < 3}>
-			<Plus/>{$t('action.continue')}
+			<PersonFillAdd/>{$t('signup.continue')}
 		</Button>
 	</form>
+	{#if usernameError}
+		<p class="name-error">{$t(`signup.name_error.${usernameError}`, [3 - username.length])}</p>
+	{/if}
 	<RequestError data={signUpError}/>
 
-	<p>
+	<p class="sign-in">
 		{$t('signup.signin')}
 		<a href="/sign-in">
 			{$t('action.sign_in')}
@@ -87,12 +82,20 @@
 
 <style lang="scss">
 	.auth-modal {
-		p {
+		.sign-in {
 			color: var(--color-secondary);
 			margin: 32px auto 0;
 			a {
 				color: var(--color-link);
 			}
+		}
+		.name-error {
+			color: #dd8282;
+			margin: 8px 0 0;
+			font-size: .9em;
+		}
+		:global(.button) {
+			white-space: nowrap;
 		}
 	}
 </style>
