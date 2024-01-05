@@ -193,13 +193,13 @@ export default {
 
 		'settings.access': 'Access',
 		'settings.access.security': 'Security',
-		'settings.access.security.devices': 'Security Keys',
-		'settings.access.security.devices.summary': 'Security Keys are your main method of log-in, remove any that you no longer use or don\'t recognise.',
+		'settings.access.security.devices': 'Passkeys',
+		'settings.access.security.devices.summary': 'Passkeys are your only method of sign-in, remove any that you no longer use or don\'t recognise.',
 		'settings.access.security.device.registered': 'Registered on {0} using {1}',
 		'settings.access.security.device.registered.origin': 'in {0}',
 		'settings.access.security.device.last_used': 'Last used {0|time_ago}',
-		'settings.access.security.create': 'Add New Security Key',
-		'settings.access.security.create.name': 'Name Your Security Key',
+		'settings.access.security.create': 'Create new Passkey',
+		'settings.access.security.create.name': 'Name your Passkey',
 		'settings.access.teams': 'Teams',
 		'settings.access.teams.create': 'Create New Team',
 		'settings.access.teams.create.header': 'Set-up your team',
@@ -370,7 +370,7 @@ export default {
 
 		'enable_sudo_mode': 'Confirm Access',
 		'enable_sudo_mode.summary': 'We need to confirm that you\'re the owner of this account.\nWhen you are ready, authenticate using the button below.',
-		'enable_sudo_mode.continue': 'Use Security Key',
+		'enable_sudo_mode.continue': 'Use Passkey',
 
 		'group_select': 'Select a group',
 		'group_select.team': 'Select a team',

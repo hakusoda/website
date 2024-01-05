@@ -33,6 +33,7 @@ declare global {
 					} | null
 				}[]
 			} | null
+			session: UserSessionJWT | null
 		}
 		// interface Platform {}
 	}

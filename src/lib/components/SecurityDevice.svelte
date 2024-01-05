@@ -2,11 +2,12 @@
 	import { ContextMenu } from '@hakumi/essence';
 
 	import { t } from '../localisation';
+	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
 	import { removeSecurityDevice } from '../api';
 
-	import X from '../icons/X.svelte';
 	import Phone from '../icons/Phone.svelte';
+	import Trash from '../icons/Trash.svelte';
 	import Display from '../icons/Display.svelte';
 	import ThreeDots from '../icons/ThreeDots.svelte';
 	export let id: string;
@@ -53,9 +54,12 @@
 		<ThreeDots/>
 	</button>
 	<ContextMenu.Root bind:trigger>
-		<button type="button" on:click={remove} disabled={removing}>
-			<X/>{$t('action.remove')}
-		</button>
+		<p>{name}</p>
+		{#if $page.data.session?.source_device_id !== id}
+			<button type="button" on:click={remove} disabled={removing}>
+				<Trash/>{$t('action.remove')}
+			</button>
+		{/if}
 	</ContextMenu.Root>
 </div>
 
