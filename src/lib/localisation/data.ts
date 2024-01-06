@@ -162,7 +162,7 @@ export default {
 		'user_action.settings': 'Settings',
 		'user_action.other.logout': 'Sign out',
 
-		'signin.manual': 'Sign-in to your HAKUMI account',
+		'signin.manual': 'Sign in to your HAKUMI account',
 		'signin.manual.name': 'Enter your creative username',
 		'signin.signup': 'Create an account',
 
@@ -194,7 +194,7 @@ export default {
 		'settings.access': 'Access',
 		'settings.access.security': 'Security',
 		'settings.access.security.devices': 'Passkeys',
-		'settings.access.security.devices.summary': 'Passkeys are your only method of sign-in, remove any that you no longer use or don\'t recognise.',
+		'settings.access.security.devices.summary': 'Passkeys are your only method of sign in, remove any that you no longer use or don\'t recognise.',
 		'settings.access.security.device.registered': 'Registered on {0} using {1}',
 		'settings.access.security.device.registered.origin': 'in {0}',
 		'settings.access.security.device.last_used': 'Last used {0|time_ago}',
@@ -494,9 +494,9 @@ export default {
 		'request_error.security_device_not_found': 'The requested security device does not exist.',
 		'request_error.user_connection_not_found': 'The requested user connection does not exist.',
 		'request_error.feature_disabled': 'This feature has been temporarily disabled, please try again later...',
-		'request_error.missing_signature': 'Failed to authenticate, security signature is missing, please sign-out.',
-		'request_error.invalid_signature': 'Failed to authenticate, security signature is invalid, please sign-out.',
-		'request_error.missing_device_key': 'Your session is out-of-date, and can no longer be used for security reasons, please sign-out.',
+		'request_error.missing_signature': 'Failed to authenticate, security signature is missing, please sign out.',
+		'request_error.invalid_signature': 'Failed to authenticate, security signature is invalid, please sign out.',
+		'request_error.missing_device_key': 'Your session is out-of-date, and can no longer be used for security reasons, please sign out.',
 		'request_error.title': 'REQUEST ERROR',
 		'request_error.zod': 'ISSUES',
 

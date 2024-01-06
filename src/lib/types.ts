@@ -494,6 +494,8 @@ export interface UserSessionJWT {
 	source_device_id: string
 	device_public_key: string
 
+	mellow_user_state?: string
+
 	/**@deprecated */
 	source_connection_id?: string
 	

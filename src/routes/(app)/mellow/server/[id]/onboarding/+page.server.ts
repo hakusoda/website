@@ -32,7 +32,7 @@ export const load = async ({ url, params: { id }, locals: { session } }) => {
 
 	const { actions, skip_onboarding_to, ...data } = response.data;
 	if (skip_onboarding_to !== null && url.searchParams.get('done') !== '')
-		throw redirect(302, getUserConnectionUrl(skip_onboarding_to) + `&state=mlw${id}mlwSKIPmlw`);
+		throw redirect(302, getUserConnectionUrl(skip_onboarding_to) + `&state=mellow_onboarding_${id}`);
 
 	const connections: { type: UserConnectionType, actions: number }[] = [];
 	for (const action of actions) {

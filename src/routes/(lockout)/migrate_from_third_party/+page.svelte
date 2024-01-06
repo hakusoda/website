@@ -65,7 +65,7 @@
 
 	<br/>
 	{#if data.has_passkey}
-		<p>You will need to sign-out, and then sign-in with one of your passkeys.</p>
+		<p>You will need to sign out, and then sign in with one of your passkeys.</p>
 		<Button on:click={signOut} {disabled}>
 			<BoxArrowRight/>{$t('action.continue')}
 		</Button>
