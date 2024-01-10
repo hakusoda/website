@@ -6,21 +6,17 @@ import { UserConnectionType, MellowProfileSyncActionType, MellowProfileSyncActio
 
 import X from '../icons/X.svelte';
 import Link from '../icons/Link.svelte';
-import Shop from '../icons/Shop.svelte';
-import Steam from '../icons/Steam.svelte';
 import GitHub from '../icons/GitHub.svelte';
 import Discord from '../icons/Discord.svelte';
-import StarFill from '../icons/StarFill.svelte';
 import BrandIcon from '../icons/BrandIcon.svelte';
 import PersonFill from '../icons/PersonFill.svelte';
 import PeopleFill from '../icons/PeopleFill.svelte';
 import RobloxIcon from '../icons/RobloxIcon.svelte';
 import BoxArrowRight from '../icons/BoxArrowRight.svelte';
 import ArrowLeftRight from '../icons/ArrowLeftRight.svelte';
-import PatchCheckFill from '../icons/PatchCheckFill.svelte';
 import PersonBadgeFill from '../icons/PersonBadgeFill.svelte';
-export const THEMES = ['dark', 'light', 'color_purple'] as const;
-export const LOCALES = ['en-AU', 'ja-JP'] as const;
+export const THEMES = ['dark'] as const;
+export const LOCALES = ['en-AU'] as const;
 
 export const USERNAME_REGEX = /^[\w-]+$/;
 export const DISPLAY_NAME_REGEX = /^[\w !@#$%^&*()-:;"'{}[\]?\\|~`<>]+$/;
