@@ -545,6 +545,7 @@ export default {
 		'footer.legal.terms': 'Terms of Service',
 		'footer.legal.privacy': 'Privacy Policy',
 		'footer.resources': 'Resources',
+		'footer.resources.docs': 'Documentation',
 		'footer.resources.status': 'Status',
 		'footer.community': 'Community',
 

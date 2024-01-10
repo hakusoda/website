@@ -170,20 +170,22 @@
 				<a href="https://github.com/hakusoda">{$t('footer.oss.link')}</a>.
 			</p>
 		</div>
-		<div class="links">
+		<!--<div class="links">
 			<p>{$t('footer.legal')}</p>
 			<a href="/terms">{$t('footer.legal.terms')}</a>
 			<a href="/privacy">{$t('footer.legal.privacy')}</a>
-		</div>
+		</div>-->
 		<div class="links">
 			<p>{$t('footer.resources')}</p>
-			<a href="https://status.hakumi.cafe" target="_blank">Status</a>
+			<a href="/docs">{$t('footer.resources.docs')}</a>
+			<a href="https://status.hakumi.cafe" target="_blank">{$t('footer.resources.status')}</a>
 			<a href="https://github.com/hakusoda" target="_blank">GitHub</a>
 		</div>
 		<div class="links">
 			<p>{$t('footer.community')}</p>
+			<a href="https://bsky.app/profile/hakumi.cafe" target="_blank">Bluesky</a>
 			<a href="https://discord.com/invite/rs3r4dQu9P" target="_blank">Discord</a>
-			<a href="https://x.com/@voxelified" target="_blank">X</a>
+			<a href="https://x.com/hakusoda" target="_blank">X</a>
 		</div>
 	</footer>
 {/if}
