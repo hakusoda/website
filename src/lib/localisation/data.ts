@@ -217,10 +217,6 @@ export default {
 		'settings.integrations.applications': 'Applications',
 		'settings.integrations.applications.summary': 'This is a list of applications that you have authorised to access certain aspects of your account.',
 
-		'mellow.server.0': 'Server',
-		'mellow.server.1': 'Profile Sync Actions',
-		'mellow.server.2': 'Settings',
-
 		'mellow.server.settings': 'Server Settings',
 		'mellow.server.settings.0': 'General',
 		'mellow.server.settings.1': 'Logging',
@@ -450,6 +446,9 @@ export default {
 		'navigation.settings.account': 'Settings',
 		'navigation.team_settings.members': 'Members',
 		'navigation.team_settings.roles': 'Roles',
+		'navigation.mellow.server': 'Server',
+		'navigation.mellow.server.actions': 'Profile Sync Actions',
+		'navigation.mellow.server.settings': 'Settings',
 
 		'side_navigation.settings.account': 'General',
 		'side_navigation.settings.account.connections': 'Connections',

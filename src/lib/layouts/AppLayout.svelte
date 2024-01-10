@@ -22,7 +22,8 @@
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
 	import BoxArrowInRight from '$lib/icons/BoxArrowInRight.svelte';
-	export let navigation: [string, typeof SvelteComponent<any>, string?][] = [];
+	export let navigation: [string, typeof SvelteComponent<any>, string?, true?][] = [];
+	export let disableDefaultBrand = false;
 	export let disableDefaultTopNav = false;
 
 	let userMenuTrigger: () => void;
@@ -47,9 +48,12 @@
 	<header>
 		<div class="geist">
 			<div class="head">
-				<a href="/" class="logo">
-					<BrandLogo size={32}/>
-				</a>
+				<slot name="header-top"/>
+				{#if !disableDefaultBrand}
+					<a href="/" class="logo">
+						<BrandLogo size={32}/>
+					</a>
+				{/if}
 				<div class="navigation">
 					{#if !disableDefaultTopNav}
 						<a href="/" class="nav-link" class:active={$page.url.pathname === '/'}>{$t('home')}</a>
@@ -141,8 +145,8 @@
 			</div>
 			{#if navigation.length}
 				<div class="navigation">
-					{#each navigation as [href, icon, tkey]}
-						<a {href} class:active={$page.url.pathname.startsWith(href)}>
+					{#each navigation as [href, icon, tkey, isOneLevel]}
+						<a {href} class:active={isOneLevel ? $page.url.pathname.endsWith(href) : $page.url.pathname.startsWith(href)}>
 							<svelte:component this={icon}/>
 							{$t(tkey ?? `navigation${href.replace(/\//g, '.')}`)}
 						</a>
@@ -155,7 +159,7 @@
 		<slot/>
 	</main>
 </div>
-{#if !$page.params.role_id}
+{#if !$page.params.role_id && !$page.params.action_id && !$page.params.webhook_id}
 	<footer>
 		<div class="header">
 			<p class="name">
