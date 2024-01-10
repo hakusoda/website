@@ -48,9 +48,6 @@
 			:global(h1:first-child) {
 				margin-top: 12px;
 			}
-			&[open] {
-				display: flex;
-			}
 		}
 		&::slotted {
 			animation: .25s show;
