@@ -20,6 +20,10 @@
 	let defaultNickname = data.default_nickname;
 	let skipOnboardingTo = data.skip_onboarding_to;
 	let allowForcedSyncing = data.allow_forced_syncing;
+	const reset = () => (defaultNickname = data.default_nickname, skipOnboardingTo = data.skip_onboarding_to, allowForcedSyncing = data.allow_forced_syncing);
+	$: if (data)
+		reset();
+
 	const save = async () => {
 		saving = !(error = null);
 		const response = await updateMellowServerProfileSyncingSettings($page.params.id, {
@@ -31,11 +35,6 @@
 			return invalidateAll().then(() => saving = false);
 		saving = !(error = response);
 	};
-	const reset = () => (
-		defaultNickname = data.default_nickname,
-		skipOnboardingTo = data.skip_onboarding_to,
-		allowForcedSyncing = data.allow_forced_syncing
-	);
 </script>
 
 <p class="input-label">{$t('mellow.server.settings.syncing.settings.nickname')}</p>
