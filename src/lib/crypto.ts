@@ -6,7 +6,7 @@ function getStoreCount(store: IDBObjectStore): Promise<number> {
 }
 
 export function storeKeyPairForAuthentication() {
-	const request = indexedDB.open('SOMETHING');
+	const request = indexedDB.open('SOMETHING', 143);
 	request.onupgradeneeded = ({ target }) =>
 		(target as IDBOpenDBRequest).result.createObjectStore('SOMETHING', { autoIncrement: true });
 	request.onsuccess = async ({ target }) => {
