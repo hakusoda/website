@@ -14,5 +14,5 @@ export async function load({ url, params: { name }, locals: { session } }) {
 
 	if (!await hasTeamPermissions(response.data!.id, session.sub, [TeamRolePermission.InviteUsers]))
 		throw requestError(403, RequestErrorType.NoPermission);
-	return response.data;
+	return response.data!;
 }

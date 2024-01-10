@@ -124,7 +124,7 @@ export async function uploadPostAttachment([image, contentType]: [ArrayBuffer, s
 
 	const bucket = supabase!.storage.from('post_attachments');
 	const response = await bucket
-		.upload(`${(await session)!.user.id}/${crypto.randomUUID()}`, image, {
+		.upload(`${session!.sub}/${crypto.randomUUID()}`, image, {
 			contentType
 		});
 	if (response.error)
@@ -216,11 +216,11 @@ export async function verifySudoMode(payload: VerifySudoModePayload) {
 }
 
 export function removeSecurityDevice(deviceId: string) {
-	return request(`user/${get(page).data.session.sub}/security/device/${encodeURIComponent(deviceId)}`, 'DELETE');
+	return request(`user/${get(page).data.session!.sub}/security/device/${encodeURIComponent(deviceId)}`, 'DELETE');
 }
 
 export function removeUserConnection(connectionId: string) {
-	return request(`user/${get(page).data.session.sub}/connection/${connectionId}`, 'DELETE');
+	return request(`user/${get(page).data.session!.sub}/connection/${connectionId}`, 'DELETE');
 }
 
 export function followUser(userId: string) {

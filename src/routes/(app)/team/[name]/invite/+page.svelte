@@ -3,11 +3,10 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import type { PageData } from './$types';
 
 	import X from '$lib/icons/X.svelte';
 	import Check from '$lib/icons/Check.svelte';
-	export let data: PageData;
+	export let data;
 
 	$: teamUrl = `/team/${$page.params.name}`;
 </script>

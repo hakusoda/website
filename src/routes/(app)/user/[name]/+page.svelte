@@ -4,7 +4,6 @@
 
 	import { t } from '$lib/localisation';
 	import { deserialize } from '$app/forms';
-	import type { PageData } from './$types';
 	import { invalidateAll } from '$app/navigation';
 	import { hasBit, getDefaultAvatar } from '$lib/util';
 	import type { RequestError, ApiRequestError } from '$lib/types';
@@ -38,7 +37,7 @@
 	import EnvelopePlusFill from '$lib/icons/EnvelopePlusFill.svelte';
 	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
 	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
-	export let data: PageData;
+	export let data;
 
 	$: avatar = data.avatar_url || getDefaultAvatar(data.id);
 

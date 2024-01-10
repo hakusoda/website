@@ -3,7 +3,6 @@
 
 	import { t } from '$lib/localisation';
 	import { goto } from '$app/navigation';
-	import type { PageData } from './$types';
 	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
 	import { updateTeam, uploadTeamAvatar } from '$lib/api';
@@ -15,7 +14,7 @@
 	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
 
 	import PersonFill from '$lib/icons/PersonFill.svelte';
-	export let data: PageData;
+	export let data;
 
 	let error: RequestError | null = null;
 	let saving = false;

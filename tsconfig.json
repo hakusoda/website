@@ -4,8 +4,7 @@
 		"types": ["user-agent-data-types"],
 		"strict": true,
 		"target": "ESNext",
-		"esModuleInterop": true,
-		"moduleResolution": "bundler",
+		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"forceConsistentCasingInFileNames": true
 	}

@@ -9,5 +9,5 @@ export async function load({ params: { id } }) {
 		.single();
 	handleResponse(response);
 
-	return response.data;
+	return response.data!;
 }

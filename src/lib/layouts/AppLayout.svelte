@@ -8,7 +8,6 @@
 	import { invalidateAll } from '$app/navigation';
 	import { UserNotificationState } from '$lib/enums';
 	import { getUserNotificationUrl } from '$lib/util';
-	import type { User, UserSessionJWT, UserNotification } from '$lib/types';
 	import { markNotificationAsRead, clearAllNotifications, markAllNotificationsAsRead } from '$lib/api';
 
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -23,10 +22,7 @@
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
 	import BoxArrowInRight from '$lib/icons/BoxArrowInRight.svelte';
-	export let user: User | null;
-	export let session: UserSessionJWT | null;
 	export let navigation: [string, typeof SvelteComponent<any>, string?][] = [];
-	export let notifications: UserNotification[] = [];
 	export let disableDefaultTopNav = false;
 
 	let userMenuTrigger: () => void;
@@ -40,6 +36,9 @@
 		invalidateAll();
 	};
 
+	$: user = $page.data.user;
+	$: session = $page.data.session;
+	$: notifications = $page.data.notifications;
 	$: unreadNotifications = notifications.filter(item => item.state === UserNotificationState.Unread);
 	let clearingNotifications = false;
 </script>

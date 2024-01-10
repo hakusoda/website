@@ -7,9 +7,7 @@
 	import UserConnection from '$lib/components/UserConnection.svelte';
 
 	import ExclamationOctagonFill from '$lib/icons/ExclamationOctagonFill.svelte';
-
-	import type { PageData } from './$types';
-	export let data: PageData;
+	export let data;
 
 	let exists: UserConnectionType | null = null;
 </script>

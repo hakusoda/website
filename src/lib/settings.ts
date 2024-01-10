@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { ZodType } from 'zod';
 import { get, writable } from 'svelte/store';
+
 import { THEMES, LOCALES } from './constants';
 import { MellowLinkListViewMode } from './enums';
 

@@ -4,14 +4,13 @@
 	import { t } from '$lib/localisation';
 	import { hasBit } from '$lib/util';
 	import { deserialize } from '$app/forms';
-	import type { PageData } from './$types';
 	import { invalidateAll } from '$app/navigation';
 	import type { RequestError } from '$lib/types';
 	import { RequestErrorType, DiscordChannelType, MellowServerLogType } from '$lib/enums';
 
 	import Radio from '$lib/components/Radio.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
-	export let data: PageData;
+	export let data;
 
 	let error: RequestError | null = null;
 	let saving = false;

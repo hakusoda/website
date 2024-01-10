@@ -4,7 +4,6 @@
 	import { t } from '$lib/localisation';
 	import { hasBit } from '$lib/util';
 	import { leaveTeam } from '$lib/api';
-	import type { PageData } from './$types';
 	import { invalidateAll } from '$app/navigation';
 	import { TeamFlag, TeamRolePermission } from '$lib/enums';
 
@@ -23,7 +22,7 @@
 	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
 	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
 	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
-	export let data: PageData;
+	export let data;
 
 	let tab = 0;
 	let dropdownTrigger: () => void;

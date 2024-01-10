@@ -2,9 +2,7 @@
 	import { t } from '$lib/localisation';
 
 	import ApplicationsListItem from '$lib/components/ApplicationsListItem.svelte';
-
-	import type { PageData } from './$types';
-	export let data: PageData;
+	export let data;
 </script>
 
 <div class="main">

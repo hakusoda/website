@@ -7,7 +7,6 @@
 	import { page } from '$app/stores';
 	import { getPublicKey } from '$lib/crypto';
 	import { invalidateAll } from '$app/navigation';
-	import type { PageData } from './$types';
 	import { RequestErrorType } from '$lib/enums';
 	import type { RequestError } from '$lib/types';
 	import { verifySignIn, getSignInOptions } from '$lib/api';
@@ -15,7 +14,7 @@
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
 	import KeyFill from '$lib/icons/KeyFill.svelte';
-	export let data: PageData;
+	export let data;
 
 	let username = '';
 	let signingIn = false;

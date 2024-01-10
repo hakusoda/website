@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import type { LayoutData } from './$types';
 
 	import BrandIcon from '$lib/icons/BrandIcon.svelte';
 	import BrandLogo from '$lib/icons/BrandLogo.svelte';
 	import CodeSlash from '$lib/icons/CodeSlash.svelte';
 	import MellowFace from '$lib/icons/MellowFace.svelte';
 	import HouseDoorFill from '$lib/icons/HouseDoorFill.svelte';
-	export let data: LayoutData;
+	export let data;
 
 	$: splitPath = $page.url.pathname.split('/');
 	$: docsArea = splitPath[1];
@@ -27,7 +26,7 @@
 			id: 'rest-api',
 			icon: CodeSlash
 		}]
-	}[docsArea];
+	}[docsArea]!;
 
 	$: base = splitPath[2];
 	$: basePath = `/${docsArea}/${base}`;

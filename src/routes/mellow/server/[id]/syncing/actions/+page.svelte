@@ -5,12 +5,11 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import type { PageData } from './$types';
 
 	import MellowProfileAction from '$lib/components/MellowProfileAction.svelte';
 
 	import Plus from '$lib/icons/Plus.svelte';
-	export let data: PageData;
+	export let data;
 
 	let linksContainer: HTMLDivElement;
 

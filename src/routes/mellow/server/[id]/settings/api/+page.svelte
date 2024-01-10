@@ -3,14 +3,13 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import type { PageData } from './$types';
 	import type { ApiRequestError } from '$lib/types';
 	import { generateMellowServerApiKey } from '$lib/api';
 
 	import RequestError from '$lib/components/RequestError.svelte';
 
 	import Plus from '$lib/icons/Plus.svelte';
-	export let data: PageData;
+	export let data;
 
 	let key: string | null = null;
 	let error: ApiRequestError | null = null;

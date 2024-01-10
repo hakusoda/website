@@ -3,7 +3,6 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import type { PageData } from './$types';
 	import { getUserConnectionUrl } from '$lib/util';
 	import type { UserConnectionType } from '$lib/enums';
 	import { USER_CONNECTION_METADATA } from '$lib/constants';
@@ -13,7 +12,7 @@
 
 	import Check from '$lib/icons/Check.svelte';
 	import ChevronDown from '$lib/icons/ChevronDown.svelte';
-	export let data: PageData;
+	export let data;
 
 	let trigger: () => void;
 	let connections: Partial<Record<UserConnectionType, typeof data['current_connections'][number]>> = {};

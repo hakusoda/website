@@ -9,8 +9,6 @@
 
 	import Discord from '$lib/icons/Discord.svelte';
 	import ArrowClockwise from '$lib/icons/ArrowClockwise.svelte';
-	export let data;
-
 	$: status = $page.status;
 
 	let message;
@@ -19,7 +17,7 @@
 	} catch (err) {}
 </script>
 
-<AppLayout {...data}>
+<AppLayout>
 	<div class="request-error">
 		<h1>{$t('error.page')}</h1>
 		<h2>{$t('error.page2')}</h2>

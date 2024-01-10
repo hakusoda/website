@@ -3,9 +3,9 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import type { LayoutData } from '../../$types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import AppLayout from '$lib/layouts/AppLayout.svelte';
 
 	import Link from '$lib/icons/Link.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
@@ -15,7 +15,7 @@
 	import ChevronDown from '$lib/icons/ChevronDown.svelte';
 	import HouseDoorFill from '$lib/icons/HouseDoorFill.svelte';
 	import ArrowRightShort from '$lib/icons/ArrowRightShort.svelte';
-	export let data: LayoutData;
+	export let data;
 
 	$: user = data.user!;
 
@@ -32,6 +32,9 @@
 	}];
 </script>
 
+<AppLayout>
+
+</AppLayout>
 <header>
 	<div class="head">
 		<MellowIcon size={32}/>

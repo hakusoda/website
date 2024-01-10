@@ -4,7 +4,6 @@
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import type { PageData } from './$types';
 	import { createMellowServerDiscordRedirectUrl } from '$lib/util';
 
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -12,7 +11,7 @@
 	import X from '$lib/icons/X.svelte';
 	import ArrowClockwise from '$lib/icons/ArrowClockwise.svelte';
 	import BoxArrowUpRight from '$lib/icons/BoxArrowUpRight.svelte';
-	export let data: PageData;
+	export let data;
 
 	$: if (browser && $page.url.searchParams.get('code'))
 		history.replaceState({}, '', '/settings/mellow/servers');

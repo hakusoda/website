@@ -3,7 +3,6 @@
 
 	import { t } from '$lib/localisation';
 	import { hasBit } from '$lib/util';
-	import type { PageData } from './$types';
 	import { TeamFlag, TeamRolePermission } from '$lib/enums';
 
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -15,7 +14,7 @@
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
 	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
-	export let data: PageData;
+	export let data;
 </script>
 
 <div class="header">

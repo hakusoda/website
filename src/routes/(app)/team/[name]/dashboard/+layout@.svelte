@@ -4,7 +4,6 @@
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
 	import { hasBit } from '$lib/util';
-	import type { LayoutData } from './$types';
 	import { TeamRolePermission } from '$lib/enums';
 
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -15,7 +14,7 @@
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import ChevronDown from '$lib/icons/ChevronDown.svelte';
-	export let data: LayoutData;
+	export let data;
 
 	$: base = `/team/${$page.params.name}/dashboard`;
 
@@ -27,7 +26,7 @@
 	[`${base}/members`, PeopleFill, 'navigation.team_settings.members'],
 	[`${base}/roles`, PeopleFill, 'navigation.team_settings.roles'],
 	[`${base}/settings`, GearFill, 'navigation.settings.account']
-]} disableDefaultTopNav {...data}>
+]} disableDefaultTopNav>
 	<svelte:fragment slot="header-top-nav">
 		<button class="context-selector" type="button" on:click={trigger}>
 			<Avatar id={$page.params.id} src={data.avatar_url} size="xxs"/>

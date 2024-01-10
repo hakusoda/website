@@ -1,12 +1,4 @@
-import type { UserSessionJWT } from '$lib/types';
-export interface Database {
-	public: {
-		Views: {}
-		Tables: {}
-		Functions: {}
-	}
-}
-
+import type { UserSessionJWT, UserNotification } from '$lib/types';
 declare global {
 	namespace App {
 		// interface Error {}
@@ -34,6 +26,7 @@ declare global {
 				}[]
 			} | null
 			session: UserSessionJWT | null
+			notifications: UserNotification[]
 		}
 		// interface Platform {}
 	}

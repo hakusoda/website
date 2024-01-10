@@ -17,8 +17,8 @@
 	export let id: string;
 	export let name: string;
 	export let data: TeamInvite;
-	export let avatar: string | null;
-	export let userAvatar: string | null;
+	export let avatar: string | null = null;
+	export let userAvatar: string | null = null;
 
 	let state = 0;
 	let error: ApiRequestError | null = null;

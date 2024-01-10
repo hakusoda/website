@@ -4,12 +4,11 @@
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
 	import { hasBit } from '$lib/util';
-	import type { PageData } from './$types';
 	import { TeamRolePermission } from '$lib/enums';
 
 	import PencilFill from '$lib/icons/PencilFill.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
-	export let data: PageData;
+	export let data;
 
 	$: selfRole = data.members.find(member => member.id === data.session!.sub)?.role;
 	$: selfPermissions = selfRole?.permissions ?? 0;

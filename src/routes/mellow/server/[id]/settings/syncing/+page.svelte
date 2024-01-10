@@ -3,7 +3,6 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import type { PageData } from './$types';
 	import { invalidateAll } from '$app/navigation';
 	import type { ApiRequestError } from '$lib/types';
 	import { USER_CONNECTION_METADATA } from '$lib/constants';
@@ -12,10 +11,9 @@
 
 	import Radio from '$lib/components/Radio.svelte';
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
-	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
 	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
-	export let data: PageData;
+	export let data;
 
 	let error: ApiRequestError | null = null;
 	let saving = false;

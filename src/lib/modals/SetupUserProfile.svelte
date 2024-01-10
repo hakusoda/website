@@ -4,7 +4,6 @@
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
-	import type { LayoutData } from '../../routes/$types';
 	import { getDefaultAvatar } from '$lib/util';
 	import type { ApiRequestError } from '$lib/types';
 	import { uploadAvatar, updateProfile } from '$lib/api';
@@ -46,7 +45,7 @@
 		state++;
 	};
 
-	$: user = ($page.data.user as LayoutData['user'])!;
+	$: user = $page.data.user!;
 </script>
 
 <Modal autoOpen>

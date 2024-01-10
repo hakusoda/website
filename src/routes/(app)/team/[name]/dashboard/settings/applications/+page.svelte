@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
-	import type { PageData } from './$types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
-	export let data: PageData;
+	export let data;
 </script>
 
 <div class="header">

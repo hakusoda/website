@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { Button, TextInput } from '@hakumi/essence';
+	import { Button } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
-	import type { PageData } from './$types';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 
 	import PersonFill from '$lib/icons/PersonFill.svelte';
-	export let data: PageData;
+	export let data;
 </script>
 
 <div class="header">

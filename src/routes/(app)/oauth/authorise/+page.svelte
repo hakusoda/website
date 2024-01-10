@@ -2,7 +2,6 @@
 	import { Button } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
-	import type { PageData } from './$types';
 	import { authoriseApplication } from '$lib/api';
 	import type { ApiRequestError } from '$lib/types';
 
@@ -15,7 +14,7 @@
 	import ThreeDots from '$lib/icons/ThreeDots.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import ExclamationOctagonFill from '$lib/icons/ExclamationOctagonFill.svelte';
-	export let data: PageData;
+	export let data;
 	
 	let error: ApiRequestError | null = null;
 	let authorising = false;

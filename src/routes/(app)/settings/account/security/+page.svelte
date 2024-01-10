@@ -3,7 +3,6 @@
 	import { Button, TextInput, ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
-	import type { PageData } from './$types';
 	import type { ApiRequestError } from '$lib/types';
 	import { verifyNewDevice, getNewDeviceOptions } from '$lib/api';
 
@@ -12,7 +11,7 @@
 
 	import Plus from '$lib/icons/Plus.svelte';
 	import Check from '$lib/icons/Check.svelte';
-	export let data: PageData;
+	export let data;
 
 	let trigger: () => void;
 

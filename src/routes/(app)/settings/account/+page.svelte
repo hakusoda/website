@@ -8,9 +8,7 @@
 	import type { RequestError } from '$lib/types';
 
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
-
-	import type { LayoutData } from './$types';
-	export let data: LayoutData;
+	export let data;
 
 	let error: RequestError | null = null;
 	let saving = false;

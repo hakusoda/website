@@ -2,10 +2,9 @@
 	import { Tabs } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
-	import type { PageData } from './$types';
 
 	import TeamSettingsMember from '$lib/components/TeamSettingsMember.svelte';
-	export let data: PageData;
+	export let data;
 
 	let tab = 0;
 

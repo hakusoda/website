@@ -1,8 +1,6 @@
 <script lang="ts">
-    import type { PageData } from './$types';
-    
-	import ActionLog from '$lib/components/ActionLog.svelte';
-    export let data: PageData;
+    import ActionLog from '$lib/components/ActionLog.svelte';
+    export let data;
 </script>
 
 <ActionLog team_id={data.id}/>

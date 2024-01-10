@@ -4,7 +4,6 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
-	import type { PageData } from './$types';
 	import { createChildPost } from '$lib/api';
 	import type { ApiRequestError } from '$lib/types';
 
@@ -16,7 +15,7 @@
 	import Chat from '$lib/icons/Chat.svelte';
 	import Plus from '$lib/icons/Plus.svelte';
 	import Heart from '$lib/icons/Heart.svelte';
-	export let data: PageData;
+	export let data;
 
 	let replying = false;
 	let replyError: ApiRequestError | null = null;
