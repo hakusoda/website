@@ -71,11 +71,6 @@ export enum MellowProfileSyncActionRequirementsType {
 	MeetOne
 }
 
-export enum MellowLinkListViewMode {
-	Default,
-	Compact
-}
-
 export enum MellowServerLogType {
 	None,
 	AuditLog = 1 << 0,

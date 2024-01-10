@@ -3,7 +3,6 @@ import type { ZodType } from 'zod';
 import { get, writable } from 'svelte/store';
 
 import { THEMES, LOCALES } from './constants';
-import { MellowLinkListViewMode } from './enums';
 
 function parse(value: string | null) {
 	return Number.isNaN(value) ? value : Number(value);
@@ -24,4 +23,3 @@ function setting<T extends ZodType>(id: string, schema: T, initial: z.util.noUnd
 
 export const theme = setting('theme', z.enum(THEMES), THEMES[0]);
 export const locale = setting('locale', z.enum(LOCALES), LOCALES[0]);
-export const mellowLinkViewMode = setting('mellow.links.view_mode', z.nativeEnum(MellowLinkListViewMode), MellowLinkListViewMode.Default);
