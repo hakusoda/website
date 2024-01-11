@@ -209,9 +209,11 @@ export default {
 
 		'settings.mellow': 'mellow Settings',
 		'settings.mellow.servers': 'mellow Servers',
-		'settings.mellow.servers.add': 'You can execute mellow\'s /setup command within a Discord server to start configuring it here.',
-		'settings.mellow.servers.server.members': 'Managed by {0} user{0|s}',
-		'settings.mellow.servers.server.placeholder': 'Unknown status, check back later.',
+		'settings.mellow.servers.get_started': 'Get Started with mellow! ＼(٥⁀▽⁀ )／',
+		'settings.mellow.servers.get_started.details': 'Click here to learn more about mellow, and start syncing your precious server members!',
+		'settings.mellow.servers.documentation': '┐(￣ヘ￣;)┌ ⠀ Feast your eyes on the mellow Documentation for guides & information on all the wonderous features!',
+		'settings.mellow.servers.server.owner': 'Managed by {0}',
+		'settings.mellow.servers.server.connect': 'Execute /setup in this server to get started!',
 		'settings.mellow.servers.refresh': 'Refresh Discord Servers',
 
 		'settings.integrations': 'Integrations',
@@ -443,7 +445,7 @@ export default {
 
 		'navigation.settings.profile': 'Profile',
 		'navigation.settings.teams': 'Teams',
-		'navigation.settings.mellow.servers': 'mellow',
+		'navigation.settings.mellow': 'mellow',
 		'navigation.settings.account': 'Settings',
 		'navigation.team_settings.members': 'Members',
 		'navigation.team_settings.roles': 'Roles',

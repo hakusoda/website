@@ -10,7 +10,7 @@
 <AppLayout navigation={[
 	['/settings/profile', PersonFill],
 	['/settings/teams', PeopleFill],
-	['/settings/mellow/servers', MellowFace],
+	['/settings/mellow', MellowFace],
 	['/settings/account', GearFill]
 ]}>
 	<slot/>

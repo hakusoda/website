@@ -15,7 +15,7 @@ export function getDefaultAvatar(id: string) {
 }
 
 export function createMellowServerDiscordRedirectUrl(origin: string) {
-	return `${origin}/settings/mellow/servers`;
+	return `${origin}/settings/mellow`;
 }
 
 export function getUserNotificationUrl({ type, target_user, target_team, target_profile_post_id }: UserNotification) {

@@ -3,5 +3,8 @@
 	"redirects": [{
 		"source": "/settings/roblox/accounts",
 		"destination": "/settings/account/connections"
+	}, {
+		"source": "/settings/mellow/servers",
+		"destination": "/settings/mellow"
 	}]
 }

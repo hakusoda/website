@@ -4,7 +4,7 @@ import { RequestErrorType } from '$lib/enums';
 import supabase, { handleResponse } from '$lib/supabase';
 import { createMellowServerDiscordRedirectUrl } from '$lib/util';
 export async function load({ url, locals: { session } }) {
-	const response = await supabase.rpc('website_get_user_mellow_servers2', {
+	const response = await supabase.rpc('website_get_user_mellow_servers', {
 		target_user_id: session!.sub
 	});
 	handleResponse(response);
@@ -46,5 +46,15 @@ export async function load({ url, locals: { session } }) {
 		allServers = response.data?.data! ?? [];
 	}
 
-	return { servers: response.data as { id: string, name: string, avatar_url: string | null }[], allServers };
+	return {
+		servers: response.data as {
+			id: string
+			name: string
+			avatar_url: string | null
+			owner_team_name: string | null
+			owner_user_name: string | null
+			owner_user_username: string | null
+		}[],
+		allServers
+	};
 }

@@ -51,7 +51,7 @@
 		</a>
 	{/each}
 	<div class="separator"/>
-	<a href="/settings/mellow/servers">
+	<a href="/settings/mellow">
 		<BrandIcon/>{$t('action.return_from_mellow')}
 	</a>
 </ContextMenu.Root>
