@@ -28,6 +28,7 @@ import type {
 	UpdateMellowUserServerSettingsPayload,
 	UpdateMellowServerProfileSyncingSettingsPayload
 } from './types';
+import { getPublicKey } from './crypto';
 
 export function createProfile(username: string) {
 	return request<User>(`user`, 'POST', { username });
@@ -241,6 +242,13 @@ export function authoriseApplication(application_id: string, redirect_uri: strin
 
 export function revokeApplication(authorisation_id: string) {
 	return request(`auth/authorisation/${authorisation_id}`, 'DELETE');
+}
+
+export async function recoverAccountViaLink(id: string) {
+	return request(`auth/recover/link`, 'POST', {
+		id,
+		device_public_key: await getPublicKey()
+	});
 }
 
 function getPlatformVersion() {

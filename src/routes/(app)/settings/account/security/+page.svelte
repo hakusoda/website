@@ -3,6 +3,7 @@
 	import { Button, TextInput, ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
+	import { page } from '$app/stores';
 	import type { ApiRequestError } from '$lib/types';
 	import { verifyNewDevice, getNewDeviceOptions } from '$lib/api';
 
@@ -55,6 +56,10 @@
 	<p>{$t('settings.access.security.devices.summary')}</p>
 </div>
 
+{#if $page.url.searchParams.get('recovered') === ''}
+	<p class="recovered">{$t('settings.access.security.devices.recovered')}</p>
+{/if}
+
 <div class="devices">
 	{#each data.devices as item}
 		<SecurityDevice {...item}/>
@@ -77,6 +82,14 @@
 </ContextMenu.Root>
 
 <style lang="scss">
+	.recovered {
+		color: #ffeddb;
+		border: 1px solid #ffba7580;
+		padding: 16px 24px;
+		font-size: .9em;
+		background: #ffba751a;
+		border-radius: 32px;
+	}
 	.devices {
 		gap: 16px;
 		display: flex;

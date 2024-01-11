@@ -195,6 +195,7 @@ export default {
 		'settings.access.security': 'Security',
 		'settings.access.security.devices': 'Passkeys',
 		'settings.access.security.devices.summary': 'Passkeys are your only method of sign in, remove any that you no longer use or don\'t recognise.',
+		'settings.access.security.devices.recovered': 'You should create a new Passkey now and remove any you don\'t recognise to avoid losing access to your account again.',
 		'settings.access.security.device.registered': 'Registered on {0} using {1}',
 		'settings.access.security.device.registered.origin': 'in {0}',
 		'settings.access.security.device.last_used': 'Last used {0|time_ago}',
