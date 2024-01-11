@@ -44,7 +44,7 @@
 			<a class="item" href={`/mellow/server/${item.id}`}>
 				<div class="header">
 					<Avatar src={item.avatar_url} size="sm" transparent/>
-					<div>
+					<div class="text">
 						<h1>{item.name}</h1>
 						<p>{$t('settings.mellow.servers.server.owner', [item.owner_team_name || item.owner_user_name || item.owner_user_username])}</p>
 					</div>
@@ -55,7 +55,7 @@
 			<a class="item connect" href={`https://discord.com/channels/${item.id}`} target="_blank">
 				<div class="header">
 					<Avatar src={`https://cdn.discordapp.com/icons/${item.id}/${item.icon}.webp?size=128`} size="sm" transparent/>
-					<div>
+					<div class="text">
 						<h1>{item.name}</h1>
 						<p>{$t('settings.mellow.servers.server.connect')}</p>
 					</div>
@@ -128,11 +128,12 @@
 				gap: 16px;
 				display: flex;
 				align-items: center;
-				div {
+				.text {
 					h1 {
 						margin: 0;
 						font-size: 1em;
 						font-weight: 500;
+						white-space: nowrap;
 					}
 					p {
 						color: var(--color-secondary);
