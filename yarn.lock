@@ -2433,7 +2433,6 @@ __metadata:
     sass: "npm:^1.69.7"
     svelte: "npm:^4.2.8"
     svelte-markdown: "npm:^0.4.1"
-    svelte-media-queries: "npm:^1.6.2"
     svelte-portal: "npm:^2.2.0"
     svelte-preprocess: "npm:^5.1.3"
     typescript: "npm:^5.3.3"
@@ -4105,13 +4104,6 @@ __metadata:
   peerDependencies:
     svelte: ^4.0.0
   checksum: d13259e258c552f6a58c9498d74efef6cfc21ed06abecaf4e1a6cc53a52c9c2b145fc14ffc0c2b15ced2a817e8f63f2eb56a85db0e197f4b61a2c9af3bf3ba54
-  languageName: node
-  linkType: hard
-
-"svelte-media-queries@npm:^1.6.2":
-  version: 1.6.2
-  resolution: "svelte-media-queries@npm:1.6.2"
-  checksum: c165825701232c6dc334da9c5853d756a5be492410ae40037367c9184052098119824ab7a5dff7e2dcbddbe5ff1ab3ee9f3583d87e73aaa3fa91ce04c5ebe02d
   languageName: node
   linkType: hard
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import MediaQuery from 'svelte-media-queries';
 	import { Tabs, Button, TextInput, ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/localisation';
@@ -152,9 +151,7 @@
 	<div class="card-container">
 		<div class="card">
 			<div class="header">
-				<MediaQuery query="(min-width: 512px)" let:matches>
-					<Avatar src={newAvatarUri ?? avatar} size={matches ? 'lg' : 'md'} hover circle/>
-				</MediaQuery>
+				<Avatar src={newAvatarUri ?? avatar} size="lg" hover circle/>
 				<div class="name">
 					<h1>{editName || data.username}</h1>
 					<p>@{data.username}</p>
