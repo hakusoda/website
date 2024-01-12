@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 
 import { enableSudoMode } from '../store';
-import { generateAuthenticationHeader } from '$lib/crypto';
+import { signApiRequest } from '../crypto';
 import { API_BASE, USER_CONNECTION_METADATA } from '../constants';
 import type { ApiResponse, UserNotification } from '../types';
 import { RequestErrorType, UserConnectionType, UserNotificationType } from '$lib/enums';
@@ -63,12 +63,13 @@ export function payloadDiff<T extends Record<any, any>>(old: Record<any, any>, n
 
 const UNKNOWN_ERROR = { error: RequestErrorType.Unknown, success: false };
 export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' = 'GET', body?: any, headers?: Record<string, string>): Promise<ApiResponse<T>> {
-	const url = path.startsWith('http') ? path : `${API_BASE}/${path}`;
+	const isExternal = path.startsWith('http');
+	const url = isExternal ? path : `${API_BASE}/${path}`;
 	return fetch(url, {
 		body: body ? body instanceof URLSearchParams ? body.toString() : body instanceof ArrayBuffer ? body : JSON.stringify(body) : undefined,
 		method,
-		headers: browser ? {
-			'something': await generateAuthenticationHeader(),
+		headers: browser && !isExternal ? {
+			...await signApiRequest(path, method, body),
 			...headers
 		} : headers,
 		credentials: 'include'

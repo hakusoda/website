@@ -16,7 +16,7 @@ export function storeKeyPairForAuthentication() {
 			if (!await getStoreCount(store)) {
 				const { publicKey, privateKey } = await crypto.subtle.generateKey({
 					name: 'ECDSA',
-					namedCurve: 'P-384',
+					namedCurve: 'P-384'
 				}, false, ['sign', 'verify']);
 
 				const store = database.transaction(['SOMETHING'], 'readwrite').objectStore('SOMETHING');
@@ -44,21 +44,32 @@ export function getPublicKey(): Promise<string> {
 	});
 }
 
-export function generateAuthenticationHeader(): Promise<string> {
+
+function encodeBody(body?: any) {
+	if (!body)
+		return '';
+	if (body instanceof URLSearchParams)
+		return base64.fromString(body.toString());
+	if (body instanceof ArrayBuffer)
+		return base64.fromArrayBuffer(body, false);
+	return base64.fromString(JSON.stringify(body));
+}
+
+export function signApiRequest(path: string, method: string, body?: any): Promise<Record<string, string>> {
 	return new Promise(resolve => {
 		indexedDB.open('SOMETHING', 143).onsuccess = ({ target }) => {
 			const database = (target as IDBOpenDBRequest).result;
 			const store = database.transaction('SOMETHING', 'readonly').objectStore('SOMETHING');
 			store.openCursor().onsuccess = async ({ target }) => {
 				const { privateKey } = (target as IDBRequest<IDBCursorWithValue>).result.value as DatabaseItem;
-				const body = new Uint8Array(64);
-				crypto.getRandomValues(body);
-				
+
 				const signature = await crypto.subtle.sign({
 					name: 'ECDSA',
 					hash: { name: 'SHA-384' }
-				}, privateKey, body);
-				resolve(`${base64.fromArrayBuffer(signature, false)}:${base64.fromArrayBuffer(body, false)}`);
+				}, privateKey, new TextEncoder().encode(`${method} /v0/${path};${encodeBody(body)}`));
+				resolve({
+					'haku-sig': base64.fromArrayBuffer(signature)
+				});
 			};
 		};
 	});
