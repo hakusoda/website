@@ -610,14 +610,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/realtime-js@npm:^2.8.4":
-  version: 2.9.1
-  resolution: "@supabase/realtime-js@npm:2.9.1"
+"@supabase/realtime-js@npm:^2.9.3":
+  version: 2.9.3
+  resolution: "@supabase/realtime-js@npm:2.9.3"
   dependencies:
     "@supabase/node-fetch": "npm:^2.6.14"
     "@types/phoenix": "npm:^1.5.4"
+    "@types/ws": "npm:^8.5.10"
     ws: "npm:^8.14.2"
-  checksum: f0d2ccb33b1f5f97de241dd7e24175b89b94c059ba9e0151bc58fcb54037fe91960a620724c176d5821deac1c11090b74d0d640e8bba4b8c0b895663cbbbdc5e
+  checksum: 321c98237e3255cad221ed16b54739ce327d395b80faba1416ba81577f043681ae0dde10e0ac1b7e3427412d1dbb35cb4b66d8466c21239932aa3dca6b9cc87c
   languageName: node
   linkType: hard
 
@@ -630,17 +631,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/supabase-js@npm:^2.39.2":
-  version: 2.39.2
-  resolution: "@supabase/supabase-js@npm:2.39.2"
+"@supabase/supabase-js@npm:^2.39.3":
+  version: 2.39.3
+  resolution: "@supabase/supabase-js@npm:2.39.3"
   dependencies:
     "@supabase/functions-js": "npm:^2.1.5"
     "@supabase/gotrue-js": "npm:^2.60.0"
     "@supabase/node-fetch": "npm:^2.6.14"
     "@supabase/postgrest-js": "npm:^1.9.0"
-    "@supabase/realtime-js": "npm:^2.8.4"
+    "@supabase/realtime-js": "npm:^2.9.3"
     "@supabase/storage-js": "npm:^2.5.4"
-  checksum: c502ebd6b62b9a02e0abd4f5349906e70a19c35201d973ff1218e983ee92953bf5fe8689312f07f1a0a6a8d4e2a24d16f9604c277dfa6384aa1df86f46c02e8e
+  checksum: b36f685579ed3fb35e7073105d99937b3e09762df93da9db40fb1c925388cf9b3a20b3e22a1b5e57e65ad0ecf93a602373d63f9aef7c4302f3557b0ffb3c82e3
   languageName: node
   linkType: hard
 
@@ -656,9 +657,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "@sveltejs/kit@npm:2.3.0"
+"@sveltejs/kit@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "@sveltejs/kit@npm:2.3.2"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -678,7 +679,7 @@ __metadata:
     vite: ^5.0.3
   bin:
     svelte-kit: svelte-kit.js
-  checksum: eb39ef150ca4a0412b220fa93a39545a67353f6718ef2bef5db649d836098a8d98fee288f7b8ffc8f15e96b72a58b709b0a43345a00a25b69dc375ce76c76e07
+  checksum: ed7262b8abf328a3d86594b961c1962b7b64cfd103b7ce66756df84b1d4b78d0d88a045305e1ec26b896e7b8f81488f969ff4311e162aa6c67c41e914ab346f0
   languageName: node
   linkType: hard
 
@@ -788,6 +789,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:*":
+  version: 20.11.0
+  resolution: "@types/node@npm:20.11.0"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 560aa850dfccb83326f9cba125459f6c3fb0c71ec78f22c61e4d248f1df78bd25fd6792cef573dfbdc49c882f8e38bb1a82ca87e0e28ff2513629c704c2b02af
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:14.18.33":
   version: 14.18.33
   resolution: "@types/node@npm:14.18.33"
@@ -813,6 +823,15 @@ __metadata:
   version: 2.0.10
   resolution: "@types/unist@npm:2.0.10"
   checksum: 5f247dc2229944355209ad5c8e83cfe29419fa7f0a6d557421b1985a1500444719cc9efcc42c652b55aab63c931813c88033e0202c1ac684bcd4829d66e44731
+  languageName: node
+  linkType: hard
+
+"@types/ws@npm:^8.5.10":
+  version: 8.5.10
+  resolution: "@types/ws@npm:8.5.10"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: e9af279b984c4a04ab53295a40aa95c3e9685f04888df5c6920860d1dd073fcc57c7bd33578a04b285b2c655a0b52258d34bee0a20569dca8defb8393e1e5d29
   languageName: node
   linkType: hard
 
@@ -1029,10 +1048,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/speed-insights@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@vercel/speed-insights@npm:1.0.2"
-  checksum: 221d17846d845d0ec7b0f63467807449e281f763f5b6950074fa89b65e0ddef8f10cc1720996874f2b2252d732e9ede6c218355762e07131fc2bdcaa063b7068
+"@vercel/speed-insights@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@vercel/speed-insights@npm:1.0.3"
+  checksum: c37450716de4fcc57c42ed59232bb8050be2500003f5e30e4f4cebfedb3a06762586058e0c7de5801aea7d657638c43fed739b0646dc312aa93bda83a6415b14
   languageName: node
   linkType: hard
 
@@ -2399,13 +2418,13 @@ __metadata:
     "@hakumi/roblox-api": "npm:^0.1.1"
     "@hexagon/base64": "npm:^1.1.28"
     "@iconify-json/bi": "npm:^1.1.23"
-    "@supabase/supabase-js": "npm:^2.39.2"
+    "@supabase/supabase-js": "npm:^2.39.3"
     "@sveltejs/adapter-vercel": "npm:^4.0.4"
-    "@sveltejs/kit": "npm:^2.3.0"
+    "@sveltejs/kit": "npm:^2.3.2"
     "@sveltejs/vite-plugin-svelte": "npm:^3.0.1"
     "@vercel/analytics": "npm:^1.1.1"
     "@vercel/edge-config": "npm:^0.4.1"
-    "@vercel/speed-insights": "npm:^1.0.2"
+    "@vercel/speed-insights": "npm:^1.0.3"
     "@voxelified/roblox-open-cloud": "npm:^0.1.0"
     "@voxelified/svelte-localisation": "npm:^1.0.0"
     cropperjs: "npm:^1.6.1"
@@ -4370,6 +4389,13 @@ __metadata:
   version: 1.0.0
   resolution: "uid-promise@npm:1.0.0"
   checksum: 3300c98b59144f3cf4d497b8ff1cd6bcf8d74f8451533b9b4772b2919cd7d003aa08c36ed38b61528bbc71e8a9ee953e845b4b44fb113d9848ce4bf84bb8e228
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: bb673d7876c2d411b6eb6c560e0c571eef4a01c1c19925175d16e3a30c4c428181fb8d7ae802a261f283e4166a0ac435e2f505743aa9e45d893f9a3df017b501
   languageName: node
   linkType: hard
 
