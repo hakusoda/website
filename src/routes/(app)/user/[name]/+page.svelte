@@ -20,23 +20,23 @@
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 	import SetupUserProfile from '$lib/modals/SetupUserProfile.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import Star from '$lib/icons/Star.svelte';
-	import Plus from '$lib/icons/Plus.svelte';
-	import Trash from '$lib/icons/Trash.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import Star from 'virtual:icons/bi/star';
+	import Plus from 'virtual:icons/bi/plus-lg';
+	import Trash from 'virtual:icons/bi/trash';
 	import Burger from '$lib/icons/Burger.svelte';
-	import People from '$lib/icons/People.svelte';
-	import Sunrise from '$lib/icons/Sunrise.svelte';
-	import StarFill from '$lib/icons/StarFill.svelte';
-	import PencilFill from '$lib/icons/PencilFill.svelte';
-	import PeopleFill from '$lib/icons/PeopleFill.svelte';
-	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import PersonPlus from '$lib/icons/PersonPlus.svelte';
-	import PersonDash from '$lib/icons/PersonDash.svelte';
-	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
-	import EnvelopePlusFill from '$lib/icons/EnvelopePlusFill.svelte';
-	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
-	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
+	import People from 'virtual:icons/bi/people';
+	import Sunrise from 'virtual:icons/bi/sunrise';
+	import StarFill from 'virtual:icons/bi/star-fill';
+	import PencilFill from 'virtual:icons/bi/pencil-fill';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
+	import PersonFill from 'virtual:icons/bi/person-fill';
+	import PersonPlus from 'virtual:icons/bi/person-plus';
+	import PersonDash from 'virtual:icons/bi/person-dash';
+	import PatchCheckFill from 'virtual:icons/bi/patch-check-fill';
+	import EnvelopePlusFill from 'virtual:icons/bi/envelope-plus-fill';
+	import ClipboardPlusFill from 'virtual:icons/bi/clipboard-plus-fill';
+	import ThreeDotsVertical from 'virtual:icons/bi/three-dots-vertical';
 	export let data;
 
 	$: avatar = data.avatar_url || getDefaultAvatar(data.id);
@@ -288,11 +288,11 @@
 							</div>
 							<div class="details">
 								<div>
-									<PersonFill size={14}/>
+									<PersonFill font-size={14}/>
 									<p>{item.role?.name ?? $t('team_role.unknown')}</p>
 								</div>
 								<div>
-									<StarFill size={14}/>
+									<StarFill font-size={14}/>
 									{#if item.owner}
 										<a href={`/user/${item.owner.username}`}>
 											{item.owner.name || item.owner.username}
@@ -302,7 +302,7 @@
 									{/if}
 								</div>
 								<div>
-									<PeopleFill size={14}/>
+									<PeopleFill font-size={14}/>
 									<p>{$t('members', [item.members[0].count])}</p>
 								</div>
 							</div>

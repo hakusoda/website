@@ -1,3 +1,4 @@
+<!-- based off materials from https://partner.steamgames.com/doc/marketing/branding -->
 <script lang="ts">
 	export let size = 16;
 </script>

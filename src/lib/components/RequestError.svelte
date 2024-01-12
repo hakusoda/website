@@ -2,7 +2,7 @@
 	import { t } from '../localisation';
 	import type { RequestError } from '../types';
 
-	import ArrowRightShort from '../icons/ArrowRightShort.svelte';
+	import ArrowRightShort from 'virtual:icons/bi/arrow-right-short';
 	export let data: RequestError | null = null;
 	export let background = 'var(--background-secondary)';
 </script>

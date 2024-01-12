@@ -8,7 +8,7 @@
 	import RequestError from './RequestError.svelte';
 	import ActionLogUIItem from './ActionLogItem.svelte';
 
-	import Hourglass from '../icons/Hourglass.svelte';
+	import Hourglass from 'virtual:icons/bi/hourglass';
 	export let team_id: string | null = null;
 	export let server_id: string | null = null;
 	$: items = server_id ? [] : [] as ActionLogItem[];
@@ -64,7 +64,7 @@
 		{/each}
 	{/each}
 	{#if requesting}
-		<Hourglass size={32}/>
+		<Hourglass font-size={32}/>
 	{/if}
 	<RequestError data={error} background="var(--background-primary)"/>
 	{#if finished && !error}

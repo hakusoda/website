@@ -7,8 +7,8 @@
 	import { getPublicKey } from '$lib/crypto';
 	import { verifyNewDevice, getNewDeviceOptions } from '$lib/api';
 
-	import Plus from '$lib/icons/Plus.svelte';
-	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
+	import Plus from 'virtual:icons/bi/plus-lg';
+	import BoxArrowRight from 'virtual:icons/bi/box-arrow-right';
 	export let data;
 
 	$: connection = data.session!.source_connection_type;

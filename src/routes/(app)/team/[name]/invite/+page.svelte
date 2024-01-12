@@ -4,8 +4,8 @@
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
 
-	import X from '$lib/icons/X.svelte';
-	import Check from '$lib/icons/Check.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import Check from 'virtual:icons/bi/check-lg';
 	export let data;
 
 	$: teamUrl = `/team/${$page.params.name}`;

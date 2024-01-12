@@ -1,9 +1,9 @@
 <script lang="ts">
 	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
 
-	import GearFill from '$lib/icons/GearFill.svelte';
-	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import ShieldLockFill from '$lib/icons/ShieldLockFill.svelte';
+	import GearFill from 'virtual:icons/bi/gear-fill';
+	import PersonFill from 'virtual:icons/bi/person-fill';
+	import ShieldLockFill from 'virtual:icons/bi/shield-lock-fill';
 </script>
 
 <WithSideNavigation items={[

@@ -8,7 +8,7 @@
 
 	import RequestError from '$lib/components/RequestError.svelte';
 
-	import Plus from '$lib/icons/Plus.svelte';
+	import Plus from 'virtual:icons/bi/plus-lg';
 	export let data;
 
 	let key: string | null = null;

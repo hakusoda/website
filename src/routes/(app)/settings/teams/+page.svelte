@@ -7,13 +7,13 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	
-	import Plus from '$lib/icons/Plus.svelte';
-	import GearFill from '$lib/icons/GearFill.svelte';
-	import StarFill from '$lib/icons/StarFill.svelte';
-	import PeopleFill from '$lib/icons/PeopleFill.svelte';
-	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
-	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
+	import Plus from 'virtual:icons/bi/plus-lg';
+	import GearFill from 'virtual:icons/bi/gear-fill';
+	import StarFill from 'virtual:icons/bi/star-fill';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
+	import PersonFill from 'virtual:icons/bi/person-fill';
+	import BoxArrowRight from 'virtual:icons/bi/box-arrow-right';
+	import PatchCheckFill from 'virtual:icons/bi/patch-check-fill';
 	export let data;
 </script>
 
@@ -40,11 +40,11 @@
 				</div>
 				<div class="details">
 					<p>
-						<PersonFill size={14}/>
+						<PersonFill font-size={14}/>
 						{item.role?.name ?? $t('team_role.unknown')}
 					</p>
 					<p>
-						<StarFill size={14}/>
+						<StarFill font-size={14}/>
 						{#if item.owner}
 							<a href={`/user/${item.owner.username}`}>
 								{item.owner.name || item.owner.username}
@@ -53,7 +53,7 @@
 							{$t('team.owner.none')}
 						{/if}
 					</p>
-					<p><PeopleFill size={14}/>{item.members[0].count}</p>
+					<p><PeopleFill font-size={14}/>{item.members[0].count}</p>
 				</div>
 				<div class="buttons">
 					{#if data.session?.sub === item.owner?.id || (item.role && hasBit(item.role.permissions, TeamRolePermission.ManageTeam))}

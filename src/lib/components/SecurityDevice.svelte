@@ -6,10 +6,10 @@
 	import { invalidateAll } from '$app/navigation';
 	import { removeSecurityDevice } from '../api';
 
-	import Phone from '../icons/Phone.svelte';
-	import Trash from '../icons/Trash.svelte';
-	import Display from '../icons/Display.svelte';
-	import ThreeDots from '../icons/ThreeDots.svelte';
+	import Phone from 'virtual:icons/bi/phone';
+	import Trash from 'virtual:icons/bi/trash';
+	import Display from 'virtual:icons/bi/display';
+	import ThreeDots from 'virtual:icons/bi/three-dots';
 	export let id: string;
 	export let name: string;
 	export let user_os: string;
@@ -17,7 +17,7 @@
 	export let user_country: string;
 	export let user_platform: string;
 
-	const iPadOSRegex = /i(Pad)?OS/;
+	const iOSRegex = /i(Pad)?OS/;
 	const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
 
 	let trigger: () => void;
@@ -33,10 +33,10 @@
 </script>
 
 <div class="security-device">
-	{#if iPadOSRegex.test(user_os) || user_os === 'Android'}
-		<Phone size={32}/>
+	{#if iOSRegex.test(user_os) || user_os === 'Android'}
+		<Phone font-size={32}/>
 	{:else}
-		<Display size={32}/>
+		<Display font-size={32}/>
 	{/if}
 	<div class="details">
 		<h1>{name}</h1>

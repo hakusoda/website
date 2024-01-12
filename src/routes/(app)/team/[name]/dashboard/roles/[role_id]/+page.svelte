@@ -12,8 +12,8 @@
 	import Radio from '$lib/components/Radio.svelte';
 	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
 
-	import LockFill from '$lib/icons/LockFill.svelte';
-	import PeopleFill from '$lib/icons/PeopleFill.svelte';
+	import LockFill from 'virtual:icons/bi/lock-fill';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
 	export let data;
 
 	$: role = data.roles.find(item => item.id === $page.params.role_id);

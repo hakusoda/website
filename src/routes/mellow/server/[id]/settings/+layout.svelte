@@ -4,12 +4,12 @@
 
 	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
 
-	import Link from '$lib/icons/Link.svelte';
+	import Link from 'virtual:icons/bi/link';
 	import Discord from '$lib/icons/Discord.svelte';
 	import Webhook from '$lib/icons/Webhook.svelte';
-	import GearFill from '$lib/icons/GearFill.svelte';
-	import Newspaper from '$lib/icons/Newspaper.svelte';
-	import CodeSlash from '$lib/icons/CodeSlash.svelte';
+	import GearFill from 'virtual:icons/bi/gear-fill';
+	import CodeSlash from 'virtual:icons/bi/code-slash';
+	import Newspaper from 'virtual:icons/bi/newspaper';
 
 	$: base = `/mellow/server/${$page.params.id}/settings`;
 	$: items = [

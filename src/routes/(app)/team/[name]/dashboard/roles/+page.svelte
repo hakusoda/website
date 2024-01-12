@@ -6,8 +6,8 @@
 	import { hasBit } from '$lib/util';
 	import { TeamRolePermission } from '$lib/enums';
 
-	import PencilFill from '$lib/icons/PencilFill.svelte';
-	import PeopleFill from '$lib/icons/PeopleFill.svelte';
+	import PencilFill from 'virtual:icons/bi/pencil-fill';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
 	export let data;
 
 	$: selfRole = data.members.find(member => member.id === data.session!.sub)?.role;
@@ -26,7 +26,7 @@
 	<div class="items">
 		{#each data.roles as item}
 			<div class="item">
-				<PeopleFill size={32}/>
+				<PeopleFill font-size={32}/>
 				<div class="name">
 					<h1>{item.name}</h1>
 					<p>

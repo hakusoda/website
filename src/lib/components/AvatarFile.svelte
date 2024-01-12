@@ -7,8 +7,8 @@
 	import { t } from '../localisation';
 	import Avatar from './Avatar.svelte';
 
-	import X from '../icons/X.svelte';
-	import Check from '../icons/Check.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import Check from 'virtual:icons/bi/check-lg';
 	export let name: string;
 	export let image: string | null = null;
 	export let circle = true;

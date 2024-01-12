@@ -9,9 +9,9 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import TeamSelect from '$lib/components/TeamSelect.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import Check from '$lib/icons/Check.svelte';
-	import PeopleFill from '$lib/icons/PeopleFill.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import Check from 'virtual:icons/bi/check-lg';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
 	export let data;
 
 	let value: string | null = null;

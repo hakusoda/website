@@ -5,7 +5,7 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 
-	import PersonFill from '$lib/icons/PersonFill.svelte';
+	import PersonFill from 'virtual:icons/bi/person-fill';
 	export let data;
 </script>
 

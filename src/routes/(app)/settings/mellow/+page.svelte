@@ -8,7 +8,7 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 
-	import ArrowClockwise from '$lib/icons/ArrowClockwise.svelte';
+	import ArrowClockwise from 'virtual:icons/bi/arrow-clockwise';
 	export let data;
 
 	let itemFilter = '';

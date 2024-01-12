@@ -3,9 +3,9 @@
 
 	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
 
-	import GearFill from '$lib/icons/GearFill.svelte';
-	import GridFill from '$lib/icons/GridFill.svelte';
-	import Newspaper from '$lib/icons/Newspaper.svelte';
+	import GearFill from 'virtual:icons/bi/gear-fill';
+	import GridFill from 'virtual:icons/bi/grid-fill';
+	import Newspaper from 'virtual:icons/bi/newspaper';
 
 	$: base = `/team/${$page.params.name}/dashboard/settings`;
 </script>

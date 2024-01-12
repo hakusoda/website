@@ -1,6 +1,6 @@
 <script lang="ts">
-	import X from '$lib/icons/X.svelte';
-	import Check from '$lib/icons/Check.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import Check from 'virtual:icons/bi/check-lg';
 	export let value: boolean;
 	export let disabled = false;
 	export let onChange: ((newValue: boolean) => void) | null = null;
@@ -10,7 +10,7 @@
 	{#if value}
 		<Check/>
 	{:else}
-		<X size={12}/>
+		<X font-size={12}/>
 	{/if}
 </button>
 

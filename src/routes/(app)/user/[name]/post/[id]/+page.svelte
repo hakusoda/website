@@ -12,9 +12,9 @@
 	import ProfilePost from '$lib/components/ProfilePost.svelte';
 	import RequestError from '$lib/components/RequestError.svelte';
 
-	import Chat from '$lib/icons/Chat.svelte';
-	import Plus from '$lib/icons/Plus.svelte';
-	import Heart from '$lib/icons/Heart.svelte';
+	import Chat from 'virtual:icons/bi/chat';
+	import Plus from 'virtual:icons/bi/plus-lg';
+	import Heart from 'virtual:icons/bi/heart';
 	export let data;
 
 	let replying = false;

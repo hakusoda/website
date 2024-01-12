@@ -9,11 +9,11 @@
 
 	import Avatar from './Avatar.svelte';
 
-	import X from '../icons/X.svelte';
-	import ThreeDots from '../icons/ThreeDots.svelte';
-	import PeopleFill from '../icons/PeopleFill.svelte';
-	import BoxArrowLeft from '../icons/BoxArrowLeft.svelte';
-	import ClipboardPlusFill from '../icons/ClipboardPlusFill.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import ThreeDots from 'virtual:icons/bi/three-dots';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
+	import BoxArrowLeft from 'virtual:icons/bi/box-arrow-left';
+	import ClipboardPlusFill from 'virtual:icons/bi/clipboard-plus-fill';
 	export let id: string;
 	export let name: string | null = null;
 	export let role: PartialRole | null = null;
@@ -98,7 +98,7 @@
 	</button>
 	<ContextMenu.Root bind:trigger>
 		<p>{name || username} (@{username})</p>
-		{#if !removing && filteredRoles.length && owner !== id && (id !== $page.data.session.sub || owner === $page.data.session.sub) && (owner === $page.data.session.sub || (myRole && (hasBit(myRole.permissions, TeamRolePermission.ManageMembers) || hasBit(myRole.permissions, TeamRolePermission.Administrator))))}
+		{#if !removing && filteredRoles.length && owner !== id && (id !== $page.data.session?.sub || owner === $page.data.session.sub) && (owner === $page.data.session?.sub || (myRole && (hasBit(myRole.permissions, TeamRolePermission.ManageMembers) || hasBit(myRole.permissions, TeamRolePermission.Administrator))))}
 			<ContextMenu.Sub>
 				<svelte:fragment slot="trigger">
 					<PeopleFill/>{$t('action.change_role')}
@@ -119,7 +119,7 @@
 			</ContextMenu.Sub>
 			<div class="separator"/>
 		{/if}
-		{#if owner === $page.data.session.sub || (myRole && hasOneOfBits(myRole.permissions, [TeamRolePermission.Administrator, TeamRolePermission.ManageMembers]))}
+		{#if owner === $page.data.session?.sub || (myRole && hasOneOfBits(myRole.permissions, [TeamRolePermission.Administrator, TeamRolePermission.ManageMembers]))}
 			<button type="button" on:click={remove} disabled={removing}>
 				<BoxArrowLeft/>
 				{$t('action.remove')}

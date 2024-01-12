@@ -6,9 +6,9 @@
 	import Markdown from './Markdown.svelte';
 	import ProfilePostAttachment from './ProfilePostAttachment.svelte';
 
-	import Chat from '../icons/Chat.svelte';
-	import Heart from '../icons/Heart.svelte';
-	import HeartFill from '../icons/HeartFill.svelte';
+	import Chat from 'virtual:icons/bi/chat';
+	import Heart from 'virtual:icons/bi/heart';
+	import HeartFill from 'virtual:icons/bi/heart-fill';
 	export let id: string;
 	export let user: {
 		id: string

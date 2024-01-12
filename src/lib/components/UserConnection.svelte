@@ -7,9 +7,9 @@
 	import type { UserConnectionType } from '../enums';
 	import { USER_CONNECTION_METADATA } from '../constants';
 
-	import X from '../icons/X.svelte';
-	import ThreeDots from '../icons/ThreeDots.svelte';
-	import BoxArrowUpRight from '../icons/BoxArrowUpRight.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import ThreeDots from 'virtual:icons/bi/three-dots';
+	import BoxArrowUpRight from 'virtual:icons/bi/box-arrow-up-right';
 
 	export let id: string;
 	export let sub: string;
@@ -36,7 +36,7 @@
 </script>
 
 <div class="user-connection">
-	<svelte:component this={USER_CONNECTION_METADATA[type]?.icon} size={32}/>
+	<svelte:component this={USER_CONNECTION_METADATA[type]?.icon} size={32} font-size={32}/>
 	{#if avatar_url}
 		<img src={avatar_url} alt="" width="32" height="32"/>
 	{/if}

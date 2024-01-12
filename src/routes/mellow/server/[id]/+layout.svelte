@@ -7,13 +7,13 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import AppLayout from '$lib/layouts/AppLayout.svelte';
 
-	import Link from '$lib/icons/Link.svelte';
-	import GearFill from '$lib/icons/GearFill.svelte';
+	import Link from 'virtual:icons/bi/link';
+	import GearFill from 'virtual:icons/bi/gear-fill';
 	import BrandIcon from '$lib/icons/BrandIcon.svelte';
-	import ChevronUp from '$lib/icons/ChevronUp.svelte';
+	import ChevronUp from 'virtual:icons/bi/chevron-up';
 	import MellowIcon from '$lib/icons/MellowIcon.svelte';
-	import ChevronDown from '$lib/icons/ChevronDown.svelte';
-	import HouseDoorFill from '$lib/icons/HouseDoorFill.svelte';
+	import ChevronDown from 'virtual:icons/bi/chevron-down';
+	import HouseDoorFill from 'virtual:icons/bi/house-door-fill';
 	export let data;
 
 	$: base = `/mellow/server/${$page.params.id}`;
@@ -35,8 +35,8 @@
 		<Avatar id={$page.params.id} src={data.avatar_url} size="xxs"/>
 		{data.name}
 		<div class="arrows">
-			<ChevronUp size={12}/>
-			<ChevronDown size={12}/>
+			<ChevronUp font-size={12}/>
+			<ChevronDown font-size={12}/>
 		</div>
 	</button>
 	<slot/>

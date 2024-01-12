@@ -7,9 +7,9 @@
 	import Avatar from './Avatar.svelte';
 	import ActionLogItemDetail from './ActionLogItemDetail.svelte';
 
-	import Link from '../icons/Link.svelte';
-	import Webhook from '../icons/Webhook.svelte';
-	import PeopleFill from '../icons/PeopleFill.svelte';
+	import Link from 'virtual:icons/bi/link';
+	import Webhook from '$lib/icons/Webhook.svelte';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
 	export let data: ActionLogItem;
 
 	$: text = $t(`action_log.type.${data.type}`, [data]);

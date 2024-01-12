@@ -15,7 +15,7 @@
 <div class="geist connections">
 	{#each data.connections as { connection: { sub, type, username, avatar_url, website_url, display_name }, last_used_at }}
 		<div class="item">
-			<svelte:component this={USER_CONNECTION_METADATA[type]?.icon} size={32}/>
+			<svelte:component this={USER_CONNECTION_METADATA[type]?.icon} size={32} font-size={32}/>
 			{#if avatar_url}
 				<img src={avatar_url} alt="" width="32" height="32"/>
 			{/if}

@@ -8,7 +8,7 @@
 
 	import MellowProfileAction from '$lib/components/MellowProfileAction.svelte';
 
-	import Plus from '$lib/icons/Plus.svelte';
+	import Plus from 'virtual:icons/bi/plus-lg';
 	export let data;
 
 	let linksContainer: HTMLDivElement;

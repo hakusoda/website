@@ -10,8 +10,8 @@
 	
 	import Modal from '../components/Modal.svelte';
 
-	import X from '../icons/X.svelte';
-	import KeyFill from '../icons/KeyFill.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import KeyFill from 'virtual:icons/bi/key-fill';
 
 	let error: RequestError | null;
 	let enabling = false;

@@ -1,3 +1,4 @@
+<!-- based off materials from https://discord.com/branding -->
 <script lang="ts">
 	export let size = 16;
 	export let coloured = false;

@@ -10,7 +10,7 @@
 
 	import Loader from '$lib/components/Loader.svelte';
 
-	import ArrowClockwise from '$lib/icons/ArrowClockwise.svelte';
+	import ArrowClockwise from 'virtual:icons/bi/arrow-clockwise';
 	export let data;
 
 	let error = '';

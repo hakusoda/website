@@ -11,17 +11,17 @@
 	import Markdown from '$lib/components/Markdown.svelte';
 	import TeamInvite from '$lib/modals/TeamInvite.svelte';
 
-	import Star from '$lib/icons/Star.svelte';
-	import Link from '$lib/icons/Link.svelte';
-	import Person from '$lib/icons/Person.svelte';
-	import People from '$lib/icons/People.svelte';
-	import Sunrise from '$lib/icons/Sunrise.svelte';
-	import GearFill from '$lib/icons/GearFill.svelte';
-	import StarFill from '$lib/icons/StarFill.svelte';
-	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
-	import PatchCheckFill from '$lib/icons/PatchCheckFill.svelte';
-	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
-	import ThreeDotsVertical from '$lib/icons/ThreeDotsVertical.svelte';
+	import Star from 'virtual:icons/bi/star';
+	import Link from 'virtual:icons/bi/link';
+	import Person from 'virtual:icons/bi/person';
+	import People from 'virtual:icons/bi/people';
+	import Sunrise from 'virtual:icons/bi/sunrise';
+	import GearFill from 'virtual:icons/bi/gear-fill';
+	import StarFill from 'virtual:icons/bi/star-fill';
+	import BoxArrowRight from 'virtual:icons/bi/box-arrow-right';
+	import PatchCheckFill from 'virtual:icons/bi/patch-check-fill';
+	import ClipboardPlusFill from 'virtual:icons/bi/clipboard-plus-fill';
+	import ThreeDotsVertical from 'virtual:icons/bi/three-dots-vertical';
 	export let data;
 
 	let tab = 0;
@@ -52,7 +52,7 @@
 						</a>
 					{/each}
 					{#if hasBit(data.flags, TeamFlag.Verified)}
-						<p><PatchCheckFill size={32}/></p>
+						<p><PatchCheckFill font-size={32}/></p>
 					{/if}
 				</h1>
 				<p>@{data.name}</p>
@@ -146,7 +146,7 @@
 						<div class="name">
 							<h1>
 								{#if item.id === data.owner?.id}
-									<StarFill size={20}/>
+									<StarFill font-size={20}/>
 								{/if}
 								{item.name ?? item.username}
 							</h1>

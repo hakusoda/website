@@ -7,13 +7,13 @@
 	import { deleteMellowServerProfileSyncAction } from '$lib/api';
 	import type { MellowProfileSyncActionType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
 
-	import Trash from '$lib/icons/Trash.svelte';
-	import Sunrise from '$lib/icons/Sunrise.svelte';
-	import GridFill from '$lib/icons/GridFill.svelte';
-	import ThreeDots from '$lib/icons/ThreeDots.svelte';
-	import PencilFill from '$lib/icons/PencilFill.svelte';
-	import UIChecksGrid from '$lib/icons/UIChecksGrid.svelte';
-	import ClipboardPlusFill from '$lib/icons/ClipboardPlusFill.svelte';
+	import Trash from 'virtual:icons/bi/trash';
+	import Sunrise from 'virtual:icons/bi/sunrise';
+	import GridFill from 'virtual:icons/bi/grid-fill';
+	import ThreeDots from 'virtual:icons/bi/three-dots';
+	import PencilFill from 'virtual:icons/bi/pencil-fill';
+	import UIChecksGrid from 'virtual:icons/bi/ui-checks-grid';
+	import ClipboardPlusFill from 'virtual:icons/bi/clipboard-plus-fill';
 	export let id: string;
 	export let name: string;
 	export let type: MellowProfileSyncActionType;

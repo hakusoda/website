@@ -6,8 +6,8 @@
 
 	import Avatar from './Avatar.svelte';
 
-	import Search from '../icons/Search.svelte';
-	import ChevronDown from '$lib/icons/ChevronDown.svelte';
+	import Search from 'virtual:icons/bi/search';
+	import ChevronDown from 'virtual:icons/bi/chevron-down';
 	export let value: string | null = null;
 
 	let focus = false;

@@ -3,11 +3,11 @@
 
 	import { t } from '$lib/localisation';
 
-	import Hourglass from '$lib/icons/Hourglass.svelte';
-	import PencilFill from '$lib/icons/PencilFill.svelte';
-	import ArrowClockwise from '$lib/icons/ArrowClockwise.svelte';
-	import ExclamationOctagonFill from '$lib/icons/ExclamationOctagonFill.svelte';
-	import ExclamationTriangleFill from '$lib/icons/ExclamationTriangleFill.svelte';
+	import Hourglass from 'virtual:icons/bi/hourglass';
+	import PencilFill from 'virtual:icons/bi/pencil-fill';
+	import ArrowClockwise from 'virtual:icons/bi/arrow-clockwise';
+	import ExclamationOctagonFill from 'virtual:icons/bi/exclamation-octagon-fill';
+	import ExclamationTriangleFill from 'virtual:icons/bi/exclamation-triangle-fill';
 	export let show = false;
 	export let save: () => void;
 	export let error: string = '';
@@ -17,11 +17,11 @@
 
 <div class="unsaved-changes" class:show class:error>
 	{#if saving}
-		<Hourglass size={28}/>
+		<Hourglass font-size={28}/>
 	{:else if error}
-		<ExclamationOctagonFill size={28}/>
+		<ExclamationOctagonFill font-size={28}/>
 	{:else}
-		<ExclamationTriangleFill size={28}/>
+		<ExclamationTriangleFill font-size={28}/>
 	{/if}
 	<div class="details">
 		{#if error}

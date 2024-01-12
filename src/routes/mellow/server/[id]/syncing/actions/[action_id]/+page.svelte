@@ -5,6 +5,7 @@
 
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import { copyJson, payloadDiff } from '$lib/util';
 	import { editor, setEditorCallback } from '$lib/store';
 	import { createMellowServerProfileSyncAction, updateMellowServerProfileSyncAction } from '$lib/api';
@@ -16,13 +17,12 @@
 	import GroupSelect from '$lib/components/GroupSelect.svelte';
 	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import Link from '$lib/icons/Link.svelte';
-	import Plus from '$lib/icons/Plus.svelte';
-	import GridFill from '$lib/icons/GridFill.svelte';
-	import Clipboard from '$lib/icons/Clipboard.svelte';
-	import UIChecksGrid from '$lib/icons/UIChecksGrid.svelte';
-    import { goto } from '$app/navigation';
+	import X from 'virtual:icons/bi/x-lg';
+	import Link from 'virtual:icons/bi/link';
+	import Plus from 'virtual:icons/bi/plus-lg';
+	import GridFill from 'virtual:icons/bi/grid-fill';
+	import Clipboard from 'virtual:icons/bi/clipboard';
+	import UIChecksGrid from 'virtual:icons/bi/ui-checks-grid';
 	export let data;
 
 	$: action = data.items.find(item => item.id === $page.params.action_id);

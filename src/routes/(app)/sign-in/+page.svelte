@@ -13,7 +13,7 @@
 
 	import RequestErrorUI from '$lib/components/RequestError.svelte';
 
-	import KeyFill from '$lib/icons/KeyFill.svelte';
+	import KeyFill from 'virtual:icons/bi/key-fill';
 	export let data;
 
 	let username = '';

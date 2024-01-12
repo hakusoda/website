@@ -1,3 +1,4 @@
+<!-- based off materials from https://github.com/logos -->
 <script lang="ts">
 	export let size = 16;
 </script>

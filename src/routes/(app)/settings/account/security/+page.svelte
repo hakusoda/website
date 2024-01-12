@@ -10,8 +10,8 @@
 	import RequestError from '$lib/components/RequestError.svelte';
 	import SecurityDevice from '$lib/components/SecurityDevice.svelte';
 
-	import Plus from '$lib/icons/Plus.svelte';
-	import Check from '$lib/icons/Check.svelte';
+	import Plus from 'virtual:icons/bi/plus-lg';
+	import Check from 'virtual:icons/bi/check-lg';
 	export let data;
 
 	let trigger: () => void;

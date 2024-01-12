@@ -9,10 +9,10 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import RequestError from '$lib/components/RequestError.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import Check from '$lib/icons/Check.svelte';
-	import Hourglass from '$lib/icons/Hourglass.svelte';
-	import EnvelopePlus from '$lib/icons/EnvelopePlus.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import Check from 'virtual:icons/bi/check-lg';
+	import Hourglass from 'virtual:icons/bi/hourglass';
+	import EnvelopePlus from 'virtual:icons/bi/envelope-plus';
 	import WavingHandEmoji from '$lib/icons/WavingHandEmoji.svelte';
 	export let id: string;
 	export let name: string;
@@ -41,7 +41,7 @@
 		<div class="header">
 			<Avatar src={avatar} size="md" hover/>
 			<Avatar src={data.author?.avatar_url} size="sm" hover circle/>
-			<EnvelopePlus size={48}/>
+			<EnvelopePlus font-size={48}/>
 			<Avatar src={userAvatar} size="md" hover circle/>
 		</div>
 

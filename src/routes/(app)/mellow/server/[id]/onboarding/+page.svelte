@@ -10,8 +10,8 @@
 
 	import Avatar from '$lib/components/Avatar.svelte';
 
-	import Check from '$lib/icons/Check.svelte';
-	import ChevronDown from '$lib/icons/ChevronDown.svelte';
+	import Check from 'virtual:icons/bi/check-lg';
+	import ChevronDown from 'virtual:icons/bi/chevron-down';
 	export let data;
 
 	let trigger: () => void;
@@ -51,7 +51,7 @@
 		<div class="connections">
 			{#each data.connections as item}
 				<button class="item" type="button" on:click={data.current_connections.some(i => i.type === item.type) ? trigger : () => location.href = getUserConnectionUrl(item.type) + `&state=mlw${$page.params.id}mlw`}>
-					<svelte:component this={USER_CONNECTION_METADATA[item.type]?.icon} size={32}/>
+					<svelte:component this={USER_CONNECTION_METADATA[item.type]?.icon} size={32} font-size={32}/>
 					{#if connections[item.type]}
 						<img src={connections[item.type]?.avatar_url} alt="" width="32" height="32"/>
 					{/if}

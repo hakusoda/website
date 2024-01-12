@@ -4,9 +4,9 @@
 
 	import BrandIcon from '$lib/icons/BrandIcon.svelte';
 	import BrandLogo from '$lib/icons/BrandLogo.svelte';
-	import CodeSlash from '$lib/icons/CodeSlash.svelte';
+	import CodeSlash from 'virtual:icons/bi/code-slash';
 	import MellowFace from '$lib/icons/MellowFace.svelte';
-	import HouseDoorFill from '$lib/icons/HouseDoorFill.svelte';
+	import HouseDoorFill from 'virtual:icons/bi/house-door-fill';
 	export let data;
 
 	$: splitPath = $page.url.pathname.split('/');

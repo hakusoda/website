@@ -8,12 +8,12 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import RequestError from '$lib/components/RequestError.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import Check from '$lib/icons/Check.svelte';
-	import Hourglass from '$lib/icons/Hourglass.svelte';
-	import ThreeDots from '$lib/icons/ThreeDots.svelte';
-	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import ExclamationOctagonFill from '$lib/icons/ExclamationOctagonFill.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import Check from 'virtual:icons/bi/check-lg';
+	import Hourglass from 'virtual:icons/bi/hourglass';
+	import ThreeDots from 'virtual:icons/bi/three-dots';
+	import PersonFill from 'virtual:icons/bi/person-fill';
+	import ExclamationOctagonFill from 'virtual:icons/bi/exclamation-octagon-fill';
 	export let data;
 	
 	let error: ApiRequestError | null = null;
@@ -47,11 +47,11 @@
 			</p>
 		</div>
 		{#if badRedirect}
-			<X size={32}/>
+			<X font-size={32}/>
 		{:else if authorising}
-			<Hourglass size={32}/>
+			<Hourglass font-size={32}/>
 		{:else}
-			<ThreeDots size={32}/>
+			<ThreeDots font-size={32}/>
 		{/if}
 		<div class="entity">
 			<Avatar id={data.session?.sub} src={data.user?.avatar_url} size="md" hover circle/>
@@ -66,7 +66,7 @@
 	{:else}
 		<div class="scopes">
 			<div class="item">
-				<PersonFill size={32}/>
+				<PersonFill font-size={32}/>
 				<div class="details">
 					<h1>Your Profile</h1>
 					<p>This will allow {data.name} to read your public profile.</p>

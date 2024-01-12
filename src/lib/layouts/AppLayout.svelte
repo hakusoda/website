@@ -13,15 +13,15 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Loader from '$lib/components/Loader.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import Eye from '$lib/icons/Eye.svelte';
-	import Bell from '$lib/icons/Bell.svelte';
-	import GearFill from '$lib/icons/GearFill.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import Eye from 'virtual:icons/bi/eye';
+	import Bell from 'virtual:icons/bi/bell';
+	import GearFill from 'virtual:icons/bi/gear-fill';
 	import BrandLogo from '$lib/icons/BrandLogo.svelte';
-	import PeopleFill from '$lib/icons/PeopleFill.svelte';
-	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
-	import BoxArrowInRight from '$lib/icons/BoxArrowInRight.svelte';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
+	import PersonFill from 'virtual:icons/bi/person-fill';
+	import BoxArrowRight from 'virtual:icons/bi/box-arrow-right';
+	import BoxArrowInRight from 'virtual:icons/bi/box-arrow-in-right';
 	export let navigation: [string, typeof SvelteComponent<any>, string?, true?][] = [];
 	export let disableDefaultBrand = false;
 	export let disableDefaultTopNav = false;

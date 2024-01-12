@@ -13,7 +13,7 @@
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
 	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
 
-	import PersonFill from '$lib/icons/PersonFill.svelte';
+	import PersonFill from 'virtual:icons/bi/person-fill';
 	export let data;
 
 	let error: RequestError | null = null;

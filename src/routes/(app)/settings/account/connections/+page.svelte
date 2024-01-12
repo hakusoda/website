@@ -6,7 +6,7 @@
 
 	import UserConnection from '$lib/components/UserConnection.svelte';
 
-	import ExclamationOctagonFill from '$lib/icons/ExclamationOctagonFill.svelte';
+	import ExclamationOctagonFill from 'virtual:icons/bi/exclamation-octagon-fill.svelte';
 	export let data;
 
 	let exists: UserConnectionType | null = null;

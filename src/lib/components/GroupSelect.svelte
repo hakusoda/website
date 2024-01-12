@@ -8,10 +8,10 @@
 	import Avatar from './Avatar.svelte';
 	import Loader from './Loader.svelte';
 
-	import Check from '../icons/Check.svelte';
-	import Search from '../icons/Search.svelte';
-	import ArrowLeft from '../icons/ArrowLeft.svelte';
-	import ChevronDown from '../icons/ChevronDown.svelte';
+	import Check from 'virtual:icons/bi/check-lg';
+	import Search from 'virtual:icons/bi/search';
+	import ArrowLeft from 'virtual:icons/bi/arrow-left';
+	import ChevronDown from 'virtual:icons/bi/chevron-down';
 	export let value: string | null = null;
 	export let source: 'self' | 'steam' | 'roblox';
 	export let onChange: ((newValue: string) => void) | null = null;

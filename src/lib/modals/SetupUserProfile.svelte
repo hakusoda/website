@@ -13,9 +13,9 @@
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
 	import RequestError from '$lib/components/RequestError.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import Check from '$lib/icons/Check.svelte';
-	import Hourglass from '$lib/icons/Hourglass.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import Check from 'virtual:icons/bi/check-lg';
+	import Hourglass from 'virtual:icons/bi/hourglass';
 	import WavingHandEmoji from '$lib/icons/WavingHandEmoji.svelte';
 
 	let name = '';

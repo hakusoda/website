@@ -9,11 +9,11 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import AppLayout from '$lib/layouts/AppLayout.svelte';
 
-	import GearFill from '$lib/icons/GearFill.svelte';
-	import ChevronUp from '$lib/icons/ChevronUp.svelte';
-	import PeopleFill from '$lib/icons/PeopleFill.svelte';
-	import PersonFill from '$lib/icons/PersonFill.svelte';
-	import ChevronDown from '$lib/icons/ChevronDown.svelte';
+	import GearFill from 'virtual:icons/bi/gear-fill';
+	import ChevronUp from 'virtual:icons/bi/chevron-up';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
+	import PersonFill from 'virtual:icons/bi/person-fill';
+	import ChevronDown from 'virtual:icons/bi/chevron-down';
 	export let data;
 
 	$: base = `/team/${$page.params.name}/dashboard`;
@@ -32,8 +32,8 @@
 			<Avatar id={$page.params.id} src={data.avatar_url} size="xxs"/>
 			{data.display_name ?? data.name}
 			<div class="arrows">
-				<ChevronUp size={12}/>
-				<ChevronDown size={12}/>
+				<ChevronUp font-size={12}/>
+				<ChevronDown font-size={12}/>
 			</div>
 		</button>
 	</svelte:fragment>

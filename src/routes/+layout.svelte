@@ -15,10 +15,10 @@
 	import EnableSudo from '$lib/modals/EnableSudo.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
 
-	import Plus from '$lib/icons/Plus.svelte';
-	import Hourglass from '$lib/icons/Hourglass.svelte';
-	import FloppyFill from '$lib/icons/FloppyFill.svelte';
-	import BoxArrowLeft from '$lib/icons/BoxArrowLeft.svelte';
+	import Plus from 'virtual:icons/bi/plus-lg';
+	import Hourglass from 'virtual:icons/bi/hourglass';
+	import FloppyFill from 'virtual:icons/bi/floppy-fill';
+	import BoxArrowLeft from 'virtual:icons/bi/box-arrow-left';
 	inject({ mode: dev ? 'development' : 'production' });
 	injectSpeedInsights();
 

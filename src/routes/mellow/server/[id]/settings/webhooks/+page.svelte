@@ -6,10 +6,10 @@
 	import { hasBit } from '$lib/util';
 	import { MellowWebhookEventType } from '$lib/enums';
 
-	import Plus from '$lib/icons/Plus.svelte';
-	import Link from '$lib/icons/Link.svelte';
-	import Sunrise from '$lib/icons/Sunrise.svelte';
-	import SendFill from '$lib/icons/SendFill.svelte';
+	import Plus from 'virtual:icons/bi/plus-lg';
+	import Link from 'virtual:icons/bi/link';
+	import Sunrise from 'virtual:icons/bi/sunrise';
+	import SendFill from 'virtual:icons/bi/send-fill';
 	export let data;
 
 	let itemFilter = '';

@@ -8,7 +8,7 @@
 	import AppLayout from '$lib/layouts/AppLayout.svelte';
 
 	import Discord from '$lib/icons/Discord.svelte';
-	import ArrowClockwise from '$lib/icons/ArrowClockwise.svelte';
+	import ArrowClockwise from 'virtual:icons/bi/arrow-clockwise';
 	$: status = $page.status;
 
 	let message;

@@ -11,7 +11,7 @@
 	import '$lib/styles/auth.scss';
 	import RequestError from '$lib/components/RequestError.svelte';
 
-	import PersonFillAdd from '$lib/icons/PersonFillAdd.svelte';
+	import PersonFillAdd from 'virtual:icons/bi/person-fill-add';
 
 	let username = '';
 	let usernameError: 0 | 1 = 0;

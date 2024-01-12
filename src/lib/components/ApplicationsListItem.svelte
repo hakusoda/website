@@ -7,8 +7,8 @@
 
 	import Avatar from './Avatar.svelte';
 
-	import X from '../icons/X.svelte';
-	import ThreeDots from '../icons/ThreeDots.svelte';
+	import X from 'virtual:icons/bi/x-lg';
+	import ThreeDots from 'virtual:icons/bi/three-dots';
 
 	export let id: string;
 	export let updated_at: string;

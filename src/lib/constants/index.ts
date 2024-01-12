@@ -4,17 +4,17 @@ import type { SvelteComponent } from 'svelte';
 import { PUBLIC_API_BASE, PUBLIC_GITHUB_ID, PUBLIC_ROBLOX_ID } from '$env/static/public';
 import { UserConnectionType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType } from '../enums';
 
-import X from '../icons/X.svelte';
-import Link from '../icons/Link.svelte';
+import X from 'virtual:icons/bi/x-lg';
+import Link from 'virtual:icons/bi/link';
 import GitHub from '../icons/GitHub.svelte';
 import Discord from '../icons/Discord.svelte';
 import BrandIcon from '../icons/BrandIcon.svelte';
-import PersonFill from '../icons/PersonFill.svelte';
-import PeopleFill from '../icons/PeopleFill.svelte';
+import PersonFill from 'virtual:icons/bi/person-fill';
+import PeopleFill from 'virtual:icons/bi/people-fill';
 import RobloxIcon from '../icons/RobloxIcon.svelte';
-import BoxArrowRight from '../icons/BoxArrowRight.svelte';
-import ArrowLeftRight from '../icons/ArrowLeftRight.svelte';
-import PersonBadgeFill from '../icons/PersonBadgeFill.svelte';
+import BoxArrowRight from 'virtual:icons/bi/box-arrow-right';
+import ArrowLeftRight from 'virtual:icons/bi/arrow-left-right';
+import PersonBadgeFill from 'virtual:icons/bi/person-badge-fill';
 export const THEMES = ['dark'] as const;
 export const LOCALES = ['en-AU'] as const;
 
