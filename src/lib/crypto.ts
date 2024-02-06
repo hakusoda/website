@@ -5,42 +5,51 @@ function getStoreCount(store: IDBObjectStore): Promise<number> {
 	});
 }
 
-export function storeKeyPairForAuthentication() {
-	const request = indexedDB.open('SOMETHING', 143);
-	request.onupgradeneeded = ({ target }) =>
-		(target as IDBOpenDBRequest).result.createObjectStore('SOMETHING', { autoIncrement: true });
-	request.onsuccess = async ({ target }) => {
-		const database = (target as IDBOpenDBRequest).result;
-		try {
-			const store = database.transaction(['SOMETHING'], 'readonly').objectStore('SOMETHING');
-			if (!await getStoreCount(store)) {
-				const { publicKey, privateKey } = await crypto.subtle.generateKey({
-					name: 'ECDSA',
-					namedCurve: 'P-384'
-				}, false, ['sign', 'verify']);
+export function storeKeyPairForAuthentication(): Promise<void> {
+	return new Promise(resolve => {
+		const request = indexedDB.open('SOMETHING', 143);
+		request.onupgradeneeded = ({ target }) =>
+			(target as IDBOpenDBRequest).result.createObjectStore('SOMETHING', { autoIncrement: true });
+		request.onsuccess = async ({ target }) => {
+			const database = (target as IDBOpenDBRequest).result;
+			try {
+				const store = database.transaction(['SOMETHING'], 'readonly').objectStore('SOMETHING');
+				if (!await getStoreCount(store)) {
+					const { publicKey, privateKey } = await crypto.subtle.generateKey({
+						name: 'ECDSA',
+						namedCurve: 'P-384'
+					}, false, ['sign', 'verify']);
 
-				const store = database.transaction(['SOMETHING'], 'readwrite').objectStore('SOMETHING');
-				store.put({ publicKey, privateKey });
+					const store = database.transaction(['SOMETHING'], 'readwrite').objectStore('SOMETHING');
+					store.put({ publicKey, privateKey });
+				}
+				resolve();
+			} catch (err) {
+				console.warn(err);
+				indexedDB.deleteDatabase('SOMETHING');
+				storeKeyPairForAuthentication().then(resolve);
 			}
-		} catch (err) {
-			console.warn(err);
-			indexedDB.deleteDatabase('SOMETHING');
-			storeKeyPairForAuthentication();
-		}
-	};
+		};
+	});
 }
 
 export function getPublicKey(): Promise<string> {
 	return new Promise(resolve => {
-		indexedDB.open('SOMETHING', 143).onsuccess = ({ target }) => {
-			const database = (target as IDBOpenDBRequest).result;
-			const store = database.transaction('SOMETHING', 'readonly').objectStore('SOMETHING');
-			store.openCursor().onsuccess = async ({ target }) => {
-				const { publicKey } = (target as IDBRequest<IDBCursorWithValue>).result.value as DatabaseItem;
-				const exported = await crypto.subtle.exportKey('raw', publicKey);
-				resolve(base64.fromArrayBuffer(exported, false));
+		try {
+			indexedDB.open('SOMETHING', 143).onsuccess = ({ target }) => {
+				const database = (target as IDBOpenDBRequest).result;
+				const store = database.transaction('SOMETHING', 'readonly').objectStore('SOMETHING');
+				store.openCursor().onsuccess = async ({ target }) => {
+					const { publicKey } = (target as IDBRequest<IDBCursorWithValue>).result.value as DatabaseItem;
+					const exported = await crypto.subtle.exportKey('raw', publicKey);
+					resolve(base64.fromArrayBuffer(exported, false));
+				};
 			};
-		};
+		} catch (err) {
+			console.warn(err);
+			indexedDB.deleteDatabase('SOMETHING');
+			storeKeyPairForAuthentication().then(getPublicKey).then(resolve);
+		}
 	});
 }
 
