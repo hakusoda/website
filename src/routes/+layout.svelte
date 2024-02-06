@@ -59,6 +59,9 @@
 	<meta property="og:type" content="website">
 	<meta name="theme-color" content="#1e1e20">
 	<meta name="og:site_name" content="HAKUMI">
+	<meta name="og:image" content="/apple-touch-icon.png">
+	<meta name="description" content="a wondrous journey into the endless basket!">
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 </svelte:head>
 
 <style lang="scss">
