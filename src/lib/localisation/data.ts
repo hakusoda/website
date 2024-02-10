@@ -48,6 +48,7 @@ export default {
 		'label.none': 'None',
 		'label.events': '{0} Event{0|s}',
 		'label.reason': 'Reason',
+		'label.players': '{0} Player{0|s}',
 		'label.advanced': 'Advanced',
 		'label.disabled': 'Disabled',
 		'label.optional': 'Optional',
@@ -293,6 +294,11 @@ export default {
 		'mellow_link_editor.requirement.link.placeholder': 'Select an action',
 		'mellow_link_editor.finish': 'Create Link',
 
+		'koko.experience.servers': 'Active Servers',
+		'koko.experience.servers.summary': 'This is a list of all active Roblox Servers connected to KoKo, blah blah...',
+		'koko.experience.server_actions': 'Server Actions',
+		'koko.experience.server_actions.summary': 'this is a good summary about server actions, erm... bite me!',
+
 		'action_log.type.team.created': 'created the team',
 		'action_log.type.team.renamed': 'renamed the team from **{0.data.0}** to **{0.data.1}**',
 		'action_log.type.team.avatar.updated': 'updated the team\'s avatar',
@@ -447,11 +453,16 @@ export default {
 		'navigation.settings.teams': 'Teams',
 		'navigation.settings.mellow': 'mellow',
 		'navigation.settings.account': 'Settings',
+
 		'navigation.team_settings.members': 'Members',
 		'navigation.team_settings.roles': 'Roles',
-		'navigation.mellow.server': 'Server',
+
+		'navigation.mellow.server': 'Server Details',
 		'navigation.mellow.server.actions': 'Profile Sync Actions',
 		'navigation.mellow.server.settings': 'Settings',
+
+		'navigation.koko.experience': 'Experience Details',
+		'navigation.koko.experience.servers': 'Active Servers',
 
 		'side_navigation.settings.account': 'General',
 		'side_navigation.settings.account.connections': 'Connections',

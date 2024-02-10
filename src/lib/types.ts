@@ -488,6 +488,30 @@ export interface GroupSelectItem {
 	avatar_url: string
 }
 
+export interface KokoExperienceServer {
+	id: string
+	players: KokoExperienceServerPlayer[]
+	place_id: number
+	experience: PartialKokoExperience
+	created_at: string
+	place_version: number
+	private_server_id: string | null
+}
+
+export interface KokoExperienceServerPlayer {
+	id: number
+	name: string
+	username: string
+	has_verified_badge: boolean
+
+	joined_at: string
+	joined_via_user: number
+}
+
+export interface PartialKokoExperience {
+	id: number
+}
+
 export interface UserSessionJWT {
 	sub: string
 	iat: number

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Portal from 'svelte-portal/src/Portal.svelte';
+	import Portal from 'svelte-portal';
 
 	import './TeamSelect.scss'
 	import { page } from '$app/stores';

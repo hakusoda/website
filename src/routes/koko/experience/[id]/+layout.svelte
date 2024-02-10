@@ -4,36 +4,35 @@
 	import { t } from '$lib/localisation';
 	import { page } from '$app/stores';
 
-	import Avatar from '$lib/components/Avatar.svelte';
 	import AppLayout from '$lib/layouts/AppLayout.svelte';
 
-	import Link from 'virtual:icons/bi/link';
 	import GearFill from 'virtual:icons/bi/gear-fill';
 	import BrandIcon from '$lib/icons/BrandIcon.svelte';
 	import ChevronUp from 'virtual:icons/bi/chevron-up';
-	import MellowIcon from '$lib/icons/MellowIcon.svelte';
+	import PeopleFill from 'virtual:icons/bi/people-fill';
 	import ChevronDown from 'virtual:icons/bi/chevron-down';
+	import Diagram3Fill from 'virtual:icons/bi/diagram-3-fill';
 	import HouseDoorFill from 'virtual:icons/bi/house-door-fill';
 	export let data;
 
-	$: base = `/mellow/server/${$page.params.id}`;
+	$: base = `/koko/experience/${$page.params.id}`;
 
 	let trigger: () => void;
 </script>
 
 <AppLayout
 	navigation={[
-		[base, HouseDoorFill, 'navigation.mellow.server', true],
-		[`${base}/syncing/actions`, Link, 'navigation.mellow.server.actions'],
+		[base, HouseDoorFill, 'navigation.koko.experience', true],
+		[`${base}/servers`, PeopleFill, 'navigation.koko.experience.servers'],
+		[`${base}/server_actions`, Diagram3Fill, 'koko.experience.server_actions'],
 		[`${base}/settings`, GearFill, 'navigation.mellow.server.settings']
 	]}
 	disableDefaultBrand
 	disableDefaultTopNav
 >
-	<MellowIcon size={32} slot="header-top"/>
+	<img src="/img/placeholder.png" alt="" width="32" height="32" slot="header-top"/>
 	<button class="server" type="button" slot="header-top-nav" on:click={trigger}>
-		<Avatar id={$page.params.id} src={data.avatar_url} size="xxs"/>
-		{data.name}
+		{data.display_name}
 		<div class="arrows">
 			<ChevronUp font-size={12}/>
 			<ChevronDown font-size={12}/>
@@ -44,10 +43,9 @@
 
 <ContextMenu.Root bind:trigger>
 	<p>{$t('settings.mellow.servers')}</p>
-	{#each data.servers as item}
-		<a href={`/mellow/server/${item.id}${$page.url.pathname.match(/server\/\d+(.*)/)?.[1] ?? ''}`}>
-			<Avatar id={item.id} src={item.avatar_url} size="xxs"/>
-			{item.name}
+	{#each data.experiences as item}
+		<a href={`/koko/experience/${item.id}${$page.url.pathname.match(/experience\/\d+(.*)/)?.[1] ?? ''}`}>
+			{item.display_name}
 		</a>
 	{/each}
 	<div class="separator"/>
@@ -57,9 +55,6 @@
 </ContextMenu.Root>
 
 <style lang="scss">
-	:global(.icon.icon-mellow) {
-		border-radius: 4px;
-	}
 	.server {
 		gap: 12px;
 		color: inherit;

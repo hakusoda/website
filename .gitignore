@@ -34,3 +34,5 @@ node_modules/
 .vercel
 .env*.local
 vite.config.*.timestamp*
+
+.DS_STORE

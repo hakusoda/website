@@ -7,7 +7,7 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 export default {
 	kit: {
 		csrf: { checkOrigin: false },
-		adapter: adapter({ runtime: 'edge' })
+		adapter: adapter({ split: true, runtime: 'edge' })
 	},
 	extensions: ['.svelte', '.md'],
 	preprocess: [
