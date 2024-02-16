@@ -22,7 +22,8 @@ export enum UserNotificationState {
 export enum UserConnectionType {
 	Discord,
 	GitHub,
-	Roblox
+	Roblox,
+	YouTube
 }
 
 export enum TeamFlag {

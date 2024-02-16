@@ -47,8 +47,7 @@
 			{#if username}
 				<!-- yes, this formatting is strange, formatting it normally results in an unwanted space -->
 				({#if website_url}
-					<a href={website_url} target="_blank">
-						@{username}</a>{:else}
+					<a href={website_url} target="_blank">@{username}</a>{:else}
 					@{username}{/if})
 			{/if}
 		</p>

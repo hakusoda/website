@@ -364,6 +364,8 @@ export default {
 		'user_connection.type.1.manage': 'Manage on github.com',
 		'user_connection.type.2': 'Roblox',
 		'user_connection.type.2.manage': 'Manage on roblox.com',
+		'user_connection.type.3': 'YouTube',
+		'user_connection.type.3.manage': 'Manage on google.com',
 		'user_connection.created': 'Connected {0|time_ago}',
 
 		'application.last_used': 'Last used {0|time_ago}',

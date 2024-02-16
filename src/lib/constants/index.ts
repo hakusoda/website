@@ -12,6 +12,7 @@ import BrandIcon from '../icons/BrandIcon.svelte';
 import PersonFill from 'virtual:icons/bi/person-fill';
 import PeopleFill from 'virtual:icons/bi/people-fill';
 import RobloxIcon from '../icons/RobloxIcon.svelte';
+import YouTubeIcon from '../icons/YouTubeIcon.svelte';
 import BoxArrowRight from 'virtual:icons/bi/box-arrow-right';
 import ArrowLeftRight from 'virtual:icons/bi/arrow-left-right';
 import PersonBadgeFill from 'virtual:icons/bi/person-badge-fill';
@@ -115,6 +116,12 @@ export const USER_CONNECTION_METADATA: Record<UserConnectionType, {
 		icon: RobloxIcon,
 		colour: '#000',
 		manage_url: 'https://www.roblox.com/my/account#!/app-permissions'
+	},
+	[UserConnectionType.YouTube]: {
+		url: 'https://accounts.google.com/o/oauth2/v2/auth?client_id=934357807730-v456geqrn1fhuvtu42jg3fjel6ehv69m.apps.googleusercontent.com&redirect_uri=RD143&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly',
+		icon: YouTubeIcon,
+		colour: 'red',
+		manage_url: 'https://myaccount.google.com/u/1/connections/overview/AZcznIIig3dPSCdDKH_OWDBHq0_aOoZqUgKIEi-H3uxy0t3ux4plgDsCY_aP3yzV3wb4F4nW6AZOlUG0BGT9OJfcPpU'
 	}
 };
 
