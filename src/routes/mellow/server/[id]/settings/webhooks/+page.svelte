@@ -7,7 +7,7 @@
 	import { MellowWebhookEventType } from '$lib/enums';
 
 	import Plus from 'virtual:icons/bi/plus-lg';
-	import Link from 'virtual:icons/bi/link';
+	import Link from 'virtual:icons/bi/link-45deg';
 	import Sunrise from 'virtual:icons/bi/sunrise';
 	import SendFill from 'virtual:icons/bi/send-fill';
 	export let data;

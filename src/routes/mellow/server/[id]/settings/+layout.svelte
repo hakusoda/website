@@ -4,7 +4,7 @@
 
 	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
 
-	import Link from 'virtual:icons/bi/link';
+	import Link from 'virtual:icons/bi/link-45deg';
 	import Discord from '$lib/icons/Discord.svelte';
 	import Webhook from '$lib/icons/Webhook.svelte';
 	import GearFill from 'virtual:icons/bi/gear-fill';

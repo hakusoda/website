@@ -12,7 +12,7 @@
 	import TeamInvite from '$lib/modals/TeamInvite.svelte';
 
 	import Star from 'virtual:icons/bi/star';
-	import Link from 'virtual:icons/bi/link';
+	import Link from 'virtual:icons/bi/link-45deg';
 	import Person from 'virtual:icons/bi/person';
 	import People from 'virtual:icons/bi/people';
 	import Sunrise from 'virtual:icons/bi/sunrise';

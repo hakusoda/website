@@ -5,7 +5,7 @@ import { PUBLIC_API_BASE, PUBLIC_GITHUB_ID, PUBLIC_ROBLOX_ID } from '$env/static
 import { UserConnectionType, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType } from '../enums';
 
 import X from 'virtual:icons/bi/x-lg';
-import Link from 'virtual:icons/bi/link';
+import Link from 'virtual:icons/bi/link-45deg';
 import GitHub from '../icons/GitHub.svelte';
 import Discord from '../icons/Discord.svelte';
 import BrandIcon from '../icons/BrandIcon.svelte';

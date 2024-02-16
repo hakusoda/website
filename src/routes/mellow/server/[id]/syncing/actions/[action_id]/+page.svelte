@@ -18,7 +18,7 @@
 	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
 
 	import X from 'virtual:icons/bi/x-lg';
-	import Link from 'virtual:icons/bi/link';
+	import Link from 'virtual:icons/bi/link-45deg';
 	import Plus from 'virtual:icons/bi/plus-lg';
 	import GridFill from 'virtual:icons/bi/grid-fill';
 	import Clipboard from 'virtual:icons/bi/clipboard';

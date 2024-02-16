@@ -7,7 +7,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import AppLayout from '$lib/layouts/AppLayout.svelte';
 
-	import Link from 'virtual:icons/bi/link';
+	import Link from 'virtual:icons/bi/link-45deg';
 	import GearFill from 'virtual:icons/bi/gear-fill';
 	import BrandIcon from '$lib/icons/BrandIcon.svelte';
 	import ChevronUp from 'virtual:icons/bi/chevron-up';

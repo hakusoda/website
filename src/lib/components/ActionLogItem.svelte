@@ -7,7 +7,7 @@
 	import Avatar from './Avatar.svelte';
 	import ActionLogItemDetail from './ActionLogItemDetail.svelte';
 
-	import Link from 'virtual:icons/bi/link';
+	import Link from 'virtual:icons/bi/link-45deg';
 	import Webhook from '$lib/icons/Webhook.svelte';
 	import PeopleFill from 'virtual:icons/bi/people-fill';
 	export let data: ActionLogItem;
