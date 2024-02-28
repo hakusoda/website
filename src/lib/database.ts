@@ -29,7 +29,7 @@ export async function getTeam(teamId: string) {
 
 export async function getUserNotifications(userId: string) {
 	const { data, error } = await supabase.from('user_notifications')
-		.select<string, UserNotification>('id, data, type, state, created_at, target_user:users!user_notifications_target_user_id_fkey ( name, username, avatar_url ), target_team:teams ( name, avatar_url, display_name ), target_profile_post_id')
+		.select<string, UserNotification>('id, data, type, state, created_at, target_user:users!user_notifications_target_user_id_fkey ( name, username, avatar_url ), target_team:teams ( name, avatar_url, display_name )')
 		.eq('user_id', userId)
 		.order('created_at', { ascending: false });
 	if (error)

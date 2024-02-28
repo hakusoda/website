@@ -4,16 +4,14 @@
 	import { t } from '$lib/localisation';
 	import { deserialize } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
+	import type { RequestError } from '$lib/types';
 	import { hasBit, getDefaultAvatar } from '$lib/util';
-	import type { RequestError, ApiRequestError } from '$lib/types';
 	import { TeamFlag, UserFlag, RequestErrorType } from '$lib/enums';
-	import { followUser, unfollowUser, uploadAvatar, updateProfile, createUserPost, createTeamInvite, uploadPostAttachments } from '$lib/api';
+	import { followUser, unfollowUser, uploadAvatar, updateProfile, createTeamInvite } from '$lib/api';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import AvatarFile from '$lib/components/AvatarFile.svelte';
-	import ProfilePost from '$lib/components/ProfilePost.svelte';
-	import RequestErrorUI from '$lib/components/RequestError.svelte';
 	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
 
 	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
@@ -21,8 +19,6 @@
 
 	import X from 'virtual:icons/bi/x-lg';
 	import Star from 'virtual:icons/bi/star';
-	import Plus from 'virtual:icons/bi/plus-lg';
-	import Trash from 'virtual:icons/bi/trash';
 	import Burger from '$lib/icons/Burger.svelte';
 	import People from 'virtual:icons/bi/people';
 	import Sunrise from 'virtual:icons/bi/sunrise';
@@ -96,30 +92,6 @@
 		burgering = false;
 	};
 
-	let creatingPost = false;
-	let createPostError: ApiRequestError | null = null;
-	let createPostContent = '';
-	let createPostAttachments: [string, ArrayBuffer, string][] = [];
-	
-	const createPost = async () => {
-		creatingPost = !(createPostError = null);
-
-		const attachments = createPostAttachments.length ? await uploadPostAttachments(createPostAttachments.map(item => [item[1], item[2]])) : [];
-		const response = await createUserPost(data.user!.id, {
-			content: createPostContent,
-			attachments
-		});
-
-		creatingPost = false;
-		if (!response.success)
-			return createPostError = response;
-
-		const zero: [{ count: number }] = [{ count: 0 }];
-		data.posts = [{ ...response.data, likes: zero, liked: zero, comments: zero }, ...data.posts!];
-		createPostContent = '';
-		createPostAttachments = [];
-	};
-
 	let dropdownTrigger: () => void;
 
 	const inviteToTeam = async (teamId: string) => {
@@ -137,15 +109,6 @@
 	};
 	$: isFollowing = !!data.following[0].count;
 </script>
-
-<svelte:window on:paste={async event => {
-	if (createPostAttachments.length < 2) {
-		const files = event.clipboardData?.files;
-		if (files)
-			for (const file of Array.from(files))
-				createPostAttachments = [...createPostAttachments, [URL.createObjectURL(file), await file.arrayBuffer(), file.type]];
-	}
-}}/>
 
 <div class="main">
 	<div class="card-container">
@@ -227,47 +190,8 @@
 		</div>
 	</div>
 	<Tabs.Root value={0}>
-		<Tabs.Item title={$t('profile.posts', [data.posts?.length ?? 0])} value={0}>
-			<div class="posts">
-				{#if data.posts}
-					{#if data.session && data.id === data.session.sub}
-						<div class="create">
-							<TextInput bind:value={createPostContent} multiline placeholder={$t('profile.posts.create.placeholder')}/>
-							<Button on:click={createPost} disabled={creatingPost}>
-								<Plus/>{$t('profile.posts.create')}
-							</Button>
-						</div>
-						<div class="create-attachments">
-							{#each createPostAttachments as image}
-								<div>
-									<img src={image[0]} alt=""/>
-									<button type="button" on:click={() => createPostAttachments = createPostAttachments.filter(item => item !== image)}>
-										<Trash/>
-									</button>
-								</div>
-							{/each}
-						</div>
-						<RequestErrorUI data={createPostError} background="var(--background-primary)"/>
-					{/if}
-					{#each data.posts as item}
-						<ProfilePost
-							id={item.id}
-							user={data}
-							likes={item.likes[0].count}
-							liked={!!item.liked[0].count}
-							content={item.content}
-							comments={item.comments[0].count}
-							created_at={item.created_at}
-							attachments={item.attachments}
-						/>
-					{/each}
-				{:else}
-					<p class="disabled">{$t('request_error.12')}</p>
-				{/if}
-			</div>
-		</Tabs.Item>
 		{#if data.teams.length}
-			<Tabs.Item title={$t('profile.teams', [data.teams.length])} value={1}>
+			<Tabs.Item title={$t('profile.teams', [data.teams.length])} value={0}>
 				<div class="teams">
 					{#each data.teams as item}
 						<a href={`/team/${item.name}`}>
@@ -489,57 +413,6 @@
 			flex: 1 1 40%;
 			max-width: 640px;
 			margin-right: auto;
-		}
-		.posts {
-			gap: 16px;
-			display: flex;
-			flex-direction: column;
-			.create {
-				gap: 16px;
-				display: flex;
-				:global(.text-input) {
-					width: 100%;
-				}
-			}
-			.create-attachments {
-				gap: 16px;
-				display: flex;
-				div {
-					width: 96px;
-					height: 96px;
-					position: relative;
-					img {
-						width: 100%;
-						height: 100%;
-						object-fit: cover;
-						border-radius: 20px;
-					}
-					button {
-						top: 8px;
-						right: 8px;
-						color: var(--color-primary);
-						border: none;
-						cursor: pointer;
-						opacity: 0;
-						padding: 6px;
-						display: flex;
-						position: absolute;
-						background: var(--background-tertiary);
-						border-radius: 4px;
-						&:hover {
-							background: #914343;
-						}
-					}
-					&:hover button {
-						opacity: 1
-					}
-				}
-			}
-			.disabled {
-				color: var(--color-secondary);
-				margin: 16px auto;
-				font-size: .9em;
-			}
 		}
 		.teams {
 			gap: 16px;

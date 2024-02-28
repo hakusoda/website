@@ -13,9 +13,7 @@ import type {
 	VerifySignUpResponse,
 	UpdateProfilePayload,
 	UpdateTeamRolePayload,
-	CreateUserPostPayload,
 	VerifySudoModePayload,
-	CreateUserPostResponse,
 	VerifyNewDevicePayload,
 	UpdateTeamMemberPayload,
 	GetSignUpOptionsPayload,
@@ -102,42 +100,6 @@ export function removeTeamMember(teamId: string, userId: string) {
 
 export function updateTeamRole(teamId: string, roleId: string, payload: UpdateTeamRolePayload) {
 	return request(`team/${teamId}/role/${roleId}`, 'PATCH', payload);
-}
-
-export function createUserPost(userId: string, payload: CreateUserPostPayload) {
-	return request<CreateUserPostResponse>(`user/${userId}/post`, 'POST', payload);
-}
-
-export function createChildPost(postId: string, payload: CreateUserPostPayload) {
-	return request<CreateUserPostResponse>(`post/${postId}/reply`, 'POST', payload);
-}
-
-export function likePost(postId: string) {
-	return request(`post/${postId}/like`, 'POST');
-}
-
-export function unlikePost(postId: string) {
-	return request(`post/${postId}/like`, 'DELETE');
-}
-
-export async function uploadPostAttachment([image, contentType]: [ArrayBuffer, string]) {
-	const { session, supabase } = get(page).data;
-
-	const bucket = supabase!.storage.from('post_attachments');
-	const response = await bucket
-		.upload(`${session!.sub}/${crypto.randomUUID()}`, image, {
-			contentType
-		});
-	if (response.error)
-		throw response.error;
-
-	return {
-		url: bucket.getPublicUrl(response.data.path).data.publicUrl
-	};
-}
-
-export function uploadPostAttachments(images: [ArrayBuffer, string][]) {
-	return Promise.all(images.map(image => uploadPostAttachment(image)));
 }
 
 export function getMellowServerActionLog(serverId: string, limit = 20, offset = 0) {

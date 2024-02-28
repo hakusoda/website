@@ -25,7 +25,6 @@ export interface UserNotification {
 		avatar_url: string | null
 		display_name: string
 	} | null
-	target_profile_post_id: string | null
 }
 
 export interface Team {
@@ -410,21 +409,6 @@ export interface UpdateMellowServerOwnershipPayload {
 
 export interface GenerateMellowServerApiKeyResponse {
 	api_key: string
-}
-
-export interface CreateUserPostPayload {
-	content: string
-	attachments?: {
-		url: string
-	}[]
-}
-export interface CreateUserPostResponse {
-	id: string
-	content: string
-	created_at: string
-	attachments: {
-		url: string
-	}[]
 }
 
 export interface GetSignUpOptionsPayload {

@@ -10,8 +10,7 @@ export enum UserNotificationType {
 	UserConnectionModerated,
 	SOMETHING,
 	TeamMemberJoined,
-	TeamMemberLeft,
-	UserPostLiked
+	TeamMemberLeft
 }
 
 export enum UserNotificationState {
@@ -43,8 +42,7 @@ export enum TeamRolePermission {
 export enum FeatureFlag {
 	None,
 	MellowSignUp = 1 << 0,
-	UserConnections = 1 << 1,
-	ProfilePostViewing = 1 << 2
+	UserConnections = 1 << 1
 }
 
 export enum MellowProfileSyncActionType {

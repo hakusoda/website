@@ -18,11 +18,9 @@ export function createMellowServerDiscordRedirectUrl(origin: string) {
 	return `${origin}/settings/mellow`;
 }
 
-export function getUserNotificationUrl({ type, target_user, target_team, target_profile_post_id }: UserNotification) {
+export function getUserNotificationUrl({ type, target_user, target_team }: UserNotification) {
 	if (type === UserNotificationType.UserConnectionModerated)
 		return '/settings/account/connections';
-	if (target_profile_post_id)
-		return `/user/143/post/${target_profile_post_id}`;
 	if (target_team)
 		return `/team/${target_team.name}`;
 	if (target_user)
