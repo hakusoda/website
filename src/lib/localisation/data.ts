@@ -198,7 +198,7 @@ export default {
 		'settings.mellow.servers': 'mellow Servers',
 		'settings.mellow.servers.get_started': 'Get Started with mellow! ＼(٥⁀▽⁀ )／',
 		'settings.mellow.servers.get_started.details': 'Click here to learn more about mellow, and start syncing your precious server members!',
-		'settings.mellow.servers.documentation': '┐(￣ヘ￣;)┌ ⠀ Feast your eyes on the mellow Documentation for guides & information on all the wonderous features!',
+		'settings.mellow.servers.documentation': '┐(￣ヘ￣;)┌ ⠀ Feast your eyes on the mellow Documentation for guides & information on all the wondrous features!',
 		'settings.mellow.servers.server.owner': 'Managed by {0}',
 		'settings.mellow.servers.server.connect': 'Execute /setup in this server to get started!',
 		'settings.mellow.servers.refresh': 'Refresh Discord Servers',
