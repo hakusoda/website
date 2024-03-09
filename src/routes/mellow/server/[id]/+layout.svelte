@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 
-	import Avatar from '$lib/components/Avatar.svelte';
-	import AppLayout from '$lib/layouts/AppLayout.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
+	import AppLayout from '$lib/ui/layouts/AppLayout.svelte';
 
 	import Link from 'virtual:icons/bi/link-45deg';
 	import GearFill from 'virtual:icons/bi/gear-fill';
-	import BrandIcon from '$lib/icons/BrandIcon.svelte';
+	import BrandIcon from '$lib/ui/icons/BrandIcon.svelte';
 	import ChevronUp from 'virtual:icons/bi/chevron-up';
-	import MellowIcon from '$lib/icons/MellowIcon.svelte';
+	import MellowIcon from '$lib/ui/icons/MellowIcon.svelte';
 	import ChevronDown from 'virtual:icons/bi/chevron-down';
 	import HouseDoorFill from 'virtual:icons/bi/house-door-fill';
 	export let data;

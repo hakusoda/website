@@ -1,6 +1,6 @@
-import { requestError } from '$lib/util/server';
-import { RequestErrorType } from '$lib/enums';
-import supabase, { handleResponse } from '$lib/supabase';
+import { requestError } from '$lib/server/util';
+import { RequestErrorType } from '$lib/shared/enums';
+import supabase, { handle_response } from '$lib/server/supabase';
 export const load = async ({ params: { id }, parent }) => {
 	const { servers } = await parent();
 	if (!servers.some(item => item.id === id))
@@ -30,7 +30,7 @@ export const load = async ({ params: { id }, parent }) => {
 		.eq('id', id)
 		.limit(1)
 		.maybeSingle();
-	handleResponse(response);
+	handle_response(response);
 
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);

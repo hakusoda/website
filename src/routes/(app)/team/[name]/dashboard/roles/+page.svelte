@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Button } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
-	import { hasBit } from '$lib/util';
-	import { TeamRolePermission } from '$lib/enums';
+	import { hasBit } from '$lib/shared/util';
+	import { TeamRolePermission } from '$lib/shared/enums';
 
 	import PencilFill from 'virtual:icons/bi/pencil-fill';
 	import PeopleFill from 'virtual:icons/bi/people-fill';

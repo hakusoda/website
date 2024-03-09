@@ -1,19 +1,19 @@
 <script lang="ts">
-	import '$lib/styles/root.scss';
+	import '$lib/ui/styles/root.scss';
 	import '@hakumi/essence/styles.scss';
 	import { inject } from '@vercel/analytics';
 	import { onMount } from 'svelte';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation';
 	import { dev } from '$app/environment';
 	import { page } from '$app/stores';
-	import { theme } from '$lib/settings';
-	import { editor, sudoModal } from '$lib/store';
-	import { storeKeyPairForAuthentication } from '$lib/crypto';
+	import { theme } from '$lib/client/settings';
+	import { editor, sudoModal } from '$lib/client/store';
+	import { store_auth_key_pair } from '$lib/client/crypto';
 
-	import EnableSudo from '$lib/modals/EnableSudo.svelte';
-	import PageLoader from '$lib/components/PageLoader.svelte';
+	import EnableSudo from '$lib/ui/modals/EnableSudo.svelte';
+	import PageLoader from '$lib/ui/components/PageLoader.svelte';
 
 	import Plus from 'virtual:icons/bi/plus-lg';
 	import Hourglass from 'virtual:icons/bi/hourglass';
@@ -24,7 +24,7 @@
 
 	$: [themeName] = $theme.split('_');
 
-	onMount(storeKeyPairForAuthentication);
+	onMount(store_auth_key_pair);
 
 	const editorSaving = editor.isSaving;
 	const editorCanSave = editor.canSave;

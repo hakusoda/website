@@ -2,13 +2,13 @@
 	import base64 from '@hexagon/base64';
 	import { Button, TextInput, ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
-	import type { ApiRequestError } from '$lib/types';
-	import { verifyNewDevice, getNewDeviceOptions } from '$lib/api';
+	import type { ApiRequestError } from '$lib/shared/types';
+	import { verifyNewDevice, getNewDeviceOptions } from '$lib/client/api';
 
-	import RequestError from '$lib/components/RequestError.svelte';
-	import SecurityDevice from '$lib/components/SecurityDevice.svelte';
+	import RequestError from '$lib/ui/components/RequestError.svelte';
+	import SecurityDevice from '$lib/ui/components/SecurityDevice.svelte';
 
 	import Plus from 'virtual:icons/bi/plus-lg';
 	import Check from 'virtual:icons/bi/check-lg';

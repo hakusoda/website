@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Button, TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation';
 	import { goto } from '$app/navigation';
-	import type { ApiRequestError } from '$lib/types';
-	import { createTeam, uploadTeamAvatar } from '$lib/api';
+	import type { ApiRequestError } from '$lib/shared/types';
+	import { createTeam, update_team_avatar } from '$lib/client/api';
 
-	import Avatar from '$lib/components/Avatar.svelte';
-	import AvatarFile from '$lib/components/AvatarFile.svelte';
-	import RequestError from '$lib/components/RequestError.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
+	import AvatarFile from '$lib/ui/components/AvatarFile.svelte';
+	import RequestError from '$lib/ui/components/RequestError.svelte';
 
 	import X from 'virtual:icons/bi/x-lg';
 	import Check from 'virtual:icons/bi/check-lg';
@@ -28,7 +28,7 @@
 		if (response.success) {
 			const team = response.data;
 			if (avatar)
-				await uploadTeamAvatar(team.id, avatar);
+				await update_team_avatar(team.id, avatar);
 			return goto(`/team/${team.name}/invite`);
 		}
 		

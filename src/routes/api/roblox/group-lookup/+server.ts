@@ -1,8 +1,8 @@
 import { error } from '@sveltejs/kit';
 import { ROBLOX_API } from '@hakumi/roblox-api';
 
-import { RequestErrorType } from '$lib/enums';
-import type { RequestError } from '$lib/types';
+import { RequestErrorType } from '$lib/shared/enums';
+import type { RequestError } from '$lib/shared/types';
 import type { RequestHandler } from './$types';
 export const GET = (async ({ url, locals: { session } }) => {
 	if (!session)

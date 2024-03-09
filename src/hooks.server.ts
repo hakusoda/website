@@ -2,9 +2,9 @@ import { redirect } from '@sveltejs/kit';
 import { jwtVerify } from 'jose';
 
 import { dev } from '$app/environment';
-import { JWT_SECRET } from '$lib/constants/server';
+import { JWT_SECRET } from '$lib/server/constants';
 import { EDGE_CONFIG } from '$env/static/private';
-import type { UserSessionJWT } from '$lib/types';
+import type { UserSessionJWT } from '$lib/shared/types';
 if (dev)
 	process.env.EDGE_CONFIG = EDGE_CONFIG;
 

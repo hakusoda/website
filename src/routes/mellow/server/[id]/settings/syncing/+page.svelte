@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { Select } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
-	import type { ApiRequestError } from '$lib/types';
-	import { USER_CONNECTION_METADATA } from '$lib/constants';
-	import { updateMellowServerProfileSyncingSettings } from '$lib/api';
-	import { UserConnectionType, MellowDefaultNickname } from '$lib/enums';
+	import type { ApiRequestError } from '$lib/shared/types';
+	import { USER_CONNECTION_METADATA } from '$lib/shared/constants';
+	import { updateMellowServerProfileSyncingSettings } from '$lib/client/api';
+	import { UserConnectionType, MellowDefaultNickname } from '$lib/shared/enums';
 
-	import Radio from '$lib/components/Radio.svelte';
-	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
+	import Radio from '$lib/ui/components/Radio.svelte';
+	import UnsavedChanges from '$lib/ui/modals/UnsavedChanges.svelte';
 
-	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
+	import RobloxIcon from '$lib/ui/icons/RobloxIcon.svelte';
 	export let data;
 
 	let error: ApiRequestError | null = null;

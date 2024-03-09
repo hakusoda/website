@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 
-	import BrandIcon from '$lib/icons/BrandIcon.svelte';
-	import BrandLogo from '$lib/icons/BrandLogo.svelte';
+	import BrandIcon from '$lib/ui/icons/BrandIcon.svelte';
+	import BrandLogo from '$lib/ui/icons/BrandLogo.svelte';
 	import CodeSlash from 'virtual:icons/bi/code-slash';
-	import MellowFace from '$lib/icons/MellowFace.svelte';
+	import MellowFace from '$lib/ui/icons/MellowFace.svelte';
 	import HouseDoorFill from 'virtual:icons/bi/house-door-fill';
 	export let data;
 

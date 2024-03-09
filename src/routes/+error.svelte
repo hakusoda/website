@@ -1,13 +1,13 @@
 <script>
 	import { Button } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation';
     import { page } from '$app/stores';
-	import { RequestErrorType } from '$lib/enums';
+	import { RequestErrorType } from '$lib/shared/enums';
 
-	import AppLayout from '$lib/layouts/AppLayout.svelte';
+	import AppLayout from '$lib/ui/layouts/AppLayout.svelte';
 
-	import Discord from '$lib/icons/Discord.svelte';
+	import Discord from '$lib/ui/icons/Discord.svelte';
 	import ArrowClockwise from 'virtual:icons/bi/arrow-clockwise';
 	$: status = $page.status;
 

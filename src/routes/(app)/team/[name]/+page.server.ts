@@ -1,8 +1,8 @@
-import supabase from '$lib/supabase';
-import { getTeam } from '$lib/database';
-import { requestError } from '$lib/util/server';
-import type { TeamInvite } from '$lib/types';
-import { RequestErrorType } from '$lib/enums';
+import supabase from '$lib/server/supabase';
+import { getTeam } from '$lib/server/database';
+import { requestError } from '$lib/server/util';
+import type { TeamInvite } from '$lib/shared/types';
+import { RequestErrorType } from '$lib/shared/enums';
 export async function load({ params: { name }, parent }) {
 	const { user } = await parent();
 

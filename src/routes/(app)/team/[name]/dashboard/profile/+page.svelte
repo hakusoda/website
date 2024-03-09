@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { Button, TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { goto } from '$app/navigation';
-	import { RequestErrorType } from '$lib/enums';
-	import type { RequestError } from '$lib/types';
-	import { updateTeam, uploadTeamAvatar } from '$lib/api';
+	import { RequestErrorType } from '$lib/shared/enums';
+	import type { RequestError } from '$lib/shared/types';
+	import { updateTeam, update_team_avatar } from '$lib/client/api';
 
-	import Avatar from '$lib/components/Avatar.svelte';
-	import Markdown from '$lib/components/Markdown.svelte';
-	import AvatarFile from '$lib/components/AvatarFile.svelte';
-	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
-	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
+	import Markdown from '$lib/ui/components/Markdown.svelte';
+	import AvatarFile from '$lib/ui/components/AvatarFile.svelte';
+	import UnsavedChanges from '$lib/ui/modals/UnsavedChanges.svelte';
+	import SegmentedControl from '$lib/ui/components/SegmentedControl.svelte';
 
 	import PersonFill from 'virtual:icons/bi/person-fill';
 	export let data;
@@ -43,7 +43,7 @@
 		});
 		if (response.success) {
 			if (newAvatar)
-				await uploadTeamAvatar(data.id, newAvatar);
+				await update_team_avatar(data.id, newAvatar);
 			return goto(`/team/${name}/settings/profile`, {
 				invalidateAll: true
 			}).then(() => (saving = false, newAvatar = null, newAvatarUri = null));

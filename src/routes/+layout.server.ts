@@ -1,8 +1,8 @@
 import { redirect } from '@sveltejs/kit';
 
-import type { UserSessionJWT } from '$lib/types';
-import { getUserNotifications } from '$lib/database';
-import supabase, { handleResponse } from '$lib/supabase';
+import type { UserSessionJWT } from '$lib/shared/types';
+import { getUserNotifications } from '$lib/server/database';
+import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ url, locals: { session }, cookies }) {
 	const user = session ? await getUser(session) : null;
 	if (session && !user) {
@@ -42,7 +42,7 @@ async function getUser(session: UserSessionJWT) {
 		.eq('id', session.sub)
 		.limit(1)
 		.maybeSingle();
-	handleResponse(response);
+	handle_response(response);
 
 	return response.data!;
 }

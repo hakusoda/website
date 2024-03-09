@@ -1,5 +1,5 @@
-import { UserConnectionType } from '$lib/enums';
-import supabase, { handleResponse } from '$lib/supabase';
+import { UserConnectionType } from '$lib/shared/enums';
+import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ params: { id, user_id } }) {
 	const response = await supabase.from('user_connections')
 		.select<string, {
@@ -24,7 +24,7 @@ export async function load({ params: { id, user_id } }) {
 		.eq('user.connections.server_id', id)
 		.limit(1)
 		.single();
-	handleResponse(response);
+	handle_response(response);
 
 	return response.data!.user;
 }

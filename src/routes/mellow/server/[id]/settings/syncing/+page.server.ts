@@ -1,6 +1,6 @@
-import { requestError } from '$lib/util/server';
-import supabase, { handleResponse } from '$lib/supabase';
-import { RequestErrorType, UserConnectionType } from '$lib/enums';
+import { requestError } from '$lib/server/util';
+import supabase, { handle_response } from '$lib/server/supabase';
+import { RequestErrorType, UserConnectionType } from '$lib/shared/enums';
 export async function load({ params: { id } }) {
 	const response = await supabase.from('mellow_servers')
 		.select<string, {
@@ -11,7 +11,7 @@ export async function load({ params: { id } }) {
 		.eq('id', id)
 		.limit(1)
 		.single();
-	handleResponse(response);
+	handle_response(response);
 
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);

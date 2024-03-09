@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation';
 	import { page } from '$app/stores';
 
-	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
+	import WithSideNavigation from '$lib/ui/layouts/WithSideNavigation.svelte';
 
 	import Link from 'virtual:icons/bi/link-45deg';
-	import Discord from '$lib/icons/Discord.svelte';
-	import Webhook from '$lib/icons/Webhook.svelte';
+	import Discord from '$lib/ui/icons/Discord.svelte';
+	import Webhook from '$lib/ui/icons/Webhook.svelte';
 	import GearFill from 'virtual:icons/bi/gear-fill';
 	import Calendar3 from 'virtual:icons/bi/calendar3';
 	import CodeSlash from 'virtual:icons/bi/code-slash';

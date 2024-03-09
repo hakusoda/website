@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
-	import { hasBit } from '$lib/util';
-	import { TeamRolePermission } from '$lib/enums';
+	import { hasBit } from '$lib/shared/util';
+	import { TeamRolePermission } from '$lib/shared/enums';
 
-	import Avatar from '$lib/components/Avatar.svelte';
-	import AppLayout from '$lib/layouts/AppLayout.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
+	import AppLayout from '$lib/ui/layouts/AppLayout.svelte';
 
 	import GearFill from 'virtual:icons/bi/gear-fill';
 	import ChevronUp from 'virtual:icons/bi/chevron-up';

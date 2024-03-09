@@ -1,5 +1,5 @@
-import type { EventResponseItem } from '$lib/types';
-import supabase, { handleResponse } from '$lib/supabase';
+import type { EventResponseItem } from '$lib/shared/types';
+import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ params: { id } }) {
 	const response = await supabase.from('mellow_servers')
 		.select<string, {
@@ -8,7 +8,7 @@ export async function load({ params: { id } }) {
 		.eq('id', id)
 		.limit(1)
 		.single();
-	handleResponse(response);
+	handle_response(response);
 
 	return response.data!;
 }

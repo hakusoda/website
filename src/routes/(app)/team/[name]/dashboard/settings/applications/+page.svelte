@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 
-	import Avatar from '$lib/components/Avatar.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
 	export let data;
 </script>
 

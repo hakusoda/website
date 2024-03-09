@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Button, ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
-	import { getUserConnectionUrl } from '$lib/util';
-	import type { UserConnectionType } from '$lib/enums';
-	import { USER_CONNECTION_METADATA } from '$lib/constants';
-	import { updateMellowUserServerSettings } from '$lib/api';
+	import { getUserConnectionUrl } from '$lib/shared/util';
+	import type { UserConnectionType } from '$lib/shared/enums';
+	import { USER_CONNECTION_METADATA } from '$lib/shared/constants';
+	import { updateMellowUserServerSettings } from '$lib/client/api';
 
-	import Avatar from '$lib/components/Avatar.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
 
 	import Check from 'virtual:icons/bi/check-lg';
 	import ChevronDown from 'virtual:icons/bi/chevron-down';

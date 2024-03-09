@@ -1,4 +1,4 @@
-import supabase, { handleResponse } from '$lib/supabase';
+import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ locals: { session } }) {
 	const response = await supabase.from('application_authorisations')
 		.select<string, {
@@ -17,7 +17,7 @@ export async function load({ locals: { session } }) {
 			}
 		}>('id, updated_at, application:applications ( name, owner:teams ( id, name, display_name ), summary, avatar_url )')
 		.eq('user_id', session!.sub);
-	handleResponse(response);
+	handle_response(response);
 
 	return { applications: response.data! };
 }

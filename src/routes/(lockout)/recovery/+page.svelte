@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
-	import { recoverAccountViaLink } from '$lib/api';
+	import { recoverAccountViaLink } from '$lib/client/api';
 
-	import Loader from '$lib/components/Loader.svelte';
+	import Loader from '$lib/ui/components/Loader.svelte';
 
 	$: hash = $page.url.hash.slice(1);
 	onMount(async () => {

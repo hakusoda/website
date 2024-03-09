@@ -1,5 +1,5 @@
-import type { UserConnectionType } from '$lib/enums';
-import supabase, { handleResponse } from '$lib/supabase';
+import type { UserConnectionType } from '$lib/shared/enums';
+import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ locals: { session } }) {
 	const response = await supabase.from('user_connections')
 		.select<string, {
@@ -14,7 +14,7 @@ export async function load({ locals: { session } }) {
 		}>('id, sub, type, username, created_at, avatar_url, website_url, display_name')
 		.eq('user_id', session!.sub)
 		.order('type');
-	handleResponse(response);
+	handle_response(response);
 
 	return { connections: response.data! };
 }

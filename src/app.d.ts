@@ -1,5 +1,5 @@
 import 'unplugin-icons/types/svelte';
-import type { UserSessionJWT, UserNotification } from '$lib/types';
+import type { UserSessionJWT, UserNotification } from '$lib/shared/types';
 declare global {
 	namespace App {
 		// interface Error {}

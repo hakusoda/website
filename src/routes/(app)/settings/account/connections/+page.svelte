@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { t } from '$lib/localisation';
-	import { UserConnectionType } from '$lib/enums';
-	import { getUserConnectionUrl } from '$lib/util';
-	import { USER_CONNECTION_METADATA } from '$lib/constants';
+	import { t } from '$lib/ui/localisation/index';
+	import { UserConnectionType } from '$lib/shared/enums';
+	import { getUserConnectionUrl } from '$lib/shared/util';
+	import { USER_CONNECTION_METADATA } from '$lib/shared/constants';
 
-	import UserConnection from '$lib/components/UserConnection.svelte';
+	import UserConnection from '$lib/ui/components/UserConnection.svelte';
 
 	import ExclamationOctagonFill from 'virtual:icons/bi/exclamation-octagon-fill.svelte';
 	export let data;

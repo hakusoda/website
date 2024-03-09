@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 
-	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
+	import WithSideNavigation from '$lib/ui/layouts/WithSideNavigation.svelte';
 
 	import GearFill from 'virtual:icons/bi/gear-fill';
 	import GridFill from 'virtual:icons/bi/grid-fill';

@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { Tabs, Button, Select, TextInput, ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
-	import { hasBit } from '$lib/util';
-	import { leaveTeam } from '$lib/api';
+	import { t } from '$lib/ui/localisation/index';
+	import { hasBit } from '$lib/shared/util';
+	import { leaveTeam } from '$lib/client/api';
 	import { invalidateAll } from '$app/navigation';
-	import { TeamFlag, TeamRolePermission } from '$lib/enums';
+	import { TeamFlag, TeamRolePermission } from '$lib/shared/enums';
 
-	import Avatar from '$lib/components/Avatar.svelte';
-	import Markdown from '$lib/components/Markdown.svelte';
-	import TeamInvite from '$lib/modals/TeamInvite.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
+	import Markdown from '$lib/ui/components/Markdown.svelte';
+	import TeamInvite from '$lib/ui/modals/TeamInvite.svelte';
 
 	import Star from 'virtual:icons/bi/star';
 	import Link from 'virtual:icons/bi/link-45deg';

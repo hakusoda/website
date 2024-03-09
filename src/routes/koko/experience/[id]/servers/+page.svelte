@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 
 	import Plus from 'virtual:icons/bi/plus-lg';
@@ -115,9 +115,6 @@
 				&:hover {
 					background: #ffffff1a;
 				}
-			}
-			&.highlighted {
-				animation: 1s infinite alternate basic-focus;
 			}
 			&:not(:disabled):hover {
 				box-shadow: inset 0 0 0 1px var(--border-secondary);

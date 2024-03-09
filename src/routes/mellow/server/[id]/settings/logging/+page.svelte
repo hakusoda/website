@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { Select } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
-	import { hasBit } from '$lib/util';
+	import { t } from '$lib/ui/localisation/index';
+	import { hasBit } from '$lib/shared/util';
 	import { deserialize } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import type { RequestError } from '$lib/types';
-	import { RequestErrorType, DiscordChannelType, MellowServerLogType } from '$lib/enums';
+	import type { RequestError } from '$lib/shared/types';
+	import { RequestErrorType, DiscordChannelType, MellowServerLogType } from '$lib/shared/enums';
 
-	import Radio from '$lib/components/Radio.svelte';
-	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
+	import Radio from '$lib/ui/components/Radio.svelte';
+	import UnsavedChanges from '$lib/ui/modals/UnsavedChanges.svelte';
 	export let data;
 
 	let error: RequestError | null = null;

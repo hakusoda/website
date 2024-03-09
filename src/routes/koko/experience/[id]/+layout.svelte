@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 
-	import AppLayout from '$lib/layouts/AppLayout.svelte';
+	import AppLayout from '$lib/ui/layouts/AppLayout.svelte';
 
 	import GearFill from 'virtual:icons/bi/gear-fill';
-	import BrandIcon from '$lib/icons/BrandIcon.svelte';
+	import BrandIcon from '$lib/ui/icons/BrandIcon.svelte';
 	import ChevronUp from 'virtual:icons/bi/chevron-up';
 	import PeopleFill from 'virtual:icons/bi/people-fill';
 	import ChevronDown from 'virtual:icons/bi/chevron-down';

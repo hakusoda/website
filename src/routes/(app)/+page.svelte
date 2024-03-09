@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation';
 </script>
 
 <div class="landing">

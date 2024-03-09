@@ -1,8 +1,8 @@
-import { requestError } from '$lib/util/server';
-import { getDiscordServerRoles } from '$lib/discord';
-import supabase, { handleResponse } from '$lib/supabase';
-import type { MellowActionLogItemType } from '$lib/types';
-import { MellowProfileSyncActionType, RequestErrorType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
+import { requestError } from '$lib/server/util';
+import { getDiscordServerRoles } from '$lib/server/discord';
+import supabase, { handle_response } from '$lib/server/supabase';
+import type { MellowActionLogItemType } from '$lib/shared/types';
+import { MellowProfileSyncActionType, RequestErrorType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '$lib/shared/enums';
 export async function load({ params: { id } }) {
 	const response = await supabase.from('mellow_binds')
 		.select<string, {
@@ -32,7 +32,7 @@ export async function load({ params: { id } }) {
 		}>('id, name, type, metadata, creator:users ( name, username ), created_at, requirements_type, requirements:mellow_bind_requirements ( id, type, data ), edits:mellow_server_audit_logs ( type, author:users ( name, username ), created_at )')
 		.eq('server_id', id)
 		.order('created_at');
-	handleResponse(response);
+	handle_response(response);
 
 	const roles = await getDiscordServerRoles(id);
 	if (!roles.success) {

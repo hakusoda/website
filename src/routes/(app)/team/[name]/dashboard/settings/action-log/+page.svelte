@@ -1,5 +1,5 @@
 <script lang="ts">
-    import ActionLog from '$lib/components/ActionLog.svelte';
+    import ActionLog from '$lib/ui/components/ActionLog.svelte';
     export let data;
 </script>
 

@@ -3,19 +3,20 @@
 	import type { GroupRole } from '@hakumi/roblox-api';
 	import { Button, Select, TextInput, NumberInput, ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { copyJson, payloadDiff } from '$lib/util';
-	import { editor, setEditorCallback } from '$lib/store';
-	import { createMellowServerProfileSyncAction, updateMellowServerProfileSyncAction } from '$lib/api';
-	import { MAPPED_MELLOW_SYNC_ACTION_ICONS, MAPPED_MELLOW_SYNC_REQUIREMENTS, MELLOW_PROFILE_ACTION_DEFAULT_METADATA } from '$lib/constants';
-	import { MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '$lib/enums';
+	import { clone_json } from '$lib/shared/util';
+	import { parse_update_payload } from '$lib/client/util';
+	import { editor, set_editor_callback } from '$lib/client/store';
+	import { create_mellow_sync_action, update_mellow_sync_action } from '$lib/client/api';
+	import { MAPPED_MELLOW_SYNC_ACTION_ICONS, MAPPED_MELLOW_SYNC_REQUIREMENTS, MELLOW_PROFILE_ACTION_DEFAULT_METADATA } from '$lib/shared/constants';
+	import { MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from '$lib/shared/enums';
 
-	import Radio from '$lib/components/Radio.svelte';
-	import Loader from '$lib/components/Loader.svelte';
-	import GroupSelect from '$lib/components/GroupSelect.svelte';
-	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
+	import Radio from '$lib/ui/components/Radio.svelte';
+	import Loader from '$lib/ui/components/Loader.svelte';
+	import GroupSelect from '$lib/ui/components/GroupSelect.svelte';
+	import WithSideNavigation from '$lib/ui/layouts/WithSideNavigation.svelte';
 
 	import X from 'virtual:icons/bi/x-lg';
 	import Link from 'virtual:icons/bi/link-45deg';
@@ -35,11 +36,11 @@
 	let metadata: any = {};
 	let requirements: Omit<NonNullable<typeof action>['requirements'][number], 'id'>[] = [];
 	let requirements_type = MellowProfileSyncActionRequirementsType.MeetAll;
-	const reset = () => (name = action!.name, type = action!.type, metadata = copyJson(action!.metadata), requirements = action!.requirements.map(i => ({ data: i.data, type: i.type })), requirements_type = action!.requirements_type);
+	const reset = () => (name = action!.name, type = action!.type, metadata = clone_json(action!.metadata), requirements = action!.requirements.map(i => ({ data: i.data, type: i.type })), requirements_type = action!.requirements_type);
 	const reset2 = () => (
 		name = toClone?.name ?? '',
 		type = toClone?.type ?? MellowProfileSyncActionType.GiveRoles,
-		metadata = { ...copyJson(MELLOW_PROFILE_ACTION_DEFAULT_METADATA[type]), ...(toClone ? copyJson(toClone.metadata) : action ? copyJson(action.metadata) : {}) },
+		metadata = { ...clone_json(MELLOW_PROFILE_ACTION_DEFAULT_METADATA[type]), ...(toClone ? clone_json(toClone.metadata) : action ? clone_json(action.metadata) : {}) },
 		requirements = toClone?.requirements ?? [],
 		requirements_type = toClone?.requirements_type ?? MellowProfileSyncActionRequirementsType.MeetAll
 	);
@@ -50,7 +51,7 @@
 
 	let lastType: MellowProfileSyncActionType = type;
 	$: if (type !== lastType)
-		(metadata = copyJson(MELLOW_PROFILE_ACTION_DEFAULT_METADATA[type]), lastType = type);
+		(metadata = clone_json(MELLOW_PROFILE_ACTION_DEFAULT_METADATA[type]), lastType = type);
 
 	let groupRoles: Record<string, GroupRole[]> = {};
 	let roleSearchId: string | null = null;
@@ -85,7 +86,7 @@
 	$: roles = [...data.roles, ...(type === MellowProfileSyncActionType.GiveRoles ? (metadata.items as string[]).filter(i => !data.roles.some(k => k.id === i)).map(i => ({ id: i, name: 'Unknown Role' })) : [])];
 
 	$: editor.canSave.set(!action || name !== action.name || type !== action.type || JSON.stringify(metadata) !== JSON.stringify(action.metadata) || JSON.stringify(requirements) !== JSON.stringify(action.requirements.map(i => ({ data: i.data, type: i.type }))) || requirements_type !== action.requirements_type);
-	setEditorCallback(async () => {
+	set_editor_callback(async () => {
 		const payload = {
 			name,
 			type,
@@ -93,11 +94,11 @@
 			requirements,
 			requirements_type
 		};
-		const response = action ? await updateMellowServerProfileSyncAction($page.params.id, action.id, payloadDiff({
+		const response = action ? await update_mellow_sync_action($page.params.id, action.id, parse_update_payload({
 			...action,
 			requirements: action.requirements.map(i => [i.type, i.data])
 		}, payload))
-			: await createMellowServerProfileSyncAction($page.params.id, payload);
+			: await create_mellow_sync_action($page.params.id, payload);
 		if (response.success) {
 			if (action)
 				data.items = data.items.map(i => i.id === action!.id ? response.data : i);

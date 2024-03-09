@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Button, TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
-	import { hasBit } from '$lib/util';
-	import { MellowWebhookEventType } from '$lib/enums';
+	import { hasBit } from '$lib/shared/util';
+	import { MellowWebhookEventType } from '$lib/shared/enums';
 
 	import Plus from 'virtual:icons/bi/plus-lg';
 	import Link from 'virtual:icons/bi/link-45deg';

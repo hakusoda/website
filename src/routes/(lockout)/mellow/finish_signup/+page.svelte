@@ -3,12 +3,12 @@
 	import { Button } from '@hakumi/essence';
 	import { onMount } from 'svelte';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { goto } from '$app/navigation';
-	import { getPublicKey } from '$lib/crypto';
-	import { verifyNewDevice, getNewDeviceOptions } from '$lib/api';
+	import { get_auth_public_key } from '$lib/client/crypto';
+	import { verifyNewDevice, getNewDeviceOptions } from '$lib/client/api';
 
-	import Loader from '$lib/components/Loader.svelte';
+	import Loader from '$lib/ui/components/Loader.svelte';
 
 	import ArrowClockwise from 'virtual:icons/bi/arrow-clockwise';
 	export let data;
@@ -37,7 +37,7 @@
 			challenge: options.data.challenge as any,
 			transports: (credential.response as any).getTransports(),
 			attestation: base64.fromArrayBuffer((credential.response as any).attestationObject),
-			device_public_key: await getPublicKey()
+			device_public_key: await get_auth_public_key()
 		});
 		if (!response.success)
 			return error = response.error;

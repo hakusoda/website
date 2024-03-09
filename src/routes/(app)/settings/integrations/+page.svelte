@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 
-	import ApplicationsListItem from '$lib/components/ApplicationsListItem.svelte';
+	import ApplicationsListItem from '$lib/ui/components/ApplicationsListItem.svelte';
 	export let data;
 </script>
 

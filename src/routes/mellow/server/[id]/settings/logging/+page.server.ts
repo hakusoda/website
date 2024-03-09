@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import { getDiscordServerChannels } from '$lib/discord';
-import supabase, { handleResponse } from '$lib/supabase';
-import { createMellowServerAuditLog } from '$lib/database';
-import { RequestErrorType, MellowServerLogType } from '$lib/enums';
-import { requestFail, requestError, verifyServerMembership } from '$lib/util/server';
+import { getDiscordServerChannels } from '$lib/server/discord';
+import supabase, { handle_response } from '$lib/server/supabase';
+import { createMellowServerAuditLog } from '$lib/server/database';
+import { RequestErrorType, MellowServerLogType } from '$lib/shared/enums';
+import { requestFail, requestError, verify_mellow_server_access } from '$lib/server/util';
 export async function load({ params: { id } }) {
 	const response = await supabase.from('mellow_servers')
 		.select<string, {
@@ -14,7 +14,7 @@ export async function load({ params: { id } }) {
 		.eq('id', id)
 		.limit(1)
 		.single();
-	handleResponse(response);
+	handle_response(response);
 
 	return {
 		...response.data!,
@@ -33,7 +33,7 @@ export const actions = {
 	edit: async ({ url, locals: { session }, params: { id }, request }) => {
 		if (!session)
 			throw requestError(401, RequestErrorType.Unauthenticated);
-		await verifyServerMembership(session, id, url);
+		await verify_mellow_server_access(session, id, url);
 
 		const body = await request.json();
 		const response = EDIT_SCHEMA.safeParse(body);
@@ -47,10 +47,10 @@ export const actions = {
 			.select('logging_types, logging_channel_id')
 			.eq('id', id)
 			.single();
-		handleResponse(old);
+		handle_response(old);
 
 		if (data.types !== undefined || data.channel !== undefined) {
-			handleResponse(await supabase.from('mellow_servers')
+			handle_response(await supabase.from('mellow_servers')
 				.update({
 					logging_types: data.types,
 					logging_channel_id: data.channel

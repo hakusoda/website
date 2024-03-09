@@ -1,5 +1,5 @@
-import { isUUID } from '$lib/util';
-import supabase, { handleResponse } from '$lib/supabase';
+import { isUUID } from '$lib/shared/util';
+import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ params: { name } }) {
 	const response = await supabase.from('teams')
 		.select<string, {
@@ -14,7 +14,7 @@ export async function load({ params: { name } }) {
 		.eq(isUUID(name) ? 'id' : 'name', name)
 		.limit(1)
 		.single();
-	handleResponse(response);
+	handle_response(response);
 
 	return response.data!;
 }

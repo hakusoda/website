@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Button } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
-	import type { ApiRequestError } from '$lib/types';
-	import { generateMellowServerApiKey } from '$lib/api';
+	import type { ApiRequestError } from '$lib/shared/types';
+	import { generateMellowServerApiKey } from '$lib/client/api';
 
-	import RequestError from '$lib/components/RequestError.svelte';
+	import RequestError from '$lib/ui/components/RequestError.svelte';
 
 	import Plus from 'virtual:icons/bi/plus-lg';
 	export let data;

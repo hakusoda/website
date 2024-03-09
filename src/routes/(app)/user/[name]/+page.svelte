@@ -1,25 +1,25 @@
 <script lang="ts">
 	import { Tabs, Button, TextInput, ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { deserialize } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import type { RequestError } from '$lib/types';
-	import { hasBit, getDefaultAvatar } from '$lib/util';
-	import { TeamFlag, UserFlag, RequestErrorType } from '$lib/enums';
-	import { followUser, unfollowUser, uploadAvatar, updateProfile, createTeamInvite } from '$lib/api';
+	import type { RequestError } from '$lib/shared/types';
+	import { hasBit, getDefaultAvatar } from '$lib/shared/util';
+	import { TeamFlag, UserFlag, RequestErrorType } from '$lib/shared/enums';
+	import { followUser, unfollowUser, update_user_avatar, update_user_profile, createTeamInvite } from '$lib/client/api';
 
-	import Avatar from '$lib/components/Avatar.svelte';
-	import Markdown from '$lib/components/Markdown.svelte';
-	import AvatarFile from '$lib/components/AvatarFile.svelte';
-	import SegmentedControl from '$lib/components/SegmentedControl.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
+	import Markdown from '$lib/ui/components/Markdown.svelte';
+	import AvatarFile from '$lib/ui/components/AvatarFile.svelte';
+	import SegmentedControl from '$lib/ui/components/SegmentedControl.svelte';
 
-	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
-	import SetupUserProfile from '$lib/modals/SetupUserProfile.svelte';
+	import UnsavedChanges from '$lib/ui/modals/UnsavedChanges.svelte';
+	import SetupUserProfile from '$lib/ui/modals/SetupUserProfile.svelte';
 
 	import X from 'virtual:icons/bi/x-lg';
 	import Star from 'virtual:icons/bi/star';
-	import Burger from '$lib/icons/Burger.svelte';
+	import Burger from '$lib/ui/icons/Burger.svelte';
 	import People from 'virtual:icons/bi/people';
 	import Sunrise from 'virtual:icons/bi/sunrise';
 	import StarFill from 'virtual:icons/bi/star-fill';
@@ -54,25 +54,25 @@
 		saving = !(saveError = null);
 
 		if (editChanged) {
-			const response = await updateProfile({
+			const response = await update_user_profile({
 				bio: editBio === data.bio ? undefined : editBio.length ? editBio : null,
 				name: editName === (data.name || data.username) ? undefined : editName.length ? editName : null
 			});
 			if (response.success) {
 				if (newAvatar)
-					uploadAvatar2();
+					update_user_avatar2();
 				else
 					invalidateAll().then(() => saving = editing = false);
 			} else
 				saving = !(saveError = response);
 		} else if (newAvatar)
-			uploadAvatar2();
+			update_user_avatar2();
 	};
 	const reset = () => (editBio = data.bio || '', editName = data.name || data.username, newAvatar = null, newAvatarUri = null, saveError = null);
 
 	let newAvatar: ArrayBuffer | null = null;
 	let newAvatarUri: string | null = null;
-	const uploadAvatar2 = () => uploadAvatar(data.id, newAvatar!).then(response => {
+	const uploadAvatar2 = () => update_user_avatar(data.id, newAvatar!).then(response => {
 		if (response.success)
 			invalidateAll().then(() => saving = editing = false);
 		else

@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
-	import { updateProfile } from '$lib/api';
+	import { t } from '$lib/ui/localisation/index';
+	import { update_user_profile } from '$lib/client/api';
 	import { invalidateAll } from '$app/navigation';
-	import { RequestErrorType } from '$lib/enums';
-	import type { RequestError } from '$lib/types';
+	import { RequestErrorType } from '$lib/shared/enums';
+	import type { RequestError } from '$lib/shared/types';
 
-	import UnsavedChanges from '$lib/modals/UnsavedChanges.svelte';
+	import UnsavedChanges from '$lib/ui/modals/UnsavedChanges.svelte';
 	export let data;
 
 	let error: RequestError | null = null;
@@ -20,7 +20,7 @@
 			return error = { error: RequestErrorType.NameTooLong };
 		saving = !(error = null);
 
-		const response = await updateProfile({ username });
+		const response = await update_user_profile({ username });
 		if (response.success)
 			return invalidateAll().then(() => saving = false);
 		saving = !(error = response);

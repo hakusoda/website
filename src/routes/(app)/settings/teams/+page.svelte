@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Button } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
-	import { hasBit } from '$lib/util';
-	import { TeamFlag, TeamRolePermission } from '$lib/enums';
+	import { t } from '$lib/ui/localisation/index';
+	import { hasBit } from '$lib/shared/util';
+	import { TeamFlag, TeamRolePermission } from '$lib/shared/enums';
 
-	import Avatar from '$lib/components/Avatar.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
 	
 	import Plus from 'virtual:icons/bi/plus-lg';
 	import GearFill from 'virtual:icons/bi/gear-fill';

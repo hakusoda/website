@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
-	import { hasBit } from '$lib/util';
-	import { MellowWebhookEventType } from '$lib/enums';
-	import { updateMellowServerWebhook } from '$lib/api';
-	import { editor, setEditorCallback } from '$lib/store';
+	import { hasBit } from '$lib/shared/util';
+	import { MellowWebhookEventType } from '$lib/shared/enums';
+	import { update_mellow_server_webhook } from '$lib/client/api';
+	import { editor, set_editor_callback } from '$lib/client/store';
 
-	import Radio from '$lib/components/Radio.svelte';
-	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
+	import Radio from '$lib/ui/components/Radio.svelte';
+	import WithSideNavigation from '$lib/ui/layouts/WithSideNavigation.svelte';
 
-	import Webhook from '$lib/icons/Webhook.svelte';
+	import Webhook from '$lib/ui/icons/Webhook.svelte';
     import { goto } from '$app/navigation';
 	export let data;
 
@@ -29,8 +29,8 @@
 		reset();
 
 	$: editor.canSave.set(name !== webhook?.name || events !== webhook?.events || enabled !== webhook?.enabled || target_url !== webhook?.target_url);
-	setEditorCallback(async () => {
-		const response = await updateMellowServerWebhook($page.params.id, $page.params.webhook_id, {
+	set_editor_callback(async () => {
+		const response = await update_mellow_server_webhook($page.params.id, $page.params.webhook_id, {
 			name,
 			events,
 			enabled,

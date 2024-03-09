@@ -1,5 +1,5 @@
 <script lang="ts">
-	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
+	import WithSideNavigation from '$lib/ui/layouts/WithSideNavigation.svelte';
 
 	import GearFill from 'virtual:icons/bi/gear-fill';
 	import PersonFill from 'virtual:icons/bi/person-fill';

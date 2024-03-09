@@ -2,14 +2,14 @@
 	import base64 from '@hexagon/base64';
 	import { Button, TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
-	import { getPublicKey } from '$lib/crypto';
+	import { t } from '$lib/ui/localisation';
+	import { get_auth_public_key } from '$lib/client/crypto';
 	import { invalidateAll } from '$app/navigation';
-	import type { ApiRequestError } from '$lib/types';
-	import { verifySignUp, getSignUpOptions } from '$lib/api';
+	import type { ApiRequestError } from '$lib/shared/types';
+	import { verifySignUp, getSignUpOptions } from '$lib/client/api';
 
-	import '$lib/styles/auth.scss';
-	import RequestError from '$lib/components/RequestError.svelte';
+	import '$lib/ui/styles/auth.scss';
+	import RequestError from '$lib/ui/components/RequestError.svelte';
 
 	import PersonFillAdd from 'virtual:icons/bi/person-fill-add';
 
@@ -50,7 +50,7 @@
 			challenge: options.data.challenge as any,
 			transports: (credential.response as any).getTransports(),
 			attestation: base64.fromArrayBuffer((credential.response as any).attestationObject),
-			device_public_key: await getPublicKey()
+			device_public_key: await get_auth_public_key()
 		});
 		if (!response.success)
 			return signingUp = !(signUpError = response);

@@ -1,8 +1,8 @@
-import { isUUID } from '$lib/util';
-import { EMPTY_UUID } from '$lib/constants';
-import supabase, { handleResponse } from '$lib/supabase';
-import { requestFail, requestError } from '$lib/util/server';
-import { RequestErrorType, UserNotificationType } from '$lib/enums';
+import { isUUID } from '$lib/shared/util';
+import { EMPTY_UUID } from '$lib/shared/constants';
+import supabase, { handle_response } from '$lib/server/supabase';
+import { requestFail, requestError } from '$lib/server/util';
+import { RequestErrorType, UserNotificationType } from '$lib/shared/enums';
 export async function load({ params: { name }, locals: { session } }) {
 	const filter = supabase.from('users')
 		.select<string, {
@@ -48,12 +48,12 @@ export async function load({ params: { name }, locals: { session } }) {
 	const response = await filter
 		.limit(1)
 		.maybeSingle();
-	handleResponse(response);
+	handle_response(response);
 
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);
 
-	const myTeams = session ? handleResponse(await supabase.from('team_members').select<string, {
+	const myTeams = session ? handle_response(await supabase.from('team_members').select<string, {
 		team: {
 			id: string
 			avatar_url: string
@@ -85,9 +85,9 @@ export const actions = {
 			.eq(isUUID(name) ? 'id' : 'username', name)
 			.limit(1)
 			.single();
-		handleResponse(response);
+		handle_response(response);
 
-		handleResponse(await supabase.from('user_notifications').upsert({
+		handle_response(await supabase.from('user_notifications').upsert({
 			type: UserNotificationType.SOMETHING,
 			user_id: response.data!.id,
 			target_user_id: session.sub

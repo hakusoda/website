@@ -1,10 +1,10 @@
 import { redirect } from '@sveltejs/kit';
 
-import { requestError } from '$lib/util/server';
-import { isUUID, hasBit } from '$lib/util';
+import { requestError } from '$lib/server/util';
+import { isUUID, hasBit } from '$lib/shared/util';
 import type { LayoutServerLoad } from './$types';
-import supabase, { handleResponse } from '$lib/supabase';
-import { RequestErrorType, TeamRolePermission } from '$lib/enums';
+import supabase, { handle_response } from '$lib/server/supabase';
+import { RequestErrorType, TeamRolePermission } from '$lib/shared/enums';
 export const load = (async ({ url, params: { name }, locals: { session } }) => {
 	if (!session)
 		throw redirect(302, `/sign-in?redirect_uri=${encodeURIComponent(url.pathname + url.search)}`);
@@ -42,7 +42,7 @@ export const load = (async ({ url, params: { name }, locals: { session } }) => {
 		.order('position', { ascending: false, referencedTable: 'team_roles' })
 		.limit(1)
 		.maybeSingle();
-	handleResponse(response);
+	handle_response(response);
 
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);

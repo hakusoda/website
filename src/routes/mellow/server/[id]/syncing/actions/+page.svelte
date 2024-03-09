@@ -3,10 +3,10 @@
 	import type { GroupRole } from '@hakumi/roblox-api';
 	import { Button, TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 
-	import MellowProfileAction from '$lib/components/MellowProfileAction.svelte';
+	import MellowProfileAction from '$lib/ui/components/MellowProfileAction.svelte';
 
 	import Plus from 'virtual:icons/bi/plus-lg';
 	export let data;

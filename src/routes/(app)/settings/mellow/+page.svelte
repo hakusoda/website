@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Button, TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import { createMellowServerDiscordRedirectUrl } from '$lib/util';
+	import { createMellowServerDiscordRedirectUrl } from '$lib/shared/util';
 
-	import Avatar from '$lib/components/Avatar.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
 
 	import ArrowClockwise from 'virtual:icons/bi/arrow-clockwise';
 	export let data;

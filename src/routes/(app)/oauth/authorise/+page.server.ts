@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { redirect } from '@sveltejs/kit';
 
-import { parseQuery } from '$lib/util/server';
-import supabase, { handleResponse } from '$lib/supabase';
-import { APPLICATION_OAUTH_SCOPE_TYPES, APPLICATION_OAUTH_SCOPE_OPERATIONS } from '$lib/constants';
+import { parseQuery } from '$lib/server/util';
+import supabase, { handle_response } from '$lib/server/supabase';
+import { APPLICATION_OAUTH_SCOPE_TYPES, APPLICATION_OAUTH_SCOPE_OPERATIONS } from '$lib/shared/constants';
 
 const PAGE_QUERY = z.object({
 	scopes: z.string()
@@ -27,7 +27,7 @@ export async function load({ url, locals: { session }, request }) {
 		.eq('application_id', application_id)
 		.limit(1)
 		.maybeSingle();
-	handleResponse(response);
+	handle_response(response);
 
 	if (response.data && scopes.every(item => response.data!.scopes.includes(item))) {
 		
@@ -47,7 +47,7 @@ export async function load({ url, locals: { session }, request }) {
 		.eq('id', application_id)
 		.limit(1)
 		.maybeSingle();
-	handleResponse(response2);
+	handle_response(response2);
 
 	return { ...response2.data!, id: application_id, redirect_uri };
 }

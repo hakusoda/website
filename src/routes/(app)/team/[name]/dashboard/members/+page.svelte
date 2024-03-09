@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Tabs } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 
-	import TeamSettingsMember from '$lib/components/TeamSettingsMember.svelte';
+	import TeamSettingsMember from '$lib/ui/components/TeamSettingsMember.svelte';
 	export let data;
 
 	let tab = 0;

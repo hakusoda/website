@@ -2,16 +2,16 @@
 	import base64 from '@hexagon/base64';
 	import { Button, TextInput } from '@hakumi/essence';
 
-	import '$lib/styles/auth.scss';
-	import { t } from '$lib/localisation';
+	import '$lib/ui/styles/auth.scss';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
-	import { getPublicKey } from '$lib/crypto';
+	import { get_auth_public_key } from '$lib/client/crypto';
 	import { invalidateAll } from '$app/navigation';
-	import { RequestErrorType } from '$lib/enums';
-	import type { RequestError } from '$lib/types';
-	import { verifySignIn, getSignInOptions } from '$lib/api';
+	import { RequestErrorType } from '$lib/shared/enums';
+	import type { RequestError } from '$lib/shared/types';
+	import { verifySignIn, getSignInOptions } from '$lib/client/api';
 
-	import RequestErrorUI from '$lib/components/RequestError.svelte';
+	import RequestErrorUI from '$lib/ui/components/RequestError.svelte';
 
 	import KeyFill from 'virtual:icons/bi/key-fill';
 	export let data;
@@ -45,7 +45,7 @@
 				challenge: options.data.challenge as any,
 				signature: base64.fromArrayBuffer((credential.response as any).signature),
 				client_data: base64.fromArrayBuffer(credential.response.clientDataJSON),
-				device_public_key: await getPublicKey()
+				device_public_key: await get_auth_public_key()
 			});
 			if (!response.success)
 				return signingIn = !(signInError = response);

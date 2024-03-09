@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 
 	import X from 'virtual:icons/bi/x-lg';

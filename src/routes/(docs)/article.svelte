@@ -1,5 +1,5 @@
 <script>
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation';
 	import { page } from '$app/stores';
 	export let title;
 	export let summary;

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { t } from '$lib/localisation';
-	import { USER_CONNECTION_METADATA } from '$lib/constants/index.js';
+	import { t } from '$lib/ui/localisation/index';
+	import { USER_CONNECTION_METADATA } from '$lib/shared/constants';
 	export let data;
 
 	$: user_name = data.name ?? data.username;

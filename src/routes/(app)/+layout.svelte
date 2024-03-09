@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AppLayout from '$lib/layouts/AppLayout.svelte';
+	import AppLayout from '$lib/ui/layouts/AppLayout.svelte';
 </script>
 
 <AppLayout>

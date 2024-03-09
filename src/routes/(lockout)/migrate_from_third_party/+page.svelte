@@ -2,10 +2,10 @@
 	import base64 from '@hexagon/base64';
 	import { Button } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { goto } from '$app/navigation';
-	import { getPublicKey } from '$lib/crypto';
-	import { verifyNewDevice, getNewDeviceOptions } from '$lib/api';
+	import { get_auth_public_key } from '$lib/client/crypto';
+	import { verifyNewDevice, getNewDeviceOptions } from '$lib/client/api';
 
 	import Plus from 'virtual:icons/bi/plus-lg';
 	import BoxArrowRight from 'virtual:icons/bi/box-arrow-right';
@@ -46,7 +46,7 @@
 			challenge: options.data.challenge as any,
 			transports: (credential.response as any).getTransports(),
 			attestation: base64.fromArrayBuffer((credential.response as any).attestationObject),
-			device_public_key: await getPublicKey()
+			device_public_key: await get_auth_public_key()
 		});
 
 		if (response.success)

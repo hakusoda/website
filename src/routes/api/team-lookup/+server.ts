@@ -1,7 +1,7 @@
-import { requestError } from '$lib/util/server';
-import { RequestErrorType } from '$lib/enums';
+import { requestError } from '$lib/server/util';
+import { RequestErrorType } from '$lib/shared/enums';
 import type { RequestHandler } from './$types';
-import supabase, { handleResponse } from '$lib/supabase';
+import supabase, { handle_response } from '$lib/server/supabase';
 export const GET = (async ({ url, locals: { session } }) => {
 	if (!session)
 		throw requestError(401, RequestErrorType.Unauthenticated);
@@ -13,7 +13,7 @@ export const GET = (async ({ url, locals: { session } }) => {
 	const response = await supabase.from('teams')
 		.select('id, avatar_url, display_name')
 		.textSearch('display_name', body);
-	handleResponse(response);
+	handle_response(response);
 
 	return new Response(JSON.stringify(response.data!.map(item => ({
 		id: item.id,

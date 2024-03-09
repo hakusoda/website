@@ -1,5 +1,5 @@
 <script>
-	import ApiEndpoint from '$lib/components/ApiEndpoint.svelte';
+	import ApiEndpoint from '$lib/ui/components/ApiEndpoint.svelte';
 </script>
 
 <ApiEndpoint

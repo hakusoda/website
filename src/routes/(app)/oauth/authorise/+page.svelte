@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Button } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
-	import { authoriseApplication } from '$lib/api';
-	import type { ApiRequestError } from '$lib/types';
+	import { t } from '$lib/ui/localisation/index';
+	import { authoriseApplication } from '$lib/client/api';
+	import type { ApiRequestError } from '$lib/shared/types';
 
-	import Avatar from '$lib/components/Avatar.svelte';
-	import RequestError from '$lib/components/RequestError.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
+	import RequestError from '$lib/ui/components/RequestError.svelte';
 
 	import X from 'virtual:icons/bi/x-lg';
 	import Check from 'virtual:icons/bi/check-lg';

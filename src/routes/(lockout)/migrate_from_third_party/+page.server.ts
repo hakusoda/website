@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 
-import supabase, { handleResponse } from '$lib/supabase';
+import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ locals: { session }}) {
 	if (!session || !session.source_connection_id)
 		throw redirect(302, `/`);
@@ -9,7 +9,7 @@ export async function load({ locals: { session }}) {
 		.select('*', { head: true, count: 'exact' })
 		.eq('user_id', session.sub)
 		.limit(1);
-	handleResponse(response);
+	handle_response(response);
 
 	return { has_passkey: !!response.count };
 }

@@ -1,13 +1,13 @@
-import { requestError } from '$lib/util/server';
-import { getDiscordToken } from '$lib/verification';
-import { RequestErrorType } from '$lib/enums';
-import supabase, { handleResponse } from '$lib/supabase';
-import { createMellowServerDiscordRedirectUrl } from '$lib/util';
+import { requestError } from '$lib/server/util';
+import { RequestErrorType } from '$lib/shared/enums';
+import { get_discord_token } from '$lib/server/discord';
+import supabase, { handle_response } from '$lib/server/supabase';
+import { createMellowServerDiscordRedirectUrl } from '$lib/shared/util';
 export async function load({ url, locals: { session } }) {
 	const response = await supabase.rpc('website_get_user_mellow_servers', {
 		target_user_id: session!.sub
 	});
-	handleResponse(response);
+	handle_response(response);
 
 	let allServers: {
 		id: string
@@ -21,7 +21,7 @@ export async function load({ url, locals: { session } }) {
 	}[] = [];
 	const code = url.searchParams.get('code');
 	if (code && session) {
-		const response = await getDiscordToken(code, createMellowServerDiscordRedirectUrl(url.origin));
+		const response = await get_discord_token(code, createMellowServerDiscordRedirectUrl(url.origin));
 		if (!response.success) {
 			console.error(response.error);
 			throw requestError(500, RequestErrorType.ExternalRequestError);
@@ -36,12 +36,12 @@ export async function load({ url, locals: { session } }) {
 			data: response2,
 			user_id: session.sub
 		}, { onConflict: 'user_id' });
-		handleResponse(response3);
+		handle_response(response3);
 
 		allServers = response2;
 	} else if (session) {
 		const response = await supabase.from('mellow_user_servers').select('data').eq('user_id', session.sub).limit(1).maybeSingle();
-		handleResponse(response);
+		handle_response(response);
 
 		allServers = response.data?.data! ?? [];
 	}

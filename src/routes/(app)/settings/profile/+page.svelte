@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Button } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 
-	import Avatar from '$lib/components/Avatar.svelte';
+	import Avatar from '$lib/ui/components/Avatar.svelte';
 
 	import PersonFill from 'virtual:icons/bi/person-fill';
 	export let data;

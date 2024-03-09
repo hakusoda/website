@@ -1,12 +1,12 @@
 import { redirect } from '@sveltejs/kit';
 
 import { MELLOW_KEY } from '$env/static/private';
-import { requestError } from '$lib/util/server';
-import { getDiscordServer } from '$lib/discord';
-import { getUserConnectionUrl } from '$lib/util';
-import supabase, { handleResponse } from '$lib/supabase';
-import { MELLOW_SYNC_REQUIREMENT_CONNECTIONS } from '$lib/constants';
-import { RequestErrorType, UserConnectionType, MellowProfileSyncActionRequirementType } from '$lib/enums';
+import { requestError } from '$lib/server/util';
+import { getDiscordServer } from '$lib/server/discord';
+import { getUserConnectionUrl } from '$lib/shared/util';
+import supabase, { handle_response } from '$lib/server/supabase';
+import { MELLOW_SYNC_REQUIREMENT_CONNECTIONS } from '$lib/shared/constants';
+import { RequestErrorType, UserConnectionType, MellowProfileSyncActionRequirementType } from '$lib/shared/enums';
 export const load = async ({ url, params: { id }, locals: { session } }) => {
 	if (!session)
 		throw requestError(401, RequestErrorType.Unauthenticated);
@@ -25,7 +25,7 @@ export const load = async ({ url, params: { id }, locals: { session } }) => {
 		.eq('id', id)
 		.limit(1)
 		.maybeSingle();
-	handleResponse(response);
+	handle_response(response);
 
 	if (!response.data)
 		throw requestError(404, RequestErrorType.NotFound);
@@ -49,7 +49,7 @@ export const load = async ({ url, params: { id }, locals: { session } }) => {
 		.select('id, type, username, avatar_url, display_name')
 		.eq('user_id', session.sub)
 		.in('type', connections.map(item => item.type))
-		.then(response => handleResponse(response).data!) : [];
+		.then(response => handle_response(response).data!) : [];
 
 	if (skip_onboarding_to !== null) {
 		const response = await supabase.from('user_connections')
@@ -58,7 +58,7 @@ export const load = async ({ url, params: { id }, locals: { session } }) => {
 			.eq('user_id', session.sub)
 			.limit(1)
 			.single();
-		handleResponse(response);
+		handle_response(response);
 		await fetch(`https://mellow-internal-api.hakumi.cafe/server/${id}/member/${response.data!.sub}/sync`, {
 			body: '{"is_sign_up":true}',
 			method: 'POST',

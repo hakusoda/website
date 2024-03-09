@@ -7,12 +7,13 @@
 <script lang="ts">
 	import { ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
-	import { update_mellow_server_event } from '$lib/api';
-	import { copyJson, create_event_response_item } from '$lib/util';
-	import type { EventResponseItem, EventResponseVariable } from '$lib/types';
-	import { EVENT_RESPONSE_TREES, EVENT_RESPONSE_ITEM_KINDS } from '$lib/constants';
+	import { clone_json } from '$lib/shared/util';
+	import { update_mellow_server_event } from '$lib/client/api';
+	import { create_event_response_item } from '$lib/client/util';
+	import type { EventResponseItem, EventResponseVariable } from '$lib/shared/types';
+	import { EVENT_RESPONSE_TREES, EVENT_RESPONSE_ITEM_KINDS } from '$lib/shared/constants';
 
 	import X from 'virtual:icons/bi/x-lg';
 	import Plus from 'virtual:icons/bi/plus-lg';
@@ -99,7 +100,7 @@
 				<X font-size={14}/>{$t('action.cancel')}
 			</button>
 		{:else}
-			<button type="button" on:click={() => editing = copyJson(data.member_join_event_response_tree)}>
+			<button type="button" on:click={() => editing = clone_json(data.member_join_event_response_tree)}>
 				<PencilFill font-size={14}/>{$t('action.edit')}
 			</button>
 		{/if}

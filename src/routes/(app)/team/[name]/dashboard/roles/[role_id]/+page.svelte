@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { hasBit } from '$lib/util';
-	import { updateTeamRole } from '$lib/api';
-	import { TeamRolePermission } from '$lib/enums';
-	import { editor, setEditorCallback } from '$lib/store';
+	import { hasBit } from '$lib/shared/util';
+	import { updateTeamRole } from '$lib/client/api';
+	import { TeamRolePermission } from '$lib/shared/enums';
+	import { editor, set_editor_callback } from '$lib/client/store';
 
-	import Radio from '$lib/components/Radio.svelte';
-	import WithSideNavigation from '$lib/layouts/WithSideNavigation.svelte';
+	import Radio from '$lib/ui/components/Radio.svelte';
+	import WithSideNavigation from '$lib/ui/layouts/WithSideNavigation.svelte';
 
 	import LockFill from 'virtual:icons/bi/lock-fill';
 	import PeopleFill from 'virtual:icons/bi/people-fill';
@@ -32,7 +32,7 @@
 		.filter(i => typeof i === 'number' && i && i !== TeamRolePermission.Administrator) as TeamRolePermission[])
 		.sort((a, b) => TeamRolePermission[a].localeCompare(TeamRolePermission[b]));
 
-	setEditorCallback(async () => {
+	set_editor_callback(async () => {
 		const response = await updateTeamRole(data.id, $page.params.role_id, {
 			name: name === role!.name ? undefined : name,
 			permissions: permissions === role!.permissions ? undefined : permissions

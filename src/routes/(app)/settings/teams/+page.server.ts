@@ -1,4 +1,4 @@
-import supabase, { handleResponse } from '$lib/supabase';
+import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ locals: { session } }) {
 	const response = await supabase.from('team_members').select<string, {
 		role: {
@@ -18,7 +18,7 @@ export async function load({ locals: { session } }) {
 			display_name: string
 		}
 	}>('team:teams ( name, flags, members:team_members ( count ), owner:users!teams_owner_id_fkey ( id, name, username ), avatar_url, display_name ), role:team_roles ( name, permissions )').eq('user_id', session!.sub);
-	handleResponse(response);
+	handle_response(response);
 
 	return {
 		teams: response.data!.map(item => ({

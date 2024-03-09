@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { Button } from '@hakumi/essence';
 
-	import { t } from '$lib/localisation';
+	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
-	import { updateMellowServerOwnership } from '$lib/api';
+	import { updateMellowServerOwnership } from '$lib/client/api';
 
-	import Modal from '$lib/components/Modal.svelte';
-	import TeamSelect from '$lib/components/TeamSelect.svelte';
+	import Modal from '$lib/ui/components/Modal.svelte';
+	import TeamSelect from '$lib/ui/components/TeamSelect.svelte';
 
 	import X from 'virtual:icons/bi/x-lg';
 	import Check from 'virtual:icons/bi/check-lg';
