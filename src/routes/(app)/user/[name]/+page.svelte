@@ -60,19 +60,19 @@
 			});
 			if (response.success) {
 				if (newAvatar)
-					update_user_avatar2();
+					update_avatar();
 				else
 					invalidateAll().then(() => saving = editing = false);
 			} else
 				saving = !(saveError = response);
 		} else if (newAvatar)
-			update_user_avatar2();
+			update_avatar();
 	};
 	const reset = () => (editBio = data.bio || '', editName = data.name || data.username, newAvatar = null, newAvatarUri = null, saveError = null);
 
 	let newAvatar: ArrayBuffer | null = null;
 	let newAvatarUri: string | null = null;
-	const uploadAvatar2 = () => update_user_avatar(data.id, newAvatar!).then(response => {
+	const update_avatar = () => update_user_avatar(data.id, newAvatar!).then(response => {
 		if (response.success)
 			invalidateAll().then(() => saving = editing = false);
 		else
