@@ -26,20 +26,20 @@
 </script>
 
 <div class="header">
-	<h2>{$t('mellow.server.settings.api.key')}</h2>
-	<p>{$t('mellow.server.settings.api.key.summary')}</p>
+	<h2>{$t('mellow.server.settings.developer.api.key')}</h2>
+	<p>{$t('mellow.server.settings.developer.api.key.summary')}</p>
 </div>
 {#if key}
 	<p class="key">
-		{$t('mellow.server.settings.api.key.new', [key])}
+		{$t('mellow.server.settings.developer.api.key.new', [key])}
 	</p>
 {:else if data.api_key_created_at}
 	<p class="exists">
-		{$t('mellow.server.settings.api.key.exists', [data.name, data.api_key_created_at])}
+		{$t('mellow.server.settings.developer.api.key.exists', [data.name, data.api_key_created_at])}
 	</p>
 {/if}
 <Button on:click={generate} disabled={generating}>
-	<Plus/>{$t('mellow.server.settings.api.key.generate')}
+	<Plus/>{$t('mellow.server.settings.developer.api.key.generate')}
 </Button>
 
 <RequestError data={error}/>

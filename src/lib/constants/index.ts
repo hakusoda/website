@@ -13,9 +13,12 @@ import PersonFill from 'virtual:icons/bi/person-fill';
 import PeopleFill from 'virtual:icons/bi/people-fill';
 import RobloxIcon from '../icons/RobloxIcon.svelte';
 import YouTubeIcon from '../icons/YouTubeIcon.svelte';
+import PersonXFill from 'virtual:icons/bi/person-x-fill';
 import BoxArrowRight from 'virtual:icons/bi/box-arrow-right';
 import ArrowLeftRight from 'virtual:icons/bi/arrow-left-right';
 import PersonBadgeFill from 'virtual:icons/bi/person-badge-fill';
+import PersonLinesFill from 'virtual:icons/bi/person-lines-fill';
+import SignpostSplitFill from 'virtual:icons/bi/signpost-split-fill';
 export const THEMES = ['dark'] as const;
 export const LOCALES = ['en-AU'] as const;
 
@@ -127,3 +130,24 @@ export const USER_CONNECTION_METADATA: Record<UserConnectionType, {
 
 export const APPLICATION_OAUTH_SCOPE_TYPES = ['openid'] as const;
 export const APPLICATION_OAUTH_SCOPE_OPERATIONS = ['read'] as const;
+
+export const EVENT_RESPONSE_TREES = {
+	'mellow.discord.member_join': {
+		allowed_item_kinds: ['action.mellow.sync_profile', 'action.mellow.member.kick', 'statement.if']
+	}
+} as const;
+
+export const EVENT_RESPONSE_ITEM_KINDS = {
+	'action.mellow.sync_profile': {
+		icon: PersonLinesFill,
+		only_one: true
+	},
+	'action.mellow.member.kick': {
+		icon: PersonXFill,
+		only_one: true
+	},
+	'statement.if': {
+		icon: SignpostSplitFill,
+		only_one: false
+	}
+} as const;

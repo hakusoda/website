@@ -6,6 +6,7 @@ import type {
 	User,
 	Pagination,
 	ActionLogItem,
+	EventResponseItem,
 	UpdateTeamPayload,
 	CreateTeamResponse,
 	VerifySignInPayload,
@@ -140,6 +141,10 @@ export function updateMellowServerWebhook(serverId: string, webhookId: string, p
 
 export function deleteMellowServerWebhook(serverId: string, webhookId: string) {
 	return request(`mellow/server/${serverId}/webhook/${webhookId}`, 'DELETE');
+}
+
+export function update_mellow_server_event(server_id: string, event_name: string, payload: EventResponseItem[]) {
+	return request(`mellow/server/${server_id}/automation/events/${event_name}`, 'PATCH', payload);
 }
 
 export function generateMellowServerApiKey(serverId: string) {

@@ -8,6 +8,7 @@
 	import Discord from '$lib/icons/Discord.svelte';
 	import Webhook from '$lib/icons/Webhook.svelte';
 	import GearFill from 'virtual:icons/bi/gear-fill';
+	import Calendar3 from 'virtual:icons/bi/calendar3';
 	import CodeSlash from 'virtual:icons/bi/code-slash';
 	import Newspaper from 'virtual:icons/bi/newspaper';
 
@@ -15,12 +16,14 @@
 	$: items = [
 		[base, GearFill, 'mellow.server.settings.0'],
 		[`${base}/syncing`, Link, 'mellow.server.settings.2'],
-		[`${base}/action-log`, Newspaper, 'mellow.server.settings.4'],
+		[`${base}/action_log`, Newspaper, 'mellow.server.settings.4'],
 		'mellow.server.settings.automation',
+		[`${base}/automation/events`, Calendar3, 'mellow.server.settings.automation.events'],
 		[`${base}/logging`, Discord, 'mellow.server.settings.1'],
-		[`${base}/api`, CodeSlash, 'mellow.server.settings.api'],
-		[`${base}/webhooks`, Webhook, 'mellow.server.settings.3']
-	];
+		[`${base}/webhooks`, Webhook, 'mellow.server.settings.3'],
+		'mellow.server.settings.developer',
+		[`${base}/developer/api`, CodeSlash, 'mellow.server.settings.developer.api']
+	] as any[];
 </script>
 
 <div class="header">

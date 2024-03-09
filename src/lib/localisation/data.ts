@@ -4,6 +4,7 @@ export default {
 		
 		'action.edit': 'Edit',
 		'action.next': 'Next',
+		'action.save': 'Save',
 		'action.view': 'View',
 		'action.clone': 'Clone',
 		'action.reset': 'Reset',
@@ -25,6 +26,7 @@ export default {
 		'action.sign_in': 'Sign in',
 		'action.go_home': 'Go Home',
 		'action.preview': 'Preview',
+		'action.add_item': 'Add Item',
 		'action.continue': 'Continue',
 		'action.transfer': 'Transfer',
 		'action.unfollow': 'Unfollow',
@@ -219,6 +221,8 @@ export default {
 		'mellow.server.settings.general.transfer.already_team': 'This server is currently being managed by members of {0}.',
 
 		'mellow.server.settings.automation': 'Automation',
+		'mellow.server.settings.automation.events': 'Events',
+		'mellow.server.settings.automation.events.summary': 'This section is a BIG work in progress!',
 		'mellow.server.settings.automation.logging.channel': 'Logging Channel',
 		'mellow.server.settings.automation.logging.channel.category': 'Discord Channels',
 		'mellow.server.settings.automation.logging.types': 'Actions to log',
@@ -242,14 +246,15 @@ export default {
 		'mellow.server.settings.syncing.settings.allow_forced_syncing': 'Allow Forced Syncing',
 		'mellow.server.settings.return': 'Return to Server List',
 
-		'mellow.server.settings.api': 'Rest API',
-		'mellow.server.settings.api.title': 'Rest API Settings',
-		'mellow.server.settings.api.summary': 'The HAKUMI Rest API allows you to fetch information about members.',
-		'mellow.server.settings.api.key': 'API Key',
-		'mellow.server.settings.api.key.summary': 'All server endpoints require an API Key for every request.',
-		'mellow.server.settings.api.key.new': 'Here is your new API Key, be very careful with it... {0}',
-		'mellow.server.settings.api.key.exists': 'An API Key for {0} already exists, it was requested {1|time_ago}. Generating a new key will invalidate the existing key.',
-		'mellow.server.settings.api.key.generate': 'Generate new API Key',
+		'mellow.server.settings.developer': 'For Developers',
+		'mellow.server.settings.developer.api': 'Private API',
+		'mellow.server.settings.developer.api.title': 'Rest API Settings',
+		'mellow.server.settings.developer.api.summary': 'The HAKUMI Rest API allows you to fetch information about members.',
+		'mellow.server.settings.developer.api.key': 'API Key',
+		'mellow.server.settings.developer.api.key.summary': 'All server endpoints require an API Key for every request.',
+		'mellow.server.settings.developer.api.key.new': 'Here is your new API Key, be very careful with it... {0}',
+		'mellow.server.settings.developer.api.key.exists': 'An API Key for {0} already exists, it was requested {1|time_ago}. Generating a new key will invalidate the existing key.',
+		'mellow.server.settings.developer.api.key.generate': 'Generate new API Key',
 
 		'mellow.server.member.connections': '{0}\'s Server Connections',
 		'mellow.server.member.connections.summary': 'This list contains all connections that {0} has set for this server.',
@@ -514,6 +519,12 @@ export default {
 		'zod_issue.not_multiple_of': 'Received data is invalid.',
 		'zod_issue.not_finite': 'Received data is invalid.',
 		'zod_issue.custom': 'Received data is invalid.',
+
+		'event.mellow.discord.member_join': 'When a new member joins...',
+
+		'event_response_item.kind.action.mellow.sync_profile': 'Sync their server profile',
+		'event_response_item.kind.action.mellow.member.kick': 'Kick them from the server',
+		'event_response_item.kind.statement.if': 'If',
 
 		'number': '{0|number}',
 

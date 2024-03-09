@@ -510,3 +510,57 @@ export interface UserSessionJWT {
 	/**@deprecated */
 	source_connection_type?: UserConnectionType
 }
+
+export type EventResponseItem =
+	GenericEventResponseItem |
+	ConditionalStatementEventResponseItem
+
+export type EventResponseItemKind =
+	'action.mellow.sync_profile' |
+	'action.mellow.member.kick' |
+	'statement.if'
+
+export interface GenericEventResponseItem {
+	kind: 'action.mellow.sync_profile' | 'action.mellow.member.kick'
+}
+
+export interface ConditionalStatementEventResponseItem {
+	kind: 'statement.if'
+	blocks: {
+		items: EventResponseItem[]
+		condition?: {
+			kind: 'generic.is' | 'generic.is_not'
+			inputs: EventResponseStatementInput[]
+		}
+	}[]
+}
+
+export type EventResponseStatementInput =
+	MatchEventResponseStatementInput |
+	VariableEventResponseStatementInput
+
+export interface MatchEventResponseStatementInput {
+	kind: 'match'
+	value: any
+}
+
+export interface VariableEventResponseStatementInput {
+	kind: 'variable'
+	value: string
+}
+
+export type EventResponseVariable = {
+	name?: string
+} & (
+	StringEventResponseVariable |
+	ObjectEventResponseVariable
+)
+
+export interface StringEventResponseVariable {
+	kind: 'string'
+}
+
+export interface ObjectEventResponseVariable {
+	kind: 'object'
+	definition: Record<string, EventResponseVariable>
+}

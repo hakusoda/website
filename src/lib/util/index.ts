@@ -3,8 +3,8 @@ import { browser } from '$app/environment';
 import { enableSudoMode } from '../store';
 import { signApiRequest } from '../crypto';
 import { API_BASE, USER_CONNECTION_METADATA } from '../constants';
-import type { ApiResponse, UserNotification } from '../types';
-import { RequestErrorType, UserConnectionType, UserNotificationType } from '$lib/enums';
+import type { ApiResponse, UserNotification, EventResponseItem, EventResponseItemKind } from '../types';
+import { RequestErrorType, UserConnectionType, UserNotificationType } from '../enums';
 export function getDefaultAvatar(id: string) {
 	let hash = 0;
 	for (let i = 0; i < id.length; i++)
@@ -57,6 +57,15 @@ export function payloadDiff<T extends Record<any, any>>(old: Record<any, any>, n
 	}
 
 	return final;
+}
+
+// is there a way to have this return the type associated with the provided kind?
+export function create_event_response_item(kind: EventResponseItemKind): EventResponseItem {
+	if (kind === 'action.mellow.sync_profile')
+		return { kind };
+	else if (kind === 'statement.if')
+		return { kind, blocks: [] };
+	throw new TypeError(`${kind} is not a valid kind`);
 }
 
 const UNKNOWN_ERROR = { error: RequestErrorType.Unknown, success: false };
