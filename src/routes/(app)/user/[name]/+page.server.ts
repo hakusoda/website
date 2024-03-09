@@ -1,8 +1,8 @@
 import { isUUID } from '$lib/shared/util';
 import { EMPTY_UUID } from '$lib/shared/constants';
+import { requestError } from '$lib/server/util';
+import { RequestErrorType } from '$lib/shared/enums';
 import supabase, { handle_response } from '$lib/server/supabase';
-import { requestFail, requestError } from '$lib/server/util';
-import { RequestErrorType, UserNotificationType } from '$lib/shared/enums';
 export async function load({ params: { name }, locals: { session } }) {
 	const filter = supabase.from('users')
 		.select<string, {
@@ -27,9 +27,6 @@ export async function load({ params: { name }, locals: { session } }) {
 					display_name: string
 				}
 			}[]
-			burger: {
-				type: UserNotificationType
-			}[]
 			username: string
 			is_edited: boolean
 			following: [{ count: number }]
@@ -39,10 +36,8 @@ export async function load({ params: { name }, locals: { session } }) {
 			team_invites: {
 				team_id: string
 			}[]
-		}>(`id, bio, name, flags, username, is_edited, following:user_followers!user_followers_target_user_id_fkey ( count ), followers:user_followers!user_followers_target_user_id_fkey ( count ), avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( role:team_roles ( name ), team:teams ( id, name, flags, owner:users!teams_owner_id_fkey ( name, username ), avatar_url, display_name, members:team_members ( count ) ) ), team_invites!team_invites_user_id_fkey ( team_id ), burger:user_notifications!user_notifications_user_id_fkey ( type )`)
+		}>(`id, bio, name, flags, username, is_edited, following:user_followers!user_followers_target_user_id_fkey ( count ), followers:user_followers!user_followers_target_user_id_fkey ( count ), avatar_url, created_at, teams:team_members!team_members_user_id_fkey ( role:team_roles ( name ), team:teams ( id, name, flags, owner:users!teams_owner_id_fkey ( name, username ), avatar_url, display_name, members:team_members ( count ) ) ), team_invites!team_invites_user_id_fkey ( team_id )`)
 		.eq(isUUID(name) ? 'id' : 'username', name)
-		.eq('user_notifications.target_user_id', session?.sub ?? EMPTY_UUID)
-		.eq('user_notifications.type', UserNotificationType.SOMETHING)
 		.eq('following.user_id', session?.sub ?? EMPTY_UUID);
 		
 	const response = await filter
@@ -73,26 +68,4 @@ export async function load({ params: { name }, locals: { session } }) {
 		my_teams: my_teams.filter(item => !teams.some(team => team.id === item.id) && !team_invites.some(invite => invite.team_id === item.id)),
 		team_invites
 	};
-}
-
-export const actions = {
-	burger: async ({ locals: { session }, params: { name } }) => {
-		if (!session)
-			return requestFail(401, RequestErrorType.Unauthenticated);
-
-		const response = await supabase.from('users')
-			.select('id')
-			.eq(isUUID(name) ? 'id' : 'username', name)
-			.limit(1)
-			.single();
-		handle_response(response);
-
-		handle_response(await supabase.from('user_notifications').upsert({
-			type: UserNotificationType.SOMETHING,
-			user_id: response.data!.id,
-			target_user_id: session.sub
-		}));
-
-		return {};
-	}
 }

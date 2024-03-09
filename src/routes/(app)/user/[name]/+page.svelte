@@ -2,7 +2,6 @@
 	import { Tabs, Button, TextInput, ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/ui/localisation/index';
-	import { deserialize } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import type { RequestError } from '$lib/shared/types';
 	import { hasBit, getDefaultAvatar } from '$lib/shared/util';
@@ -19,7 +18,6 @@
 
 	import X from 'virtual:icons/bi/x-lg';
 	import Star from 'virtual:icons/bi/star';
-	import Burger from '$lib/ui/icons/Burger.svelte';
 	import People from 'virtual:icons/bi/people';
 	import Sunrise from 'virtual:icons/bi/sunrise';
 	import StarFill from 'virtual:icons/bi/star-fill';
@@ -79,19 +77,6 @@
 			saving = !(saveError = response);
 	});
 
-	let burgering = false;
-	const burger = async () => {
-		burgering = true;
-		const response = await fetch('?/burger', {
-			body: '',
-			method: 'POST'
-		});
-		const result = deserialize(await response.text());
-		if (result.type === 'success')
-			await invalidateAll();
-		burgering = false;
-	};
-
 	let dropdownTrigger: () => void;
 
 	const inviteToTeam = async (teamId: string) => {
@@ -132,10 +117,6 @@
 					{#if data.id === data.user?.id}
 						<Button on:click={() => editing = true}>
 							<PencilFill/>{$t('action.edit_profile')}
-						</Button>
-					{:else if data.session}
-						<Button circle on:click={burger} disabled={burgering || !!data.burger.length} title={$t(`profile.burger.${!!data.burger.length}`)}>
-							<Burger/>
 						</Button>
 					{/if}
 					<Button circle on:click={dropdownTrigger}>
