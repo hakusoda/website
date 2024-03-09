@@ -21,9 +21,6 @@
 	import BoxArrowLeft from 'virtual:icons/bi/box-arrow-left';
 	inject({ mode: dev ? 'development' : 'production' });
 	injectSpeedInsights();
-
-	$: [themeName] = $theme.split('_');
-
 	onMount(store_auth_key_pair);
 
 	const editorSaving = editor.isSaving;
@@ -33,7 +30,7 @@
 	$: editorCreating = editorTargetId === 'create';
 </script>
 
-<div class={`app theme-${themeName}`}>
+<div class={`app theme-${$theme}`}>
 	<div class="app-container">
 		<slot/>
 	</div>
