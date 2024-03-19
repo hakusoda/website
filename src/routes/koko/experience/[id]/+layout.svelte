@@ -25,7 +25,7 @@
 		[base, HouseDoorFill, 'navigation.koko.experience', true],
 		[`${base}/servers`, PeopleFill, 'navigation.koko.experience.servers'],
 		[`${base}/server_actions`, Diagram3Fill, 'koko.experience.server_actions'],
-		[`${base}/settings`, GearFill, 'navigation.mellow.server.settings']
+		[`${base}/settings`, GearFill, 'navigation.generic.settings']
 	]}
 	disableDefaultBrand
 	disableDefaultTopNav

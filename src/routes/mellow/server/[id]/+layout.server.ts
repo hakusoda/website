@@ -1,12 +1,19 @@
 import { requestError } from '$lib/server/util';
 import { RequestErrorType } from '$lib/shared/enums';
 import supabase, { handle_response } from '$lib/server/supabase';
-export const load = async ({ params: { id }, parent }) => {
-	const { servers } = await parent();
-	if (!servers.some(item => item.id === id))
-		throw requestError(401, RequestErrorType.Unauthorised);
+import { get_discord_server_member_from_platform_user } from '$lib/server/discord';
+export const load = async ({ params: { id }, locals: { session } }) => {
+	const response = await supabase.rpc('mellow_server_accessible_by_user2', {
+		user_id: session!.sub,
+		server_id: id
+	});
+	handle_response(response);
 
-	const response = await supabase.from('mellow_servers')
+	const discord_member = await get_discord_server_member_from_platform_user(id, session!.sub);
+	if (!response.data && !discord_member)
+		throw requestError(404, RequestErrorType.Unauthorised);
+
+	const response2 = await supabase.from('mellow_servers')
 		.select<string, {
 			name: string
 			webhooks: {
@@ -30,10 +37,13 @@ export const load = async ({ params: { id }, parent }) => {
 		.eq('id', id)
 		.limit(1)
 		.maybeSingle();
-	handle_response(response);
+	handle_response(response2);
 
-	if (!response.data)
+	if (!response2.data)
 		throw requestError(404, RequestErrorType.NotFound);
 
-	return response.data;
+	return {
+		...response2.data,
+		is_member: response.data as boolean
+	};
 };

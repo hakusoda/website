@@ -209,6 +209,8 @@ export default {
 		'settings.integrations.applications': 'Applications',
 		'settings.integrations.applications.summary': 'This is a list of applications that you have authorised to access certain aspects of your account.',
 
+		'mellow.dashboard.servers': 'Your Servers',
+		
 		'mellow.server.settings': 'Server Settings',
 		'mellow.server.settings.0': 'General',
 		'mellow.server.settings.1': 'Logging',
@@ -439,17 +441,21 @@ export default {
 		'reference.articles.rest-api.team': 'Team',
 		'reference.articles.rest-api.user': 'User',
 
+		'navigation.generic.settings': 'Settings',
+
 		'navigation.settings.profile': 'Profile',
 		'navigation.settings.teams': 'Teams',
 		'navigation.settings.mellow': 'mellow',
-		'navigation.settings.account': 'Settings',
 
 		'navigation.team_settings.members': 'Members',
 		'navigation.team_settings.roles': 'Roles',
 
+		'navigation.mellow.dashboard': 'Dashboard',
+		'navigation.mellow.dashboard.servers': 'Servers',
+
 		'navigation.mellow.server': 'Server Details',
 		'navigation.mellow.server.actions': 'Profile Sync Actions',
-		'navigation.mellow.server.settings': 'Settings',
+		'navigation.mellow.server.user_settings': 'User Settings',
 
 		'navigation.koko.experience': 'Experience Details',
 		'navigation.koko.experience.servers': 'Active Servers',

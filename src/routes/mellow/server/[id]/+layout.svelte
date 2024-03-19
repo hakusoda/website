@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { ContextMenu } from '@hakumi/essence';
 
-	import { t } from '$lib/ui/localisation/index';
+	import { t } from '$lib/ui/localisation';
 	import { page } from '$app/stores';
+	import { use_mellow_servers } from '$lib/client/store';
 
 	import Avatar from '$lib/ui/components/Avatar.svelte';
 	import AppLayout from '$lib/ui/layouts/AppLayout.svelte';
@@ -12,6 +13,7 @@
 	import BrandIcon from '$lib/ui/icons/BrandIcon.svelte';
 	import ChevronUp from 'virtual:icons/bi/chevron-up';
 	import MellowIcon from '$lib/ui/icons/MellowIcon.svelte';
+	import PersonFill from 'virtual:icons/bi/person-fill';
 	import ChevronDown from 'virtual:icons/bi/chevron-down';
 	import HouseDoorFill from 'virtual:icons/bi/house-door-fill';
 	export let data;
@@ -19,13 +21,14 @@
 	$: base = `/mellow/server/${$page.params.id}`;
 
 	let trigger: () => void;
+	const servers = use_mellow_servers();
 </script>
 
 <AppLayout
 	navigation={[
 		[base, HouseDoorFill, 'navigation.mellow.server', true],
 		[`${base}/syncing/actions`, Link, 'navigation.mellow.server.actions'],
-		[`${base}/settings`, GearFill, 'navigation.mellow.server.settings']
+		[`${base}/settings`, GearFill, 'navigation.generic.settings']
 	]}
 	disableDefaultBrand
 	disableDefaultTopNav
@@ -44,12 +47,14 @@
 
 <ContextMenu.Root bind:trigger>
 	<p>{$t('settings.mellow.servers')}</p>
-	{#each data.servers as item}
-		<a href={`/mellow/server/${item.id}${$page.url.pathname.match(/server\/\d+(.*)/)?.[1] ?? ''}`}>
-			<Avatar id={item.id} src={item.avatar_url} size="xxs"/>
-			{item.name}
-		</a>
-	{/each}
+	{#if $servers}
+		{#each $servers as item}
+			<a href={`/mellow/server/${item.id}${$page.url.pathname.match(/server\/\d+(.*)/)?.[1] ?? ''}`}>
+				<Avatar id={item.id} src={item.avatar_url} size="xxs"/>
+				{item.name}
+			</a>
+		{/each}
+	{/if}
 	<div class="separator"/>
 	<a href="/settings/mellow">
 		<BrandIcon/>{$t('action.return_from_mellow')}

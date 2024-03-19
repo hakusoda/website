@@ -2,8 +2,8 @@ import { get } from 'svelte/store';
 
 import { page } from '$app/stores';
 import { request } from '../shared/util';
+import type { MellowServer } from './types';
 import type {
-	User,
 	Pagination,
 	ActionLogItem,
 	EventResponseItem,
@@ -97,6 +97,10 @@ export function removeTeamMember(team_id: string, user_id: string) {
 
 export function updateTeamRole(team_id: string, role_id: string, payload: UpdateTeamRolePayload) {
 	return request(`team/${team_id}/role/${role_id}`, 'PATCH', payload);
+}
+
+export function get_mellow_servers() {
+	return request<MellowServer[]>('mellow/servers');
 }
 
 export function getMellowServerActionLog(server_id: string, limit = 20, offset = 0) {

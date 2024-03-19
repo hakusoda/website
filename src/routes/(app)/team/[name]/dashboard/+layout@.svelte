@@ -25,7 +25,7 @@
 	[`${base}/profile`, PersonFill, 'navigation.settings.profile'],
 	[`${base}/members`, PeopleFill, 'navigation.team_settings.members'],
 	[`${base}/roles`, PeopleFill, 'navigation.team_settings.roles'],
-	[`${base}/settings`, GearFill, 'navigation.settings.account']
+	[`${base}/settings`, GearFill, 'navigation.generic.settings']
 ]} disableDefaultTopNav>
 	<svelte:fragment slot="header-top-nav">
 		<button class="context-selector" type="button" on:click={trigger}>
