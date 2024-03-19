@@ -22,7 +22,8 @@ export enum UserConnectionType {
 	Discord,
 	GitHub,
 	Roblox,
-	YouTube
+	YouTube,
+	Patreon
 }
 
 export enum TeamFlag {
@@ -63,7 +64,8 @@ export enum MellowProfileSyncActionRequirementType {
 	RobloxHaveAsset,
 	RobloxHaveBadge,
 	RobloxHavePass,
-	GitHubInOrganisation
+	GitHubInOrganisation,
+	PatreonHaveCampaignTier
 }
 export enum MellowProfileSyncActionRequirementsType {
 	MeetAll,

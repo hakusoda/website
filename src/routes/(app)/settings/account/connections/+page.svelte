@@ -21,8 +21,8 @@
 <div class="connection-types">
 	{#each Object.values(UserConnectionType) as item}
 		{#if typeof item === 'number' && item !== UserConnectionType.YouTube}
-			<a class="item focusable" href={getUserConnectionUrl(item)} style={`--bg: ${USER_CONNECTION_METADATA[item]?.colour};`}>
-				<svelte:component this={USER_CONNECTION_METADATA[item]?.icon}/>{$t(`user_connection.type.${item}`)}
+			<a class="item focusable" href={getUserConnectionUrl(item)} style={`--bg: ${USER_CONNECTION_METADATA[item]?.colour}; color: ${USER_CONNECTION_METADATA[item]?.text_colour || 'unset'}`}>
+				<svelte:component this={USER_CONNECTION_METADATA[item]?.icon} fill={USER_CONNECTION_METADATA[item]?.icon_colour}/>{$t(`user_connection.type.${item}`)}
 			</a>
 		{/if}
 	{/each}

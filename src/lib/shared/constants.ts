@@ -8,6 +8,7 @@ import X from 'virtual:icons/bi/x-lg';
 import Link from 'virtual:icons/bi/link-45deg';
 import GitHub from '../ui/icons/GitHub.svelte';
 import Discord from '../ui/icons/Discord.svelte';
+import Patreon from '../ui/icons/Patreon.svelte';
 import BrandIcon from '../ui/icons/BrandIcon.svelte';
 import PersonFill from 'virtual:icons/bi/person-fill';
 import PeopleFill from 'virtual:icons/bi/people-fill';
@@ -94,14 +95,17 @@ export const MELLOW_SYNC_REQUIREMENT_CONNECTIONS: Record<MellowProfileSyncAction
 	[MellowProfileSyncActionRequirementType.RobloxHaveAsset]: UserConnectionType.Roblox,
 	[MellowProfileSyncActionRequirementType.RobloxHaveBadge]: UserConnectionType.Roblox,
 	[MellowProfileSyncActionRequirementType.RobloxHavePass]: UserConnectionType.Roblox,
-	[MellowProfileSyncActionRequirementType.GitHubInOrganisation]: UserConnectionType.GitHub
+	[MellowProfileSyncActionRequirementType.GitHubInOrganisation]: UserConnectionType.GitHub,
+	[MellowProfileSyncActionRequirementType.PatreonHaveCampaignTier]: UserConnectionType.Patreon
 };
 
 export const USER_CONNECTION_METADATA: Record<UserConnectionType, {
 	url: string
 	icon: typeof SvelteComponent<any>
 	colour: string
-	manage_url: string
+	manage_url: string,
+	icon_colour?: string,
+	text_colour?: string
 }> = {
 	[UserConnectionType.Discord]: {
 		url: `https://discord.com/api/oauth2/authorize?client_id=1068554282481229885&redirect_uri=RD143&response_type=code&scope=identify`,
@@ -126,6 +130,14 @@ export const USER_CONNECTION_METADATA: Record<UserConnectionType, {
 		icon: YouTubeIcon,
 		colour: 'red',
 		manage_url: 'https://myaccount.google.com/u/1/connections/overview/AZcznIIig3dPSCdDKH_OWDBHq0_aOoZqUgKIEi-H3uxy0t3ux4plgDsCY_aP3yzV3wb4F4nW6AZOlUG0BGT9OJfcPpU'
+	},
+	[UserConnectionType.Patreon]: {
+		url: 'https://www.patreon.com/oauth2/authorize?client_id=BaKp_8PIeBxx0cfJoEEaVxVQMxD3c_IUFS_qCSu5gNFnXLL5c4Qw4YMPtgMJG-n9&redirect_uri=RD143&scope=identity%20identity.memberships&response_type=code',
+		icon: Patreon,
+		colour: '#fff',
+		manage_url: '',
+		icon_colour: '#000',
+		text_colour: '#000'
 	}
 };
 
