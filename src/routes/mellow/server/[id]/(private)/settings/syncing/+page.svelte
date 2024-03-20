@@ -1,17 +1,18 @@
 <script lang="ts">
-	import { Select } from '@hakumi/essence';
+	import { Button, Select } from '@hakumi/essence';
 
 	import { t } from '$lib/ui/localisation/index';
 	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
 	import type { ApiRequestError } from '$lib/shared/types';
-	import { USER_CONNECTION_METADATA } from '$lib/shared/constants';
+	import { API_BASE, USER_CONNECTION_METADATA } from '$lib/shared/constants';
 	import { updateMellowServerProfileSyncingSettings } from '$lib/client/api';
 	import { UserConnectionType, MellowDefaultNickname } from '$lib/shared/enums';
 
 	import Radio from '$lib/ui/components/Radio.svelte';
 	import UnsavedChanges from '$lib/ui/modals/UnsavedChanges.svelte';
 
+	import Patreon from '$lib/ui/icons/Patreon.svelte';
 	import RobloxIcon from '$lib/ui/icons/RobloxIcon.svelte';
 	export let data;
 
@@ -35,6 +36,8 @@
 			return invalidateAll().then(() => saving = false);
 		saving = !(error = response);
 	};
+	
+	$: patreon_connected = data.oauth_authorisations.some(item => item.kind === 0);
 </script>
 
 <p class="input-label">{$t('mellow.server.settings.syncing.settings.nickname')}</p>
@@ -66,6 +69,12 @@
 		{/if}
 	{/each}
 </Select.Root>
+
+<p class="input-label">{$t('mellow.server.settings.syncing.settings.auto_sync')}</p>
+<p class="summary">{$t('mellow.server.settings.syncing.settings.auto_sync.summary')}</p>
+<Button href={patreon_connected ? undefined : `https://www.patreon.com/oauth2/authorize?client_id=BaKp_8PIeBxx0cfJoEEaVxVQMxD3c_IUFS_qCSu5gNFnXLL5c4Qw4YMPtgMJG-n9&redirect_uri=${encodeURIComponent(`${API_BASE}/mellow/service_callback/0`)}&scope=w:campaigns.webhook&response_type=code&state=${$page.params.id}`} disabled={patreon_connected}>
+	<Patreon/>{$t('mellow.server.settings.syncing.settings.auto_sync.patreon')}
+</Button>
 
 <p class="input-label">{$t('mellow.server.settings.syncing.settings.other')}</p>
 <div class="radio-input">

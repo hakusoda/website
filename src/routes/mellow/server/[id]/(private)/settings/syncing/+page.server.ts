@@ -7,7 +7,8 @@ export async function load({ params: { id } }) {
 			default_nickname: string
 			skip_onboarding_to: UserConnectionType | null
 			allow_forced_syncing: boolean
-		}>('default_nickname, skip_onboarding_to, allow_forced_syncing')
+			oauth_authorisations: { kind: number }[]
+		}>('default_nickname, skip_onboarding_to, allow_forced_syncing, oauth_authorisations:mellow_server_oauth_authorisations (kind)')
 		.eq('id', id)
 		.limit(1)
 		.single();
