@@ -258,6 +258,11 @@
 								<NumberInput min={0} placeholder={$t('mellow_sync_action.requirement.9.id')} bind:string={item.data[0]}/>
 							{:else if item.type === MellowProfileSyncActionRequirementType.RobloxHavePass}
 								<NumberInput min={0} placeholder={$t('mellow_sync_action.requirement.10.id')} bind:string={item.data[0]}/>
+							{:else if item.type === MellowProfileSyncActionRequirementType.PatreonHaveCampaignTier}
+								<div class="fields">
+									<TextInput placeholder={$t('mellow_sync_action.requirement.12.campaign_id')} bind:value={item.data[0]}/>
+									<TextInput placeholder={$t('mellow_sync_action.requirement.12.tier_id')} bind:value={item.data[1]}/>
+								</div>
 							{/if}
 						</div>
 						<div class="buttons">

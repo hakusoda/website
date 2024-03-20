@@ -79,6 +79,9 @@ export const MAPPED_MELLOW_SYNC_REQUIREMENTS: [([MellowProfileSyncActionRequirem
 		[MellowProfileSyncActionRequirementType.HAKUMIInTeam, PeopleFill]
 	], BrandIcon],*/
 	[[
+		[MellowProfileSyncActionRequirementType.PatreonHaveCampaignTier, Patreon]
+	], Patreon],
+	[[
 		[MellowProfileSyncActionRequirementType.MeetOtherAction, Link]
 	], BrandIcon]
 ];
