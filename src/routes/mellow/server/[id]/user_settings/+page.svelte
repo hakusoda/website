@@ -49,17 +49,19 @@
 			}, 1000);
 
 			window.addEventListener('message', event => {
-				if (event.origin !== $page.url.origin)
+				const new_item = event.data;
+				if (event.origin !== $page.url.origin || !new_item.sub || !new_item.user_id)
 					return;
 
-				const new_item = event.data;
 				if (!user_connections.some(item => item.id === new_item.id))
 					user_connections = [...user_connections, new_item];
 
-				if (override_id)
-					server_user_connections = server_user_connections.map(item => item.id === override_id ? { id: new_item.id } : item);
-				else
-					server_user_connections = [...data.server_user_connections, { id: new_item.id }];
+				requestAnimationFrame(() => {
+					if (override_id)
+						server_user_connections = server_user_connections.map(item => item.id === override_id ? { id: new_item.id } : item);
+					else
+						server_user_connections = [...server_user_connections, { id: new_item.id }];
+				});
 
 				clearInterval(interval_id);
 				new_window.close();
