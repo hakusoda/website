@@ -72,7 +72,7 @@
 
 <p class="input-label">{$t('mellow.server.settings.syncing.settings.auto_sync')}</p>
 <p class="summary">{$t('mellow.server.settings.syncing.settings.auto_sync.summary')}</p>
-<Button href={patreon_connected ? undefined : `https://www.patreon.com/oauth2/authorize?client_id=BaKp_8PIeBxx0cfJoEEaVxVQMxD3c_IUFS_qCSu5gNFnXLL5c4Qw4YMPtgMJG-n9&redirect_uri=${encodeURIComponent(`${API_BASE}/mellow/service_callback/0`)}&scope=w:campaigns.webhook&response_type=code&state=${$page.params.id}`} disabled={patreon_connected}>
+<Button href={patreon_connected ? undefined : `https://www.patreon.com/oauth2/authorize?client_id=BaKp_8PIeBxx0cfJoEEaVxVQMxD3c_IUFS_qCSu5gNFnXLL5c4Qw4YMPtgMJG-n9&redirect_uri=${encodeURIComponent(`${API_BASE}/mellow/service_callback/0`)}&scope=campaigns%20w:campaigns.webhook&response_type=code&state=${$page.params.id}`} disabled={patreon_connected}>
 	<Patreon/>{$t('mellow.server.settings.syncing.settings.auto_sync.patreon')}
 </Button>
 

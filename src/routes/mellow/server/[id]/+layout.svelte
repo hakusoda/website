@@ -22,14 +22,17 @@
 
 	let trigger: () => void;
 	const servers = use_mellow_servers();
+
+	$: navigation = [
+		[base, HouseDoorFill, 'navigation.mellow.server', true],
+		[`${base}/syncing/actions`, Link, 'navigation.mellow.server.actions'],
+		[`${base}/user_settings`, PersonFill, 'navigation.mellow.server.user_settings'],
+		[`${base}/settings`, GearFill, 'navigation.generic.settings']
+	].filter((_,index) => data.is_member || index === 2) as any[]; 
 </script>
 
 <AppLayout
-	navigation={[
-		[base, HouseDoorFill, 'navigation.mellow.server', true],
-		[`${base}/syncing/actions`, Link, 'navigation.mellow.server.actions'],
-		[`${base}/settings`, GearFill, 'navigation.generic.settings']
-	]}
+	{navigation}
 	disableDefaultBrand
 	disableDefaultTopNav
 >

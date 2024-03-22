@@ -10,3 +10,10 @@ export interface MellowServer {
 	}
 	avatar_url: string | null
 }
+
+export interface UpdateMellowUserServerSettingsPayload {
+	is_onboarding?: boolean
+	user_connections: {
+		id: string
+	}[]
+}

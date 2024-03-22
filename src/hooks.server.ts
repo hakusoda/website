@@ -20,8 +20,6 @@ export async function handle({ event, resolve }) {
 
 		if (payload.source_connection_id && event.url.pathname !== '/migrate_from_third_party')
 			throw redirect(302, '/migrate_from_third_party');
-		if (payload.mellow_user_state && event.url.pathname !== '/mellow/finish_signup')
-			throw redirect(302, '/mellow/finish_signup');
 	}
 
 	return resolve(event, {

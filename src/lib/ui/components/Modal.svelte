@@ -56,6 +56,7 @@
 			animation: 1s show-backdrop;
 			background: #00000080;
 			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
 		}
 	}
 

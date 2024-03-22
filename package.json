@@ -49,6 +49,5 @@
 		"svelte-markdown": {
 			"svelte": "^4.0.5"
 		}
-	},
-	"packageManager": "yarn@4.1.0"
+	}
 }

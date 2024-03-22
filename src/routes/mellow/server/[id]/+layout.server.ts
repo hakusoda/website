@@ -29,11 +29,12 @@ export const load = async ({ params: { id }, locals: { session } }) => {
 				created_at: string
 			}[]
 			avatar_url: string | null
+			banner_url: string | null
 			owner_team: {
 				display_name: string
 			} | null
 			owner_user_id: string
-		}>('name, webhooks:mellow_server_webhooks ( id, name, events, creator:users ( name, username ), enabled, target_url, created_at ), avatar_url, owner_team:teams ( display_name ), owner_user_id')
+		}>('name, webhooks:mellow_server_webhooks ( id, name, events, creator:users ( name, username ), enabled, target_url, created_at ), avatar_url, banner_url, owner_team:teams ( display_name ), owner_user_id')
 		.eq('id', id)
 		.limit(1)
 		.maybeSingle();

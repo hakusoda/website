@@ -5,7 +5,7 @@ function get_object_store_count(store: IDBObjectStore): Promise<number> {
 	});
 }
 
-export function store_auth_key_pair(): Promise<void> {
+export function store_auth_key_pair(): Promise<string> {
 	return new Promise(resolve => {
 		const request = indexedDB.open('SOMETHING', 143);
 		request.onupgradeneeded = ({ target }) =>
@@ -22,8 +22,9 @@ export function store_auth_key_pair(): Promise<void> {
 
 					const store = database.transaction(['SOMETHING'], 'readwrite').objectStore('SOMETHING');
 					store.put({ publicKey, privateKey });
+					return resolve(base64.fromArrayBuffer(await crypto.subtle.exportKey('raw', publicKey), false));
 				}
-				resolve();
+				get_auth_public_key().then(resolve);
 			} catch (err) {
 				console.warn(err);
 				indexedDB.deleteDatabase('SOMETHING');

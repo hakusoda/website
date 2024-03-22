@@ -2,7 +2,10 @@ import { get } from 'svelte/store';
 
 import { page } from '$app/stores';
 import { request } from '../shared/util';
-import type { MellowServer } from './types';
+import type {
+	MellowServer,
+	UpdateMellowUserServerSettingsPayload
+} from './types';
 import type {
 	Pagination,
 	ActionLogItem,
@@ -24,7 +27,6 @@ import type {
 	UpdateMellowServerOwnershipPayload,
 	CreateMellowProfileSyncActionPayload,
 	CreateMellowProfileSyncActionResponse,
-	UpdateMellowUserServerSettingsPayload,
 	UpdateMellowServerProfileSyncingSettingsPayload
 } from '../shared/types';
 import { get_auth_public_key } from './crypto';
@@ -107,8 +109,8 @@ export function getMellowServerActionLog(server_id: string, limit = 20, offset =
 	return request<Pagination<ActionLogItem>>(`mellow/server/${server_id}/action_log?limit=${limit}&offset=${offset}`);
 }
 
-export function updateMellowUserServerSettings(server_id: string, payload: UpdateMellowUserServerSettingsPayload) {
-	return request(`mellow/server/${server_id}/user-settings`, 'PATCH', payload);
+export function update_mellow_user_server_settings(server_id: string, payload: UpdateMellowUserServerSettingsPayload) {
+	return request(`mellow/server/${server_id}/user_settings`, 'PATCH', payload);
 }
 
 export function updateMellowServerOwnership(server_id: string, payload: UpdateMellowServerOwnershipPayload) {

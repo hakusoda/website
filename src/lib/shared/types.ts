@@ -354,12 +354,6 @@ export type ActionLogItem = {
 	} | null
 }
 
-export interface UpdateMellowUserServerSettingsPayload {
-	connections: {
-		id: string
-	}[]
-}
-
 export interface UpdateMellowServerProfileSyncingSettingsPayload {
 	default_nickname?: string
 	skip_onboarding_to?: UserConnectionType | null
@@ -501,8 +495,6 @@ export interface UserSessionJWT {
 	iat: number
 	source_device_id: string
 	device_public_key: string
-
-	mellow_user_state?: string
 
 	/**@deprecated */
 	source_connection_id?: string

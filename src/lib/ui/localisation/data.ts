@@ -261,8 +261,22 @@ export default {
 		'mellow.server.settings.developer.api.key.exists': 'An API Key for {0} already exists, it was requested {1|time_ago}. Generating a new key will invalidate the existing key.',
 		'mellow.server.settings.developer.api.key.generate': 'Generate new API Key',
 
+		'mellow.server.user_settings.connections.connected': 'Connected accounts',
+		'mellow.server.user_settings.connections.connected.summary': '{0} is able to read these accounts in order to give you special roles & whatnot in their Discord server.',
+
+		'mellow.server.user_settings.connections.recommended': 'Recommended to connect',
+		'mellow.server.user_settings.connections.recommended.summary': 'Based on what syncing actions {0} has created, we recommended connecting these!',
+
+		'mellow.server.user_settings.connections.required': 'Required before you can sync',
+		'mellow.server.user_settings.connections.required.summary': '{0} needs all of these connected before you can sync your profile.',
+
 		'mellow.server.member.connections': '{0}\'s Server Connections',
 		'mellow.server.member.connections.summary': 'This list contains all connections that {0} has set for this server.',
+
+		'mellow.user_settings_connection.note.0': 'Connect your {0} account to receive special roles, and maybe other stuff!',
+		'mellow.user_settings_connection.note.1': 'Connect your {0} account to receive perks in the server!',
+		'mellow.user_settings_connection.note.2': 'Connect your {0} account to gain access to the server!',
+		'mellow.user_settings_connection.note.3': 'You\'ve already connected your {0} account, woohoo!',
 
 		'mellow_link_editor.header.false': 'Create Action',
 		'mellow_link_editor.header.true': 'Update Existing Action',

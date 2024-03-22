@@ -59,6 +59,10 @@ main > .header {
 		white-space: pre;
 		line-height: normal;
 	}
+	b {
+		color: var(--color-primary);
+		font-weight: 600;
+	}
 	*:nth-child(2) {
 		margin: 16px 0 0;
 	}
