@@ -13,6 +13,14 @@ a {
 	min-width: 256px !important;
 }
 
+.awesome_focus {
+	outline: none;
+	&:focus {
+		animation: awesome_focus ease-out .25s;
+		box-shadow: 0 0 0 2px hsla(260, 80%, 80%, .75);
+	}
+}
+
 #absolute-solver {
 	top: 0;
 	left: 0;
@@ -23,5 +31,11 @@ a {
 	pointer-events: none;
 	* {
 		pointer-events: initial;
+	}
+}
+
+@keyframes awesome_focus {
+	0% {
+		box-shadow: 0 0 0 32px transparent;
 	}
 }

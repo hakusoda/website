@@ -1,5 +1,6 @@
 import type { ZodIssue } from 'zod';
-import type { RequestErrorType, DiscordChannelType, UserConnectionType, UserNotificationType, UserNotificationState, MellowProfileSyncActionType, MellowProfileSyncActionRequirementType, MellowProfileSyncActionRequirementsType } from './enums';
+
+import type { RequestErrorType, DiscordChannelType, UserConnectionKind, UserNotificationType, UserNotificationState } from '../enums';
 export interface User {
 	id: string
 	name: string | null
@@ -144,59 +145,9 @@ export type MellowActionLogItemType =
 	'mellow.server.api_key.created' |
 	'mellow.server.ownership.changed'
 
-export type MellowProfileAction = {
-	id: string
-	name: string
-	creator: {
-		name: string | null
-		username: string
-	} | null
-	metadata: {}
-	last_edit: {
-		type: MellowActionLogItemType
-		author: {
-			name: string | null
-			username: string
-		}
-		created_at: string
-	}
-	created_at: string
-	requirements: {
-		id: string
-		data: string[]
-		type: MellowProfileSyncActionRequirementType
-	}[]
-	requirements_type: MellowProfileSyncActionRequirementsType
-} & ({
-	type: MellowProfileSyncActionType.GiveRoles
-	metadata: {
-		items: string[]
-		can_remove: boolean
-	}
-} | {
-	type: MellowProfileSyncActionType.BanFromServer
-	metadata: MellowRemoveMemberMetadata & {
-		delete_messages_seconds: number
-	}
-} | {
-	type: MellowProfileSyncActionType.KickFromServer
-	metadata: MellowRemoveMemberMetadata
-} | {
-	type: MellowProfileSyncActionType.CancelSync
-	metadata: {
-		user_facing_reason: string | null
-	}
-})
-
 export interface MellowRemoveMemberMetadata {
 	audit_log_reason: string | null
 	user_facing_reason: string | null
-}
-
-export interface MellowProfileActionRequirement {
-	id: string
-	data: string[]
-	type: MellowProfileSyncActionRequirementType
 }
 
 export interface DiscordRole {
@@ -325,15 +276,28 @@ export interface Pagination<T> {
 
 export type ActionLogItem = {
 	id: string
-	data: any
 	type: TeamActionLogType | MellowActionLogItemType
 	author: {
 		id: string
 		name: string | null
 		username: string
 		avatar_url: string | null
-	}
+	} | null
 	created_at: string
+	data_changes: ({
+		name: string
+		kind: 'created'
+		value: any
+	} | {
+		name: string
+		kind: 'updated'
+		new_value: any
+		old_value: any
+	} | {
+		name: string
+		kind: 'deleted'
+		old_value: any
+	})[]
 	target_team_role?: {
 		id: string
 		name: string
@@ -344,7 +308,7 @@ export type ActionLogItem = {
 		username: string
 		avatar_url: string | null
 	} | null
-	target_action?: {
+	target_command?: {
 		id: string
 		name: string
 	} | null
@@ -352,41 +316,16 @@ export type ActionLogItem = {
 		id: string
 		name: string
 	} | null
+	target_sync_action?: {
+		id: string
+		display_name: string
+	} | null
 }
 
 export interface UpdateMellowServerProfileSyncingSettingsPayload {
 	default_nickname?: string
-	skip_onboarding_to?: UserConnectionType | null
+	skip_onboarding_to?: UserConnectionKind | null
 	allow_forced_syncing?: boolean
-}
-
-export interface CreateMellowProfileSyncActionPayload {
-	name: string
-	type: MellowProfileSyncActionType
-	metadata: any
-	requirements: {
-		data: string[]
-		type: MellowProfileSyncActionRequirementType
-	}[]
-	requirements_type: MellowProfileSyncActionRequirementsType
-}
-
-export interface CreateMellowProfileSyncActionResponse {
-	id: string
-	name: string
-	type: MellowProfileSyncActionType
-	creator: {
-		name: string | null
-		username: string
-	}
-	metadata: any
-	created_at: string
-	requirements: {
-		id: string
-		data: string[]
-		type: MellowProfileSyncActionRequirementType
-	}[]
-	requirements_type: MellowProfileSyncActionRequirementsType
 }
 
 export interface CreateMellowWebhookPayload {
@@ -500,59 +439,5 @@ export interface UserSessionJWT {
 	source_connection_id?: string
 	
 	/**@deprecated */
-	source_connection_type?: UserConnectionType
-}
-
-export type EventResponseItem =
-	GenericEventResponseItem |
-	ConditionalStatementEventResponseItem
-
-export type EventResponseItemKind =
-	'action.mellow.sync_profile' |
-	'action.mellow.member.kick' |
-	'statement.if'
-
-export interface GenericEventResponseItem {
-	kind: 'action.mellow.sync_profile' | 'action.mellow.member.kick'
-}
-
-export interface ConditionalStatementEventResponseItem {
-	kind: 'statement.if'
-	blocks: {
-		items: EventResponseItem[]
-		condition?: {
-			kind: 'generic.is' | 'generic.is_not'
-			inputs: EventResponseStatementInput[]
-		}
-	}[]
-}
-
-export type EventResponseStatementInput =
-	MatchEventResponseStatementInput |
-	VariableEventResponseStatementInput
-
-export interface MatchEventResponseStatementInput {
-	kind: 'match'
-	value: any
-}
-
-export interface VariableEventResponseStatementInput {
-	kind: 'variable'
-	value: string
-}
-
-export type EventResponseVariable = {
-	name?: string
-} & (
-	StringEventResponseVariable |
-	ObjectEventResponseVariable
-)
-
-export interface StringEventResponseVariable {
-	kind: 'string'
-}
-
-export interface ObjectEventResponseVariable {
-	kind: 'object'
-	definition: Record<string, EventResponseVariable>
+	source_connection_type?: UserConnectionKind
 }

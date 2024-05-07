@@ -17,3 +17,14 @@ export interface UpdateMellowUserServerSettingsPayload {
 		id: string
 	}[]
 }
+
+export interface UpdateMellowServerLoggingPayload {
+	channel_id?: string | null
+	event_kinds?: number
+}
+
+export interface CreateMellowServerCommandPayload {
+	name: string
+	kind: 'slash_command'
+	description: string
+}

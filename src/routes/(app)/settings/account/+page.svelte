@@ -2,10 +2,10 @@
 	import { TextInput } from '@hakumi/essence';
 
 	import { t } from '$lib/ui/localisation/index';
-	import { update_user_profile } from '$lib/client/api';
 	import { invalidateAll } from '$app/navigation';
 	import { RequestErrorType } from '$lib/shared/enums';
 	import type { RequestError } from '$lib/shared/types';
+	import { update_user_profile } from '$lib/client/api';
 
 	import UnsavedChanges from '$lib/ui/modals/UnsavedChanges.svelte';
 	export let data;

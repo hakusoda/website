@@ -4,7 +4,7 @@ import { enable_sudo_mode } from '../client/store';
 import { sign_api_request } from '../client/crypto';
 import type { ApiResponse, UserNotification } from './types';
 import { API_BASE, UUID_REGEX, USER_CONNECTION_METADATA } from './constants';
-import { RequestErrorType, UserConnectionType, UserNotificationType } from './enums';
+import { RequestErrorType, UserConnectionKind, UserNotificationType } from './enums';
 export function getDefaultAvatar(id: string) {
 	let hash = 0;
 	for (let i = 0; i < id.length; i++)
@@ -28,7 +28,7 @@ export function get_user_notification_uri({ type, target_user, target_team }: Us
 	return '';
 }
 
-export function getUserConnectionUrl(type: UserConnectionType) {
+export function getUserConnectionUrl(type: UserConnectionKind) {
 	const metadata = USER_CONNECTION_METADATA[type];
 	const redirect = encodeURIComponent(`${API_BASE}/auth/callback/${type}`);
 	return metadata.url.replace('RD143', redirect);
@@ -46,6 +46,16 @@ export const hasOneOfBits = (bits: number, thebits: number[]) => {
 			return true;
 	return false;
 };
+
+export function assert<T>(value: T, error_message?: string): NonNullable<T> {
+	if (!value)
+		throw new TypeError(error_message || 'assertion failed');
+	return value;
+}
+
+export function are_json_equal(a: any, b: any) {
+	return JSON.stringify(a) == JSON.stringify(b);
+}
 
 const UNKNOWN_ERROR = { error: RequestErrorType.Unknown, success: false };
 export async function request<T = any>(path: string, method: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE' = 'GET', body?: any, headers?: Record<string, string>): Promise<ApiResponse<T>> {

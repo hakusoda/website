@@ -10,6 +10,7 @@
 
 	import Link from 'virtual:icons/bi/link-45deg';
 	import GearFill from 'virtual:icons/bi/gear-fill';
+	import Document from '$lib/ui/icons/Document.svelte';
 	import BrandIcon from '$lib/ui/icons/BrandIcon.svelte';
 	import ChevronUp from 'virtual:icons/bi/chevron-up';
 	import MellowIcon from '$lib/ui/icons/MellowIcon.svelte';
@@ -25,10 +26,11 @@
 
 	$: navigation = [
 		[base, HouseDoorFill, 'navigation.mellow.server', true],
+		//[`${base}/commands`, Document, 'navigation.mellow.server.commands'],
 		[`${base}/syncing/actions`, Link, 'navigation.mellow.server.actions'],
 		[`${base}/user_settings`, PersonFill, 'navigation.mellow.server.user_settings'],
 		[`${base}/settings`, GearFill, 'navigation.generic.settings']
-	].filter((_,index) => data.is_member || index === 2) as any[]; 
+	].filter((_,index) => data.is_member || index === 3) as any[]; 
 </script>
 
 <AppLayout

@@ -10,7 +10,7 @@
 	export let data;
 
 	$: splitPath = $page.url.pathname.split('/');
-	$: docsArea = splitPath[1];
+	$: current_section = splitPath[1];
 	$: paths = {
 		docs: [{
 			id: 'api',
@@ -26,10 +26,24 @@
 			id: 'rest-api',
 			icon: CodeSlash
 		}]
-	}[docsArea]!;
+	}[current_section]!;
 
 	$: base = splitPath[2];
-	$: basePath = `/${docsArea}/${base}`;
+	$: section_base_path = `/${current_section}/${base}`;
+
+	$: pages = data.articles
+		.filter(item => item.url !== section_base_path && item.url.startsWith(section_base_path));
+	$: pages2 = Object.entries(
+		pages
+			.sort((a, b) => (a.metadata?.position ?? pages.indexOf(a)) - (b.metadata?.position ?? pages.indexOf(b)))
+			.reduce((acc, value) => {
+				const split = value.url.split('/');
+				const category = split.length === 5 ? `${split[2]}.${split[3]}` : '';
+				(acc[category] ??= []).push(value);
+
+				return acc;
+			}, {} as Record<string, typeof pages>)
+	);
 </script>
 
 <header>
@@ -50,9 +64,10 @@
 		</div>
 		<div class="navigation">
 			{#each paths as path}
-				<a href={`/${docsArea}/${path.id}`} class:active={$page.url.pathname.startsWith(`/${docsArea}/${path.id}`)}>
+				{@const href = `/${current_section}/${path.id}`}
+				<a {href} class:active={$page.url.pathname.startsWith(href)}>
 					<svelte:component this={path.icon}/>
-					{$t(`${docsArea}.articles.${path.id}`)}
+					{$t(`${current_section}.articles.${path.id}`)}
 				</a>
 			{/each}
 		</div>
@@ -61,13 +76,18 @@
 <main>
 	<div class="geist">
 		<div class="navigation">
-			<a href={basePath} class:active={$page.url.pathname === basePath}>
+			<a href={section_base_path} class:active={$page.url.pathname === section_base_path}>
 				{$t('label.overview')}
 			</a>
-			{#each data.articles.filter(item => item.url !== basePath && item.url.startsWith(basePath)) as item}
-				<a href={item.url} class:active={$page.url.pathname === item.url}>
-					{$t(`${docsArea}.articles.${item.url.replace(/^\/\w+\/?/, '').replace(/\//g, '.')}`)}
-				</a>
+			{#each pages2 as [category, items]}
+				{#if category}
+					<p>{$t(`${current_section}.articles.${category}`)}</p>
+				{/if}
+				{#each items as item}
+					<a href={item.url} class:active={$page.url.pathname === item.url}>
+						{$t(`${current_section}.articles.${item.url.replace(/^\/\w+\/?/, '').replace(/\//g, '.')}`)}
+					</a>
+				{/each}
 			{/each}
 		</div>
 		<div class="content">
@@ -143,16 +163,24 @@
 			height: 100%;
 			display: flex;
 			.navigation {
-				gap: 12px;
+				height: 100%;
 				display: flex;
 				padding: 32px 24px;
 				min-width: 256px;
 				border-right: 1px solid var(--border-primary);
 				flex-direction: column;
+				p {
+					margin: 32px 0 6px;
+					font-size: 13px;
+				}
 				a {
+					all: unset;
 					color: hsl(250 20% 90% / 80%);
-					font-size: .9em;
+					height: 32px;
+					display: flex;
+					font-size: 14px;
 					transition: color .1s;
+					align-items: center;
 					&.active, &:hover {
 						color: var(--menu-color-hover);
 						text-decoration: none;

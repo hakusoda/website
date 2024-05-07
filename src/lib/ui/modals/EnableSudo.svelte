@@ -53,36 +53,20 @@
 </script>
 
 <Modal autoOpen>
-	<h1>{$t('enable_sudo_mode')}</h1>
-	<p>{$t('enable_sudo_mode.summary')}</p>
-
-	<div class="buttons">
-		<Button on:click={enable} disabled={enabling}>
-			<KeyFill/>{$t('enable_sudo_mode.continue')}
-		</Button>
-		<form action="dialog">
-			<Button colour="secondary" on:click={() => $sudoModal = $sudoEnabled = false} disabled={enabling}>
-				<X/>{$t('action.cancel')}
-			</Button>
+	<div class="content">
+		<form method="dialog">
+			<button class="top_button" on:click={() => $sudoModal = $sudoEnabled = false} disabled={enabling}>
+				<X/>
+			</button>
 		</form>
 	</div>
+	<div class="footer">
+		<div>
+			<h2>{$t('enable_sudo_mode')}</h2>
+			<p>{$t('enable_sudo_mode.summary')}</p>
+		</div>
+		<button type="button" on:click={enable} disabled={enabling}>
+			{$t('action.verify')}
+		</button>
+	</div>
 </Modal>
-
-<style lang="scss">
-	h1 {
-		margin: 0 auto;
-	}
-	p {
-		color: var(--color-secondary);
-		margin: 16px auto 0;
-		font-size: .9em;
-		text-align: center;
-		line-height: normal;
-		white-space: pre-line;
-	}
-	.buttons {
-		gap: 16px;
-		margin: 48px auto 0;
-		display: flex;
-	}
-</style>

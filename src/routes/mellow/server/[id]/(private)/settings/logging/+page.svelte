@@ -1,59 +1,53 @@
 <script lang="ts">
 	import { Select } from '@hakumi/essence';
 
-	import { t } from '$lib/ui/localisation/index';
+	import { t } from '$lib/ui/localisation';
+	import { page } from '$app/stores';
 	import { hasBit } from '$lib/shared/util';
-	import { deserialize } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 	import type { RequestError } from '$lib/shared/types';
-	import { RequestErrorType, DiscordChannelType, MellowServerLogType } from '$lib/shared/enums';
+	import { parse_update_payload } from '$lib/client/util';
+	import { update_mellow_server_logging } from '$lib/client/api';
+	import { DiscordChannelType, MellowServerLogType } from '$lib/shared/enums';
 
 	import Radio from '$lib/ui/components/Radio.svelte';
 	import UnsavedChanges from '$lib/ui/modals/UnsavedChanges.svelte';
 	export let data;
 
+	let channel_id = data.logging_channel_id;
+	let event_kinds = data.logging_types;
+
 	let error: RequestError | null = null;
 	let saving = false;
 	const save = async () => {
 		saving = !(error = null);
-		const response = await fetch('?/edit', {
-			body: JSON.stringify({
-				types : types === data.logging_types ? undefined : types,
-				channel: channel === data.logging_channel_id ? undefined : channel,
-				channel_name: channel === data.logging_channel_id ? undefined : channel ? `#${data.channels.find(c => c.id === channel)?.name}` : null
-			}),
-            method: 'POST'
-        });
-		const result = deserialize(await response.text());
-		if (result.type === 'success') {
-			await invalidateAll();
-		} else if (result.type === 'failure')
-			error = result.data as any;
-		else if (result.type === 'error')
-			error = { error: RequestErrorType.Offline };
+		const response = await update_mellow_server_logging($page.params.id, parse_update_payload({
+			channel_id: data.logging_channel_id,
+			event_kinds: data.logging_types
+		}, { channel_id, event_kinds }));
+		if (response.success)
+			data.logging_channel_id = channel_id, data.logging_types = event_kinds;
+		else
+			error = response;
 		saving = false;
 	};
-	const reset = () => (types = data.logging_types, channel = data.logging_channel_id);
+	const reset = () => (channel_id = data.logging_channel_id, event_kinds = data.logging_types);
 
-	let channel = data.logging_channel_id;
-
-	let types = data.logging_types;
 	let enabled: boolean[] = [];
 	for (const type of Object.values(MellowServerLogType))
 		if (typeof type === 'number' && type)
-			enabled[type] = hasBit(types, type);
+			enabled[type] = hasBit(event_kinds, type);
 
 	$: {
 		let newTypes = 0;
 		for (const [type, value] of Object.entries(enabled))
 			if (value)
 				newTypes += parseInt(type);
-		types = newTypes;
+		event_kinds = newTypes;
 	}
 </script>
 
 <p class="input-label">{$t('mellow.server.settings.automation.logging.channel')}</p>
-<Select.Root bind:value={channel}>
+<Select.Root withSearch bind:value={channel_id}>
 	<Select.Item value={null}>
 		{$t('label.disabled')}
 	</Select.Item>
@@ -82,7 +76,7 @@
 </div>
 
 <UnsavedChanges
-	show={types !== data.logging_types || channel !== data.logging_channel_id}
+	show={channel_id !== data.logging_channel_id || event_kinds !== data.logging_types}
 	error={error ? $t(`request_error.${error.error}`) : ''}
 	{save}
 	{reset}

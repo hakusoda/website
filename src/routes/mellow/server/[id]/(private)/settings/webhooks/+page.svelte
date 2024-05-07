@@ -23,48 +23,46 @@
 </script>
 
 <div class="header">
-	<h2>{$t('mellow.server.settings.automation.webhooks')}</h2>
+	<h2>{$t('mellow.server.settings.automation.webhooks')} (not yet finished, sorry!)</h2>
 	<p>{$t('mellow.server.settings.automation.webhooks.summary')}</p>
 </div>
 <div class="controls">
 	<TextInput bind:value={itemFilter} placeholder={$t('action.search')}/>
-	<Button>
+	<Button disabled>
 		<Plus/>{$t('mellow.server.settings.automation.webhooks.create')}
 	</Button>
 </div>
-{#await data.webhooks then items}
-	<div class="items">
-		{#each items.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item}
-			<a class="item" href={`/mellow/server/${$page.params.id}/settings/webhooks/${item.id}`}>
-				<div class="info">
-					<h1>{item.name}</h1>
-					<div class="details">
-						<p>
-							<Sunrise/>
-							{$t('time_ago', [item.created_at])}
-							{#if item.creator}
-								{$t('label.by')}
-								<a href={`/user/${item.creator.username}`}>
-									{item.creator.name ?? `@${item.creator.username}`}
-								</a>
-							{/if}
-						</p>
-						<p>
-							<Link/>
-							<a href={item.target_url} target="_blank">
-								{item.target_url}
+<div class="items">
+	{#each data.webhooks.filter(item => item.name.toLowerCase().includes(itemFilter.toLowerCase())) as item}
+		<a class="item" href={`/mellow/server/${$page.params.id}/settings/webhooks/${item.id}`}>
+			<div class="info">
+				<h1>{item.name}</h1>
+				<div class="details">
+					<p>
+						<Sunrise/>
+						{$t('time_ago', [item.created_at])}
+						{#if item.creator}
+							{$t('label.by')}
+							<a href={`/user/${item.creator.username}`}>
+								{item.creator.name ?? `@${item.creator.username}`}
 							</a>
-						</p>
-						<p>
-							<SendFill/>
-							{$t('label.events', [calculateEvents(item)])}
-						</p>
-					</div>
+						{/if}
+					</p>
+					<p>
+						<Link/>
+						<a href={item.target_url} target="_blank">
+							{item.target_url}
+						</a>
+					</p>
+					<p>
+						<SendFill/>
+						{$t('label.events', [calculateEvents(item)])}
+					</p>
 				</div>
-			</a>
-		{/each}
-	</div>
-{/await}
+			</div>
+		</a>
+	{/each}
+</div>
 
 <style lang="scss">
 	.controls {

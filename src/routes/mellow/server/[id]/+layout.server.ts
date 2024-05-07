@@ -3,13 +3,16 @@ import { RequestErrorType } from '$lib/shared/enums';
 import supabase, { handle_response } from '$lib/server/supabase';
 import { get_discord_server_member_from_platform_user } from '$lib/server/discord';
 export const load = async ({ params: { id }, locals: { session } }) => {
+	if (!session)
+		throw requestError(401, RequestErrorType.Unauthenticated);
+
 	const response = await supabase.rpc('mellow_server_accessible_by_user2', {
-		user_id: session!.sub,
+		user_id: session.sub,
 		server_id: id
 	});
 	handle_response(response);
 
-	const discord_member = await get_discord_server_member_from_platform_user(id, session!.sub);
+	const discord_member = await get_discord_server_member_from_platform_user(id, session.sub);
 	if (!response.data && !discord_member)
 		throw requestError(404, RequestErrorType.Unauthorised);
 

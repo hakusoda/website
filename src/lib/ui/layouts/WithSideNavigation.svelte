@@ -3,7 +3,7 @@
 
 	import { t } from '$lib/ui/localisation';
 	import { page } from '$app/stores';
-	export let items: (string | [string, typeof SvelteComponent<any>?, string?, boolean?])[] = [];
+	export let items: (string | [string | (() => void), typeof SvelteComponent<any>?, string?, boolean?])[] = [];
 </script>
 
 <div class="with-side-navigation geist">
@@ -16,10 +16,18 @@
 					<p>{$t(item)}</p>
 				{/if}
 			{:else}
-				<a href={item[0]} class:active={$page.url.pathname === item[0]} class:disabled={item[3]}>
-					<svelte:component this={item[1]}/>
-					{$t(item[2] ?? `side_navigation${item[0].replace(/\//g, '.')}`)}
-				</a>
+				{@const [target, icon, display_name, disabled] = item}
+				{#if typeof target === 'string'}
+					<a href={target} class:active={$page.url.pathname === target} class:disabled>
+						<svelte:component this={icon}/>
+						{$t(display_name ?? `side_navigation${target.replace(/\//g, '.')}`)}
+					</a>
+				{:else}
+					<button type="button" on:click={target} class:disabled>
+						<svelte:component this={icon}/>
+						{display_name ? $t(display_name) : 'untitled'}
+					</button>
+				{/if}
 			{/if}
 		{/each}
 	</div>
@@ -44,7 +52,8 @@
 				margin: 32px 0 6px;
 				font-size: 12px;
 			}
-			a {
+			a, button {
+				all: unset;
 				gap: 12px;
 				color: hsl(250 20% 90% / 80%);
 				height: 32px;

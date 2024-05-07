@@ -1,15 +1,19 @@
 import { get } from 'svelte/store';
+import type { GroupRole } from '@hakumi/roblox-open-cloud';
 
 import { page } from '$app/stores';
 import { request } from '../shared/util';
+import * as Mellow from '../shared/types/mellow';
+import * as VisualScripting from '../shared/types/visual_scripting';
 import type {
 	MellowServer,
+	CreateMellowServerCommandPayload,
+	UpdateMellowServerLoggingPayload,
 	UpdateMellowUserServerSettingsPayload
 } from './types';
 import type {
 	Pagination,
 	ActionLogItem,
-	EventResponseItem,
 	UpdateTeamPayload,
 	CreateTeamResponse,
 	VerifySignInPayload,
@@ -25,8 +29,6 @@ import type {
 	CreateMellowWebhookPayload,
 	GenerateMellowServerApiKeyResponse,
 	UpdateMellowServerOwnershipPayload,
-	CreateMellowProfileSyncActionPayload,
-	CreateMellowProfileSyncActionResponse,
 	UpdateMellowServerProfileSyncingSettingsPayload
 } from '../shared/types';
 import { get_auth_public_key } from './crypto';
@@ -118,21 +120,32 @@ export function updateMellowServerOwnership(server_id: string, payload: UpdateMe
 }
 
 export function updateMellowServerProfileSyncingSettings(server_id: string, payload: UpdateMellowServerProfileSyncingSettingsPayload) {
-	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${server_id}/syncing/settings`, 'PATCH', payload);
+	return request(`mellow/server/${server_id}/syncing/settings`, 'PATCH', payload);
 }
 
-export function create_mellow_sync_action(server_id: string, payload: CreateMellowProfileSyncActionPayload) {
-	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${server_id}/syncing/action`, 'POST', payload);
+// mellow commands
+export function create_mellow_command(server_id: string, payload: CreateMellowServerCommandPayload) {
+	return request(`mellow/server/${server_id}/commands`, 'POST', payload);
 }
 
-export function update_mellow_sync_action(server_id: string, action_id: string, payload: Partial<CreateMellowProfileSyncActionPayload>) {
-	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${server_id}/syncing/action/${action_id}`, 'PATCH', payload);
+export function update_mellow_command(server_id: string, command_id: string, payload: Partial<CreateMellowServerCommandPayload>) {
+	return request(`mellow/server/${server_id}/command/${command_id}`, 'PATCH', payload);
+}
+
+// mellow sync actions
+export function create_mellow_sync_action(server_id: string, payload: Mellow.Syncing.SyncAction) {
+	return request<Mellow.Syncing.InternalSyncAction>(`mellow/server/${server_id}/syncing/action`, 'POST', payload);
+}
+
+export function update_mellow_sync_action(server_id: string, action_id: string, payload: Partial<Mellow.Syncing.SyncAction>) {
+	return request<Mellow.Syncing.InternalSyncAction>(`mellow/server/${server_id}/syncing/action/${action_id}`, 'PATCH', payload);
 }
 
 export function delete_mellow_sync_action(server_id: string, action_id: string) {
-	return request<CreateMellowProfileSyncActionResponse>(`mellow/server/${server_id}/syncing/action/${action_id}`, 'DELETE');
+	return request(`mellow/server/${server_id}/syncing/action/${action_id}`, 'DELETE');
 }
 
+// mellow webhooks
 export function create_mellow_server_webhook(server_id: string, payload: CreateMellowWebhookPayload) {
 	return request(`mellow/server/${server_id}/webhook`, 'POST', payload);
 }
@@ -145,8 +158,21 @@ export function delete_mellow_server_webhook(server_id: string, webhook_id: stri
 	return request(`mellow/server/${server_id}/webhook/${webhook_id}`, 'DELETE');
 }
 
-export function update_mellow_server_event(server_id: string, event_name: string, payload: EventResponseItem[]) {
-	return request(`mellow/server/${server_id}/automation/events/${event_name}`, 'PATCH', payload);
+// other
+export function create_mellow_server_visual_scripting_document(server_id: string, payload: Omit<VisualScripting.Document, 'id' | 'created_by'>) {
+	return request<VisualScripting.Document>(`mellow/server/${server_id}/visual_scripting/documents`, 'POST', payload);
+}
+
+export function update_mellow_server_logging(server_id: string, payload: UpdateMellowServerLoggingPayload) {
+	return request(`mellow/server/${server_id}/automation/logging`, 'PATCH', payload);
+}
+
+export function send_mellow_syncing_auto_import_request(server_id: string, payload: Mellow.Syncing.AutoImportRequest) {
+	return request<Mellow.Syncing.InternalSyncAction[]>(`mellow/server/${server_id}/syncing/actions/auto_import`, 'POST', payload);
+}
+
+export function get_roblox_group_roles_for_mellow_server(server_id: string, group_id: string | number) {
+	return request<GroupRole[]>(`mellow/server/${server_id}/roblox/group/${group_id}/roles`);
 }
 
 export function generateMellowServerApiKey(server_id: string) {
@@ -218,6 +244,10 @@ export async function recoverAccountViaLink(id: string) {
 		id,
 		device_public_key: await get_auth_public_key()
 	});
+}
+
+export function update_visual_scripting_document(document_id: string, payload: Partial<Omit<VisualScripting.Document, 'id' | 'created_by'>>) {
+	return request(`visual_scripting/document/${document_id}`, 'PATCH', payload);
 }
 
 function getPlatformVersion() {

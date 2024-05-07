@@ -1,11 +1,11 @@
-import type { UserConnectionType } from '$lib/shared/enums';
+import type { UserConnectionKind } from '$lib/shared/enums';
 import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ locals: { session } }) {
 	const response = await supabase.from('user_connections')
 		.select<string, {
 			id: string
 			sub: string
-			type: UserConnectionType
+			type: UserConnectionKind
 			username: string | null
 			created_at: string
 			avatar_url: string | null

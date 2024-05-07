@@ -2,7 +2,7 @@ import { PUBLIC_DISCORD_ID } from '$env/static/public';
 import { MELLOW_TOKEN, DISCORD_SECRET } from '$env/static/private';
 
 import { request } from '../shared/util';
-import { UserConnectionType } from '../shared/enums';
+import { UserConnectionKind } from '../shared/enums';
 import supabase, { handle_response } from './supabase';
 import type { DiscordRole, DiscordServer, DiscordChannel } from '../shared/types';
 export function getDiscordServer(server_id: string) {
@@ -32,7 +32,7 @@ export function get_discord_server_member(server_id: string, user_id: string) {
 export async function get_discord_server_member_from_platform_user(server_id: string, user_id: string): Promise<DiscordMember | null> {
 	const response = handle_response(await supabase.from('user_connections')
 		.select('sub')
-		.eq('type', UserConnectionType.Discord)
+		.eq('type', UserConnectionKind.Discord)
 		.eq('user_id', user_id)
 		.limit(1)
 		.maybeSingle()

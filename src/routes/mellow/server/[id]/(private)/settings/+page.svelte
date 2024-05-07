@@ -10,7 +10,6 @@
 	import TeamSelect from '$lib/ui/components/TeamSelect.svelte';
 
 	import X from 'virtual:icons/bi/x-lg';
-	import Check from 'virtual:icons/bi/check-lg';
 	import PeopleFill from 'virtual:icons/bi/people-fill';
 	export let data;
 
@@ -51,25 +50,31 @@
 </Button>
 
 <Modal bind:trigger>
-	<h1>{$t('mellow.server.settings.general.transfer')}</h1>
-	<TeamSelect bind:value/>
-
-	<div class="buttons">
-		<Button on:click={transfer} disabled={!value || transferring}>
-			<Check/>{$t('action.continue')}
-		</Button>
-		<form method="dialog">
-			<Button colour="secondary">
-				<X/>{$t('action.cancel')}
-			</Button>
-		</form>
+	<div class="content">
+		<TeamSelect bind:value/>
+		<button class="top_button" type="button" on:click={trigger} disabled={transferring}>
+			<X/>
+		</button>
+	</div>
+	<div class="footer">
+		<div>
+			{#if value}
+				{@const team = data.user?.teams.find(item => item.team.id === value)?.team}
+				<h2>{$t('modal.transfer_to_team.selected', [team?.display_name ?? team?.name])}</h2>
+				<p>{$t('modal.transfer_to_team.selected.note')}</p>
+			{:else}
+				<h2>{$t('modal.transfer_to_team')}</h2>
+				<p>{$t('modal.transfer_to_team.note')}</p>
+			{/if}
+		</div>
+		<button type="button" on:click={transfer} disabled={!value || transferring}>
+			{$t('action.transfer')}
+		</button>
 	</div>
 </Modal>
 
 <style lang="scss">
-	.buttons {
-		gap: 16px;
-		margin: 24px 0 0;
+	.content {
 		display: flex;
 	}
 </style>

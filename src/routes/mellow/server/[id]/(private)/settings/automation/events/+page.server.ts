@@ -1,14 +1,10 @@
-import type { EventResponseItem } from '$lib/shared/types';
+import type { Document } from '$lib/shared/types/visual_scripting';
 import supabase, { handle_response } from '$lib/server/supabase';
 export async function load({ params: { id } }) {
-	const response = await supabase.from('mellow_servers')
-		.select<string, {
-			member_join_event_response_tree: EventResponseItem[]
-		}>('member_join_event_response_tree')
-		.eq('id', id)
-		.limit(1)
-		.single();
-	handle_response(response);
+	const response = handle_response(await supabase.from('visual_scripting_documents')
+		.select<string, Document>('id, name, kind, definition, created_by:users ( id, name, username, avatar_url )')
+		.eq('mellow_server_id', id)
+	);
 
-	return response.data!;
+	return { documents: response.data! };
 }

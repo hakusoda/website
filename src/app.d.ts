@@ -13,6 +13,7 @@ declare global {
 				username: string
 				avatar_url: string | null
 				created_at: string
+				accent_colour: number
 				teams: {
 					team: {
 						id: string

@@ -20,7 +20,7 @@
 		'mellow.server.settings.automation',
 		[`${base}/automation/events`, Calendar3, 'mellow.server.settings.automation.events'],
 		[`${base}/logging`, Discord, 'mellow.server.settings.1'],
-		[`${base}/webhooks`, Webhook, 'mellow.server.settings.3'],
+		//[`${base}/webhooks`, Webhook, 'mellow.server.settings.3'],
 		'mellow.server.settings.developer',
 		[`${base}/developer/api`, CodeSlash, 'mellow.server.settings.developer.api']
 	] as any[];

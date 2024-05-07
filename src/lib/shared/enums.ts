@@ -18,7 +18,7 @@ export enum UserNotificationState {
 	Read
 }
 
-export enum UserConnectionType {
+export enum UserConnectionKind {
 	Discord,
 	GitHub,
 	Roblox,
@@ -46,36 +46,11 @@ export enum FeatureFlag {
 	UserConnections = 1 << 1
 }
 
-export enum MellowProfileSyncActionType {
-	GiveRoles,
-	BanFromServer,
-	KickFromServer,
-	CancelSync
-}
-export enum MellowProfileSyncActionRequirementType {
-	RobloxHaveConnection,
-	RobloxHaveGroupRole,
-	RobloxHaveGroupRankInRange,
-	RobloxInGroup,
-	RobloxBeFriendsWith,
-	MeetOtherAction,
-	HAKUMIInTeam,
-	SteamInGroup,
-	RobloxHaveAsset,
-	RobloxHaveBadge,
-	RobloxHavePass,
-	GitHubInOrganisation,
-	PatreonHaveCampaignTier
-}
-export enum MellowProfileSyncActionRequirementsType {
-	MeetAll,
-	MeetOne
-}
-
 export enum MellowServerLogType {
 	None,
-	AuditLog = 1 << 0,
-	ServerProfileSync = 1 << 1
+	ActionLog = 1 << 0,
+	ServerProfileSync = 1 << 1,
+	VisualScriptingDocumentResult = 1 << 3
 }
 
 export enum MellowWebhookEventType {
@@ -94,7 +69,6 @@ export enum RequestErrorType {
 	InvalidBody,
 	Unauthenticated,
 	DatabaseUpdate,
-	MellowLinkRequirementMissingRole,
 	Offline,
 	Unknown,
 	Unauthorised,

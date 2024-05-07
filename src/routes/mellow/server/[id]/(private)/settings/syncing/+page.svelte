@@ -7,7 +7,7 @@
 	import type { ApiRequestError } from '$lib/shared/types';
 	import { API_BASE, USER_CONNECTION_METADATA } from '$lib/shared/constants';
 	import { updateMellowServerProfileSyncingSettings } from '$lib/client/api';
-	import { UserConnectionType, MellowDefaultNickname } from '$lib/shared/enums';
+	import { UserConnectionKind, MellowDefaultNickname } from '$lib/shared/enums';
 
 	import Radio from '$lib/ui/components/Radio.svelte';
 	import UnsavedChanges from '$lib/ui/modals/UnsavedChanges.svelte';
@@ -41,7 +41,6 @@
 </script>
 
 <p class="input-label">{$t('mellow.server.settings.syncing.settings.nickname')}</p>
-<p class="summary">{$t('mellow.server.settings.syncing.settings.nickname.summary')}</p>
 <Select.Root bind:value={defaultNickname}>
 	{#each Object.values(MellowDefaultNickname) as item}
 		{#if !/^[A-Z]/.test(item)}
@@ -60,7 +59,7 @@
 	<Select.Item value={null}>
 		{$t('mellow.server.settings.syncing.settings.skip_onboarding.default')}
 	</Select.Item>
-	{#each Object.values(UserConnectionType) as item}
+	{#each Object.values(UserConnectionKind) as item}
 		{#if typeof item === 'number' && item}
 			<Select.Item value={item}>
 				<svelte:component this={USER_CONNECTION_METADATA[item]?.icon}/>

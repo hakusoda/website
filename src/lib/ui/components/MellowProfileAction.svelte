@@ -3,9 +3,9 @@
 
 	import { t } from '$lib/ui/localisation';
 	import { page } from '$app/stores';
-	import { MAPPED_MELLOW_SYNC_ACTION_ICONS } from '$lib/shared/constants';
+	import { SYNC_ACTION_ICONS } from '$lib/client/model/mellow/syncing';
 	import { delete_mellow_sync_action } from '$lib/client/api';
-	import type { MellowProfileSyncActionType, MellowProfileSyncActionRequirementsType } from '$lib/shared/enums';
+	import type { Criteria, SyncActionKind, InternalSyncAction } from '$lib/shared/types/mellow/syncing';
 
 	import Trash from 'virtual:icons/bi/trash';
 	import Sunrise from 'virtual:icons/bi/sunrise';
@@ -15,18 +15,19 @@
 	import UIChecksGrid from 'virtual:icons/bi/ui-checks-grid';
 	import ClipboardPlusFill from 'virtual:icons/bi/clipboard-plus-fill';
 	export let id: string;
-	export let name: string;
-	export let type: MellowProfileSyncActionType;
+	export let kind: SyncActionKind;
+	export let creator: InternalSyncAction['creator'] = null;
+	export let criteria: Criteria;
+	export let created_at: string | null = null;
+	export let updated_at: string | null = null;
+	export let updated_by: InternalSyncAction['updated_by'] = null;
+	export let display_name: string;
+
 	export let index: number;
 	export let items: HTMLAnchorElement[];
 	export let remove: () => void;
-	export let creator: { name: string | null, username: string } | null = null;
 	export let server_id: string;
-	export let last_edit: { author: { name: string | null, username: string }, created_at: string } | null = null;
-	export let created_at: string;
 	export let highlighted: boolean;
-	export let requirements: unknown[];
-	export let requirements_type: MellowProfileSyncActionRequirementsType;
 
 	let trigger: () => void;
 	let deleting = false;
@@ -43,38 +44,42 @@
 
 <a class="mellow-profile-action" href={`/mellow/server/${$page.params.id}/syncing/actions/${id}`} class:highlighted bind:this={items[index]}>
 	<div class="info">
-		<h1>{name}</h1>
+		<h1>{display_name}</h1>
 		<div class="details">
-			<p>
-				<Sunrise/>
-				{$t('time_ago', [created_at])}
-				{#if creator}
-					{$t('label.by')}
-					<a href={`/user/${creator.username}`}>
-						{creator.name ?? `@${creator.username}`}
-					</a>
-				{/if}
-			</p>
-			{#if last_edit}
+			{#if created_at}
+				<p>
+					<Sunrise/>
+					{$t('time_ago', [created_at])}
+					{#if creator}
+						{$t('label.by')}
+						<a href={`/user/${creator.username}`}>
+							{creator.name ?? `@${creator.username}`}
+						</a>
+					{/if}
+				</p>
+			{/if}
+			{#if updated_at !== created_at}
 				<p>
 					<PencilFill/>
-					<a href={`/user/${last_edit.author.username}`}>
-						{last_edit.author.name ?? `@${last_edit.author.username}`}
-					</a>
-					{$t('time_ago', [last_edit.created_at])}
+					{#if updated_by}
+						<a href={`/user/${updated_by.username}`}>
+							{updated_by.name ?? `@${updated_by.username}`}
+						</a>
+					{/if}
+					{$t('time_ago', [updated_at])}
 				</p>
 			{/if}
 			<p>
-				<svelte:component this={MAPPED_MELLOW_SYNC_ACTION_ICONS[type]}/>
-				{$t(`mellow_sync_action.type.${type}.full`)}
+				<svelte:component this={SYNC_ACTION_ICONS[kind]}/>
+				{$t(`mellow_sync_action.kind.${kind}`)}
 			</p>
 			<p>
-				{#if requirements_type}
+				{#if criteria.quantifier.kind === 'at_least'}
 					<UIChecksGrid/>
 				{:else}
 					<GridFill/>
 				{/if}
-				{$t('mellow_sync_action.requirements', [requirements.length])}
+				{$t('mellow_sync_action.criteria_items', [criteria.items.length])}
 			</p>
 		</div>
 	</div>
@@ -83,7 +88,7 @@
 	</button>
 </a>
 <ContextMenu.Root bind:trigger>
-	<p>{name}</p>
+	<p>{display_name}</p>
 	<a href={`/mellow/server/${$page.params.id}/syncing/actions/create?clone_from_id=${id}`}>
 		<ClipboardPlusFill/>{$t('action.clone')}
 	</a>

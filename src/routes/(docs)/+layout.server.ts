@@ -1,6 +1,8 @@
 export function load() {
 	const modules: Record<string, {
-		metadata: {}
+		metadata?: {
+			position?: number
+		}
 	}> = import.meta.glob('./**/*.md', { eager: true });
 	return {
 		articles: Object.entries(modules).map(([path, { metadata }]) => ({

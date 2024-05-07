@@ -4,7 +4,7 @@
 	import { t } from '../localisation';
 	import { invalidateAll } from '$app/navigation';
 	import { removeUserConnection } from '$lib/client/api';
-	import type { UserConnectionType } from '$lib/shared/enums';
+	import type { UserConnectionKind } from '$lib/shared/enums';
 	import { USER_CONNECTION_METADATA } from '$lib/shared/constants';
 
 	import X from 'virtual:icons/bi/x-lg';
@@ -13,7 +13,7 @@
 
 	export let id: string;
 	export let sub: string;
-	export let type: UserConnectionType;
+	export let type: UserConnectionKind;
 	export let username: string | null;
 	export let created_at: string;
 	export let avatar_url: string | null;

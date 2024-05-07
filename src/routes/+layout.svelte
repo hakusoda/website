@@ -25,8 +25,7 @@
 
 	const editorSaving = editor.isSaving;
 	const editorCanSave = editor.canSave;
-
-	$: editorTargetId = $page.params.role_id || $page.params.action_id || $page.params.webhook_id;
+	$: editorTargetId = $page.params?.role_id || $page.params?.action_id || $page.params?.webhook_id || $page.params?.command_id;
 	$: editorCreating = editorTargetId === 'create';
 </script>
 

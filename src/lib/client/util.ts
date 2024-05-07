@@ -1,12 +1,13 @@
-import type { EventResponseItem, EventResponseItemKind } from "$lib/shared/types";
-
-// is there a way to have this return the type associated with the provided kind?
-export function create_event_response_item(kind: EventResponseItemKind): EventResponseItem {
-	if (kind === 'action.mellow.sync_profile')
-		return { kind };
-	else if (kind === 'statement.if')
-		return { kind, blocks: [] };
-	throw new TypeError(`${kind} is not a valid kind`);
+import type { ActionLogItem } from '$lib/shared/types';
+export function get_data_change_value(data_change?: ActionLogItem['data_changes'][number]): any {
+	if (!data_change)
+		return null;
+	
+	if (data_change.kind === 'created')
+		return data_change.value;
+	else if (data_change.kind === 'updated')
+		return data_change.new_value;
+	return data_change.old_value;
 }
 
 export function parse_update_payload<T extends Record<any, any>>(old: Record<any, any>, new_: T): T {

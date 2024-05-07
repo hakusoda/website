@@ -1,31 +1,31 @@
 <script lang="ts">
-	import { Button, TextInput } from '@hakumi/essence';
+	import { TextInput } from '@hakumi/essence';
 
-	import { t } from '$lib/ui/localisation';
+	import { t } from '../localisation';
 	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
 	import { getDefaultAvatar } from '$lib/shared/util';
 	import type { ApiRequestError } from '$lib/shared/types';
 	import { update_user_avatar, update_user_profile } from '$lib/client/api';
 
-	import Modal from '$lib/ui/components/Modal.svelte';
-	import Avatar from '$lib/ui/components/Avatar.svelte';
-	import AvatarFile from '$lib/ui/components/AvatarFile.svelte';
-	import RequestError from '$lib/ui/components/RequestError.svelte';
+	import Modal from '../components/Modal.svelte';
+	import Avatar from '../components/Avatar.svelte';
+	import AvatarFile from '../components/AvatarFile.svelte';
+	import PageSlider from '../components/PageSlider.svelte';
+	import RequestError from '../components/RequestError.svelte';
 
 	import X from 'virtual:icons/bi/x-lg';
-	import Check from 'virtual:icons/bi/check-lg';
-	import Hourglass from 'virtual:icons/bi/hourglass';
-	import WavingHandEmoji from '$lib/ui/icons/WavingHandEmoji.svelte';
+
+	$: user = $page.data.user!;
 
 	let name = '';
-	let state = 0;
+	let state = false;
 	let error: ApiRequestError | null = null;
 	let finishing = false;
 
-	let newAvatar: Uint8Array | null = null;
-	let newAvatarUri: string | null = null;
-	const finish = async () => {
+	let new_avatar: Uint8Array | null = null;
+	let new_avatar_url: string | null = null;
+	const finish_setup = async () => {
 		finishing = !(error = null);
 		
 		const name2 = name || user.username;
@@ -36,104 +36,122 @@
 		if (!response.success)
 			return finishing = !(error = response.error);
 
-		if (newAvatar) {
-			const response = await update_user_avatar(user.id, newAvatar);
+		if (new_avatar) {
+			const response = await update_user_avatar(user.id, new_avatar);
 			if (!response.success)
 				return finishing = !(error = response.error);
 		}
 
-		state++;
+		state = true;
 	};
 
-	$: user = $page.data.user!;
+	$: avatar_url = new_avatar_url || user?.avatar_url || getDefaultAvatar(user?.id);
 </script>
 
 <Modal autoOpen>
-	{#if !state}
-		<h1>{$t('modal.setup_profile')}</h1>
-		<p class="summary">{$t('modal.setup_profile.summary')}</p>
-
-		<div class="input-row">
-			<p class="input-column">
-				{$t('profile.name')}
-				<TextInput bind:value={name} placeholder={user.username}/>
-			</p>
-			<p class="input-column">
-				{$t('profile.avatar')}
-				<AvatarFile
-					name={name || user.username}
-					image={newAvatarUri ?? getDefaultAvatar(user.id)}
-					bind:result={newAvatar}
-					bind:resultUri={newAvatarUri}
-				/>
-			</p>
+	<PageSlider position={state ? 1 : 0}>
+		<div class="content">
+			<div class="input_row">
+				<div>
+					<p>{$t('profile.name')}</p>
+					<TextInput bind:value={name} placeholder={user.name || user.username}/>
+				</div>
+				<div>
+					<p>{$t('profile.avatar')}</p>
+					<AvatarFile
+						name={name || user.username}
+						image={avatar_url}
+						bind:result={new_avatar}
+						bind:resultUri={new_avatar_url}
+					/>
+				</div>
+				<form method="dialog">
+					<button class="top_button">
+						<X/>
+					</button>
+				</form>
+			</div>
+	
+			<RequestError data={error}/>
 		</div>
-
-		<RequestError data={error}/>
-		<div class="buttons">
-			<Button on:click={finish} disabled={finishing}>
-				{#if finishing}
-					<Hourglass/>
-				{:else}
-					<Check/>
-				{/if}
+		<div class="content welcome">
+			<div class="user" style={`--b: url("${avatar_url}");`}>
+				<Avatar id={user.id} src={avatar_url} size="md" circle transparent/>
+				<div>
+					<h2>{name || user.name || user.username}</h2>
+					<p>joined the community {$t('days_ago', [user.created_at])}!</p>
+				</div>
+			</div>
+		</div>
+	</PageSlider>
+	<div class="footer">
+		{#if state}
+			<div>
+				<h2>{$t('modal.setup_profile.welcome')}</h2>
+				<p>{$t('modal.setup_profile.welcome.summary')}</p>
+			</div>
+			<button on:click={invalidateAll}>
+				{$t('action.confirm')}
+			</button>
+		{:else}
+			<div>
+				<h2>{$t('modal.setup_profile')}</h2>
+				<p>{$t('modal.setup_profile.summary')}</p>
+			</div>
+			<button on:click={finish_setup} disabled={finishing}>
 				{$t('action.continue')}
-			</Button>
-			<form method="dialog">
-				<Button colour="secondary" disabled={finishing}>
-					<X/>{$t('action.later')}
-				</Button>
-			</form>
-		</div>
-	{:else}
-		<div class="header">
-			<Avatar id={user.id} src={newAvatarUri} size="md" hover circle/>
-			<WavingHandEmoji size={80}/>
-		</div>
-
-		<h1>{$t('modal.setup_profile.welcome')}</h1>
-		<p class="summary">{$t('modal.setup_profile.welcome.summary', [name])}</p>
-
-		<div class="buttons">
-			<Button on:click={() => invalidateAll()}>
-				<Check/>{$t('action.acknowledge')}
-			</Button>
-		</div>
-	{/if}
+			</button>
+		{/if}
+	</div>
 </Modal>
 
 <style lang="scss">
-	.header, h1, .summary, .buttons {
-		margin-left: auto;
-		margin-right: auto;
-	}
-	.header {
-		gap: 48px;
+	.welcome {
+		height: 160px;
 		display: flex;
-		position: relative;
-		margin-top: 16px;
-		align-items: center;
-		margin-bottom: 16px;
-	}
-	.summary {
-		color: var(--color-secondary);
-		margin-bottom: 16px;
-	}
-	.input-row {
-		gap: 32px;
-		margin: 32px 0 16px;
-		display: flex;
-		.input-column {
-			gap: 8px;
-			color: var(--color-secondary);
+		.user {
+			gap: 32px;
+			margin: auto;
 			display: flex;
-			font-size: .9em;
-			flex-direction: column;
+			position: relative;
+			align-items: center;
+			h2 {
+				margin: 0;
+				font-size: 2em;
+				font-weight: 650;
+			}
+			p {
+				margin: 0;
+				mix-blend-mode: overlay;
+			}
+			&:before {
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				filter: blur(64px);
+				z-index: -1;
+				content: '';
+				position: absolute;
+				background: var(--b);
+				background-size: 100% 100%;
+			}
 		}
 	}
-	.buttons {
-		gap: 16px;
-		display: flex;
-		margin-top: 16px;
+	.content {
+		.input_row {
+			gap: 32px;
+			display: flex;
+			div {
+				gap: 8px;
+				display: flex;
+				flex-direction: column;
+				p {
+					margin: 0;
+					font-size: .9em;
+					font-weight: 450;
+				}
+			}
+		}
 	}
 </style>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from '$lib/ui/localisation/index';
-	import { UserConnectionType } from '$lib/shared/enums';
+	import { UserConnectionKind } from '$lib/shared/enums';
 	import { getUserConnectionUrl } from '$lib/shared/util';
 	import { USER_CONNECTION_METADATA } from '$lib/shared/constants';
 
@@ -9,7 +9,7 @@
 	import ExclamationOctagonFill from 'virtual:icons/bi/exclamation-octagon-fill.svelte';
 	export let data;
 
-	let exists: UserConnectionType | null = null;
+	let exists: UserConnectionKind | null = null;
 </script>
 
 <div class="header">
@@ -19,8 +19,8 @@
 
 <p class="add">{$t('settings.account.connections.add')}</p>
 <div class="connection-types">
-	{#each Object.values(UserConnectionType) as item}
-		{#if typeof item === 'number' && item !== UserConnectionType.YouTube}
+	{#each Object.values(UserConnectionKind) as item}
+		{#if typeof item === 'number' && item !== UserConnectionKind.YouTube}
 			<a class="item focusable" href={getUserConnectionUrl(item)} style={`--bg: ${USER_CONNECTION_METADATA[item]?.colour}; color: ${USER_CONNECTION_METADATA[item]?.text_colour || 'unset'}`}>
 				<svelte:component this={USER_CONNECTION_METADATA[item]?.icon} fill={USER_CONNECTION_METADATA[item]?.icon_colour}/>{$t(`user_connection.type.${item}`)}
 			</a>

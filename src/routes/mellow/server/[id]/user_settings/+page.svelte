@@ -3,7 +3,7 @@
 
 	import { t } from '$lib/ui/localisation';
 	import { page } from '$app/stores';
-	import type { UserConnectionType } from '$lib/shared/enums';
+	import type { UserConnectionKind } from '$lib/shared/enums';
 	import { clone_json, getUserConnectionUrl } from '$lib/shared/util';
 	import { update_mellow_user_server_settings } from '$lib/client/api';
 
@@ -33,7 +33,7 @@
 			original_server_user_connections = clone_json(filtered_connections);
 		saving = false;
 	};
-	const add_connection = (connection_kind: UserConnectionType, override_id?: string) => {
+	const add_connection = (connection_kind: UserConnectionKind, override_id?: string) => {
 		adding_connection = true;
 
 		const new_window = window.open(getUserConnectionUrl(connection_kind) + `&state=mellow_user_settings`, 'mellow_user_settings', {

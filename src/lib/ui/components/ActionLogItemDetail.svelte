@@ -2,11 +2,13 @@
 	import { t } from '../localisation';
 	export let tv: string | null = null;
 	export let name = 'unknown';
-	export let type: 'changed' | 'rename' | 'with' | 'with2' = 'changed';
+	export let type: 'changed' | 'rename' | 'with' | 'with2' = (name === 'name' || name === 'display_name') ? 'rename' : 'changed';
 	export let value: any = null;
 	export let change: [any, any] | undefined | null = null;
 
 	const mapValue = (value: any) => value !== null ? tv ? $t(tv.replace('%', value) as '143') : value : $t('label.none');
+
+	$: display_name = name === 'display_name' ? 'name' : name;
 </script>
 
 {#if value || !change || (change[0] !== change[1] && change[1] !== null)}
@@ -15,22 +17,22 @@
 			{#if change && type === 'changed'}
 				{#if typeof change[0] === 'boolean'}
 					{#if change[1] ?? change[0]}Enabled{:else}Disabled{/if}
-					{name}
+					{display_name}
 				{:else}
-					Changed {name} from
+					Changed {display_name} from
 					<p class="old">{mapValue(change[0])}</p>
 					to
 					<p class="new">{mapValue(change[1])}</p>
 				{/if}
 			{:else if type === 'with'}
-				With a {name} of <b>{mapValue(value)}</b>
+				With {display_name} <b>{mapValue(value)}</b>
 			{:else if type === 'with2'}
 				With {value}
 			{:else if change}
 				Renamed from <b>{change[0]}</b> to <b>{change[1]}</b>
 			{/if}
 		{:else}
-			Changed {name}
+			Changed {display_name}
 		{/if}
 	</p>
 {/if}

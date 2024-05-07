@@ -72,10 +72,12 @@
 					{item.name}
 				</button>
 			{/each}
-			<br/>
-			<button type="button" on:click|stopPropagation={() => (state--, query = '')}>
-				<ArrowLeft/>{$t('group_select.back')}
-			</button>
+			{#if cached.length}
+				<br/>
+				<button type="button" on:click|stopPropagation={() => (state--, query = '')}>
+					<ArrowLeft/>{$t('group_select.back')}
+				</button>
+			{/if}
 		{:else}
 			<p>{$t('group_select.recent')}</p>
 			{#each cached as item}

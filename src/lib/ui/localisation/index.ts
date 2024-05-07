@@ -12,9 +12,7 @@ const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 		const diff = Date.now() - date.getTime();
 		
 		const day = Math.floor(diff / 86400000);
-		const hrs = date.getHours();
-		const mins = date.getMinutes();
-		return trans(ta(3, day), [day, (hrs % 12) + 1, mins > 9 ? mins : `0${mins}`, hrs > 11 ? 'PM' : 'AM']);
+		return trans(ta(3, day), [day]);
 	},
 	time_ago: (value, trans) => {
 		const date = new Date(value);
@@ -32,11 +30,8 @@ const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 			return trans(ta(4, week), [week]);
 
 		const day = Math.floor(diff / 86400000);
-		if (day > 0) {
-			const hrs = date.getHours();
-			const mins = date.getMinutes();
-			return trans(ta(3, day), [day, (hrs % 12) + 1, mins > 9 ? mins : `0${mins}`, hrs > 11 ? 'PM' : 'AM']);
-		}
+		if (day > 0)
+			return trans(ta(3, day), [day]);
 
 		const hour = Math.floor(diff / 3600000);
 		if (hour > 0)
@@ -61,5 +56,5 @@ const [t, trans, locale] = create(LOCALES[0], data, LOCALES, {
 	}
 });
 
-const ta = (id: number, val: number): any => `time_ago.${id}_${val === 1 ? 1 : 0}`;
+const ta = (id: number, val: number): any => `time_ago.${id}_${val === 1 ? 1 : val === 0 ? 2 : 0}`;
 export { t, trans, locale };

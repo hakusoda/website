@@ -2,7 +2,7 @@
 	import { ContextMenu } from '@hakumi/essence';
 
 	import { t } from '$lib/ui/localisation';
-	import { UserConnectionType } from '$lib/shared/enums';
+	import { UserConnectionKind } from '$lib/shared/enums';
 	import { USER_CONNECTION_METADATA } from '$lib/shared/constants';
 
 	import Avatar from '../Avatar.svelte';
@@ -13,11 +13,11 @@
 	import ChevronDown from 'virtual:icons/bi/chevron-down';
 	import PersonPlusFill from 'virtual:icons/bi/person-plus-fill';
 	import ExclamationTriangle from 'virtual:icons/bi/exclamation-triangle';
-	export let kind: UserConnectionType | null = null;
+	export let kind: UserConnectionKind | null = null;
 	export let current: {
 		id: string
 		sub: string
-		type: UserConnectionType
+		type: UserConnectionKind
 		username: string | null
 		created_at: string
 		avatar_url: string | null
@@ -29,18 +29,18 @@
 	export let user_connections: {
 		id: string
 		sub: string
-		type: UserConnectionType
+		type: UserConnectionKind
 		username: string | null
 		created_at: string
 		avatar_url: string | null
 		website_url: string | null
 		display_name: string | null
 	}[];
-	export let add_connection: (kind: UserConnectionType, override_id?: string) => void;
+	export let add_connection: (kind: UserConnectionKind, override_id?: string) => void;
 	export let set_connection: (id: string, override_id?: string) => void;
 	export let remove_connection: (id: string) => void;
 
-	$: real_kind = kind ?? current?.type ?? UserConnectionType.Discord;
+	$: real_kind = kind ?? current?.type ?? UserConnectionKind.Discord;
 	$: metadata = USER_CONNECTION_METADATA[real_kind];
 
 	$: note_variation = (current ? 3 : for_entry ? 2 : 0) as 0 | 2 | 3;
