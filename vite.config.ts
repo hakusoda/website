@@ -5,11 +5,19 @@ export default {
 	build: {
 		target: 'esnext'
 	},
-	plugins: [sveltekit(), icons({
-		scale: 1,
-		compiler: 'svelte',
-		iconCustomizer(collection, icon, props) {
-			props['font-size'] = '16px';
-		}
-	})]
+	plugins: [
+		icons({
+			compiler: 'svelte',
+			scale: 1,
+			iconCustomizer(_collection, _icon, props) {
+				props['font-size'] = '16px';
+			}
+		}),
+		sveltekit()
+	],
+	server: {
+		allowedHosts: true,
+		port: 5173,
+		strictPort: true
+	}
 } satisfies UserConfig;

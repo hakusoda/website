@@ -1,123 +1,178 @@
 <script lang="ts">
-	import '$lib/ui/styles/root.scss';
-	import '@hakumi/essence/styles.scss';
-	import { inject } from '@vercel/analytics';
 	import { onMount } from 'svelte';
-	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	
-	import { t } from '$lib/ui/localisation';
-	import { dev } from '$app/environment';
-	import { page } from '$app/stores';
-	import { theme } from '$lib/client/settings';
-	import { editor, sudoModal } from '$lib/client/store';
-	import { store_auth_key_pair } from '$lib/client/crypto';
-
-	import EnableSudo from '$lib/ui/modals/EnableSudo.svelte';
-	import PageLoader from '$lib/ui/components/PageLoader.svelte';
-
-	import Plus from 'virtual:icons/bi/plus-lg';
-	import Hourglass from 'virtual:icons/bi/hourglass';
-	import FloppyFill from 'virtual:icons/bi/floppy-fill';
-	import BoxArrowLeft from 'virtual:icons/bi/box-arrow-left';
-	inject({ mode: dev ? 'development' : 'production' });
-	injectSpeedInsights();
-	onMount(store_auth_key_pair);
-
-	const editorSaving = editor.isSaving;
-	const editorCanSave = editor.canSave;
-	$: editorTargetId = $page.params?.role_id || $page.params?.action_id || $page.params?.webhook_id || $page.params?.command_id;
-	$: editorCreating = editorTargetId === 'create';
+	import '$lib/interface/styles/root.scss';
+	
+	import AsobukazeLogo from '$lib/interface/visuals/asobukaze_logo.svelte';
+	import BlueskyIcon from '$lib/interface/visuals/bluesky_icon.svelte';
+	import BrandLogo from '$lib/interface/visuals/brand_logo.svelte';
+    import DiscordIcon from '$lib/interface/visuals/discord_icon.svelte';
+	import GithubIcon from '$lib/interface/visuals/github_icon.svelte';
+	import RobloxIcon from '$lib/interface/visuals/roblox_icon.svelte';
+	import XIcon from '$lib/interface/visuals/x_icon.svelte';
+	
+	let header_hover = false;
+	onMount(() => header_hover = document.body.scrollTop > 0);
 </script>
 
-<div class={`app theme-${$theme}`}>
-	<div class="app-container">
-		<slot/>
+<div class="cool_top_blur" class:hover={header_hover}/>
+<nav>
+	<div class="header" class:hover={header_hover}>
+		<a class="brand_logo" href="/" title="HAKUMI">
+			<BrandLogo height={30}/>
+		</a>
+		<div class="links">
+			
+		</div>
 	</div>
-	<div id="absolute-solver"/>
-	{#if editorTargetId}
-		<div class="editor-controls">
-			<button type="button" on:click={() => editor.callback?.()} disabled={!$editorCanSave || $editorSaving}>
-				{#if editorCreating}<Plus/>{:else}{#if $editorSaving}<Hourglass/>{:else}<FloppyFill/>{/if}{/if}
-				{$t(editorCreating ? 'action.create' :'action.save_changes')}
-			</button>
-			<a class="secondary" href={$page.url.pathname.replace(/\/[^\/]*?$/, '')}>
-				<BoxArrowLeft/>{$t('action.cancel')}
+</nav>
+<main>
+	<slot/>
+</main>
+<footer>
+	<div class="brand">
+		<div class="studio_logos">
+			<a class="brand_logo" href="/" title="HAKUMI">
+				<BrandLogo height={32}/>
+			</a>
+			<a class="brand_logo" href="/" title="ASOBUKAZE">
+				<AsobukazeLogo height={56}/>
 			</a>
 		</div>
-	{/if}
-	<PageLoader/>
-	{#if $sudoModal}
-		<EnableSudo/>
-	{/if}
-</div>
+		<div class="lower_section">
+			<a class="social_logo" href="https://discord.gg/rs3r4dQu9P" target="_blank">
+				<DiscordIcon size={24}/>
+			</a>
+			<a class="social_logo" href="https://bsky.app/profile/hakumi.cafe" target="_blank">
+				<BlueskyIcon size={24}/>
+			</a>
+			<a class="social_logo" href="https://x.com/hakusoda" target="_blank">
+				<XIcon size={24}/>
+			</a>
+			<a class="social_logo" href="https://www.roblox.com/communities/14242138" target="_blank">
+				<RobloxIcon size={24}/>
+			</a>
+			<a class="social_logo" href="https://github.com/hakusoda" target="_blank">
+				<GithubIcon size={24}/>
+			</a>
+			<p class="legal">
+				© 2025 HAKUMI
+			</p>
+		</div>
+	</div>
+	<div class="links">
+		<a href="/" title="(soon, use this page for now)">
+			About us
+		</a>
+		<a href="/" title="(soon)">
+			Open Source
+		</a>
+	</div>
+</footer>
 
-<svelte:head>
-	<meta property="og:type" content="website">
-	<meta name="theme-color" content="#1e1e20">
-	<meta name="og:site_name" content="HAKUMI">
-	<meta name="og:image" content="/apple-touch-icon.png">
-	<meta name="description" content="a wondrous journey into the endless basket!">
-	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-</svelte:head>
+<svelte:document on:scroll={() => header_hover = document.documentElement.scrollTop > 0}/>
 
 <style lang="scss">
-	.app {
-		width: 100vw;
-		height: 100vh;
-		overflow: hidden;
-		min-height: 100vh;
-		background: var(--background-primary);
-
-		--color-link: hsl(330 90% 80%);
-		--color-verified: color-mix(in srgb, var(--button-background) 75%, #fff);
-
-		.app-container {
-			height: inherit;
-			overflow: hidden auto;
-			min-height: inherit;
-		}
-		&:has(.editor-controls) .app-container {
-			height: calc(100% - 97px);
-			min-height: unset;
+	.cool_top_blur {
+		background: color-mix(in oklab, hsl(350 12% 8%) 80%, transparent);
+		height: 96px;
+		left: 0;
+		mask-image: linear-gradient(to bottom, #000 20%, transparent 80%);
+		opacity: 0;
+		position: fixed;
+		top: 0;
+		transition: opacity .5s;
+		width: 100%;
+		z-index: 10;
+		&.hover {
+			opacity: 1;
 		}
 	}
-	.editor-controls {
-		gap: 32px;
-		display: flex;
-		padding: 32px 0;
-		border-top: 1px solid var(--border-primary);
-		justify-content: center;
-		a, button {
-			gap: 12px;
-			color: var(--color-primary);
-			border: none;
-			height: 32px;
-			cursor: pointer;
-			display: flex;
-			padding: 0 16px;
-			font-size: .8em;
-			background: var(--button-background);
-			transition: opacity .5s, background .5s, box-shadow .5s;
-			box-shadow: 0 0 0 1px color-mix(in srgb, var(--button-background) 75%, #fff);
+	nav {
+		left: 0;
+		padding: 0 16px;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 10;
+		.header {
 			align-items: center;
-			font-family: inherit;
-			border-radius: 12px;
-			&:is(a) {
-				background: none;
-				box-shadow: 0 0 0 1px var(--color-secondary);
+			border-radius: 24px;
+			display: flex;
+			height: 64px;
+			margin: 16px auto;
+			max-width: 1200px;
+			padding: 16px 32px;
+			transition: background .2s, box-shadow .2s, padding .5s;
+			&.hover {
+				backdrop-filter: blur(16px);
+				background: hsla(315, 10%, 5%, .3);
+				box-shadow: inset 0 0 0 1px hsla(315, 80%, 90%, .15);
+				padding: 16px 24px;
 			}
-			&:not(:disabled):hover {
-				&:not(a) {
-					background: color-mix(in srgb, var(--button-background) 90%, #fff);
-				}
-				&:is(a) {
-					box-shadow: 0 0 0 1px #fff;
+			.brand_logo {
+				color: #fff;
+				margin: 0 16px 0 0;
+			}
+			.links {
+				margin: 0 0 0 auto;
+				a {
+					color: #fff;
+					font-weight: 500;
 					text-decoration: none;
 				}
 			}
-			&:disabled {
-				cursor: not-allowed;
-				opacity: .5;
+		}
+	}
+	main {
+		min-height: calc(100vh - 94px);
+		margin: 0 auto;
+		max-width: 1200px;
+		padding: 80px 16px;
+		width: 100%;
+	}
+	footer {
+		align-items: center;
+		display: flex;
+		margin: auto auto 0 auto;
+		max-width: 1200px;
+		padding: 48px 16px;
+		width: 100%;
+		.studio_logos {
+			align-items: center;
+			display: flex;
+			gap: 24px;
+			.brand_logo {
+				color: #fff;
+			}
+		}
+		.lower_section {
+			align-items: center;
+			display: flex;
+			gap: 12px;
+			.social_logo {
+				color: #fff;
+			}
+			.legal {
+				font-family: 'Outfit', sans-serif;
+				font-size: .9em;
+				font-weight: 500;
+				margin: 0 12px 0 auto;
+			}
+		}
+		.links {
+			display: flex;
+			gap: 32px;
+			margin-left: auto;
+			a {
+				color: var(--color-secondary);
+				font-size: .9em;
+				font-weight: 450;
+				text-decoration: none;
+				transition: color .5s;
+				&:hover {
+					color: var(--color-secondary-hover);
+				}
 			}
 		}
 	}
