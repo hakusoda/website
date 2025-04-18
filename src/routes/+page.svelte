@@ -4,7 +4,10 @@
 
 <div class="marketing">
 	<div class="thumbnail"></div>
-	<div class="thumbnail_blur"></div>
+	<div class="thumbnail_gradient">
+		<div class="gradient gradient_base"></div>
+		<div class="gradient gradient_ring"></div>
+	</div>
 	<h1>We're a passionate dream studio.</h1>
 	<p>HAKUMI is an up-and-coming technology studio fueled by creativity and experimentation.<br/>We aspire to create simple & friendly software that just works, along with video game development!</p>
 	
@@ -55,9 +58,7 @@
 				top: 0;
 			}
 		}
-		.thumbnail_blur {
-			background-image: url('/asset/image/library.jpeg');
-			background-size: 100% 100%;
+		.thumbnail_gradient {
 			filter: blur(150px);
 			height: 600px;
 			left: 50%;
@@ -65,8 +66,26 @@
 			position: absolute;
 			top: 256px;
 			transform: translate(-50%, -50%);
+			transition: filter 2s;
 			width: 700px;
 			z-index: -1;
+			.gradient {
+				border-radius: 50%;
+				left: 50%;
+				position: absolute;
+				top: 50%;
+				transform: translate(-50%, -50%);
+			}
+			.gradient_base {
+				background: #ff0055;
+				height: 60%;
+				width: 80%;
+			}
+			.gradient_ring {
+				border: 15px solid #c73a2a;
+				height: 160%;
+				width: 160%;
+			}
 		}
 		h1 {
 			color: transparent;
