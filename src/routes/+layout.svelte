@@ -15,7 +15,7 @@
 	onMount(() => header_hover = document.body.scrollTop > 0);
 </script>
 
-<div class="cool_top_blur" class:hover={header_hover}/>
+<div class="cool_top_blur" class:hover={header_hover}></div>
 <nav>
 	<div class="header" class:hover={header_hover}>
 		<a class="brand_logo" href="/" title="HAKUMI">
@@ -30,43 +30,46 @@
 	<slot/>
 </main>
 <footer>
-	<div class="brand">
-		<div class="studio_logos">
-			<a class="brand_logo" href="/" title="HAKUMI">
-				<BrandLogo height={32}/>
+	<div class="footer_gradient"></div>
+	<div class="footer_contents">
+		<div class="brand">
+			<div class="studio_logos">
+				<a class="brand_logo" href="/" title="HAKUMI">
+					<BrandLogo height={32}/>
+				</a>
+				<a class="brand_logo" href="/" title="ASOBUKAZE">
+					<AsobukazeLogo height={56}/>
+				</a>
+			</div>
+			<div class="lower_section">
+				<a class="social_logo" href="https://discord.gg/rs3r4dQu9P" target="_blank">
+					<DiscordIcon size={24}/>
+				</a>
+				<a class="social_logo" href="https://bsky.app/profile/hakumi.cafe" target="_blank">
+					<BlueskyIcon size={24}/>
+				</a>
+				<a class="social_logo" href="https://x.com/hakusoda" target="_blank">
+					<XIcon size={24}/>
+				</a>
+				<a class="social_logo" href="https://www.roblox.com/communities/14242138" target="_blank">
+					<RobloxIcon size={24}/>
+				</a>
+				<a class="social_logo" href="https://github.com/hakusoda" target="_blank">
+					<GithubIcon size={24}/>
+				</a>
+				<p class="legal">
+					© 2025 HAKUMI
+				</p>
+			</div>
+		</div>
+		<div class="links">
+			<a href="/" title="(soon, use this page for now)">
+				About us
 			</a>
-			<a class="brand_logo" href="/" title="ASOBUKAZE">
-				<AsobukazeLogo height={56}/>
+			<a href="/" title="(soon)">
+				Open Source
 			</a>
 		</div>
-		<div class="lower_section">
-			<a class="social_logo" href="https://discord.gg/rs3r4dQu9P" target="_blank">
-				<DiscordIcon size={24}/>
-			</a>
-			<a class="social_logo" href="https://bsky.app/profile/hakumi.cafe" target="_blank">
-				<BlueskyIcon size={24}/>
-			</a>
-			<a class="social_logo" href="https://x.com/hakusoda" target="_blank">
-				<XIcon size={24}/>
-			</a>
-			<a class="social_logo" href="https://www.roblox.com/communities/14242138" target="_blank">
-				<RobloxIcon size={24}/>
-			</a>
-			<a class="social_logo" href="https://github.com/hakusoda" target="_blank">
-				<GithubIcon size={24}/>
-			</a>
-			<p class="legal">
-				© 2025 HAKUMI
-			</p>
-		</div>
-	</div>
-	<div class="links">
-		<a href="/" title="(soon, use this page for now)">
-			About us
-		</a>
-		<a href="/" title="(soon)">
-			Open Source
-		</a>
 	</div>
 </footer>
 
@@ -106,8 +109,8 @@
 			transition: background .2s, box-shadow .2s, padding .5s;
 			&.hover {
 				backdrop-filter: blur(16px);
-				background: hsla(315, 10%, 5%, .3);
-				box-shadow: inset 0 0 0 1px hsla(315, 80%, 90%, .15);
+				background: hsla(350, 10%, 5%, .3);
+				box-shadow: inset 0 0 0 1px hsla(350, 20%, 40%, .15);
 				padding: 16px 24px;
 			}
 			.brand_logo {
@@ -132,12 +135,32 @@
 		width: 100%;
 	}
 	footer {
-		align-items: center;
-		display: flex;
-		margin: auto auto 0 auto;
-		max-width: 1200px;
-		padding: 48px 16px;
-		width: 100%;
+		background: linear-gradient(to bottom, hsl(350, 12%, 7%), hsl(10, 40%, 6%));
+		border-radius: 24px 24px 0 0;
+		border-top: 1px solid hsl(350, 20%, 13%);
+		overflow: hidden;
+		position: relative;
+		.footer_gradient {
+			background: #d22f661a;
+			border-radius: 50%;
+			bottom: 0;
+			content: '';
+			filter: blur(60px);
+			height: 50px;
+			left: 50%;
+			max-width: 1000px;
+			position: absolute;
+			transform: translate(-50%, 60%);
+			width: 70%;
+		}
+		.footer_contents {
+			align-items: center;
+			display: flex;
+			margin: auto auto 0 auto;
+			max-width: 1200px;
+			padding: 48px 16px;
+			width: 100%;
+		}
 		.studio_logos {
 			align-items: center;
 			display: flex;
