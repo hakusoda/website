@@ -4,12 +4,12 @@
 	import '$lib/interface/styles/root.scss';
 	
 	import AsobukazeLogo from '$lib/interface/visuals/asobukaze_logo.svelte';
-	import BlueskyIcon from '$lib/interface/visuals/bluesky_icon.svelte';
+	import BlueskyIcon from '$lib/interface/visuals/socials/bluesky_icon.svelte';
 	import BrandLogo from '$lib/interface/visuals/brand_logo.svelte';
-    import DiscordIcon from '$lib/interface/visuals/discord_icon.svelte';
-	import GithubIcon from '$lib/interface/visuals/github_icon.svelte';
-	import RobloxIcon from '$lib/interface/visuals/roblox_icon.svelte';
-	import XIcon from '$lib/interface/visuals/x_icon.svelte';
+    import DiscordIcon from '$lib/interface/visuals/socials/discord_icon.svelte';
+	import GithubIcon from '$lib/interface/visuals/socials/github_icon.svelte';
+	import RobloxIcon from '$lib/interface/visuals/socials/roblox_icon.svelte';
+	import XIcon from '$lib/interface/visuals/socials/x_icon.svelte';
 	
 	let header_hover = false;
 	onMount(() => header_hover = document.body.scrollTop > 0);
