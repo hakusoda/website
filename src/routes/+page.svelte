@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DiscordIcon from "$lib/interface/visuals/discord_icon.svelte";
+	import DiscordIcon from "$lib/interface/visuals/socials/discord_icon.svelte";
 </script>
 
 <div class="marketing">
