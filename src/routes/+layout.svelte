@@ -19,7 +19,7 @@
 <nav>
 	<div class="header" class:hover={header_hover}>
 		<a class="brand_logo" href="/" title="HAKUMI">
-			<BrandLogo height={30}/>
+			<BrandLogo height={40}/>
 		</a>
 		<div class="links">
 			
@@ -35,7 +35,7 @@
 		<div class="brand">
 			<div class="studio_logos">
 				<a class="brand_logo" href="/" title="HAKUMI">
-					<BrandLogo height={32}/>
+					<BrandLogo height={56}/>
 				</a>
 				<a class="brand_logo" href="/" title="ASOBUKAZE">
 					<AsobukazeLogo height={56}/>
@@ -115,6 +115,7 @@
 			}
 			.brand_logo {
 				color: #fff;
+				line-height: 0;
 				margin: 0 16px 0 0;
 			}
 			.links {
@@ -167,14 +168,17 @@
 			gap: 24px;
 			.brand_logo {
 				color: #fff;
+				line-height: 0;
 			}
 		}
 		.lower_section {
 			align-items: center;
 			display: flex;
 			gap: 12px;
+			margin-top: 24px;
 			.social_logo {
 				color: #fff;
+				line-height: 0;
 			}
 			.legal {
 				font-family: 'Outfit', sans-serif;
