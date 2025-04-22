@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	
+	import { page } from '$app/state';
+	import { PUBLIC_SITE_URL } from '$env/static/public';
+	
 	import '$lib/interface/styles/root.scss';
 	
 	import AsobukazeLogo from '$lib/interface/visuals/asobukaze_logo.svelte';
@@ -11,8 +14,11 @@
 	import RobloxIcon from '$lib/interface/visuals/socials/roblox_icon.svelte';
 	import XIcon from '$lib/interface/visuals/socials/x_icon.svelte';
 	
-	let header_hover = false;
+	let header_hover = $state(false);
 	onMount(() => header_hover = document.body.scrollTop > 0);
+	
+	let { children } = $props();
+	let pathname = $derived(page.url.pathname);
 </script>
 
 <div class="cool_top_blur" class:hover={header_hover}></div>
@@ -27,7 +33,7 @@
 	</div>
 </nav>
 <main>
-	<slot/>
+	{@render children()}
 </main>
 <footer>
 	<div class="footer_gradient"></div>
@@ -42,22 +48,22 @@
 				</a>
 			</div>
 			<div class="lower_section">
-				<a class="social_logo" href="https://discord.gg/rs3r4dQu9P" target="_blank">
+				<a class="social_logo" href="https://discord.gg/rs3r4dQu9P" title="Discord" target="_blank">
 					<DiscordIcon size={24}/>
 				</a>
-				<a class="social_logo" href="https://bsky.app/profile/hakumi.cafe" target="_blank">
+				<a class="social_logo" href="https://bsky.app/profile/hakumi.cafe" title="Bluesky" target="_blank">
 					<BlueskyIcon size={24}/>
 				</a>
-				<a class="social_logo" href="https://x.com/hakusoda" target="_blank">
+				<a class="social_logo" href="https://x.com/hakusoda" title="X" target="_blank">
 					<XIcon size={24}/>
 				</a>
-				<a class="social_logo" href="https://www.roblox.com/communities/14242138" target="_blank">
+				<a class="social_logo" href="https://www.roblox.com/communities/14242138" title="Roblox" target="_blank">
 					<RobloxIcon size={24}/>
 				</a>
-				<a class="social_logo" href="https://github.com/hakusoda" target="_blank">
+				<a class="social_logo" href="https://github.com/hakusoda" title="GitHub" target="_blank">
 					<GithubIcon size={24}/>
 				</a>
-				<p class="legal">
+				<p class="legal" aria-hidden="true">
 					© 2025 HAKUMI
 				</p>
 			</div>
@@ -74,6 +80,11 @@
 </footer>
 
 <svelte:document on:scroll={() => header_hover = document.documentElement.scrollTop > 0}/>
+<svelte:head>
+	{#key pathname}
+		<meta property="og:url" content="{PUBLIC_SITE_URL}{pathname}"/>
+	{/key}
+</svelte:head>
 
 <style lang="scss">
 	.cool_top_blur {

@@ -1,9 +1,17 @@
 <script lang="ts">
-	import DiscordIcon from "$lib/interface/visuals/socials/discord_icon.svelte";
+	import optimise_image from '$lib/shared/optimise_image';
+	
+	import DiscordIcon from '$lib/interface/visuals/socials/discord_icon.svelte';
 </script>
 
 <div class="marketing">
-	<div class="thumbnail"></div>
+	<div class="thumbnail_container">
+		<img
+			class="thumbnail_image"
+			srcset={optimise_image('/asset/image/landing_thumbnail.png', [600, 1200], 60)}
+			alt="Library Landing Thumbnail"
+		/>
+	</div>
 	<div class="thumbnail_gradient">
 		<div class="gradient gradient_base"></div>
 		<div class="gradient gradient_ring"></div>
@@ -24,14 +32,19 @@
 		margin-top: 24px;
 		min-height: inherit;
 		width: 100%;
-		.thumbnail {
+		.thumbnail_container {
 			aspect-ratio: 16 / 8;
 			border-radius: 16px;
-			background-image: url('/asset/image/library.jpeg');
-			background-size: cover;
 			box-shadow: 0 2px 10px 0 hsl(0 calc(1 * 0%) 0% / 0.2);
-			height: 300px;
+			overflow: hidden;
 			position: relative;
+			width: 600px;
+			.thumbnail_image {
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+				width: 100%;
+			}
 			&:before {
 				border-radius: 15px;
 				box-shadow: inset 0 0 0 1px #fff;
@@ -119,7 +132,7 @@
 			position: relative;
 			text-decoration: none;
 			&:before {
-				background: #5865F21a;
+				background: #5865F20a;
 				content: '';
 				filter: blur(20px);
 				height: 80px;

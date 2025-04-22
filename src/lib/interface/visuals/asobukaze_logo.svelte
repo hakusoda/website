@@ -3,7 +3,7 @@
 	export let width: number | null = null;
 </script>
 
-<svg {width} {height} viewBox="0 0 46 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg {width} {height} viewBox="0 0 46 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 	<path d="M4 7.5C3.17157 7.5 2.5 6.82842 2.5 6V4.25534C3.36354 3.65385 4.19474 3.375 5 3.375C5.80526 3.375 6.63646 3.65385 7.5 4.25534V6C7.5 6.82842 6.82843 7.5 6 7.5H4Z" stroke="currentColor"/>
 	<path d="M4 5.5C4 5.2643 4 5.14645 3.92678 5.07322C3.85355 5 3.73575 5 3.50015 5C3.07472 5 2.46106 5 2 5C2 5.39052 2 6 2 6H3.5C3.7357 6 3.85355 6 3.92678 5.92678C4 5.85355 4 5.7357 4 5.5V5.5Z" fill="currentColor"/>
 	<path fill-rule="evenodd" clip-rule="evenodd" d="M8 6V5H6.5C6.2643 5 6.14645 5 6.07322 5.07322C6 5.14645 6 5.2643 6 5.5V5.5C6 5.7357 6 5.85355 6.07322 5.92678C6.14645 6 6.2643 6 6.5 6H8Z" fill="currentColor"/>

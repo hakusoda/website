@@ -8,7 +8,15 @@ export default {
 	extensions: ['.md', '.svelte'],
 	kit: {
 		csrf: { checkOrigin: false },
-		adapter: adapter({ runtime: 'edge' })
+		adapter: adapter({
+			images: {
+				domains: ['hakumi.cafe'],
+				formats: ['image/avif', 'image/webp'],
+				minimumCacheTTL: 300,
+				sizes: [600, 1200]
+			},
+			runtime: 'edge'
+		})
 	},
 	preprocess: [
 		mdsvex({
