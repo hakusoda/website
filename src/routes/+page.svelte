@@ -9,7 +9,7 @@
 		<div class="gradient gradient_ring"></div>
 	</div>
 	<h1>We're a passionate dream studio.</h1>
-	<p>HAKUMI is an up-and-coming technology studio fueled by creativity and experimentation.<br/>We aspire to create simple & friendly software that just works, along with video game development!</p>
+	<p>HAKUMI is an up-and-coming technology studio fuelled by creativity and experimentation.<br/>We aspire to create simple & friendly software that just works, along with video game development!</p>
 	
 	<a class="discord_button" href="https://discord.gg/rs3r4dQu9P" target="_blank">
 		<DiscordIcon size={20}/>Join the community!
