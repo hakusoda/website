@@ -4,6 +4,10 @@
 	import DiscordIcon from '$lib/interface/visuals/socials/discord_icon.svelte';
 </script>
 
+<script module>
+	export const last_updated_at = '2025-04-23';
+</script>
+
 <div class="marketing">
 	<div class="thumbnail_container">
 		<img
