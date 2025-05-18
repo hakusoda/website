@@ -1,6 +1,8 @@
 <script lang="ts">
 	import optimise_image from '$lib/shared/optimise_image';
 	
+	import { PUBLIC_SOCIAL_LINK_DISCORD } from '$env/static/public';
+	
 	import DiscordIcon from '$lib/interface/visuals/socials/discord_icon.svelte';
 </script>
 
@@ -23,7 +25,7 @@
 	<h1>We're a passionate dream studio.</h1>
 	<p>HAKUMI is an up-and-coming technology studio fuelled by creativity and experimentation.<br/>We aspire to create simple & friendly software that just works, along with video game development!</p>
 	
-	<a class="discord_button" href="https://discord.gg/rs3r4dQu9P" target="_blank">
+	<a class="discord_button" href={PUBLIC_SOCIAL_LINK_DISCORD} target="_blank">
 		<DiscordIcon size={20}/>Join the community!
 	</a>
 </div>

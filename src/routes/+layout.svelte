@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	
 	import { page } from '$app/state';
-	import { PUBLIC_SITE_URL } from '$env/static/public';
+	import { PUBLIC_SITE_URL, PUBLIC_SOCIAL_LINK_BLUESKY, PUBLIC_SOCIAL_LINK_DISCORD, PUBLIC_SOCIAL_LINK_GITHUB, PUBLIC_SOCIAL_LINK_ROBLOX, PUBLIC_SOCIAL_LINK_X } from '$env/static/public';
 	
 	import '$lib/interface/styles/root.scss';
 	
@@ -48,19 +48,19 @@
 				</a>
 			</div>
 			<div class="lower_section">
-				<a class="social_logo" href="https://discord.gg/rs3r4dQu9P" title="Discord" target="_blank">
+				<a class="social_logo" href={PUBLIC_SOCIAL_LINK_DISCORD} title="Discord" target="_blank">
 					<DiscordIcon size={24}/>
 				</a>
-				<a class="social_logo" href="https://bsky.app/profile/hakumi.cafe" title="Bluesky" target="_blank">
+				<a class="social_logo" href={PUBLIC_SOCIAL_LINK_BLUESKY} title="Bluesky" target="_blank">
 					<BlueskyIcon size={24}/>
 				</a>
-				<a class="social_logo" href="https://x.com/hakusoda" title="X" target="_blank">
+				<a class="social_logo" href={PUBLIC_SOCIAL_LINK_X} title="X" target="_blank">
 					<XIcon size={24}/>
 				</a>
-				<a class="social_logo" href="https://www.roblox.com/communities/14242138" title="Roblox" target="_blank">
+				<a class="social_logo" href={PUBLIC_SOCIAL_LINK_ROBLOX} title="Roblox" target="_blank">
 					<RobloxIcon size={24}/>
 				</a>
-				<a class="social_logo" href="https://github.com/hakusoda" title="GitHub" target="_blank">
+				<a class="social_logo" href={PUBLIC_SOCIAL_LINK_GITHUB} title="GitHub" target="_blank">
 					<GithubIcon size={24}/>
 				</a>
 				<p class="legal" aria-hidden="true">
