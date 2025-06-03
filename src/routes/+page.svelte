@@ -30,6 +30,18 @@
 	</a>
 </div>
 
+<!-- is it possible to use the PUBLIC_SITE_URL variable here? -->
+<svelte:head>
+	<script type="application/ld+json">
+		{
+			"@context" : "https://schema.org",
+			"@type" : "WebSite",
+			"name" : "HAKUMI",
+			"url" : "https://hakumi.cafe"
+		}
+	</script>
+</svelte:head>
+
 <style lang="scss">
 	.marketing {
 		align-items: center;
