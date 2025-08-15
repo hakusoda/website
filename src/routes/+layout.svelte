@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	
 	import { page } from '$app/state';
-	import { PUBLIC_SITE_URL, PUBLIC_SOCIAL_LINK_BLUESKY, PUBLIC_SOCIAL_LINK_DISCORD, PUBLIC_SOCIAL_LINK_GITHUB, PUBLIC_SOCIAL_LINK_ROBLOX, PUBLIC_SOCIAL_LINK_X } from '$env/static/public';
+	import { PUBLIC_SITE_URL, PUBLIC_SOCIAL_LINK_BLUESKY, PUBLIC_SOCIAL_LINK_DISCORD, PUBLIC_SOCIAL_LINK_GITHUB, PUBLIC_SOCIAL_LINK_KOFI, PUBLIC_SOCIAL_LINK_ROBLOX, PUBLIC_SOCIAL_LINK_X } from '$env/static/public';
 	
 	import '$lib/interface/styles/root.scss';
 	
@@ -11,6 +11,7 @@
 	import BrandLogo from '$lib/interface/visuals/brand_logo.svelte';
     import DiscordIcon from '$lib/interface/visuals/socials/discord_icon.svelte';
 	import GithubIcon from '$lib/interface/visuals/socials/github_icon.svelte';
+	import KofiIcon from '$lib/interface/visuals/socials/kofi_icon.svelte';
 	import RobloxIcon from '$lib/interface/visuals/socials/roblox_icon.svelte';
 	import XIcon from '$lib/interface/visuals/socials/x_icon.svelte';
 	
@@ -62,6 +63,9 @@
 				</a>
 				<a class="social_logo" href={PUBLIC_SOCIAL_LINK_GITHUB} title="GitHub" target="_blank">
 					<GithubIcon size={24}/>
+				</a>
+				<a class="social_logo" href={PUBLIC_SOCIAL_LINK_KOFI} title="Ko-fi" target="_blank">
+					<KofiIcon size={24}/>
 				</a>
 				<p class="legal" aria-hidden="true">
 					© 2025 HAKUMI
