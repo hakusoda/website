@@ -1,9 +1,10 @@
 import icons from 'unplugin-icons/vite'
 import { sveltekit } from '@sveltejs/kit/vite';
 import type { UserConfig } from 'vite';
-export default {
+
+const config: UserConfig = {
 	build: {
-		target: 'esnext'
+		target: 'baseline-widely-available'
 	},
 	plugins: [
 		icons({
@@ -20,4 +21,6 @@ export default {
 		port: 5173,
 		strictPort: true
 	}
-} satisfies UserConfig;
+};
+
+export default config;
