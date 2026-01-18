@@ -68,7 +68,7 @@
 					<KofiIcon size={24}/>
 				</a>
 				<p class="legal" aria-hidden="true">
-					© 2025 HAKUMI
+					© {new Date().getFullYear()} HAKUMI
 				</p>
 			</div>
 		</div>
