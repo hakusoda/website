@@ -7,7 +7,6 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 export default {
 	extensions: ['.md', '.svelte'],
 	kit: {
-		csrf: { checkOrigin: false },
 		adapter: adapter({
 			images: {
 				domains: ['hakumi.cafe'],
