@@ -13,8 +13,7 @@ export default {
 				formats: ['image/avif', 'image/webp'],
 				minimumCacheTTL: 300,
 				sizes: [600, 1200]
-			},
-			runtime: 'edge'
+			}
 		})
 	},
 	preprocess: [
