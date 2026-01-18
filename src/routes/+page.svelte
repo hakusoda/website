@@ -96,7 +96,7 @@
 			opacity: .15;
 			position: absolute;
 			top: 256px;
-			transform: translate(-50%, -50%);
+			transform: translate3d(-50%, -50%, 0);
 			transition: filter 2s;
 			width: 700px;
 			z-index: -1;
