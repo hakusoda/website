@@ -73,8 +73,8 @@
 			</div>
 		</div>
 		<div class="links">
-			<a href="/" title="(soon, use this page for now)">
-				About us
+			<a href="/contact">
+				Contact
 			</a>
 			<a href="/" title="(soon)">
 				Open Source
@@ -147,6 +147,7 @@
 		min-height: calc(100vh - 94px);
 		margin: 0 auto;
 		max-width: 1200px;
+		overflow: hidden;
 		padding: 80px 16px;
 		width: 100%;
 	}
