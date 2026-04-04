@@ -172,6 +172,8 @@
 		.footer_contents {
 			align-items: center;
 			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
 			margin: auto auto 0 auto;
 			max-width: 1200px;
 			padding: 48px 16px;
@@ -180,7 +182,9 @@
 		.studio_logos {
 			align-items: center;
 			display: flex;
+			flex-wrap: wrap;
 			gap: 24px;
+			justify-content: center;
 			.brand_logo {
 				color: #fff;
 				line-height: 0;
@@ -205,7 +209,9 @@
 		.links {
 			display: flex;
 			gap: 32px;
-			margin-left: auto;
+			@media (min-width: 768px) {
+				
+			}
 			a {
 				color: var(--color-secondary);
 				font-size: .9em;
