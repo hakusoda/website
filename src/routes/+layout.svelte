@@ -92,7 +92,8 @@
 
 <style lang="scss">
 	.cool_top_blur {
-		background: color-mix(in oklab, hsl(350 12% 8%) 80%, transparent);
+		backdrop-filter: blur(6px);
+		background: color-mix(in oklab, hsl(350 12% 8%) 90%, transparent);
 		height: 96px;
 		left: 0;
 		mask-image: linear-gradient(to bottom, #000 20%, transparent 80%);
