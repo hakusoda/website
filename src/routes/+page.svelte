@@ -1,7 +1,7 @@
 <script lang="ts">
 	import optimise_image from '$lib/shared/optimise_image';
 	
-	import { PUBLIC_SOCIAL_LINK_DISCORD } from '$env/static/public';
+	import { PUBLIC_SITE_URL, PUBLIC_SOCIAL_LINK_DISCORD } from '$env/static/public';
 	
 	import DiscordIcon from '$lib/interface/visuals/socials/discord_icon.svelte';
 </script>
@@ -30,16 +30,15 @@
 	</a>
 </div>
 
-<!-- is it possible to use the PUBLIC_SITE_URL variable here? -->
 <svelte:head>
-	<script type="application/ld+json">
-		{
-			"@context" : "https://schema.org",
-			"@type" : "WebSite",
-			"name" : "HAKUMI",
-			"url" : "https://hakumi.cafe"
-		}
-	</script>
+	<svelte:element this={'script'} type="application/ld+json">
+		{`{
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	"name": "HAKUMI",
+	"url": "${PUBLIC_SITE_URL}"
+}`}
+	</svelte:element>
 </svelte:head>
 
 <style lang="scss">
