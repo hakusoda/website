@@ -37,7 +37,6 @@
 	{@render children()}
 </main>
 <footer>
-	<div class="footer_gradient"></div>
 	<div class="footer_contents">
 		<div class="brand">
 			<div class="studio_logos">
@@ -153,24 +152,11 @@
 		width: 100%;
 	}
 	footer {
-		background: linear-gradient(to bottom, hsl(350, 12%, 7%), hsl(10, 40%, 6%));
+		background: radial-gradient(at 50% 100%, #d22f660a 0%, transparent 70%) center / min(100%, 1000px) no-repeat, linear-gradient(to bottom, hsl(350, 12%, 7%), hsl(10, 40%, 6%));
 		border-radius: 24px 24px 0 0;
 		border-top: 1px solid hsl(350, 20%, 13%);
 		overflow: hidden;
 		position: relative;
-		.footer_gradient {
-			background: #d22f661a;
-			border-radius: 50%;
-			bottom: 0;
-			content: '';
-			filter: blur(60px);
-			height: 50px;
-			left: 50%;
-			max-width: 1000px;
-			position: absolute;
-			transform: translate(-50%, 60%);
-			width: 70%;
-		}
 		.footer_contents {
 			align-items: center;
 			display: flex;

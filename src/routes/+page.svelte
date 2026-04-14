@@ -18,10 +18,7 @@
 			alt="Library Landing Thumbnail"
 		/>
 	</div>
-	<div class="thumbnail_gradient">
-		<div class="gradient gradient_base"></div>
-		<div class="gradient gradient_ring"></div>
-	</div>
+	<div class="thumbnail_gradient"></div>
 	<h1>We're a passionate dream studio.</h1>
 	<p>HAKUMI is an up-and-coming technology studio fuelled by creativity and experimentation.<br/>We aspire to create simple & friendly software that just works, along with video game development!</p>
 	
@@ -90,35 +87,16 @@
 			}
 		}
 		.thumbnail_gradient {
-			filter: blur(150px);
-			height: 600px;
+			background: radial-gradient(at 50% 50%, #ff0055 35%, #c73a2a80 55%, transparent 70%);
+			height: 800px;
 			left: 50%;
 			max-width: 100%;
-			opacity: .15;
-			overflow: hidden;
+			opacity: .05;
 			position: absolute;
 			top: 256px;
 			transform: translate3d(-50%, -50%, 0);
-			transition: filter 2s;
-			width: 700px;
+			width: 1000px;
 			z-index: -1;
-			.gradient {
-				border-radius: 50%;
-				left: 50%;
-				position: absolute;
-				top: 50%;
-				transform: translate(-50%, -50%);
-			}
-			.gradient_base {
-				background: #ff0055;
-				height: 60%;
-				width: 80%;
-			}
-			.gradient_ring {
-				border: 15px solid #c73a2a;
-				height: 160%;
-				width: 160%;
-			}
 		}
 		h1 {
 			color: transparent;
@@ -153,15 +131,14 @@
 			position: relative;
 			text-decoration: none;
 			&:before {
-				background: #5865F20a;
+				background: radial-gradient(at 50% 50%, #5865F20a 0%, transparent 70%);
 				content: '';
-				filter: blur(20px);
-				height: 80px;
+				height: 120px;
 				left: 50%;
 				position: absolute;
 				top: 50%;
 				transform: translate(-50%, -50%);
-				width: calc(100% + 40px);
+				width: calc(100% + 120px);
 				z-index: -1;
 			}
 		}
