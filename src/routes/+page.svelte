@@ -14,6 +14,7 @@
 	<div class="thumbnail_container">
 		<img
 			class="thumbnail_image"
+			fetchpriority="high"
 			srcset={optimise_image('/asset/image/landing_thumbnail.png', [600, 1200], 60)}
 			alt="Library Landing Thumbnail"
 		/>
