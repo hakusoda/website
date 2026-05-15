@@ -19,7 +19,8 @@
 	onMount(() => header_hover = document.body.scrollTop > 0);
 	
 	let { children } = $props();
-	let pathname = $derived(page.url.pathname);
+	let canonical_url = $derived(`${PUBLIC_SITE_URL}${page.url.pathname}`);
+	let title = $derived(page.data.title);
 </script>
 
 <div class="cool_top_blur" class:hover={header_hover}></div>
@@ -28,9 +29,6 @@
 		<a class="brand_logo" href="/" title="HAKUMI">
 			<BrandLogo height={40}/>
 		</a>
-		<div class="links">
-			
-		</div>
 	</div>
 </nav>
 <main>
@@ -84,8 +82,12 @@
 
 <svelte:document on:scroll={() => header_hover = document.documentElement.scrollTop > 0}/>
 <svelte:head>
-	{#key pathname}
-		<meta property="og:url" content="{PUBLIC_SITE_URL}{pathname}"/>
+	{#key title}
+		<title>{title ?? 'HAKUMI — We\'re a passionate dream studio'}</title>
+	{/key}
+	{#key canonical_url}
+		<link rel="canonical" href={canonical_url} />
+		<meta property="og:url" content={canonical_url}/>
 	{/key}
 </svelte:head>
 
@@ -132,14 +134,6 @@
 				color: #fff;
 				line-height: 0;
 				margin: 0 16px 0 0;
-			}
-			.links {
-				margin: 0 0 0 auto;
-				a {
-					color: #fff;
-					font-weight: 500;
-					text-decoration: none;
-				}
 			}
 		}
 	}
