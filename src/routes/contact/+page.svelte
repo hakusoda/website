@@ -12,7 +12,7 @@
 </script>
 
 <script module>
-	export const last_updated_at = '2025-04-23';
+	export const last_updated_at = '2026-04-04';
 </script>
 
 <div class="marketing">
