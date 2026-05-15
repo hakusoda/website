@@ -103,7 +103,7 @@
 			color: transparent;
 			background: linear-gradient(to right, #d07c98 5%, #e1779b 10%, #e1779b 15%, #d0847c 85%, #d0847c 90%, #edafa1 95%);
 			background-clip: text;
-			font-family: 'Outfit', sans-serif;
+			font-family: var(--font-secondary);
 			font-size: 36px;
 			font-weight: 450;
 			margin: 24px 0 0;

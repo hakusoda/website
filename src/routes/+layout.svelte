@@ -182,7 +182,7 @@
 				line-height: 0;
 			}
 			.legal {
-				font-family: 'Outfit', sans-serif;
+				font-family: var(--font-secondary);
 				font-size: .9em;
 				font-weight: 500;
 				margin: 0 12px 0 auto;
